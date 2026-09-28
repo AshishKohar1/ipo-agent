@@ -1,0 +1,146 @@
+INDUSINVIT-IV.NS: Period 'max' is invalid, must be one of: 1d, 5d
+$KRT.NS: possibly delisted; no timezone found
+$NSDL.NS: possibly delisted; no timezone found
+$ARISINFRA.NS: possibly delisted; no timezone found
+$ARISINFRA.BO: possibly delisted; no timezone found
+$CAPINVIT.NS: possibly delisted; no timezone found
+$CAPINVIT.BO: Data doesn't exist for startDate = 1736620200, endDate = 1770316200
+$SGLTL.NS: possibly delisted; no timezone found
+$SGLTL.BO: possibly delisted; no timezone found
+$IDEAFPO.NS: possibly delisted; no timezone found
+$IDEAFPO.BO: possibly delisted; no timezone found
+$INDUSINVIT.NS: possibly delisted; no timezone found
+$SAH.NS: possibly delisted; no timezone found
+$SAH.BO: possibly delisted; no timezone found
+$OLPCL.NS: possibly delisted; no timezone found
+$RDBRL.NS: possibly delisted; no timezone found
+$VMS.NS: possibly delisted; no timezone found
+$FCL.NS: Data doesn't exist for startDate = 1299349800, endDate = 1335637800
+$SEATV.NS: possibly delisted; no timezone found
+$SATCH.NS: possibly delisted; no timezone found
+$BAGMANE.NS: possibly delisted; no timezone found
+$CITIUSINVT.NS: possibly delisted; no timezone found
+$AMIRCHAND.NS: possibly delisted; no timezone found
+$AMIRCHAND.BO: possibly delisted; no timezone found
+$RIIT.NS: possibly delisted; no timezone found
+$ANANTAM.NS: possibly delisted; no timezone found
+$KRT.NS: possibly delisted; no timezone found
+$NSDL.NS: possibly delisted; no timezone found
+$ARISINFRA.NS: possibly delisted; no timezone found
+$ARISINFRA.BO: possibly delisted; no timezone found
+$CAPINVIT.NS: possibly delisted; no timezone found
+$SGLTL.NS: possibly delisted; no timezone found
+$SGLTL.BO: possibly delisted; no timezone found
+$IDEAFPO.NS: possibly delisted; no timezone found
+$IDEAFPO.BO: possibly delisted; no timezone found
+$INDUSINVIT.NS: possibly delisted; no timezone found
+$SAH.NS: possibly delisted; no timezone found
+$SAH.BO: possibly delisted; no timezone found
+$OLPCL.NS: possibly delisted; no timezone found
+$RDBRL.NS: possibly delisted; no timezone found
+$VMS.NS: possibly delisted; no timezone found
+$SEATV.NS: possibly delisted; no timezone found
+$SATCH.NS: possibly delisted; no timezone found
+issed=4
+2026-09-28 02:10:57    progress 125/377  built=120  missed=5
+2026-09-28 02:11:09    progress 150/377  built=145  missed=5
+2026-09-28 02:11:23    progress 175/377  built=170  missed=5
+2026-09-28 02:11:39    progress 200/377  built=194  missed=6
+2026-09-28 02:11:54    progress 225/377  built=219  missed=6
+2026-09-28 02:12:09    progress 250/377  built=244  missed=6
+2026-09-28 02:12:22    progress 275/377  built=269  missed=6
+2026-09-28 02:12:35    progress 300/377  built=294  missed=6
+2026-09-28 02:12:48    progress 325/377  built=318  missed=7
+2026-09-28 02:13:04    progress 350/377  built=343  missed=7
+2026-09-28 02:13:18    progress 375/377  built=368  missed=7
+2026-09-28 02:13:19  JOB 2 done — target built for 370, missed 7
+2026-09-28 02:13:19    listing-date paths: derived=130, dropped_bad_series=2, dropped_no_series=5, known=240
+2026-09-28 02:13:19    BASE RATE H_label=1 (beat Nifty in yr 1): 41.1%
+2026-09-28 02:13:19    median excess_1y = -10.4 pp
+2026-09-28 02:13:19    *** 7 dropouts are disproportionately failures — base rate is OPTIMISTIC
+2026-09-28 02:13:19  JOB 3 — price history / drawdown / volatility
+2026-09-28 02:13:33    progress 25/450
+2026-09-28 02:13:45    progress 50/450
+2026-09-28 02:13:57    progress 75/450
+2026-09-28 02:14:10    progress 100/450
+2026-09-28 02:14:22    progress 125/450
+2026-09-28 02:14:35    progress 150/450
+2026-09-28 02:14:48    progress 175/450
+2026-09-28 02:15:01    progress 200/450
+2026-09-28 02:15:15    progress 225/450
+2026-09-28 02:15:27    progress 250/450
+2026-09-28 02:15:41    progress 275/450
+2026-09-28 02:15:54    progress 300/450
+2026-09-28 02:16:08    progress 325/450
+2026-09-28 02:16:22    progress 350/450
+2026-09-28 02:16:37    progress 375/450
+2026-09-28 02:16:52    progress 400/450
+2026-09-28 02:17:09    progress 425/450
+2026-09-28 02:17:26    progress 450/450
+2026-09-28 02:17:26  JOB 3 done — 444 symbols
+2026-09-28 02:17:26  ALL JOBS COMPLETE
+$KRIDHANINF.NS: Data doesn't exist for startDate = 1310063400, endDate = 1346351400
+26-09-28 11:00:31  OVERNIGHT RUN START
+2026-09-28 11:00:31  JOB 2 — building holding target (excess_1y vs Nifty)
+2026-09-28 11:00:31    candidates: 505 IPOs (246 with known listing date, 259 to derive)
+2026-09-28 11:00:44    progress 400/505  built=308  missed=6
+2026-09-28 11:00:57    progress 425/505  built=341  missed=6
+2026-09-28 11:01:09    progress 450/505  built=369  missed=6
+2026-09-28 11:01:23    progress 475/505  built=398  missed=7
+2026-09-28 11:01:36    progress 500/505  built=458  missed=8
+2026-09-28 11:01:39  JOB 2 done — target built for 497, missed 8
+2026-09-28 11:01:39    listing-date paths: derived=257, dropped_bad_series=3, dropped_no_series=5, known=240
+2026-09-28 11:01:39    BASE RATE H_label=1 (beat Nifty in yr 1): 42.3%
+2026-09-28 11:01:39    median excess_1y = -9.6 pp
+2026-09-28 11:01:39    *** 8 dropouts are disproportionately failures — base rate is OPTIMISTIC
+2026-09-28 11:01:39  ALL JOBS COMPLETE
+$NSDL.NS: possibly delisted; no timezone found
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: ARISINFRA.NS"}}}
+$ARISINFRA.NS: possibly delisted; no timezone found
+$ARISINFRA.BO: possibly delisted; no timezone found
+$SGLTL.NS: possibly delisted; no timezone found
+$SGLTL.BO: possibly delisted; no timezone found
+$SAH.NS: possibly delisted; no timezone found
+$SAH.BO: possibly delisted; no timezone found
+$OLPCL.NS: possibly delisted; no timezone found
+$RDBRL.NS: possibly delisted; no timezone found
+$KRIDHANINF.NS: Data doesn't exist for startDate = 1310063400, endDate = 1346351400
+$VMS.NS: possibly delisted; no timezone found
+$FCL.NS: Data doesn't exist for startDate = 1299349800, endDate = 1335637800
+$SEATV.NS: possibly delisted; no timezone found
+$SATCH.NS: possibly delisted; no timezone found
+$SAH.NS: possibly delisted; no timezone found
+$SAH.BO: possibly delisted; no timezone found
+$OLPCL.NS: possibly delisted; no timezone found
+$RDBRL.NS: possibly delisted; no timezone found
+$KRIDHANINF.NS: Data doesn't exist for startDate = 1310063400, endDate = 1409423400
+$VMS.NS: possibly delisted; no timezone found
+$FCL.NS: Data doesn't exist for startDate = 1299349800, endDate = 1398709800
+$SEATV.NS: possibly delisted; no timezone found
+$SATCH.NS: possibly delisted; no timezone found
+6-09-28 11:16:30    progress 475/494  built=472  missed=3
+2026-09-28 11:16:40  JOB 2 [1y, nifty50_tri] done — target built for 491, missed 3
+2026-09-28 11:16:40    listing-date paths: derived=253, dropped_no_series=3, known=238
+2026-09-28 11:16:40    BASE RATE H_label=1 (beat nifty50_tri over 1y): 40.3%
+2026-09-28 11:16:40    median excess_1y = -11.6 pp
+2026-09-28 11:16:40    *** 3 dropouts are disproportionately failures — base rate is OPTIMISTIC
+2026-09-28 11:16:40  JOB 2 — building holding target excess_3y vs nifty50_tri
+2026-09-28 11:16:40    flagged rows skipped: 29 | candidates: 332 IPOs (84 known listing date, 248 to derive)
+2026-09-28 11:16:54    progress 25/332  built=25  missed=0
+2026-09-28 11:17:07    progress 50/332  built=49  missed=1
+2026-09-28 11:17:21    progress 75/332  built=74  missed=1
+2026-09-28 11:17:35    progress 100/332  built=99  missed=1
+2026-09-28 11:17:48    progress 125/332  built=124  missed=1
+2026-09-28 11:18:02    progress 150/332  built=149  missed=1
+2026-09-28 11:18:16    progress 175/332  built=174  missed=1
+2026-09-28 11:18:29    progress 200/332  built=199  missed=1
+2026-09-28 11:18:43    progress 225/332  built=224  missed=1
+2026-09-28 11:18:57    progress 250/332  built=249  missed=1
+2026-09-28 11:19:11    progress 275/332  built=274  missed=1
+2026-09-28 11:19:26    progress 300/332  built=299  missed=1
+2026-09-28 11:19:41    progress 325/332  built=324  missed=1
+2026-09-28 11:19:45  JOB 2 [3y, nifty50_tri] done — target built for 331, missed 1
+2026-09-28 11:19:45    listing-date paths: derived=248, dropped_no_series=1, known=83
+2026-09-28 11:19:45    BASE RATE H3_label=1 (beat nifty50_tri over 3y): 36.0%
+2026-09-28 11:19:45    median excess_3y = -34.6 pp
+2026-09-28 11:19:45    *** 1 dropouts are disproportionately failures — base rate is OPTIMISTIC

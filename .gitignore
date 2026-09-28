@@ -1,0 +1,9 @@
+# PDFs are never committed; data/verified_rhp_manifest.csv records URL + SHA-256 so any
+# document can be re-fetched from SEBI / BSE SME and verified.
+*.pdf
+rhp_pdfs/
+_backup_*/
+__pycache__/
+*.pyc
+.venv/
+.env

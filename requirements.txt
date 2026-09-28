@@ -1,0 +1,12 @@
+# Pinned to the versions working on the development laptop (Python 3.14.5, Windows 11),
+# recorded in Stage 0 on 2026-09-28. scikit-learn is deliberately absent (PLAN.md rule 10).
+# Requires Python >= 3.12 (numpy 2.5 minimum; pandas 3.0 needs >= 3.11).
+pandas==3.0.6
+numpy==2.5.1
+requests==2.34.2
+yfinance==1.7.0
+pdfplumber==0.11.10
+openpyxl==3.1.5
+statsmodels==0.15.0
+beautifulsoup4==4.15.0
+lxml==6.1.1

@@ -1,0 +1,5 @@
+# Normalise line endings so Windows (laptop) and Linux (cloud) checkouts match.
+* text=auto
+*.xlsx binary
+*.joblib binary
+*.pdf binary

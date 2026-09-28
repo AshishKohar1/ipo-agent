@@ -1,0 +1,12 @@
+OLD (night run) all rows        n=370  base=41.1%
+OLD, flagged rows excluded      n=362  base=40.3%  hits=146
+NEW rows (merged today)         n=127  base=45.7%  hits=58  median excess -5.7
+CLEANED SET (excl. flagged)     n=489  base=41.7%  hits=204  median excess -10.3
+seasoned, unflagged master rows 554; built 489; Job2 misses 5; never resolved 60
+check: 489+5+60 = 554 vs seasoned 554
+  all U fail                 (204 + 65x0.000) / 554 = 36.8%
+  U beat at half observed    (204 + 65x0.209) / 554 = 39.3%
+  U beat at observed         (204 + 65x0.417) / 554 = 41.7%
+unresolved by year: {2010: 25, 2011: 15, 2012: 2, 2015: 3, 2016: 4, 2017: 2, 2018: 3, 2019: 1, 2021: 2, 2023: 1, 2024: 1, 2025: 1}
+unresolved current gains: median -95.9%, <-50: 72%
+misses: [['ARISINFRA', 'no price series — delisted/suspended/renamed'], ['SGLTL', 'no price series — delisted/suspended/renamed'], ['IGIL', 'first bar 10d after known listing date'], ['SAH', 'no price series — delisted/suspended/renamed'], ['FCONSUMER', 'first bar 178d after issue open — listing date not derivable']]
