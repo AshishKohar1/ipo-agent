@@ -15,7 +15,7 @@ source of truth. Every session: `git fetch`, check out `work`, `git pull`.
 | Stage | Title | Depends on | Status | Started (IST) | Finished (IST) | Notes |
 |---|---|---|---|---|---|---|
 | 0 | Repository setup (laptop) | — | DONE | 2026-09-28 23:01 | 2026-09-29 | acceptance verified against `origin/main`; `work` branch created and pushed — see reports/STAGE_00_CLOSURE.md |
-| 1 | Cloud environment check | 0 + cloud setup | NOT_STARTED | | | |
+| 1 | Cloud environment check | 0 + cloud setup | IN_PROGRESS | 2026-09-29 21:55 | | running on the LAPTOP (win32), not the cloud; Linux half deferred |
 | 2 | Model L feature comparison | 1 | NOT_STARTED | | | ends in Gate A |
 | 3 | Calibration curve + final thresholds | Gate A | NOT_STARTED | | | |
 | 4 | Day-wise subscription + GMP history | 1 | NOT_STARTED | | | |
