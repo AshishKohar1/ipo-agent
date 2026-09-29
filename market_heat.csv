@@ -1,0 +1,653 @@
+company,symbol,listing_date,cutoff,cutoff_source,exclude_reason,heat,n_window,window_days,heat_flag
+Bagmane Prime Office REIT,BAGMANE,2026-05-14,2026-05-05,recovered_open_date,reit_invit,-0.5222222222221009,9,60.0,widened_to_60d
+OnEMI Technology Solutions Ltd.,KISSHT,2026-05-08,2026-04-30,recovered_open_date,,-1.5675000000001091,4,30.0,
+Citius Transnet Investment Trust,CITIUSINVT,2026-04-29,2026-04-17,recovered_open_date,reit_invit,-2.8399999999998857,7,30.0,
+Om Power Transmission Ltd.,OMPOWER,2026-04-17,2026-04-09,recovered_open_date,,-1.0237499999998363,8,30.0,
+Sai Parenteral's Ltd.,SAIPARENT,2026-04-02,2026-03-24,recovered_open_date,,-5.929999999999836,8,30.0,
+Powerica Ltd,POWERICA,2026-04-02,2026-03-24,recovered_open_date,,-5.929999999999836,8,30.0,
+Amir Chand Jagdish Kumar (Exports) Ltd.,AMIRCHAND,2026-04-02,2026-03-24,recovered_open_date,,-5.929999999999836,8,30.0,
+Central Mine Planning & Design Institute Ltd.,CMPDI,2026-03-30,2026-03-20,recovered_open_date,,-5.318571428571366,7,30.0,
+GSP Crop Science Ltd.,GSPCROP,2026-03-24,2026-03-16,recovered_open_date,,-4.853749999999991,8,30.0,
+Raajmarg Infra Investment Trust,RIIT,2026-03-24,2026-03-11,recovered_open_date,reit_invit,-7.217142857142919,7,30.0,
+Innovision Ltd,INNOVISION,2026-03-23,2026-03-10,recovered_open_date,,-7.217142857142919,7,30.0,
+Rajputana Stainless Ltd.,RSL,2026-03-19,2026-03-09,recovered_open_date,,-7.217142857142919,7,30.0,
+SEDEMAC Mechatronics Ltd.,SEDEMAC,2026-03-11,2026-03-04,recovered_open_date,,-7.440000000000145,5,30.0,
+Omnitech Engineering Ltd.,OMNI,2026-03-05,2026-02-25,recovered_open_date,,-2.9566666666669335,3,30.0,
+PNGS Reva Diamond Jewellery Ltd.,PNGSREVA,2026-03-04,2026-02-24,recovered_open_date,,-2.9566666666669335,3,30.0,
+Clean Max Enviro Energy Solutions Ltd.,CLEANMAX,2026-03-02,2026-02-23,recovered_open_date,,-2.9566666666669335,3,30.0,
+Shree Ram Twistex Ltd.,SRTL,2026-03-02,2026-02-23,recovered_open_date,,-2.9566666666669335,3,30.0,
+Gaudium IVF and Wo...,GAUDIUMIVF,2026-02-27,2026-02-20,recovered_open_date,,-5.265000000000327,4,30.0,
+Aye Finance Ltd,AYE,2026-02-16,2026-02-09,recovered_open_date,,25.169999999999465,3,30.0,
+Fractal Analytics Ltd.,FRACTAL,2026-02-16,2026-02-09,recovered_open_date,,25.169999999999465,3,30.0,
+Shadowfax Technologies Ltd.,SHADOWFAX,2026-01-28,2026-01-20,recovered_open_date,,32.946666666666715,3,30.0,
+Amagi Media Labs Ltd.,AMAGI,2026-01-21,2026-01-13,recovered_open_date,,10.384999999999613,6,30.0,
+Bharat Coking Coal Ltd.,BHARATCOAL,2026-01-19,2026-01-09,recovered_open_date,,13.409999999999652,9,30.0,
+Gujarat Kidney & Super Speciality Ltd.,GKSL,2025-12-30,2025-12-22,recovered_open_date,,17.18777777777743,9,30.0,
+KSH International Ltd.,KSHINTL,2025-12-23,2025-12-16,recovered_open_date,,16.448181818181844,11,30.0,
+ICICI Prudential Asset Management Co.Ltd.,ICICIAMC,2025-12-19,2025-12-12,recovered_open_date,,13.975833333333412,12,30.0,
+Nephrocare Health Services Ltd.,NEPHROPLUS,2025-12-17,2025-12-10,recovered_open_date,,10.634000000000196,10,30.0,
+Park Medi World Ltd.,PARKHOSPS,2025-12-17,2025-12-10,recovered_open_date,,10.634000000000196,10,30.0,
+Wakefit Innovations Ltd.,WAKEFIT,2025-12-15,2025-12-08,recovered_open_date,,10.634000000000196,10,30.0,
+Corona Remedies Ltd.,CORONA,2025-12-15,2025-12-08,recovered_open_date,,10.634000000000196,10,30.0,
+Aequs Ltd,AEQUS,2025-12-10,2025-11-30,listing_date_minus_10d,,8.894166666666933,12,30.0,
+Meesho Ltd,MEESHO,2025-12-10,2025-12-03,recovered_open_date,,8.894166666666933,12,30.0,
+Vidya Wires Ltd,VIDYAWIRES,2025-12-10,2025-12-03,recovered_open_date,,8.894166666666933,12,30.0,
+Sudeep Pharma Ltd,SUDEEPPHRM,2025-11-28,2025-11-21,recovered_open_date,,8.281000000000313,10,30.0,
+Excelsoft Technologies Ltd.,EXCELSOFT,2025-11-26,2025-11-19,recovered_open_date,,7.697500000000218,8,30.0,
+Capillary Technologies India Ltd.,CAPILLARY,2025-11-21,2025-11-14,recovered_open_date,,6.752500000000282,8,30.0,
+Fujiyama Power Systems Ltd.,UTLSOLAR,2025-11-20,2025-11-13,recovered_open_date,,11.606666666666975,9,30.0,
+Tenneco Clean Air India Ltd.,TENNIND,2025-11-19,2025-11-12,recovered_open_date,,10.187777777778036,9,30.0,
+Physicswallah Ltd,PWL,2025-11-18,2025-11-11,recovered_open_date,,10.187777777778036,9,30.0,
+Emmvee Photovoltaic Power Ltd.,EMMVEE,2025-11-18,2025-11-11,recovered_open_date,,10.187777777778036,9,30.0,
+Pine Labs Ltd,PINELABS,2025-11-14,2025-11-07,recovered_open_date,,7.9277777777780205,9,30.0,
+Billionbrains Garage Ventures Ltd.,GROWW,2025-11-12,2025-11-04,recovered_open_date,,3.6545454545455205,11,30.0,
+Lenskart Solutions Ltd.,LENSKART,2025-11-10,2025-10-31,recovered_open_date,,2.5481249999999136,16,30.0,
+Studds Accessories Ltd.,STUDDS,2025-11-07,2025-10-30,recovered_open_date,,2.951999999999953,20,30.0,
+Orkla India Ltd,ORKLAINDIA,2025-11-06,2025-10-27,listing_date_minus_10d,,2.92999999999996,22,30.0,
+Midwest Ltd,MIDWESTLTD,2025-10-24,2025-10-15,recovered_open_date,,4.278846153846014,26,30.0,
+Canara HSBC Life Insurance Co.Ltd.,CANHLIFE,2025-10-17,2025-10-10,recovered_open_date,,2.4824999999998454,24,30.0,
+Canara Robeco Asset Management Co.Ltd.,CRAMC,2025-10-16,2025-10-09,recovered_open_date,,2.6371999999998663,25,30.0,
+Rubicon Research Ltd.,RUBICON,2025-10-16,2025-10-09,recovered_open_date,,2.6371999999998663,25,30.0,
+LG Electronics India Ltd.,LGEINDIA,2025-10-14,2025-10-07,recovered_open_date,,5.88571428571413,21,30.0,
+Anantam Highways Trust,ANANTAM,2025-10-16,2025-10-07,recovered_open_date,reit_invit,5.88571428571413,21,30.0,
+Tata Capital Ltd,TATACAP,2025-10-13,2025-10-06,recovered_open_date,,6.00099999999984,20,30.0,
+WeWork India Management Ltd.,WEWORK,2025-10-10,2025-10-03,recovered_open_date,,5.429999999999927,20,30.0,
+Advance Agrolife Ltd.,ADVANCE,2025-10-08,2025-09-30,recovered_open_date,,7.99692307692301,13,30.0,
+Fabtech Technologies Ltd.,FABTECH,2025-10-07,2025-09-29,recovered_open_date,,8.958181818181732,11,30.0,
+Glottis Ltd,GLOTTIS,2025-10-07,2025-09-29,recovered_open_date,,8.958181818181732,11,30.0,
+Om Freight Forwarders Ltd.,OMFREIGHT,2025-10-08,2025-09-29,recovered_open_date,,8.958181818181732,11,30.0,
+Pace Digitek Ltd,PACEDIGITK,2025-10-06,2025-09-26,recovered_open_date,,9.124999999999819,10,30.0,
+Jinkushal Industries Ltd.,JKIPL,2025-10-03,2025-09-25,recovered_open_date,,9.679230769230625,13,30.0,
+Trualt Bioenergy Ltd.,TRUALT,2025-10-03,2025-09-25,recovered_open_date,,9.679230769230625,13,30.0,
+Jain Resource Recycling Ltd.,JAINREC,2025-10-01,2025-09-24,recovered_open_date,,9.980833333333218,12,30.0,
+Epack Prefab Technologies Ltd.,EPACKPEB,2025-10-01,2025-09-24,recovered_open_date,,9.980833333333218,12,30.0,
+BMW Ventures Ltd,BMWVENTLTD,2025-10-01,2025-09-24,recovered_open_date,,9.980833333333218,12,30.0,
+Anand Rathi Share & Stock Brokers Ltd.,ARSSBL,2025-09-30,2025-09-23,recovered_open_date,,9.914545454545408,11,30.0,
+Seshaasai Technologies Ltd.,STYL,2025-09-30,2025-09-23,recovered_open_date,,9.914545454545408,11,30.0,
+Solarworld Energy Solutions Ltd.,SOLARWORLD,2025-09-30,2025-09-23,recovered_open_date,,9.914545454545408,11,30.0,
+Jaro Institute of Technology Management & Research Ltd.,JARO,2025-09-30,2025-09-23,recovered_open_date,,9.914545454545408,11,30.0,
+Atlanta Electricals Ltd.,ATLANTAELE,2025-09-29,2025-09-22,recovered_open_date,,9.914545454545408,11,30.0,
+Ganesh Consumer Products Ltd.,GANESHCP,2025-09-29,2025-09-22,recovered_open_date,,9.914545454545408,11,30.0,
+GK Energy Ltd,GKENERGY,2025-09-26,2025-09-19,recovered_open_date,,12.339999999999995,12,30.0,
+Saatvik Green Energy Ltd.,SAATVIKGL,2025-09-26,2025-09-19,recovered_open_date,,12.339999999999995,12,30.0,
+Ivalue Infosolutions Ltd.,IVALUE,2025-09-25,2025-09-18,recovered_open_date,,11.268461538461521,13,30.0,
+VMS TMT Ltd,VMSTMT,2025-09-24,2025-09-17,recovered_open_date,,7.593000000000029,10,30.0,
+Euro Pratik Sales Ltd.,EUROPRATIK,2025-09-23,2025-09-16,recovered_open_date,,7.593000000000029,10,30.0,
+Dev Accelerator Ltd.,DEVX,2025-09-17,2025-09-10,recovered_open_date,,12.418461538461578,13,30.0,
+Shringar House of Mangalsutra Ltd.,SHRINGARMS,2025-09-17,2025-09-10,recovered_open_date,,12.418461538461578,13,30.0,
+Urban Company Ltd,URBANCO,2025-09-17,2025-09-07,listing_date_minus_10d,,12.924166666666679,12,30.0,
+Amanta Healthcare Ltd.,AMANTA,2025-09-09,2025-09-01,recovered_open_date,,14.590666666666584,15,30.0,
+Anlon Healthcare Ltd.,AHCL,2025-09-03,2025-08-26,recovered_open_date,,16.835000000000036,14,30.0,
+Vikran Engineering Ltd.,VIKRAN,2025-09-03,2025-08-26,recovered_open_date,,16.835000000000036,14,30.0,
+Mangal Electrical Industries Ltd.,MEIL,2025-08-28,2025-08-20,recovered_open_date,,15.966428571428619,14,30.0,
+Gem Aromatics Ltd,GEMAROMA,2025-08-26,2025-08-19,recovered_open_date,,17.31692307692314,13,30.0,
+Shreeji Shipping Global Ltd.,SHREEJISPG,2025-08-26,2025-08-19,recovered_open_date,,17.31692307692314,13,30.0,
+Patel Retail Ltd,PATELRMART,2025-08-26,2025-08-19,recovered_open_date,,17.31692307692314,13,30.0,
+Vikram Solar Ltd,VIKRAMSOLR,2025-08-26,2025-08-19,recovered_open_date,,17.31692307692314,13,30.0,
+Regaal Resources Ltd.,REGAAL,2025-08-20,2025-08-12,recovered_open_date,,12.428333333333285,12,30.0,
+BlueStone Jewellery & Lifestyle Ltd.,BLUESTONE,2025-08-19,2025-08-11,recovered_open_date,,12.428333333333285,12,30.0,
+JSW Cement Ltd,JSWCEMENT,2025-08-14,2025-08-07,recovered_open_date,,12.571538461538484,13,30.0,
+All Time Plastics Ltd.,ALLTIME,2025-08-14,2025-08-07,recovered_open_date,,12.571538461538484,13,30.0,
+Highway Infrastructure Ltd.,HILINFRA,2025-08-12,2025-08-05,recovered_open_date,,12.110000000000127,8,30.0,
+Knowledge Realty Trust,KRT,2025-08-18,2025-08-05,recovered_open_date,reit_invit,12.110000000000127,8,30.0,
+M & B Engineering Ltd,MBEL,2025-08-06,2025-07-30,recovered_open_date,,14.91200000000008,10,30.0,
+Sri Lotus Developers & Realty Ltd,LOTUSDEV,2025-08-06,2025-07-30,recovered_open_date,,14.91200000000008,10,30.0,
+National Securities Depository Ltd (NSDL),NSDL,2025-08-06,2025-07-30,recovered_open_date,,14.91200000000008,10,30.0,
+Aditya Infotech Ltd,CPPLUS,2025-08-05,2025-07-29,recovered_open_date,,14.91200000000008,10,30.0,
+Laxmi India Finance Ltd,LAXMIINDIA,2025-08-05,2025-07-29,recovered_open_date,,14.91200000000008,10,30.0,
+Shanti Gold International Ltd,SHANTIGOLD,2025-08-01,2025-07-25,recovered_open_date,,13.028181818181936,11,30.0,
+Brigade Hotel Ventures Limited,BRIGHOTEL,2025-07-31,2025-07-24,recovered_open_date,,13.028181818181936,11,30.0,
+GNG Electronics Limited,EBGNG,2025-07-30,2025-07-23,recovered_open_date,,13.028181818181936,11,30.0,
+Indiqube Spaces Limited,INDIQUBE,2025-07-30,2025-07-23,recovered_open_date,,13.028181818181936,11,30.0,
+Anthem Biosciences Limited,ANTHEM,2025-07-21,2025-07-14,recovered_open_date,,12.205555555555797,9,30.0,
+Smartworks Coworking Limited,SMARTWORKS,2025-07-17,2025-07-10,recovered_open_date,,12.205555555555797,9,30.0,
+Travel Food Services Limited,TRAVELFOOD,2025-07-14,2025-07-07,recovered_open_date,,11.945000000000164,8,30.0,
+Crizac Limited,CRIZAC,2025-07-09,2025-07-02,recovered_open_date,,6.063333333333503,9,30.0,
+Indogulf Cropsciences Limited,IGCL,2025-07-03,2025-06-26,recovered_open_date,,3.1475000000002638,8,30.0,
+HDB Financial Services Limited,HDBFS,2025-07-02,2025-06-25,recovered_open_date,,4.427142857143086,7,30.0,
+Sambhv Steel Tubes Limited,SAMBHV,2025-07-02,2025-06-25,recovered_open_date,,4.427142857143086,7,30.0,
+Globe Civil Projects Limited,GLOBECIVIL,2025-07-01,2025-06-24,recovered_open_date,,4.427142857143086,7,30.0,
+Kalpataru Limited,KALPATARU,2025-07-01,2025-06-24,recovered_open_date,,4.427142857143086,7,30.0,
+Ellenbarrie Industrial Gases Limited,ELLEN,2025-07-01,2025-06-24,recovered_open_date,,4.427142857143086,7,30.0,
+Arisinfra Solutions Limited,ARISINFRA,2025-06-25,2025-06-18,recovered_open_date,,4.676666666666885,6,30.0,
+Oswal Pumps Limited,OSWALPUMPS,2025-06-20,2025-06-13,recovered_open_date,,4.676666666666885,6,30.0,
+Scoda Tubes Limited,SCODATUBES,2025-06-04,2025-05-28,recovered_open_date,,7.0349999999998545,2,30.0,
+Prostarm Info Systems Limited,PROSTARM,2025-06-03,2025-05-27,recovered_open_date,,7.574999999999999,510,,long_run_median
+Aegis Vopak Terminals Limited,AEGISVOPAK,2025-06-02,2025-05-26,recovered_open_date,,7.574999999999999,510,,long_run_median
+Schloss Bangalore Limited,THELEELA,2025-06-02,2025-05-26,recovered_open_date,,7.574999999999999,510,,long_run_median
+Belrise Industries Limited,BELRISE,2025-05-28,2025-05-21,recovered_open_date,,7.574999999999999,510,,long_run_median
+Borana Weaves Limited,BORANA,2025-05-27,2025-05-20,recovered_open_date,,7.574999999999999,510,,long_run_median
+Ather Energy Limited,ATHERENERG,2025-05-06,2025-04-28,recovered_open_date,,7.59,509,,long_run_median
+Quality Power Electronics Limited,QPOWER,2025-02-24,2025-02-14,recovered_open_date,,16.914999999999964,4,30.0,
+Hexaware Technologies Limited,HEXT,2025-02-19,2025-02-12,recovered_open_date,,20.38999999999972,6,30.0,
+Ajax Engineering Limited,AJAXENGG,2025-02-17,2025-02-10,recovered_open_date,,20.38999999999972,6,30.0,
+Dr Agarwal's Healthcare Limited,AGARWALEYE,2025-02-04,2025-01-29,recovered_open_date,,30.97555555555563,9,30.0,
+Denta Water & Infrastructure Limited,,2025-01-29,2025-01-19,listing_date_minus_10d,,39.50769230769234,13,30.0,
+Stallion India Fluorochem Limited,STALLION,2025-01-23,2025-01-16,recovered_open_date,,39.588823529411776,17,30.0,
+Laxmi Dental Limited,LAXMIDENTL,2025-01-20,2025-01-13,recovered_open_date,,41.222000000000115,15,30.0,
+Capital Infra Trust,CAPINVIT,2025-01-17,2025-01-07,recovered_open_date,reit_invit,42.724285714285806,14,30.0,
+Quadrant Future Tek Limited,QUADFUTURE,2025-01-14,2025-01-07,recovered_open_date,,42.724285714285806,14,30.0,
+Standard Glass Lining Technology Limited,SGLTL,2025-01-13,2025-01-06,recovered_open_date,,42.724285714285806,14,30.0,
+Indo Farm Equipment Limited,INDOFARM,2025-01-07,2024-12-31,recovered_open_date,,36.23500000000006,14,30.0,
+Unimech Aerospace and Manufacturing Limited,UNIMECH,2024-12-31,2024-12-23,recovered_open_date,,28.774999999999864,8,30.0,
+Ventive Hospitality Limited,VENTIVE,2024-12-30,2024-12-20,recovered_open_date,,26.418749999999818,8,30.0,
+Carraro India Limited,CARRARO,2024-12-30,2024-12-20,recovered_open_date,,26.418749999999818,8,30.0,
+Senores Pharmaceuticals Limited,SENORES,2024-12-30,2024-12-20,recovered_open_date,,26.418749999999818,8,30.0,
+Transrail Lighting Limited,TRANSRAILL,2024-12-27,2024-12-19,recovered_open_date,,24.528571428571272,7,30.0,
+Dam Capital Advisors Limited,DAMCAPITAL,2024-12-27,2024-12-19,recovered_open_date,,24.528571428571272,7,30.0,
+Mamata Machinery Limited,MAMATA,2024-12-27,2024-12-19,recovered_open_date,,24.528571428571272,7,30.0,
+Sanathan Textiles Limited,SANATHAN,2024-12-27,2024-12-19,recovered_open_date,,24.528571428571272,7,30.0,
+Concord Enviro Systems Limited,CEWATER,2024-12-27,2024-12-19,recovered_open_date,,24.528571428571272,7,30.0,
+International Gemmological Institute (India) Limited,IGIL,2024-12-20,2024-12-13,recovered_open_date,,7.611428571428405,7,30.0,
+Inventurus Knowledge Solutions Limited,IKS,2024-12-19,2024-12-12,recovered_open_date,,7.101249999999936,8,30.0,
+Vishal Mega Mart Limited,VMM,2024-12-18,2024-12-11,recovered_open_date,,7.101249999999936,8,30.0,
+One Mobikwik Systems Limited,MOBIKWIK,2024-12-18,2024-12-11,recovered_open_date,,7.101249999999936,8,30.0,
+Sai Life Sciences Limited,SAILIFE,2024-12-18,2024-12-11,recovered_open_date,,7.101249999999936,8,30.0,
+Suraksha Diagnostic Limited,SURAKSHA,2024-12-06,2024-11-29,recovered_open_date,,-1.0600000000001728,8,30.0,
+Enviro Infra Engineers Limited,EIEL,2024-11-29,2024-11-22,recovered_open_date,,6.676249999999982,8,30.0,
+NTPC Green Energy Limited,NTPCGREEN,2024-11-27,2024-11-17,listing_date_minus_10d,,5.770000000000032,9,30.0,
+Zinka Logistics Solution Limited (BlackBuck),BLACKBUCK,2024-11-22,2024-11-13,recovered_open_date,,8.459999999999907,7,30.0,
+Niva Bupa Health Insurance Company Limited,NIVABUPA,2024-11-14,2024-11-07,recovered_open_date,,9.281666666666448,6,30.0,
+Swiggy Limited,SWIGGY,2024-11-13,2024-11-06,recovered_open_date,,9.281666666666448,6,30.0,
+ACME Solar Holdings Limited,ACMESOLAR,2024-11-13,2024-11-06,recovered_open_date,,9.281666666666448,6,30.0,
+Sagility India Limited,SAGILITY,2024-11-12,2024-11-05,recovered_open_date,,9.281666666666448,6,30.0,
+Afcons Infrastructure Limited,AFCONS,2024-11-04,2024-10-25,listing_date_minus_10d,,31.537999999999737,5,30.0,
+Godavari Biorefineries Limited,GODAVARIB,2024-10-30,2024-10-23,recovered_open_date,,28.426249999999754,8,30.0,
+Deepak Builders & Engineers India Limited,DBEIL,2024-10-28,2024-10-21,recovered_open_date,,32.698571428571086,7,30.0,
+Waaree Energies Limited,WAAREEENER,2024-10-28,2024-10-21,recovered_open_date,,32.698571428571086,7,30.0,
+Hyundai Motor India Limited,HYUNDAI,2024-10-22,2024-10-15,recovered_open_date,,40.87399999999998,10,30.0,
+Garuda Construction and Engineering Limited,GARUDA,2024-10-15,2024-10-08,recovered_open_date,,38.53750000000006,12,30.0,
+Diffusion Engineers Limited,DIFFNKG,2024-10-04,2024-09-26,recovered_open_date,,37.69769230769243,13,30.0,
+KRN Heat Exchanger and Refrigeration Limited,KRN,2024-10-03,2024-09-25,recovered_open_date,,38.11000000000006,14,30.0,
+Manba Finance Limited,MANBA,2024-09-30,2024-09-23,recovered_open_date,,42.165454545454686,11,30.0,
+Arkade Developers Limited,ARKADE,2024-09-24,2024-09-16,recovered_open_date,,37.54250000000013,8,30.0,
+Northern ARC Capital Limited,NORTHARC,2024-09-24,2024-09-14,listing_date_minus_10d,,37.54250000000013,8,30.0,
+Western Carriers Limited,WCIL,2024-09-24,2024-09-13,recovered_open_date,,37.54250000000013,8,30.0,
+P N Gadgil Jewellers Limited,PNGJL,2024-09-17,2024-09-10,recovered_open_date,,48.42000000000007,9,30.0,
+Tolins Tyres Limited,TOLINS,2024-09-16,2024-09-09,recovered_open_date,,49.25,8,30.0,
+Bajaj Housing Finance Limited,BAJAJHFL,2024-09-16,2024-09-09,recovered_open_date,,49.25,8,30.0,
+Kross Limited,KROSS,2024-09-16,2024-09-06,listing_date_minus_10d,,44.10888888888884,9,30.0,
+Shree Tirupati Balajee Agro Trading Company Limited,BALAJEE,2024-09-12,2024-09-05,recovered_open_date,,40.375,10,30.0,
+Gala Precision Engineering Limited,GALAPREC,2024-09-09,2024-09-02,recovered_open_date,,33.2962500000001,8,30.0,
+Baazar Style Retail Limited,STYLEBAAZA,2024-09-06,2024-08-30,recovered_open_date,,33.2962500000001,8,30.0,
+Ecos (India) Mobility & Hospitality Limited,ECOSMOBLTY,2024-09-04,2024-08-28,recovered_open_date,,32.22714285714288,7,30.0,
+Premier Energies Limited,PREMIERENE,2024-09-03,2024-08-27,recovered_open_date,,32.22714285714288,7,30.0,
+Orient Technologies Limited,ORIENTTECH,2024-08-28,2024-08-21,recovered_open_date,,27.731428571428687,7,30.0,
+Interarch Building Products Limited,INTERARCH,2024-08-26,2024-08-19,recovered_open_date,,28.18666666666665,6,30.0,
+Saraswati Saree Depot Limited,SSDL,2024-08-20,2024-08-12,recovered_open_date,,5.4375,4,30.0,
+Brainbees Solutions Limited,FIRSTCRY,2024-08-13,2024-08-06,recovered_open_date,,26.990000000000084,3,30.0,
+Unicommerce eSolutions Limited,UNIECOM,2024-08-13,2024-08-06,recovered_open_date,,26.990000000000084,3,30.0,
+Ola Electric Mobility Limited,OLAELEC,2024-08-09,2024-08-02,recovered_open_date,,24.227499999999964,4,30.0,
+Ceigall India Limited,CEIGALL,2024-08-08,2024-08-01,recovered_open_date,,22.021999999999935,5,30.0,
+Akums Drugs and Pharmaceuticals Limited,AKUMS,2024-08-06,2024-07-30,recovered_open_date,,22.021999999999935,5,30.0,
+Sanstar Limited,SANSTAR,2024-07-26,2024-07-19,recovered_open_date,,26.667999999999846,5,30.0,
+Emcure Pharmaceuticals Limited,EMCURE,2024-07-10,2024-07-03,recovered_open_date,,24.21499999999969,2,30.0,
+Bansal Wire Industries Limited,BANSALWIRE,2024-07-10,2024-07-03,recovered_open_date,,24.21499999999969,2,30.0,
+Vraj Iron & Steel Limited,VRAJ,2024-07-03,2024-06-26,recovered_open_date,,5.949999999999999,442,,long_run_median
+Allied Blenders and Distillers Limited,ABDL,2024-07-02,2024-06-25,recovered_open_date,,5.949999999999999,442,,long_run_median
+Stanley Lifestyles Limited,STANLEY,2024-06-28,2024-06-21,recovered_open_date,,5.949999999999999,442,,long_run_median
+Vodafone Idea Ltd ,IDEAFPO,2024-04-25,2024-04-18,recovered_open_date,fpo,12.449999999999818,4,30.0,
+Bharti Hexacom Ltd ,BHARTIHEXA,2024-04-12,2024-04-03,recovered_open_date,,19.60249999999985,8,30.0,
+SRM Contractors Ltd ,SRM,2024-04-03,2024-03-26,recovered_open_date,,17.335999999999878,10,30.0,
+Krystal Integrated Services Ltd ,KRYSTAL,2024-03-21,2024-03-14,recovered_open_date,,29.167500000000018,12,30.0,
+Popular Vehicles & Services Ltd ,PVSL,2024-03-19,2024-03-12,recovered_open_date,,35.24363636363639,11,30.0,
+Gopal Snacks Ltd,GOPAL,2024-03-14,2024-03-06,recovered_open_date,,41.766363636363664,11,30.0,
+J.G.Chemicals Ltd ,JGCHEM,2024-03-13,2024-03-05,recovered_open_date,,37.79777777777781,9,30.0,
+R K Swamy Ltd ,RKSWAMY,2024-03-12,2024-03-04,recovered_open_date,,37.79777777777781,9,30.0,
+Mukka Proteins Ltd ,MUKKA,2024-03-07,2024-02-29,recovered_open_date,,35.839000000000034,10,30.0,
+Indus Infra Trust ,INDUSINVIT,2024-03-12,2024-03-02,listing_date_minus_10d,reit_invit,37.79777777777781,9,30.0,
+Exicom Tele-Systems Ltd ,EXICOM,2024-03-05,2024-02-27,recovered_open_date,,39.78444444444449,9,30.0,
+Platinum Industries Ltd ,PLATIND,2024-03-05,2024-02-27,recovered_open_date,,39.78444444444449,9,30.0,
+GPT Healthcare Ltd ,GPTHEALTH,2024-02-29,2024-02-22,recovered_open_date,,36.93000000000002,10,30.0,
+Juniper Hotels Ltd ,JUNIPER,2024-02-28,2024-02-21,recovered_open_date,,36.93000000000002,10,30.0,
+Vibhor Steel Tubes Limited,VSTL,2024-02-20,2024-02-13,recovered_open_date,,34.59833333333336,6,30.0,
+Entero Healthcare Solutions Limited,ENTERO,2024-02-16,2024-02-09,recovered_open_date,,37.388000000000105,5,30.0,
+Jana Small Finance Bank Limited,JSFB,2024-02-14,2024-02-07,recovered_open_date,,37.388000000000105,5,30.0,
+Capital Small Finance Bank Limited,CAPITALSFB,2024-02-14,2024-02-07,recovered_open_date,,37.388000000000105,5,30.0,
+Rashi Peripherals Limited,RPTECH,2024-02-14,2024-02-07,recovered_open_date,,37.388000000000105,5,30.0,
+Apeejay Surrendra Group (conglomerate),,2024-02-12,2024-02-02,listing_date_minus_10d,,14.512500000000045,4,30.0,
+BLS E-Services Limited,BLSE,2024-02-06,2024-01-30,recovered_open_date,,11.815000000000055,2,30.0,
+Nova Agritech Limited,NOVAAGRI,2024-01-31,2024-01-23,recovered_open_date,,16.460000000000036,9,30.0,
+Epack Durable Limited,EPACK,2024-01-30,2024-01-19,recovered_open_date,,24.252500000000055,12,30.0,
+Medi Assist Healthcare Services Limited,MEDIASSIST,2024-01-23,2024-01-15,recovered_open_date,,25.33090909090912,11,30.0,
+Jyoti CNC Automation Limited,JYOTICNC,2024-01-16,2024-01-09,recovered_open_date,,25.33090909090912,11,30.0,
+Innova Captab Limited,INNOVACAP,2023-12-29,2023-12-21,recovered_open_date,,62.34000000000002,7,30.0,
+Azad Engineering Limited,AZAD,2023-12-28,2023-12-20,recovered_open_date,,66.97600000000003,5,30.0,
+Happy Forgings Limited,HAPPYFORGE,2023-12-27,2023-12-19,recovered_open_date,,66.97600000000003,5,30.0,
+Credo Brands Marketing Limited,MUFTI,2023-12-27,2023-12-19,recovered_open_date,,66.97600000000003,5,30.0,
+RBZ Jewellers Limited,RBZJEWEL,2023-12-27,2023-12-19,recovered_open_date,,66.97600000000003,5,30.0,
+Muthoot Microfin Limited,MUTHOOTMF,2023-12-26,2023-12-18,recovered_open_date,,66.97600000000003,5,30.0,
+Motisons Jewellers Limited,MOTISONS,2023-12-26,2023-12-18,recovered_open_date,,66.97600000000003,5,30.0,
+Suraj Estate Developers Limited,SURAJEST,2023-12-26,2023-12-18,recovered_open_date,,66.97600000000003,5,30.0,
+Inox India Limited,INOXINDIA,2023-12-21,2023-12-11,listing_date_minus_10d,,57.166666666666664,6,30.0,
+Doms Industries Limited,DOMS,2023-12-20,2023-12-13,recovered_open_date,,57.166666666666664,6,30.0,
+India Shelter Finance Limited,INDIASHLTR,2023-12-20,2023-12-13,recovered_open_date,,57.166666666666664,6,30.0,
+Flair Writing Instruments Limited,,2023-12-01,2023-11-21,listing_date_minus_10d,,9.176666666666733,6,30.0,
+Tata Technologies Limited,TATATECH,2023-11-30,2023-11-22,recovered_open_date,,9.176666666666733,6,30.0,
+Gandhar Oil Refineries Limited,GANDHAR,2023-11-30,2023-11-22,recovered_open_date,,9.176666666666733,6,30.0,
+Fedbank Financial Services Limited,FEDFINA,2023-11-30,2023-11-22,recovered_open_date,,9.176666666666733,6,30.0,
+Indian Renewable Energy Development Agency Limited (IREDA),IREDA,2023-11-29,2023-11-19,listing_date_minus_10d,,9.176666666666733,6,30.0,
+ASK Automotive Limited,ASKAUTOLTD,2023-11-15,2023-11-07,recovered_open_date,,20.667500000000246,4,30.0,
+Protean eGov Technologies Limited,PROTEAN,2023-11-13,2023-11-06,recovered_open_date,bad_listing_date,18.143333333333732,3,30.0,
+ESAF Small Finance Bank Limited,ESAFSFB,2023-11-10,2023-10-31,listing_date_minus_10d,,14.258333333333516,6,30.0,
+Honasa Consumer Limited (Mamaearth),HONASA,2023-11-07,2023-10-31,recovered_open_date,,14.258333333333516,6,30.0,
+Cello World Limited,CELLO,2023-11-06,2023-10-30,recovered_open_date,,14.258333333333516,6,30.0,
+Blue Jet Healthcare Limited,BLUEJET,2023-11-01,2023-10-25,recovered_open_date,,12.68500000000006,8,30.0,
+IRM Energy Limited,IRMENERGY,2023-10-26,2023-10-18,recovered_open_date,,13.986923076923002,13,30.0,
+Plaza Wires Limited,PLAZACABLE,2023-10-12,2023-09-29,recovered_open_date,,22.814999999999827,12,30.0,
+Valiant Laboratories Limited,VALIANTLAB,2023-10-06,2023-09-27,recovered_open_date,,27.4449999999998,10,30.0,
+JSW Infrastructure Limited,JSWINFRA,2023-10-03,2023-09-25,recovered_open_date,,27.4449999999998,10,30.0,
+Updater Services Limited,UDS,2023-10-04,2023-09-25,recovered_open_date,,27.4449999999998,10,30.0,
+Manoj Vaibhav Gems,MVGJL,2023-10-03,2023-09-22,recovered_open_date,,30.753333333333202,9,30.0,
+Signature Global India Limited,SIGNATURE,2023-09-27,2023-09-20,recovered_open_date,,32.775714285714194,7,30.0,
+Sai Silks (Kalamandir) Limited,KALAMANDIR,2023-09-27,2023-09-20,recovered_open_date,,32.775714285714194,7,30.0,
+Yatra Online Limited,YATRA,2023-09-28,2023-09-15,recovered_open_date,,33.014999999999986,8,30.0,
+Samhi Hotels Limited,SAMHI,2023-09-22,2023-09-14,recovered_open_date,,33.014999999999986,8,30.0,
+Zaggle Prepaid Ocean Limited,ZAGGLE,2023-09-22,2023-09-14,recovered_open_date,,33.014999999999986,8,30.0,
+R R Kabel Limited,RRKABEL,2023-09-20,2023-09-13,recovered_open_date,,33.014999999999986,8,30.0,
+EMS Limited,EMSLIMITED,2023-09-21,2023-09-11,listing_date_minus_10d,,38.19999999999997,6,30.0,
+Jupiter Life Line Limited,JLHL,2023-09-18,2023-09-06,recovered_open_date,,32.93285714285711,7,30.0,
+Ratnaveer Precision Limited,RATNAVEER,2023-09-11,2023-09-04,recovered_open_date,,27.596666666666653,6,30.0,
+Rishabh Instruments Limited,RISHABH,2023-09-11,2023-08-30,recovered_open_date,,16.560000000000038,5,30.0,
+Vishnu Prakash R P Limited,VPRPL,2023-09-05,2023-08-24,recovered_open_date,,31.970000000000073,5,30.0,
+Aeroflex Industries Limited,AEROFLEX,2023-08-31,2023-08-22,recovered_open_date,,38.78250000000003,4,30.0,
+Pyramid Technoplast Limited,PYRAMID,2023-08-29,2023-08-18,recovered_open_date,,48.367500000000064,4,30.0,
+TVS Supply Chain Solutions Limited,TVSSCS,2023-08-23,2023-08-10,recovered_open_date,,46.397500000000036,4,30.0,
+Concord Biotech Limited,CONCORDBIO,2023-08-18,2023-08-04,recovered_open_date,,65.958,5,30.0,
+SBFC Finance Limited,SBFC,2023-08-16,2023-08-03,recovered_open_date,,55.820000000000014,6,30.0,
+Yatharth Hospital & Trauma Care Services Limited,YATHARTH,2023-08-07,2023-07-26,recovered_open_date,,49.28400000000001,5,30.0,
+Netweb Technologies India Limited,NETWEB,2023-07-27,2023-07-17,recovered_open_date,,46.65499999999997,4,30.0,
+Utkarsh Small Finance Bank Limited,UTKARSHBNK,2023-07-21,2023-07-12,recovered_open_date,,46.962499999999864,4,30.0,
+Senco Gold Limited,SENCO,2023-07-14,2023-07-04,recovered_open_date,,28.779999999999745,2,60.0,widened_to_60d
+Cyient DLM Limited,CYIENTDLM,2023-07-10,2023-06-27,recovered_open_date,,28.779999999999745,2,60.0,widened_to_60d
+Ideaforge Technologies Limited,IDEAFORGE,2023-07-07,2023-06-26,recovered_open_date,,28.779999999999745,2,60.0,widened_to_60d
+HMA Agro Industries Limited,HMAAGRO,2023-07-04,2023-06-20,recovered_open_date,,28.779999999999745,2,60.0,widened_to_60d
+IKIO Technologies Limited (formerly IKIO Lighting Limited),IKIO,2023-06-16,2023-06-06,listing_date_minus_10d,,9.610000000000127,2,60.0,widened_to_60d
+Nexus Select Trust,NXST,2023-05-19,2023-05-09,recovered_open_date,reit_invit,4.242500000000064,4,60.0,widened_to_60d
+Mankind Pharma Limited,MANKIND,2023-05-09,2023-04-25,recovered_open_date,,-0.5749999999998181,2,30.0,
+Avalon Technologies Limited,AVALON,2023-04-18,2023-04-03,recovered_open_date,,9.059999999999945,2,30.0,
+Udayshivakumar Infosolutions Limited,USK,2023-04-03,2023-03-20,recovered_open_date,,5.125,364,,long_run_median
+Global Surfaces Limited,GSLSU,2023-03-23,2023-03-13,recovered_open_date,,5.18,363,,long_run_median
+Divgi Torqtransfer Systems Limited,DIVGIITTS,2023-03-14,2023-03-01,recovered_open_date,,18.205000000000382,2,60.0,widened_to_60d
+Sah Polymers Limited,SAH,2023-01-12,2022-12-30,recovered_open_date,,1.0216666666665333,6,30.0,
+Radiant Cash Management Services Limited,RADIANTCMS,2023-01-04,2022-12-23,recovered_open_date,,1.5679999999998473,5,30.0,
+Elin Electronics Limited,ELIN,2022-12-30,2022-12-20,recovered_open_date,,6.4057142857141764,7,30.0,
+KFin Technologies Limited,KFINTECH,2022-12-29,2022-12-19,recovered_open_date,,6.4057142857141764,7,30.0,
+Landmark Cars Limited,LANDMARK,2022-12-23,2022-12-13,recovered_open_date,,6.834999999999946,10,30.0,
+Abans Financial Services Limited,AFSL,2022-12-23,2022-12-13,listing_date_minus_10d,,6.834999999999946,10,30.0,
+Sula Vineyards Limited,SULA,2022-12-22,2022-12-12,recovered_open_date,,7.633333333333313,9,30.0,
+Uniparts India Limited,UNIPARTS,2022-12-12,2022-11-30,recovered_open_date,,10.527777777777779,9,30.0,
+Dharmaj Crop Guard Limited,DHARMAJ,2022-12-08,2022-11-28,recovered_open_date,,10.527777777777779,9,30.0,
+Keystone Realtors Limited,RUSTOMJEE,2022-11-24,2022-11-14,recovered_open_date,,31.189999999999902,3,30.0,
+Inox Green Energy Limited,INOXGREEN,2022-11-23,2022-11-11,recovered_open_date,,27.639999999999873,2,30.0,
+Kaynes Technology India Limited,KAYNES,2022-11-22,2022-11-10,recovered_open_date,,27.639999999999873,2,30.0,
+Archean Chemical Industries Limited,ACI,2022-11-21,2022-11-09,recovered_open_date,,27.639999999999873,2,30.0,
+Five Star Business Finance Limited,FIVESTAR,2022-11-21,2022-11-09,recovered_open_date,,27.639999999999873,2,30.0,
+Bikaji Foods International Limited,BIKAJI,2022-11-16,2022-11-03,recovered_open_date,,27.639999999999873,2,30.0,
+Global Health Limited,MEDANTA,2022-11-16,2022-11-03,recovered_open_date,,27.639999999999873,2,30.0,
+Fusion Finance Ltd,FUSION,2022-11-15,2022-11-05,listing_date_minus_10d,,27.639999999999873,2,30.0,
+DCX Systems Ltd,DCXINDIA,2022-11-11,2022-10-31,recovered_open_date,,27.639999999999873,2,30.0,
+Tracxn Technologies,TRACXN,2022-10-20,2022-10-10,recovered_open_date,,17.27500000000009,2,30.0,
+Electronics Mart India,EMIL,2022-10-17,2022-10-04,recovered_open_date,,29.82000000000001,3,30.0,
+Harsha Engineers,HARSHA,2022-09-26,2022-09-14,recovered_open_date,,37.0,2,30.0,
+Tamilnad Mercantile,TMB,2022-09-15,2022-09-05,recovered_open_date,,5.199999999999999,340,,long_run_median
+Dreamfolks Services,DREAMFOLKS,2022-09-06,2022-08-24,recovered_open_date,,5.18,339,,long_run_median
+Syrma SGS Technologies,SYRMA,2022-08-26,2022-08-12,recovered_open_date,,5.18,339,,long_run_median
+Aether Industries,AETHER,2022-06-03,2022-05-24,recovered_open_date,,2.769999999999982,4,30.0,
+eMudhra Ltd,EMUDHRA,2022-06-01,2022-05-20,recovered_open_date,,2.1066666666665697,3,30.0,
+Ethos Limited,ETHOSLTD,2022-05-30,2022-05-20,listing_date_minus_10d,,2.1066666666665697,3,30.0,
+Paradeep Phosphates Limited,PARADEEP,2022-05-27,2022-05-17,recovered_open_date,,7.4699999999998,2,30.0,
+Venus Pipes & Tubes Limited,VENUSPIPES,2022-05-24,2022-05-11,recovered_open_date,,17.352499999999964,4,30.0,
+Delhivery Limited,DELHIVERY,2022-05-24,2022-05-11,recovered_open_date,,17.352499999999964,4,30.0,
+Prudent Corporate Advisory Services Limited,PRUDENT,2022-05-20,2022-05-10,recovered_open_date,,25.350000000000062,3,30.0,
+Life Insurance Corporation of India (LIC),LICI,2022-05-17,2022-05-04,recovered_open_date,,24.039999999999964,3,30.0,
+Rainbow Children’s Medicare Limited,RAINBOW,2022-05-10,2022-04-27,recovered_open_date,,24.039999999999964,3,30.0,
+Campus Activewear (India) Limited,CAMPUS,2022-05-09,2022-04-26,recovered_open_date,,24.039999999999964,3,30.0,
+Hariom Pipe Industries Limited,HARIOMPIPE,2022-04-13,2022-03-30,recovered_open_date,,1.5799999999999272,3,60.0,widened_to_60d
+Veranda Learning Solutions Limited,VERANDA,2022-04-11,2022-03-29,recovered_open_date,,1.5799999999999272,3,60.0,widened_to_60d
+Uma Exports Limited,UMAEXPORTS,2022-04-07,2022-03-28,recovered_open_date,,1.5799999999999272,3,60.0,widened_to_60d
+Patanjali Foods Limited (formerly Ruchi Soya Industries Limited),,2022-04-08,2022-03-29,listing_date_minus_10d,fpo,1.5799999999999272,3,60.0,widened_to_60d
+Vedant Fashions Limited,MANYAVAR,2022-02-16,2022-02-04,recovered_open_date,,19.750833333333276,12,60.0,widened_to_60d
+AWL Agri Business Limited (formerly Adani Wilmar Limited),AWL,2022-02-08,2022-01-29,listing_date_minus_10d,,27.26333333333332,12,60.0,widened_to_60d
+AGS Transact Technologies Limited,AGSTRA,2022-01-31,2022-01-19,recovered_open_date,,25.799999999999923,7,30.0,
+CMS Info Systems Limited,CMSINFO,2021-12-31,2021-12-21,recovered_open_date,,37.625,8,30.0,
+Supriya Lifescience Limited,SUPRIYA,2021-12-28,2021-12-16,recovered_open_date,,42.19125000000008,8,30.0,
+HP Adhesives Limited,HPAL,2021-12-27,2021-12-15,recovered_open_date,,55.20636363636376,11,30.0,
+Data Patterns (India) Limited,DATAPATTNS,2021-12-24,2021-12-14,recovered_open_date,,59.781000000000134,10,30.0,
+MedPlus Health Services Limited,MEDPLUS,2021-12-23,2021-12-13,recovered_open_date,,59.06444444444464,9,30.0,
+C.E. Info Systems Limited (MapmyIndia),MAPMYINDIA,2021-12-21,2021-12-09,recovered_open_date,,61.01100000000015,10,30.0,
+Shriram Properties Limited,SHRIRAMPPS,2021-12-20,2021-12-08,recovered_open_date,,61.01100000000015,10,30.0,
+Rategain Travel Technologies Limited,RATEGAIN,2021-12-17,2021-12-07,recovered_open_date,,61.01100000000015,10,30.0,
+Anand Rathi Wealth Limited,ANANDRATHI,2021-12-14,2021-12-02,recovered_open_date,,61.01100000000015,10,30.0,
+Tega Industries Limited,TEGA,2021-12-13,2021-12-01,recovered_open_date,,61.01100000000015,10,30.0,
+Star Health and Allied Insurance Company Limited,STARHEALTH,2021-12-10,2021-11-30,recovered_open_date,,57.710000000000136,9,30.0,
+Go Fashion (India) Limited,GOCOLORS,2021-11-30,2021-11-17,recovered_open_date,,68.51600000000016,5,30.0,
+Tarsons Products,TARSONS,2021-11-26,2021-11-15,recovered_open_date,,36.42000000000007,2,30.0,
+Latent View Analytics,LATENTVIEW,2021-11-23,2021-11-10,recovered_open_date,,46.096000000000096,5,60.0,widened_to_60d
+Sapphire Foods India,SAPPHIRE,2021-11-18,2021-11-09,recovered_open_date,,46.096000000000096,5,60.0,widened_to_60d
+One97 Communications,PAYTM,2021-11-18,2021-11-08,recovered_open_date,,46.096000000000096,5,60.0,widened_to_60d
+PB Fintech,POLICYBZR,2021-11-15,2021-11-01,recovered_open_date,,46.096000000000096,5,60.0,widened_to_60d
+S.J.S Enterprises Limited,SJS,2021-11-15,2021-11-01,recovered_open_date,,46.096000000000096,5,60.0,widened_to_60d
+Sigachi Industries Limited,SIGACHI,2021-11-15,2021-11-01,recovered_open_date,,46.096000000000096,5,60.0,widened_to_60d
+Fino Payments Bank Limited,FINOPB,2021-11-12,2021-10-29,recovered_open_date,,85.71500000000015,2,30.0,
+FSN E Commerce Ventures Limited (Nykaa),NYKAA,2021-11-10,2021-10-28,recovered_open_date,,85.71500000000015,2,30.0,
+Aditya Birla Sun Life AMC Limited,ABSLAMC,2021-10-11,2021-09-29,recovered_open_date,,19.683333333333394,3,30.0,
+Paras Defence and Space Technologies Limited,PARAS,2021-10-01,2021-09-21,recovered_open_date,,4.628000000000066,5,30.0,
+Sansera Engineering Limited,SANSERA,2021-09-24,2021-09-14,listing_date_minus_10d,,4.571250000000077,8,30.0,
+Vijaya Diagnostic Centre Limited,VIJAYA,2021-09-14,2021-09-04,listing_date_minus_10d,,7.967000000000008,10,30.0,
+Acutaas Chemicals Limited,ACUTAAS,2021-09-14,2021-09-04,listing_date_minus_10d,,7.967000000000008,10,30.0,
+Aptus Value Housing Finance India Limited,APTUS,2021-08-24,2021-08-14,listing_date_minus_10d,,65.13333333333328,6,30.0,
+Chemplast Sanmar Limited,CHEMPLASTS,2021-08-24,2021-08-14,listing_date_minus_10d,,65.13333333333328,6,30.0,
+Nuvoco Vistas Corporation Limited,NUVOCO,2021-08-23,2021-08-13,listing_date_minus_10d,,65.13333333333328,6,30.0,
+CarTrade Tech Limited,CARTRADE,2021-08-20,2021-08-10,listing_date_minus_10d,,65.13333333333328,6,30.0,
+Devyani International Limited,DEVYANI,2021-08-16,2021-08-06,listing_date_minus_10d,,86.92500000000007,4,30.0,
+Windlas Biotech Limited,WINDLAS,2021-08-16,2021-08-06,listing_date_minus_10d,,86.92500000000007,4,30.0,
+Exxaro Tiles Limited,EXXARO,2021-08-16,2021-08-06,listing_date_minus_10d,,86.92500000000007,4,30.0,
+Krsnaa Diagnostics Limited,KRSNAA,2021-08-16,2021-08-06,listing_date_minus_10d,,86.92500000000007,4,30.0,
+Rolex Rings Limited,ROLEXRINGS,2021-08-09,2021-07-30,listing_date_minus_10d,,73.86400000000003,5,30.0,
+Alivus Life Sciences Limited,ALIVUS,2021-08-06,2021-07-27,listing_date_minus_10d,,53.328333333333376,6,30.0,
+Tatva Chintan Pharma Chem Limited,TATVA,2021-07-29,2021-07-19,listing_date_minus_10d,,18.22399999999998,5,30.0,
+Eternal Limited,ETERNAL,2021-07-23,2021-07-13,listing_date_minus_10d,,18.22399999999998,5,30.0,
+G R Infraprojects Limited,GRINFRA,2021-07-19,2021-07-09,listing_date_minus_10d,,18.22399999999998,5,30.0,
+Clean Science and Technology Limited,CLEAN,2021-07-19,2021-07-09,listing_date_minus_10d,,18.22399999999998,5,30.0,
+India Pesticides Limited,IPL,2021-07-05,2021-06-25,listing_date_minus_10d,,11.924999999999955,2,30.0,
+Dodla Dairy Limited,DODLA,2021-06-28,2021-06-18,listing_date_minus_10d,,4.705,278,,long_run_median
+Krishna Institute of Medical Sciences Limited,KIMS,2021-06-28,2021-06-18,listing_date_minus_10d,,4.705,278,,long_run_median
+Sona BLW Precision Forgings Limited,SONACOMS,2021-06-24,2021-06-14,listing_date_minus_10d,,4.705,278,,long_run_median
+Shyam Metalics and Energy Limited,SHYAMMETL,2021-06-24,2021-06-14,listing_date_minus_10d,,4.705,278,,long_run_median
+Powergrid Infrastructure Investment Trust,PGINVIT,2021-05-14,2021-05-04,listing_date_minus_10d,reit_invit,-5.634999999999991,2,30.0,
+Macrotech Developers Limited (Lodha Group),,2021-04-19,2021-04-09,listing_date_minus_10d,,17.856666666666722,9,30.0,
+Barbeque Nation Hospitality Limited,,2021-04-07,2021-03-28,listing_date_minus_10d,,15.34555555555562,9,30.0,
+Nazara Technologies Limited,NAZARA,2021-03-30,2021-03-20,listing_date_minus_10d,,41.75,5,30.0,
+Suryoday Small Finance Bank Limited,SURYODAY,2021-03-26,2021-03-16,listing_date_minus_10d,,49.647500000000036,4,30.0,
+Kalyan Jewellers India Limited,KALYANKJIL,2021-03-26,2021-03-16,listing_date_minus_10d,,49.647500000000036,4,30.0,
+Craftsman Automation Limited,CRAFTSMAN,2021-03-25,2021-03-15,listing_date_minus_10d,,37.85333333333332,3,30.0,
+Laxmi Organic Industries Limited,LXCHEM,2021-03-25,2021-03-15,listing_date_minus_10d,,37.85333333333332,3,30.0,
+Anupam Rasayan India Limited,ANURAS,2021-03-24,2021-03-14,listing_date_minus_10d,,37.85333333333332,3,30.0,
+Easy Trip Planners Limited,EASEMYTRIP,2021-03-19,2021-03-09,listing_date_minus_10d,,37.85333333333332,3,30.0,
+MTAR Technologies Limited,MTARTECH,2021-03-15,2021-03-05,listing_date_minus_10d,,27.375,4,30.0,
+Heranba Industries Limited,HERANBA,2021-03-05,2021-02-23,listing_date_minus_10d,,27.657500000000027,4,30.0,
+Railtel Corporation of India Limited,RAILTEL,2021-02-26,2021-02-16,listing_date_minus_10d,,27.657500000000027,4,30.0,
+Nureca Limited,NURECA,2021-02-25,2021-02-15,listing_date_minus_10d,,27.657500000000027,4,30.0,
+Brookfield India Real Estate Trust,BIRET,2021-02-16,2021-02-06,listing_date_minus_10d,reit_invit,27.657500000000027,4,30.0,
+Stove Kraft Limited,STOVEKRAFT,2021-02-05,2021-01-26,listing_date_minus_10d,,67.57333333333342,3,60.0,widened_to_60d
+Home First Finance Company India Limited,HOMEFIRST,2021-02-03,2021-01-24,listing_date_minus_10d,,67.57333333333342,3,60.0,widened_to_60d
+Indigo Paints Limited,INDIGOPNTS,2021-02-02,2021-01-23,listing_date_minus_10d,,55.23500000000013,2,30.0,
+Indian Railway Finance Corporation Limited,IRFC,2021-01-29,2021-01-19,listing_date_minus_10d,,55.23500000000013,2,30.0,
+Antony Waste Handling Cell Ltd,AWHCL,2021-01-01,2020-12-22,listing_date_minus_10d,,33.196666666666715,3,60.0,widened_to_60d
+Mrs Bectors Food Specialities Ltd,BECTORFOOD,2020-12-24,2020-12-14,listing_date_minus_10d,,5.253333333333406,3,60.0,widened_to_60d
+Restaurant Brands Asia Ltd,RBA,2020-12-14,2020-12-04,listing_date_minus_10d,,7.209999999999961,6,60.0,widened_to_60d
+Gland Pharma Ltd,GLAND,2020-11-20,2020-11-10,listing_date_minus_10d,,9.997499999999945,4,30.0,
+Equitas Small Finance Bank Ltd,EQUITASBNK,2020-11-02,2020-10-23,listing_date_minus_10d,,29.05333333333321,6,30.0,
+UTI Asset Management Company Ltd,UTIAMC,2020-10-12,2020-10-02,listing_date_minus_10d,,88.03499999999985,4,30.0,
+Likhitha Infrastructure Ltd,LIKHITHA,2020-10-15,2020-10-05,listing_date_minus_10d,,88.03499999999985,4,30.0,
+Mazagon Dock Shipbuilders Ltd,MAZDOCK,2020-10-12,2020-10-02,listing_date_minus_10d,,88.03499999999985,4,30.0,
+Angel One Ltd,ANGELONE,2020-10-05,2020-09-25,listing_date_minus_10d,,106.86999999999989,2,30.0,
+Computer Age Management Services Ltd,CAMS,2020-10-01,2020-09-21,listing_date_minus_10d,,84.54999999999995,2,60.0,widened_to_60d
+Chemcon Speciality Chemicals Ltd,CHEMCON,2020-10-01,2020-09-21,listing_date_minus_10d,,84.54999999999995,2,60.0,widened_to_60d
+Route Mobile Ltd,ROUTE,2020-09-21,2020-09-11,listing_date_minus_10d,,4.005,248,,long_run_median
+Happiest Minds Technologies Ltd,HAPPSTMNDS,2020-09-17,2020-09-07,listing_date_minus_10d,,4.005,248,,long_run_median
+Mindspace Business Parks REIT,MINDSPACE,2020-08-07,2020-07-28,listing_date_minus_10d,reit_invit,4.005,248,,long_run_median
+Yes Bank Ltd,,2020-07-27,2020-07-17,listing_date_minus_10d,fpo,3.93,247,,long_run_median
+Rossari Biotech Ltd,ROSSARI,2020-07-23,2020-07-13,listing_date_minus_10d,,3.93,247,,long_run_median
+SBI Cards & Payment Services Ltd,SBICARD,2020-03-16,2020-03-06,listing_date_minus_10d,,4.005,246,,long_run_median
+Prince Pipes and Fittings Ltd,PRINCEPIPE,2019-12-30,2019-12-20,listing_date_minus_10d,,48.89500000000021,2,30.0,
+Ujjivan Small Finance Bank Ltd,UJJIVANSFB,2019-12-12,2019-12-02,listing_date_minus_10d,,51.625,2,60.0,widened_to_60d
+CSB Bank Ltd,CSBBANK,2019-12-04,2019-11-24,listing_date_minus_10d,,51.625,2,60.0,widened_to_60d
+Vishwaraj Sugar Industries Ltd,VISHWARAJ,2019-10-15,2019-10-05,listing_date_minus_10d,,3.606666666666721,3,60.0,widened_to_60d
+Indian Railway Catering and Tourism Corporation Ltd,IRCTC,2019-10-14,2019-10-04,listing_date_minus_10d,,3.606666666666721,3,60.0,widened_to_60d
+Sterling and Wilson Solar Ltd,,2019-08-20,2019-08-10,listing_date_minus_10d,,23.045000000000073,2,60.0,widened_to_60d
+Spandana Sphoorty Financial Ltd,SPANDANA,2019-08-19,2019-08-09,listing_date_minus_10d,,23.045000000000073,2,60.0,widened_to_60d
+Affle (India) Ltd,AFFLE,2019-08-08,2019-07-29,listing_date_minus_10d,,4.005,238,,long_run_median
+Indiamart Intermesh Ltd,INDIAMART,2019-07-04,2019-06-24,listing_date_minus_10d,,3.93,237,,long_run_median
+Neogen Chemicals Ltd,NEOGEN,2019-05-08,2019-04-28,listing_date_minus_10d,,4.8125,4,30.0,
+Polycab India Ltd,POLYCAB,2019-04-16,2019-04-06,listing_date_minus_10d,,-1.7850000000000819,2,60.0,widened_to_60d
+Metropolis Healthcare Ltd,METROPOLIS,2019-04-15,2019-04-05,listing_date_minus_10d,,-6.240000000000085,3,60.0,widened_to_60d
+Rail Vikas Nigam Ltd,RVNL,2019-04-11,2019-04-01,listing_date_minus_10d,,-6.240000000000085,3,60.0,widened_to_60d
+Embassy Office Parks REIT,EMBASSY,2019-04-01,2019-03-22,listing_date_minus_10d,reit_invit,-5.610000000000127,2,60.0,widened_to_60d
+MSTC Ltd,MSTCLTD,2019-03-29,2019-03-19,listing_date_minus_10d,,-5.610000000000127,2,60.0,widened_to_60d
+Chalet Hotels Ltd,CHALET,2019-02-07,2019-01-28,listing_date_minus_10d,,4.0,230,,long_run_median
+Xelpmoc Design and Technologies Ltd,XELPMOC,2019-02-04,2019-01-25,listing_date_minus_10d,,4.0,230,,long_run_median
+AAVAS Financiers Ltd,AAVAS,2018-10-08,2018-09-28,listing_date_minus_10d,,16.39333333333343,3,60.0,widened_to_60d
+Garden Reach Shipbuilders & Engineers Ltd,GRSE,2018-10-10,2018-09-30,listing_date_minus_10d,,11.900000000000091,3,60.0,widened_to_60d
+Ircon International Ltd,IRCON,2018-09-28,2018-09-18,listing_date_minus_10d,,16.39333333333343,3,60.0,widened_to_60d
+CreditAccess Grameen Ltd,CREDITACC,2018-08-23,2018-08-13,listing_date_minus_10d,,28.975000000000136,2,30.0,
+HDFC Asset Management Company Ltd,HDFCAMC,2018-08-06,2018-07-27,listing_date_minus_10d,,4.503333333333255,3,30.0,
+TCNS Clothing Co. Ltd,,2018-07-30,2018-07-20,listing_date_minus_10d,,4.503333333333255,3,30.0,
+Varroc Engineering Ltd,VARROC,2018-07-06,2018-06-26,listing_date_minus_10d,,4.29,221,,long_run_median
+Fine Organic Industries Ltd,FINEORG,2018-07-02,2018-06-22,listing_date_minus_10d,,4.29,221,,long_run_median
+Rites Ltd,RITES,2018-07-02,2018-06-22,listing_date_minus_10d,,4.29,221,,long_run_median
+Indostar Capital Finance Ltd,INDOSTAR,2018-05-21,2018-05-11,listing_date_minus_10d,,-2.662499999999966,8,60.0,widened_to_60d
+Lemon Tree Hotels Ltd,LEMONTREE,2018-04-09,2018-03-30,listing_date_minus_10d,,2.4125000000000227,4,30.0,
+ICICI Securities Ltd,,2018-04-04,2018-03-25,listing_date_minus_10d,,-6.683333333333242,3,30.0,
+Mishra Dhatu Nigam Ltd (MIDHANI),MIDHANI,2018-04-04,2018-03-25,listing_date_minus_10d,,-6.683333333333242,3,30.0,
+Sandhar Technologies Ltd,SANDHAR,2018-04-02,2018-03-23,listing_date_minus_10d,,-2.0799999999999272,2,30.0,
+Hindustan Aeronautics Ltd (HAL),HAL,2018-03-28,2018-03-18,listing_date_minus_10d,,-2.0799999999999272,2,30.0,
+Dharan Infra EPC Ltd,DHARAN,2018-04-02,2018-03-23,listing_date_minus_10d,,-2.0799999999999272,2,30.0,
+Bandhan Bank Ltd,BANDHANBNK,2018-03-27,2018-03-17,listing_date_minus_10d,,-2.0799999999999272,2,30.0,
+Bharat Dynamics Ltd,BDL,2018-03-23,2018-03-13,listing_date_minus_10d,,-2.0799999999999272,2,30.0,
+H.G. Infra Engineering Ltd,HGINFRA,2018-03-09,2018-02-27,listing_date_minus_10d,,9.794999999999959,4,30.0,
+Aster DM Healthcare Ltd,,2018-02-26,2018-02-16,listing_date_minus_10d,,29.289999999999964,4,30.0,
+Galaxy Surfactants Ltd,GALAXYSURF,2018-02-08,2018-01-29,listing_date_minus_10d,,49.72250000000008,4,60.0,widened_to_60d
+Amber Enterprises India Ltd,AMBER,2018-01-30,2018-01-20,listing_date_minus_10d,,41.690000000000055,3,60.0,widened_to_60d
+Newgen Software Technologies Ltd,NEWGEN,2018-01-29,2018-01-19,listing_date_minus_10d,,41.690000000000055,3,60.0,widened_to_60d
+Apollo Micro Systems Ltd,APOLLO,2018-01-22,2018-01-12,listing_date_minus_10d,,41.690000000000055,3,30.0,
+Astron Paper & Board Mill Ltd,ASTRON,2017-12-29,2017-12-19,listing_date_minus_10d,,-1.4649999999999181,2,30.0,
+Future Supply Chain Solutions Ltd,,2017-12-18,2017-12-08,listing_date_minus_10d,,-0.38000000000010914,4,30.0,
+Shalby Ltd,SHALBY,2017-12-15,2017-12-05,listing_date_minus_10d,,3.0299999999999274,5,30.0,
+HDFC Life Insurance Company Ltd,HDFCLIFE,2017-11-17,2017-11-07,listing_date_minus_10d,,15.913999999999941,5,30.0,
+Khadim India Ltd,KHADIM,2017-11-14,2017-11-04,listing_date_minus_10d,,19.23199999999997,5,30.0,
+New India Assurance Company Ltd,NIACL,2017-11-13,2017-11-03,listing_date_minus_10d,,19.23199999999997,5,30.0,
+Mahindra Logistics Ltd,MAHLOG,2017-11-10,2017-10-31,listing_date_minus_10d,,16.82000000000001,6,30.0,
+Nippon Life India Asset Management Ltd,NAM-INDIA,2017-11-06,2017-10-27,listing_date_minus_10d,,14.180000000000032,7,30.0,
+General Insurance Corporation of India Ltd,GICRE,2017-10-25,2017-10-15,listing_date_minus_10d,,21.45857142857153,7,30.0,
+Indian Energy Exchange Ltd,IEX,2017-10-23,2017-10-13,listing_date_minus_10d,,21.45857142857153,7,30.0,
+MAS Financial Services Ltd,MASFIN,2017-10-18,2017-10-08,listing_date_minus_10d,,21.45857142857153,7,30.0,
+Godrej Agrovet Ltd,GODREJAGRO,2017-10-16,2017-10-06,listing_date_minus_10d,,21.45857142857153,7,30.0,
+Prataap Snacks Ltd,DIAMONDYD,2017-10-05,2017-09-25,listing_date_minus_10d,,17.12000000000006,4,30.0,
+SBI Life Insurance Company Ltd,SBILIFE,2017-10-03,2017-09-23,listing_date_minus_10d,,17.12000000000006,4,30.0,
+ICICI Lombard General Insurance Company Ltd,ICICIGI,2017-09-27,2017-09-17,listing_date_minus_10d,,40.557500000000005,4,60.0,widened_to_60d
+Capacit'e Infraprojects Ltd,CAPACITE,2017-09-25,2017-09-15,listing_date_minus_10d,,40.557500000000005,4,60.0,widened_to_60d
+Matrimony.com Ltd,MATRIMONY,2017-09-21,2017-09-11,listing_date_minus_10d,,40.557500000000005,4,60.0,widened_to_60d
+Bharat Road Network Ltd,BRNL,2017-09-18,2017-09-08,listing_date_minus_10d,,7.426666666666658,3,30.0,
+Dixon Technologies (India) Ltd,DIXON,2017-09-18,2017-09-08,listing_date_minus_10d,,7.426666666666658,3,30.0,
+Apex Frozen Foods Ltd,APEX,2017-09-04,2017-08-25,listing_date_minus_10d,,4.024999999999977,2,30.0,
+Cochin Shipyard Ltd,COCHINSHIP,2017-08-11,2017-08-01,listing_date_minus_10d,,62.200000000000045,3,30.0,
+SIS Ltd,,2017-08-10,2017-07-31,listing_date_minus_10d,,62.200000000000045,3,30.0,
+Salasar Techno Engineering Ltd,SALASAR,2017-07-25,2017-07-15,listing_date_minus_10d,,23.186000000000014,5,30.0,
+AU Small Finance Bank Ltd,AUBANK,2017-07-10,2017-06-30,listing_date_minus_10d,,0.7450000000000045,2,30.0,
+GTPL Hathway Ltd,GTPL,2017-07-04,2017-06-24,listing_date_minus_10d,,7.5666666666666815,3,60.0,widened_to_60d
+Central Depository Services Ltd,CDSL,2017-06-30,2017-06-20,listing_date_minus_10d,,7.5666666666666815,3,60.0,widened_to_60d
+ERIS Lifesciences Ltd,ERIS,2017-06-29,2017-06-19,listing_date_minus_10d,,7.5666666666666815,3,60.0,widened_to_60d
+Tejas Networks Ltd,TEJASNET,2017-06-27,2017-06-17,listing_date_minus_10d,,8.590000000000032,2,30.0,
+PSP Projects Ltd,PSPPROJECT,2017-05-29,2017-05-19,listing_date_minus_10d,,26.355000000000018,4,60.0,widened_to_60d
+IndiGrid Infrastructure Fund,,2017-06-06,2017-05-27,listing_date_minus_10d,reit_invit,13.970000000000027,2,30.0,
+Housing & Urban Development Corporation Ltd,HUDCO,2017-05-19,2017-05-09,listing_date_minus_10d,,31.50750000000005,4,60.0,widened_to_60d
+IRB InvIT Fund,IRBINVIT,2017-05-18,2017-05-08,listing_date_minus_10d,reit_invit,31.50750000000005,4,60.0,widened_to_60d
+S Chand & Company Ltd,SCHAND,2017-05-09,2017-04-29,listing_date_minus_10d,,-1.1200000000000045,2,30.0,
+Shankara Building Products Ltd,SHANKARA,2017-04-05,2017-03-26,listing_date_minus_10d,,64.1350000000001,2,30.0,
+CL Educate Ltd,CLEDUCATE,2017-03-31,2017-03-21,listing_date_minus_10d,,30.375,2,60.0,widened_to_60d
+Avenue Supermarts Ltd (DMart),DMART,2017-03-21,2017-03-11,listing_date_minus_10d,,4.55,171,,long_run_median
+Music Broadcast Ltd,RADIOCITY,2017-03-17,2017-03-07,listing_date_minus_10d,,4.55,171,,long_run_median
+BSE Ltd (Bombay Stock Exchange),BSE,2017-02-03,2017-01-24,listing_date_minus_10d,,16.149999999999977,2,60.0,widened_to_60d
+Laurus Labs Ltd,LAURUSLABS,2016-12-19,2016-12-09,listing_date_minus_10d,,9.580000000000004,3,60.0,widened_to_60d
+Sheela Foam Ltd,SFL,2016-12-09,2016-11-29,listing_date_minus_10d,,3.990000000000009,2,30.0,
+Varun Beverages Ltd,VBL,2016-11-08,2016-10-29,listing_date_minus_10d,,4.44666666666664,3,30.0,
+PNB Housing Finance Ltd,PNBHOUSING,2016-11-07,2016-10-28,listing_date_minus_10d,,4.44666666666664,3,30.0,
+Endurance Technologies Ltd,ENDURANCE,2016-10-19,2016-10-09,listing_date_minus_10d,,4.319999999999993,4,30.0,
+HPL Electric & Power Ltd,HPL,2016-10-04,2016-09-24,listing_date_minus_10d,,13.145000000000095,2,30.0,
+ICICI Prudential Life Insurance Company Ltd,ICICIPRULI,2016-09-29,2016-09-19,listing_date_minus_10d,,14.794000000000006,5,60.0,widened_to_60d
+GNA Axles Ltd,GNA,2016-09-26,2016-09-16,listing_date_minus_10d,,14.794000000000006,5,60.0,widened_to_60d
+L&T Technology Services Ltd,LTTS,2016-09-23,2016-09-13,listing_date_minus_10d,,14.794000000000006,5,60.0,widened_to_60d
+RBL Bank Ltd,RBLBANK,2016-08-31,2016-08-21,listing_date_minus_10d,,19.479999999999944,3,30.0,
+S P Apparels Ltd,SPAL,2016-08-12,2016-08-02,listing_date_minus_10d,,28.780000000000047,3,30.0,
+Dilip Buildcon Ltd,DBL,2016-08-11,2016-08-01,listing_date_minus_10d,,25.65000000000009,2,30.0,
+Advanced Enzyme Technologies Ltd,ADVENZYMES,2016-08-01,2016-07-22,listing_date_minus_10d,,26.523333333333387,3,30.0,
+LTIMindtree Ltd,,2016-07-21,2016-07-11,listing_date_minus_10d,,14.299999999999955,2,60.0,widened_to_60d
+Quess Corp Ltd,QUESS,2016-07-12,2016-07-02,listing_date_minus_10d,,21.28249999999997,4,60.0,widened_to_60d
+Mahanagar Gas Ltd,MGL,2016-07-01,2016-06-21,listing_date_minus_10d,,18.9533333333333,3,60.0,widened_to_60d
+Parag Milk Foods Ltd,PARAGMILK,2016-05-19,2016-05-09,listing_date_minus_10d,,9.597500000000025,4,60.0,widened_to_60d
+Ujjivan Financial Services Ltd,,2016-05-10,2016-04-30,listing_date_minus_10d,,14.050000000000031,3,30.0,
+Thyrocare Technologies Ltd,THYROCARE,2016-05-09,2016-04-29,listing_date_minus_10d,,9.597500000000025,4,30.0,
+Equitas Holdings Ltd,,2016-04-21,2016-04-11,listing_date_minus_10d,,2.4933333333333394,3,30.0,
+Infibeam Avenues Ltd,,2016-04-04,2016-03-25,listing_date_minus_10d,,-5.376666666666627,3,60.0,widened_to_60d
+Bharat Wire Ropes Ltd,BHARATWIRE,2016-04-01,2016-03-22,listing_date_minus_10d,,-5.376666666666627,3,60.0,widened_to_60d
+Healthcare Global Enterprises Ltd,HCG,2016-03-30,2016-03-20,listing_date_minus_10d,,-5.376666666666627,3,60.0,widened_to_60d
+Quick Heal Technologies Ltd,QUICKHEAL,2016-02-18,2016-02-08,listing_date_minus_10d,,26.06333333333335,3,60.0,widened_to_60d
+Team Lease Services Ltd,TEAMLEASE,2016-02-12,2016-02-02,listing_date_minus_10d,,26.06333333333335,3,60.0,widened_to_60d
+Precision Camshafts Ltd,PRECAM,2016-02-08,2016-01-29,listing_date_minus_10d,,26.06333333333335,3,60.0,widened_to_60d
+Narayana Hrudayalaya Ltd,NH,2016-01-06,2015-12-27,listing_date_minus_10d,,30.894999999999982,2,30.0,
+Dr Lal Pathlabs Ltd,LALPATHLAB,2015-12-23,2015-12-13,listing_date_minus_10d,,10.220000000000027,3,60.0,widened_to_60d
+Alkem Laboratories Ltd,ALKEM,2015-12-23,2015-12-13,listing_date_minus_10d,,10.220000000000027,3,60.0,widened_to_60d
+S H Kelkar & Company Ltd,SHK,2015-11-16,2015-11-06,listing_date_minus_10d,,-3.7350000000000136,6,60.0,widened_to_60d
+Interglobe Aviation Ltd,INDIGO,2015-11-10,2015-10-31,listing_date_minus_10d,,-3.568000000000029,5,60.0,widened_to_60d
+Coffee Day Enterprises Ltd,COFFEEDAY,2015-11-02,2015-10-23,listing_date_minus_10d,,-4.0150000000000245,6,60.0,widened_to_60d
+Sadbhav Infrastructure Project Ltd,SADBHIN,2015-09-16,2015-09-06,listing_date_minus_10d,,5.875,2,30.0,
+Madhyam Agrivet Industries Ltd,,2015-09-21,2015-09-11,listing_date_minus_10d,,-7.902500000000032,4,30.0,
+Shree Pushkar Chemicals Ltd,SHREEPUSHK,2015-09-10,2015-08-31,listing_date_minus_10d,,5.875,2,30.0,
+Pennar Engineered Building Systems Ltd,,2015-09-10,2015-08-31,listing_date_minus_10d,,5.875,2,30.0,
+Navkar Corporation Ltd,NAVKARCORP,2015-09-09,2015-08-30,listing_date_minus_10d,,5.875,2,30.0,
+Power Mech Projects Ltd,POWERMECH,2015-08-26,2015-08-16,listing_date_minus_10d,,4.470000000000027,2,60.0,widened_to_60d
+Syngene International Ltd,SYNGENE,2015-08-11,2015-08-01,listing_date_minus_10d,,3.03,131,,long_run_median
+Manpasand Beverages Ltd,,2015-07-09,2015-06-29,listing_date_minus_10d,,9.319999999999993,4,60.0,widened_to_60d
+PNC Infratech Ltd,PNCINFRA,2015-05-26,2015-05-16,listing_date_minus_10d,,12.163333333333336,3,30.0,
+UFO Moviez India Ltd,UFO,2015-05-14,2015-05-04,listing_date_minus_10d,,18.95999999999996,3,30.0,
+MEP Infrastructure Developers Ltd,MEP,2015-05-06,2015-04-26,listing_date_minus_10d,,8.194999999999936,2,30.0,
+VRL Logistics Ltd,VRLLOG,2015-04-30,2015-04-20,listing_date_minus_10d,,8.194999999999936,2,30.0,
+Inox Wind Ltd,INOXWIND,2015-04-09,2015-03-30,listing_date_minus_10d,,3.64,124,,long_run_median
+Imagicaaworld Entertainment Ltd,IMAGICAA,2015-04-06,2015-03-27,listing_date_minus_10d,,3.64,124,,long_run_median
+Ortel Communications Ltd,ORTEL,2015-03-19,2015-03-09,listing_date_minus_10d,,3.83,123,,long_run_median
+Monte Carlo Fashions Ltd,MONTECARLO,2014-12-19,2014-12-09,listing_date_minus_10d,,3.955,122,,long_run_median
+Shemaroo Entertainment Ltd,SHEMAROO,2014-10-01,2014-09-21,listing_date_minus_10d,,3.64,120,,long_run_median
+Sharda Cropchem Ltd,SHARDACROP,2014-09-23,2014-09-13,listing_date_minus_10d,,3.64,120,,long_run_median
+Snowman Logistics Ltd,SNOWMAN,2014-09-12,2014-09-02,listing_date_minus_10d,,3.45,119,,long_run_median
+Wonderla Holidays Ltd,WONDERLA,2014-05-09,2014-04-29,listing_date_minus_10d,,3.24,118,,long_run_median
+Engineers India Ltd,,2014-02-28,2014-02-18,listing_date_minus_10d,fpo,3.24,118,,long_run_median
+Power Grid Corporation of India Ltd,,2013-12-19,2013-12-09,listing_date_minus_10d,fpo,3.24,118,,long_run_median
+Just Dial Ltd,JUSTDIAL,2013-06-05,2013-05-26,listing_date_minus_10d,,3.03,117,,long_run_median
+Repco Home Finance Ltd,REPCOHOME,2013-04-01,2013-03-22,listing_date_minus_10d,,3.24,116,,long_run_median
+V-Mart Retail Ltd,VMART,2013-02-20,2013-02-10,listing_date_minus_10d,,5.936666666666649,3,60.0,widened_to_60d
+Indus Towers Ltd,INDUSTOWER,2012-12-28,2012-12-18,listing_date_minus_10d,,3.64,112,,long_run_median
+PC Jeweller Ltd,PCJEWELLER,2012-12-27,2012-12-17,listing_date_minus_10d,,3.64,112,,long_run_median
+CARE Ratings Ltd,CARERATING,2012-12-26,2012-12-16,listing_date_minus_10d,,3.64,112,,long_run_median
+Tara Jewels Ltd,,2012-12-06,2012-11-26,listing_date_minus_10d,,3.45,111,,long_run_median
+VKS Projects Ltd,,2012-07-18,2012-07-08,listing_date_minus_10d,,-1.0849999999999795,2,60.0,widened_to_60d
+Speciality Restaurants Ltd,SPECIALITY,2012-05-30,2012-05-20,listing_date_minus_10d,,-0.6099999999999852,4,60.0,widened_to_60d
+Tribhovandas Bhimji Zaveri Ltd,TBZ,2012-05-09,2012-04-29,listing_date_minus_10d,,0.9499999999999886,2,30.0,
+MT Educare Ltd,MTEDUCARE,2012-04-12,2012-04-02,listing_date_minus_10d,,17.11500000000001,2,30.0,
+NBCC (India) Ltd,NBCC,2012-04-12,2012-04-02,listing_date_minus_10d,,17.11500000000001,2,30.0,
+Olympic Cards Ltd,OLPCL,2012-03-28,2012-03-18,listing_date_minus_10d,,4.08,105,,long_run_median
+Multi Commodity Exchange of India Ltd,MCX,2012-03-09,2012-02-28,listing_date_minus_10d,,3.955,104,,long_run_median
+Indo Thai Securities Ltd,INDOTHAI,2011-11-02,2011-10-23,listing_date_minus_10d,,2.0214285714285682,7,30.0,
+Flexituff Ventures International Ltd,FLEXITUFF,2011-10-19,2011-10-09,listing_date_minus_10d,,0.682500000000033,4,30.0,
+Taksheel Solutions Ltd,,2011-10-19,2011-10-09,listing_date_minus_10d,,0.682500000000033,4,30.0,
+Onelife Capital Advisors Ltd,ONELIFECAP,2011-10-17,2011-10-07,listing_date_minus_10d,,-1.6449999999999818,4,30.0,
+Ujaas Energy Ltd,UEL,2011-10-20,2011-10-10,listing_date_minus_10d,,0.682500000000033,4,30.0,
+RDB Rasayans Ltd,RDBRL,2011-10-07,2011-09-27,listing_date_minus_10d,,-0.4124999999999943,4,30.0,
+Setubandhan Infrastructure Ltd,SETUINFRA,2011-10-04,2011-09-24,listing_date_minus_10d,,0.37000000000000455,4,30.0,
+PG Electroplast Ltd,PGEL,2011-09-26,2011-09-16,listing_date_minus_10d,,2.2166666666666592,3,30.0,
+TD Power Systems Ltd,TDPOWERSYS,2011-09-08,2011-08-29,listing_date_minus_10d,,-0.6133333333333061,3,30.0,
+SRS Ltd,,2011-09-16,2011-09-06,listing_date_minus_10d,,2.150000000000015,3,30.0,
+Brooks Laboratories Ltd,BROOKS,2011-09-05,2011-08-26,listing_date_minus_10d,,0.7433333333333773,3,30.0,
+Tree House Education & Accessories Ltd,TREEHOUSE,2011-08-26,2011-08-16,listing_date_minus_10d,,0.7433333333333773,3,30.0,
+L&T Finance Holdings Ltd,LTF,2011-08-12,2011-08-02,listing_date_minus_10d,,5.692500000000024,4,30.0,
+Inventure Growth & Securities Ltd,INVENTURE,2011-08-04,2011-07-25,listing_date_minus_10d,,6.776666666666681,3,30.0,
+Bharatiya Global Infomedia Ltd,BGLOBAL,2011-07-28,2011-07-18,listing_date_minus_10d,,8.655000000000001,4,30.0,
+Kridhan Infra Ltd,KRIDHANINF,2011-07-13,2011-07-03,listing_date_minus_10d,,12.08499999999998,2,30.0,
+Rushil Decor Ltd,RUSHIL,2011-07-07,2011-06-27,listing_date_minus_10d,,12.08499999999998,2,30.0,
+Birla Pacific Medspa Ltd,,2011-07-07,2011-06-27,listing_date_minus_10d,,12.08499999999998,2,30.0,
+Timbor Home Ltd,,2011-06-22,2011-06-12,listing_date_minus_10d,,-2.640000000000024,3,30.0,
+VMS Industries Ltd,VMS,2011-06-14,2011-06-04,listing_date_minus_10d,,-0.9442857142857163,7,30.0,
+Power Finance Corporation Ltd,,2011-05-27,2011-05-17,listing_date_minus_10d,fpo,-0.9339999999999918,5,30.0,
+Dr. Datsons Labs Ltd,,2011-05-27,2011-05-17,listing_date_minus_10d,,-0.9339999999999918,5,30.0,
+BF Industrial & Technologies Ltd,,2011-05-23,2011-05-13,listing_date_minus_10d,,0.3275000000000148,4,30.0,
+Vaswani Industries Ltd,VASWANI,2011-10-24,2011-10-14,listing_date_minus_10d,,0.682500000000033,4,30.0,
+Servalakshmi Paper Ltd,,2011-05-12,2011-05-02,listing_date_minus_10d,,15.98999999999999,6,60.0,widened_to_60d
+Innoventive Industries Ltd,,2011-05-13,2011-05-03,listing_date_minus_10d,,15.98999999999999,6,60.0,widened_to_60d
+Future Consumer Ltd,FCONSUMER,2011-05-10,2011-04-30,listing_date_minus_10d,,15.98999999999999,6,60.0,widened_to_60d
+Paramount Printpac Ltd,,2011-05-09,2011-04-29,listing_date_minus_10d,,6.774999999999977,2,30.0,
+Muthoot Finance Ltd,MUTHOOTFIN,2011-05-06,2011-04-26,listing_date_minus_10d,,6.774999999999977,2,30.0,
+Shilpi Cable Technologies Ltd,,2011-04-08,2011-03-29,listing_date_minus_10d,,20.597499999999997,4,30.0,
+PTC India Financial Services Ltd,PFS,2011-03-30,2011-03-20,listing_date_minus_10d,,18.27666666666668,3,30.0,
+Lovable Lingerie Ltd,LOVABLE,2011-03-24,2011-03-14,listing_date_minus_10d,,18.27666666666668,3,30.0,
+Fineotex Chemical Ltd,FCL,2011-03-11,2011-03-01,listing_date_minus_10d,,0.7133333333333288,3,60.0,widened_to_60d
+AcroPetal Technologies Ltd,,2011-03-10,2011-02-28,listing_date_minus_10d,,5.972499999999997,4,60.0,widened_to_60d
+Sudar Industries Ltd,,2011-03-11,2011-03-01,listing_date_minus_10d,,0.7133333333333288,3,60.0,widened_to_60d
+Omkar Speciality Chemicals Ltd,,2011-02-10,2011-01-31,listing_date_minus_10d,,2.599999999999966,2,30.0,
+Tata Steel Ltd,,2011-02-02,2011-01-23,listing_date_minus_10d,fpo,7.553333333333323,3,30.0,
+Midvalley Entertainment & Hospitality Ltd,,2011-01-27,2011-01-17,listing_date_minus_10d,,4.41749999999999,4,30.0,
+C Mahendra Exports Ltd,,2011-01-20,2011-01-10,listing_date_minus_10d,,12.919999999999982,5,30.0,
+Punjab & Sind Bank,PSB,2010-12-30,2010-12-20,listing_date_minus_10d,,23.464999999999975,2,30.0,
+A2Z Infra Engineering Ltd,A2ZINFRA,2010-12-23,2010-12-13,listing_date_minus_10d,,37.5,2,30.0,
+Ravikumar Distilleries Ltd,RKDL,2010-12-27,2010-12-17,listing_date_minus_10d,,23.464999999999975,2,30.0,
+Shipping Corporation of India Ltd,,2010-12-15,2010-12-05,listing_date_minus_10d,fpo,14.608333333333348,18,60.0,widened_to_60d
+MOIL Ltd,MOIL,2010-12-15,2010-12-05,listing_date_minus_10d,,14.608333333333348,18,60.0,widened_to_60d
+Claris Lifescience Ltd,,2010-12-20,2010-12-10,listing_date_minus_10d,,37.5,2,30.0,
+RPP Infra Projects Ltd,RPPINFRA,2010-12-06,2010-11-26,listing_date_minus_10d,,21.076000000000022,5,30.0,
+Power Grid Corporation of India Ltd,,2010-11-25,2010-11-15,listing_date_minus_10d,fpo,5.793333333333369,6,30.0,
+Gravita India Ltd,GRAVITA,2010-11-16,2010-11-06,listing_date_minus_10d,,7.822000000000018,15,30.0,
+Coal India Ltd,COALINDIA,2010-11-04,2010-10-25,listing_date_minus_10d,,12.507500000000007,16,30.0,
+Shah Metacorp Ltd,SHAH,2010-10-27,2010-10-17,listing_date_minus_10d,,13.981428571428571,14,30.0,
+Prestige Estates Projects Ltd,PRESTIGE,2010-10-27,2010-10-17,listing_date_minus_10d,,13.981428571428571,14,30.0,
+BS Ltd,,2010-10-27,2010-10-17,listing_date_minus_10d,,13.981428571428571,14,30.0,
+Oberoi Realty Ltd,OBEROIRLTY,2010-10-20,2010-10-10,listing_date_minus_10d,,15.333749999999995,8,30.0,
+Jupiter Wagons Ltd,JWL,2010-10-18,2010-10-08,listing_date_minus_10d,,22.57499999999999,6,30.0,
+Bedmutha Industries Ltd,BEDMUTHA,2010-10-14,2010-10-04,listing_date_minus_10d,,16.779999999999973,3,30.0,
+Sea TV Network Ltd,SEATV,2010-10-14,2010-10-04,listing_date_minus_10d,,16.779999999999973,3,30.0,
+Ashoka Buildcon Ltd,ASHOKA,2010-10-14,2010-10-04,listing_date_minus_10d,,16.779999999999973,3,30.0,
+Tecpro Systems Ltd,,2010-10-12,2010-10-02,listing_date_minus_10d,,16.779999999999973,3,30.0,
+Va Tech Wabag Ltd,WABAG,2010-10-13,2010-10-03,listing_date_minus_10d,,16.779999999999973,3,30.0,
+Cantabil Retail India Ltd,CANTABIL,2010-10-12,2010-10-02,listing_date_minus_10d,,16.779999999999973,3,30.0,
+Orient Green Power Company Ltd,GREENPOWER,2010-10-08,2010-09-28,listing_date_minus_10d,,13.138,5,60.0,widened_to_60d
+Ramky Infrastructure Ltd,RAMKY,2010-10-08,2010-09-28,listing_date_minus_10d,,13.138,5,60.0,widened_to_60d
+ESL Steel Ltd,,2010-10-08,2010-09-28,listing_date_minus_10d,,13.138,5,60.0,widened_to_60d
+Sastasundar Ventures Ltd,,2010-10-05,2010-09-25,listing_date_minus_10d,,12.318333333333337,6,60.0,widened_to_60d
+Eros International Media Ltd,,2010-10-06,2010-09-26,listing_date_minus_10d,,12.318333333333337,6,60.0,widened_to_60d
+CP Capital Ltd,CPCAP,2010-10-06,2010-09-26,listing_date_minus_10d,,12.318333333333337,6,60.0,widened_to_60d
+Tirupati Inks Limited,,2010-10-01,2010-09-21,listing_date_minus_10d,,15.024999999999977,2,30.0,
+Indosolar Limited,WAAREEINDO,2010-09-29,2010-09-19,listing_date_minus_10d,,15.024999999999977,2,30.0,
+Gujarat Pipavav Port Limited,GPPL,2010-09-09,2010-08-30,listing_date_minus_10d,,10.852500000000006,4,30.0,
+Prakash Steelage Limited,PRAKASHSTL,2010-08-25,2010-08-15,listing_date_minus_10d,,10.225000000000023,4,30.0,
+Bajaj Consumer Care Limited,BAJAJCON,2010-08-18,2010-08-08,listing_date_minus_10d,,10.225000000000023,4,30.0,
+Bharat Financial Inclusion Limited,,2010-08-16,2010-08-06,listing_date_minus_10d,,10.225000000000023,4,30.0,
+Engineers India Limited,,2010-08-12,2010-08-02,listing_date_minus_10d,fpo,7.01666666666669,3,30.0,
+Midfield Industries Limited,,2010-08-04,2010-07-25,listing_date_minus_10d,,4.720000000000009,3,30.0,
+Hindustan Media Ventures Limited,HMVL,2010-07-21,2010-07-11,listing_date_minus_10d,,-0.8550000000000088,6,60.0,widened_to_60d
+Technofab Engineers Limited,,2010-07-16,2010-07-06,listing_date_minus_10d,,0.38285714285713573,7,60.0,widened_to_60d
+Shri Aster Silicates Limited,,2010-07-28,2010-07-18,listing_date_minus_10d,,5.875,2,30.0,
+Parabolic Drugs Limited,,2010-07-01,2010-06-21,listing_date_minus_10d,,0.22499999999999432,6,60.0,widened_to_60d
+Standard Chartered (India) Limited,,2010-06-11,2010-06-01,listing_date_minus_10d,idr,0.22499999999999432,6,30.0,
+Jaypee Infratech Limited,,2010-05-21,2010-05-11,listing_date_minus_10d,,0.22000000000000833,3,30.0,
+SJVN Limited,SJVN,2010-05-20,2010-05-10,listing_date_minus_10d,,-3.5749999999999886,2,30.0,
+GB Global Limited,,2010-05-19,2010-05-09,listing_date_minus_10d,,-2.529999999999992,3,30.0,
+Tarapur Transformers Limited,TARAPUR,2010-05-18,2010-05-08,listing_date_minus_10d,,-2.529999999999992,3,30.0,
+Satchmo Holdings Limited,SATCH,2010-05-13,2010-05-03,listing_date_minus_10d,,6.106000000000006,5,30.0,
+Talwalkars Better Value Fitness Limited,,2010-05-10,2010-04-30,listing_date_minus_10d,,6.106000000000006,5,30.0,
+Goenka Diamond & Jewellery Limited,,2010-04-16,2010-04-06,listing_date_minus_10d,,25.245000000000005,6,30.0,
+Intrasoft Technologies Limited,ISFT,2010-04-12,2010-04-02,listing_date_minus_10d,,30.76666666666667,6,30.0,
+Shree Ganesh Jewellery House (I) Limited,,2010-04-09,2010-03-30,listing_date_minus_10d,,34.672000000000004,5,30.0,
+Persistent Systems Limited,PERSISTENT,2010-04-06,2010-03-27,listing_date_minus_10d,,21.422000000000004,5,30.0,
+IL&FS Transportation Networks Limited,IL&FSTRANS,2010-03-30,2010-03-20,listing_date_minus_10d,,10.351111111111113,9,30.0,
+Pradip Overseas Limited,,2010-04-05,2010-03-26,listing_date_minus_10d,,14.300000000000002,7,30.0,
+NMDC Limited,,2010-03-29,2010-03-19,listing_date_minus_10d,fpo,10.351111111111113,9,30.0,
+DQ Entertainment (International) Limited,,2010-03-29,2010-03-19,listing_date_minus_10d,,10.351111111111113,9,30.0,
+United Bank of India,,2010-03-18,2010-03-08,listing_date_minus_10d,,6.953333333333332,9,30.0,
+REC Limited,,2010-03-08,2010-02-26,listing_date_minus_10d,fpo,2.644999999999999,10,30.0,
+Man Infraconstruction Limited,MANINFRA,2010-03-11,2010-03-01,listing_date_minus_10d,,3.16111111111111,9,30.0,
+Texmo Pipes and Products Limited,TEXMOPIPES,2010-03-10,2010-02-28,listing_date_minus_10d,,2.644999999999999,10,30.0,
+Hathway Cable & Datacom Limited,HATHWAY,2010-02-25,2010-02-15,listing_date_minus_10d,,5.846666666666665,3,30.0,
+ARSS Infrastructure Projects Limited,,2010-03-03,2010-02-21,listing_date_minus_10d,,5.204999999999999,6,30.0,
+NTPC Limited,,2010-02-19,2010-02-09,listing_date_minus_10d,fpo,5.774999999999999,4,30.0,
+Emmbi Industries Limited,EMMBI,2010-02-24,2010-02-14,listing_date_minus_10d,,5.846666666666665,3,30.0,
+Valor Estates Limited,DBREALTY,2010-02-24,2010-02-14,listing_date_minus_10d,,5.846666666666665,3,30.0,
+Thangamayil Jewellery Limited,THANGAMAYL,2010-02-19,2010-02-09,listing_date_minus_10d,,5.774999999999999,4,30.0,
+Syncom Healthcare Limited,,2010-02-15,2010-02-05,listing_date_minus_10d,,7.3925,4,30.0,
+Vascon Engineers Limited,VASCONEQ,2010-02-15,2010-02-05,listing_date_minus_10d,,7.3925,4,30.0,
+Aqua Logistics Limited,,2010-02-23,2010-02-13,listing_date_minus_10d,,5.846666666666665,3,30.0,
+Jubilant Foodworks Limited,JUBLFOOD,2010-02-08,2010-01-29,listing_date_minus_10d,,7.39,4,30.0,
+Birla Shloka Edutech Limited,,2010-01-29,2010-01-19,listing_date_minus_10d,,7.39,4,30.0,
+Infinite Computer Solutions Limited,,2010-02-03,2010-01-24,listing_date_minus_10d,,7.39,4,30.0,
+D B Corp Limited,DBCORP,2010-01-06,2009-12-27,listing_date_minus_10d,,,0,,no_prior_data
+Godrej Properties Limited,GODREJPROP,2010-01-05,2009-12-26,listing_date_minus_10d,,,0,,no_prior_data
+JSW Energy Limited,JSWENERGY,2010-01-04,2009-12-25,listing_date_minus_10d,,,0,,no_prior_data
+MBL Infrastructure Limited,MBLINFRA,2010-01-11,2010-01-01,listing_date_minus_10d,,,0,,no_prior_data

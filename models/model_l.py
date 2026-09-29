@@ -26,6 +26,8 @@ import dataio
 
 MB_FEATURES = ["log1p_total", "log1p_qib", "log1p_hni", "log1p_rii", "log_issue_size"]
 SME_FEATURES = ["log1p_total", "log_issue_size"]
+# PLAN.md section 5: these are the PROMISED HIT RATES, not thresholds. The threshold
+# is derived from out-of-fold predictions by framework.threshold_section5().
 THRESHOLDS = {"L1": {"L1": 0.90}, "L2": {"L2": 0.80}}
 CUTS = {"L1": 0.0, "L2": 10.0}
 
@@ -123,7 +125,7 @@ def spec(target: str, segment: str) -> F.ModelSpec:
         target=target,
         target_desc=f"1 if listing gain > {CUTS[target]:g}% else 0",
         realised_days=0,
-        thresholds=THRESHOLDS[target],
+        required_hit_rate=THRESHOLDS[target],
         notes=MB_NOTES if mb else SME_NOTES,
     )
 

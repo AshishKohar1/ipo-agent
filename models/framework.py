@@ -57,7 +57,8 @@ class ModelSpec:
     target: str                                  # binary 0/1 column produced by load()
     target_desc: str
     realised_days: int = 0                       # 0 for L (listing day); 365 / 1095 for H
-    thresholds: dict = field(default_factory=dict)   # {label: probability} to verify
+    required_hit_rate: dict = field(default_factory=dict)  # {label: promised hit rate},
+    # e.g. {'L1': 0.90}. The THRESHOLD is derived from it by threshold_section5().
     n_test_years: int = 5
     min_test_n: int = 20                         # test year needs this many rows ...
     min_test_class: int = 3                      # ... and this many of each class
@@ -188,17 +189,23 @@ def walk_forward(df: pd.DataFrame, spec: ModelSpec, half_life, years=None):
     return pd.concat(oof, ignore_index=True), pd.DataFrame(per)
 
 
-def select_half_life(df, spec):
+def select_half_life(df, spec, select_by: str = "pooled_oof_auc"):
+    """Half-life chosen by POOLED out-of-fold AUC (PLAN.md section 5): concatenate every
+    fold's out-of-fold predictions and score once. The mean of per-year AUCs is also
+    reported, but must not drive the choice — it lets a 20-row test year count as much as
+    a 100-row one."""
     years = test_years(df, spec)
     rows, runs = [], {}
     for hl in HALF_LIVES:
         oof, per = walk_forward(df, spec, hl, years)
         runs[hl] = (oof, per)
+        pooled = roc_auc_score(oof["y"], oof["p"])
         rows.append({"half_life": "none" if hl is None else hl,
-                     "mean_auc": per["auc"].mean(), "pooled_oof_auc": roc_auc_score(oof["y"], oof["p"]),
+                     "pooled_oof_auc": pooled, "pooled_gini": 2 * pooled - 1,
+                     "mean_auc": per["auc"].mean(),
                      **{f"auc_{int(r.test_year)}": r.auc for r in per.itertuples()}})
     tab = pd.DataFrame(rows)
-    best = HALF_LIVES[int(tab["mean_auc"].to_numpy().argmax())]
+    best = HALF_LIVES[int(tab[select_by].to_numpy().argmax())]
     return best, tab, runs, years
 
 
@@ -231,6 +238,62 @@ def threshold_table(oof: pd.DataFrame, grid=THRESHOLD_GRID) -> pd.DataFrame:
                      "hits": k, "hit_rate": k / n if n else np.nan,
                      "hit_rate_lo95": wilson_lower(k, n)})
     return pd.DataFrame(rows)
+
+
+def vif(df: pd.DataFrame, features: list[str]) -> pd.DataFrame:
+    """Variance inflation factor per feature, by OLS of each feature on the others
+    (numpy lstsq — no statsmodels dependency). VIF > 5 means the coefficient on that
+    feature is not separately interpretable."""
+    X = df[features].astype(float)
+    rows = []
+    for c in features:
+        other = X.drop(columns=c)
+        A = np.column_stack([np.ones(len(other)), other.to_numpy()])
+        beta, *_ = np.linalg.lstsq(A, X[c].to_numpy(), rcond=None)
+        resid = X[c].to_numpy() - A @ beta
+        ss_tot = ((X[c] - X[c].mean()) ** 2).sum()
+        r2 = 1 - (resid ** 2).sum() / ss_tot if ss_tot > 0 else 0.0
+        rows.append({"feature": c, "vif": np.inf if r2 >= 1 else 1 / (1 - r2)})
+    return pd.DataFrame(rows)
+
+
+def threshold_section5(oof: pd.DataFrame, required: float, min_fire: int = 20,
+                       slack: float = 0.05, grid=None) -> dict:
+    """PLAN.md section 5 threshold rule, applied to out-of-fold predictions.
+
+    The chosen threshold is the LOWEST probability t (so it fires as often as possible)
+    that satisfies all three:
+      1. out-of-sample hit rate among rows with p >= t  >=  `required`
+      2. Wilson 95% lower bound of that hit rate        >=  `required - slack`
+      3. number of firing rows                          >=  `min_fire`
+
+    `required` is the promised hit rate (0.90 for L1, 0.80 for L2) — NOT the threshold.
+    Returns the chosen threshold and the evidence, or chosen=None if nothing qualifies.
+    """
+    grid = np.round(np.arange(0.05, 1.00, 0.01), 2) if grid is None else grid
+    rows = []
+    for t in grid:
+        f = oof[oof["p"] >= t]
+        n = len(f); k = int(f["y"].sum())
+        hr = k / n if n else np.nan
+        lo = wilson_lower(k, n) if n else np.nan
+        rows.append({"threshold": float(t), "n_fire": n, "fire_pct": n / len(oof) * 100,
+                     "hits": k, "hit_rate": hr, "hit_rate_lo95": lo,
+                     "meets_hit_rate": bool(n and hr >= required),
+                     "meets_wilson": bool(n and lo >= required - slack),
+                     "meets_min_fire": n >= min_fire})
+    tab = pd.DataFrame(rows)
+    ok = tab[tab["meets_hit_rate"] & tab["meets_wilson"] & tab["meets_min_fire"]]
+    chosen = float(ok["threshold"].min()) if len(ok) else None
+    row = ok.loc[ok["threshold"].idxmin()].to_dict() if len(ok) else None
+    # why it failed, for the report: the binding constraint at the best near-miss
+    near = None
+    if chosen is None:
+        cand = tab[tab["meets_min_fire"]]
+        if len(cand):
+            near = cand.loc[cand["hit_rate"].idxmax()].to_dict()
+    return {"required": required, "min_fire": min_fire, "slack": slack,
+            "chosen": chosen, "at_chosen": row, "best_near_miss": near, "table": tab}
 
 
 def verify_thresholds(thr: pd.DataFrame, claims: dict, min_fire: int = 10) -> list[dict]:
@@ -317,21 +380,26 @@ def run(spec: ModelSpec, write_card: bool = True) -> dict:
     oof_base, per_base = runs[None]
     cal_best, cal_base = calibration(oof_best), calibration(oof_base)
     thr = threshold_table(oof_best)
-    checks = verify_thresholds(thr, spec.thresholds) if spec.thresholds else []
+    # PLAN.md section 5: lowest threshold meeting the promised hit rate, a Wilson 95%
+    # lower bound within 5pp of it, and >= 20 fires. Derived, never assumed.
+    s5 = {lab: threshold_section5(oof_best, req)
+          for lab, req in (spec.required_hit_rate or {}).items()}
     pipe, coefs, w = fit_final(df, spec, best)
     try:
         hc = hc_logit(df, spec); hc_txt = hc.summary().as_text()
     except Exception as e:                       # never let a stats nicety kill the run
         hc, hc_txt = None, f"HC Logit failed: {e}"
-    final_thr = {}
-    for c in checks:
-        final_thr[c["label"]] = c["claimed"] if c["passes"] else c["lowest_passing"]
+    final_thr = {lab: r["chosen"] for lab, r in s5.items()}
+    pooled = roc_auc_score(oof_best["y"], oof_best["p"])
     path = save_bundle(spec, pipe, best, final_thr,
-                       {"validation_mean_auc": float(per_best["auc"].mean())})
+                       {"validation_pooled_auc": float(pooled),
+                        "validation_mean_auc": float(per_best["auc"].mean()),
+                        "required_hit_rate": dict(spec.required_hit_rate or {})})
     res = dict(spec=spec, df=df, best=best, hl_tab=hl_tab, years=years, per_best=per_best,
                per_base=per_base, oof=oof_best, cal_best=cal_best, cal_base=cal_base,
-               thr=thr, checks=checks, coefs=coefs, w=w, hc=hc, hc_txt=hc_txt,
-               final_thr=final_thr, bundle=path)
+               thr=thr, s5=s5, coefs=coefs, w=w, hc=hc, hc_txt=hc_txt,
+               final_thr=final_thr, bundle=path,
+               vif=vif(df, spec.features), pooled_auc=pooled)
     if write_card:
         res["card"] = write_model_card(res)
     return res
@@ -371,19 +439,25 @@ def write_model_card(r: dict) -> Path:
         _md(cal), "",
         "## Threshold table (out-of-fold, chosen half-life)", "", _md(r["thr"]), "",
     ]
-    if r["checks"]:
-        lines += ["## Threshold verification",
-                  "'Fire at ≥t' promises an out-of-fold hit rate of at least t. It passes if the hit "
-                  "rate among IPOs firing at t is ≥ t on at least 10 fires. A failing threshold is "
-                  "replaced by the lowest threshold that does deliver t (most fires) — never kept.", ""]
-        for c in r["checks"]:
-            hr = "n/a" if pd.isna(c["hit_rate"]) else f"{c['hit_rate']*100:.1f}%"
-            lp = c["lowest_passing"]
-            fix = "no threshold delivers it" if lp is None else f"use ≥{lp:.0%}"
-            verdict = "**PASS**" if c["passes"] else f"**FAIL** → {fix}"
-            lines.append(f"- **{c['label']} ≥{c['claimed']:.0%}**: fires {c['n_fire']}, "
-                         f"hit rate {hr} (95% lower bound {c['hit_rate_lo95']*100:.1f}%) → {verdict}")
+    if r["s5"]:
+        lines += ["## Threshold derivation (PLAN.md section 5)",
+                  "The threshold is the **lowest** probability whose out-of-fold hit rate meets the "
+                  "promised rate, whose Wilson 95% lower bound is within 5pp of it, and which fires "
+                  "on at least 20 IPOs. If nothing qualifies, no threshold is published.", ""]
+        for lab, s in r["s5"].items():
+            if s["chosen"] is None:
+                nm = s["best_near_miss"]
+                lines.append(f"- **{lab} (needs {s['required']:.0%})**: no threshold qualifies. "
+                             + ("no threshold fires on 20+ IPOs" if nm is None else
+                                f"best with 20+ fires: hit rate {nm['hit_rate']*100:.1f}% "
+                                f"(lower bound {nm['hit_rate_lo95']*100:.1f}%) at t={nm['threshold']:.2f}"))
+            else:
+                at = s["at_chosen"]
+                lines.append(f"- **{lab} (needs {s['required']:.0%})**: threshold **{s['chosen']:.2f}** "
+                             f"-> fires {at['n_fire']} ({at['fire_pct']:.1f}%), hit rate "
+                             f"{at['hit_rate']*100:.1f}%, Wilson lower bound {at['hit_rate_lo95']*100:.1f}%")
         lines += ["", f"Thresholds saved in the bundle: `{r['final_thr']}`", ""]
+    lines += ["## Collinearity (VIF)", "", _md(r["vif"]), ""]
     lines += ["## Coefficient significance (unweighted Logit, standardised features, robust SEs)",
               "statsmodels' discrete Logit gives identical SEs for HC0/HC1/HC3 — it applies a generic "
               "robust sandwich, not the HC3 leverage correction.", "", "```", r["hc_txt"], "```", "",
