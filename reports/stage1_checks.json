@@ -1,0 +1,266 @@
+{
+  "run_at_ist": "2026-09-29 22:01 IST",
+  "steps": {
+    "1_interpreter": {
+      "platform": "win32",
+      "platform_full": "Windows-11-10.0.26200-SP0",
+      "machine": "AMD64",
+      "python": "3.14.5",
+      "is_linux": false,
+      "pins": {
+        "pandas": "3.0.6",
+        "numpy": "2.5.1",
+        "requests": "2.34.2",
+        "yfinance": "1.7.0",
+        "pdfplumber": "0.11.10",
+        "openpyxl": "3.1.5",
+        "statsmodels": "0.15.0",
+        "beautifulsoup4": "4.15.0",
+        "lxml": "6.1.1"
+      },
+      "installed": {
+        "pandas": "3.0.6",
+        "numpy": "2.5.1",
+        "requests": "2.34.2",
+        "yfinance": "1.7.0",
+        "pdfplumber": "0.11.10",
+        "openpyxl": "3.1.5",
+        "statsmodels": "0.15.0",
+        "beautifulsoup4": "4.15.0",
+        "lxml": "6.1.1"
+      },
+      "requirements_clean": true,
+      "deviations": []
+    },
+    "3_reachability": {
+      "domains": [
+        {
+          "host": "www.sebi.gov.in",
+          "why": "RHP / prospectus source (Stages 8-10)",
+          "required_now": true,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.niftyindices.com",
+          "why": "official Nifty 50 TRI benchmark (Stage 3 target refresh)",
+          "required_now": true,
+          "probe": "/reports/historical-data",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "query2.finance.yahoo.com",
+          "why": "prices, symbols, listing dates (Job 1-3)",
+          "required_now": true,
+          "probe": "/v1/finance/search?q=Reliance&quotesCount=1",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.nseindia.com",
+          "why": "equity list, offer-doc listing, spine refresh",
+          "required_now": true,
+          "probe": "/api/marketStatus",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.bsesme.com",
+          "why": "SME prospectus source",
+          "required_now": true,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.bseindia.com",
+          "why": "BSE mainboard (resolver not implemented; reconciliation)",
+          "required_now": false,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.chittorgarh.com",
+          "why": "day-wise subscription (Stage 4)",
+          "required_now": false,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.ipoji.com",
+          "why": "day-wise subscription, 2nd source (Stage 4)",
+          "required_now": false,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.investorgain.com",
+          "why": "GMP history (Stage 4)",
+          "required_now": false,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.screener.in",
+          "why": "financials reconciliation (Stage 8)",
+          "required_now": false,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        },
+        {
+          "host": "www.rbi.org.in",
+          "why": "91-day T-bill for WACC proxy (Stage 11)",
+          "required_now": false,
+          "probe": "/",
+          "status": 200,
+          "reachable": true,
+          "note": ""
+        }
+      ],
+      "blocked_required": []
+    },
+    "3b_robots": [
+      {
+        "host": "www.chittorgarh.com",
+        "status": 200,
+        "has_robots": true,
+        "disallow_all_for_star": false,
+        "star_disallows": [
+          "/ipo/ipo_discussions.asp"
+        ]
+      },
+      {
+        "host": "www.ipoji.com",
+        "status": 200,
+        "has_robots": true,
+        "disallow_all_for_star": false,
+        "star_disallows": [
+          "/profile",
+          "/bids"
+        ]
+      },
+      {
+        "host": "www.investorgain.com",
+        "status": 200,
+        "has_robots": true,
+        "disallow_all_for_star": false,
+        "star_disallows": []
+      },
+      {
+        "host": "www.screener.in",
+        "status": 200,
+        "has_robots": true,
+        "disallow_all_for_star": false,
+        "star_disallows": [
+          "/user/*",
+          "/*?q=",
+          "/*?sort=",
+          "/*?limit=",
+          "/*?page=",
+          "/company/source/quarter/*"
+        ]
+      },
+      {
+        "host": "www.sebi.gov.in",
+        "status": 200,
+        "has_robots": true,
+        "disallow_all_for_star": false,
+        "star_disallows": [
+          "",
+          "/js",
+          "/hindi/js",
+          "/css",
+          "/hindi/css"
+        ]
+      },
+      {
+        "host": "www.bsesme.com",
+        "status": 200,
+        "has_robots": true,
+        "disallow_all_for_star": false,
+        "star_disallows": []
+      }
+    ],
+    "4_integrity": {
+      "master rows": {
+        "got": 652,
+        "expected": 652,
+        "ok": true,
+        "detail": ""
+      },
+      "exclude_reason flags": {
+        "got": 29,
+        "expected": 29,
+        "ok": true,
+        "detail": "{'reit_invit': 14, 'fpo': 13, 'bad_listing_date': 1, 'idr': 1}"
+      },
+      "excess_1y rows": {
+        "got": 491,
+        "expected": 491,
+        "ok": true,
+        "detail": ""
+      },
+      "excess_3y rows": {
+        "got": 331,
+        "expected": 331,
+        "ok": true,
+        "detail": ""
+      },
+      "benchmark_1y": {
+        "got": [
+          "nifty50_tri"
+        ],
+        "ok": true
+      },
+      "benchmark_3y": {
+        "got": [
+          "nifty50_tri"
+        ],
+        "ok": true
+      },
+      "tri": {
+        "rows": 4395,
+        "first": "2009-01-01",
+        "last": "2026-09-25",
+        "max_gap_days": 6,
+        "gaps_over_6d": 0,
+        "nulls": 0,
+        "monotonic": true,
+        "unique": true,
+        "ok": true
+      }
+    },
+    "4b_estimator": {
+      "max_abs_diff_vs_statsmodels_mle": 3.0064173373034464e-10,
+      "max_abs_penalised_gradient": 9.2148511043888e-15,
+      "auc_diff_vs_brute_force": 0.0,
+      "ok": true
+    },
+    "5_sha_roundtrip": {
+      "url": "https://www.sebi.gov.in/sebi_data/attachdocs/1437128962873.pdf",
+      "expected_sha256": "0c6cddda381f472ea519832a8a81ed0d26e2868b6ad7e5fde16dbfd68dc4e0c9",
+      "got_sha256": "0c6cddda381f472ea519832a8a81ed0d26e2868b6ad7e5fde16dbfd68dc4e0c9",
+      "ok": true,
+      "note": "sha256 matches manifest; _verify_is_prospectus=True (verified, 401 pages); temp file deleted"
+    }
+  },
+  "required_failures": [],
+  "passed": true
+}
