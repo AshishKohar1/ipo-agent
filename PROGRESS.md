@@ -1,19 +1,22 @@
 # Progress
 
+**Working branch: `work`** (on GitHub at github.com/AshishKohar1/ipo-agent). This is the
+source of truth. Every session: `git fetch`, check out `work`, `git pull`.
+
 ## Summary (updated at the end of every session)
-- **Finished:** —
-- **In progress:** Stage 0 (repository setup, laptop), started 2026-09-28 23:01 IST
-- **Open gates:** none
-- **Next stage:** Stage 1, cloud environment check (needs the user's cloud setup)
-- **Blocked:** nothing
+- **Finished:** Stage 0 (closed against `origin/main`); Stage 1 (laptop); Stage 2 (Sets A-D x L1/L2, pooled AUC + section-5 thresholds + paired bootstrap)
+- **In progress:** Stage 4 next (day-wise subscription + GMP), the only unblocked stage while Gate A is open
+- **Open gates:** **GATE A** - which feature set Model L uses. Recommendation: Set A for both targets (Set C for L1 optional). See reports/STAGE_02_REPORT.md
+- **Next stage:** Stage 3 and Stage 5 are BLOCKED on Gate A. Stage 4 and Stage 8 do not depend on it
+- **Blocked:** Stage 3, 5 (Gate A). Caveat: Stage 1's Linux/`pip install` half is unverified - the first cloud session must re-run check_env.py and stage1_env_check.py
 
 ## Stages
 
 | Stage | Title | Depends on | Status | Started (IST) | Finished (IST) | Notes |
 |---|---|---|---|---|---|---|
-| 0 | Repository setup (laptop) | — | IN_PROGRESS | 2026-09-28 23:01 | | |
-| 1 | Cloud environment check | 0 + cloud setup | NOT_STARTED | | | |
-| 2 | Model L feature comparison | 1 | NOT_STARTED | | | ends in Gate A |
+| 0 | Repository setup (laptop) | — | DONE | 2026-09-28 23:01 | 2026-09-29 | acceptance verified against `origin/main`; `work` branch created and pushed — see reports/STAGE_00_CLOSURE.md |
+| 1 | Cloud environment check | 0 + cloud setup | DONE | 2026-09-29 21:55 | 2026-09-29 22:10 | ran on the LAPTOP: check_env 13/13, 11/11 domains, integrity + estimator + SHA round-trip all pass. Linux/`pip install` half UNVERIFIED - first cloud session must re-run check_env.py and stage1_env_check.py |
+| 2 | Model L feature comparison | 1 | AWAITING_USER | 2026-09-29 22:10 | 2026-09-29 22:40 | Gate A open - see reports/STAGE_02_REPORT.md. Sets A-D x L1/L2 on 616 identical rows |
 | 3 | Calibration curve + final thresholds | Gate A | NOT_STARTED | | | |
 | 4 | Day-wise subscription + GMP history | 1 | NOT_STARTED | | | |
 | 5 | Final-day forecaster + GMP test | Gate A, 4 | NOT_STARTED | | | |
@@ -30,7 +33,7 @@
 
 | Gate | After stage | Status | Decision (verbatim in DECISIONS.md) |
 |---|---|---|---|
-| A | 2 | — | |
+| A | 2 | **AWAITING_USER** (opened 2026-09-29) | |
 | B | 6 | — | |
 | C | 8 | — | |
 | D | 9 | — | |

@@ -26,10 +26,72 @@ def check(name):
     return wrap
 
 
-@check("python >= 3.10")
+@check("platform")
+def _():
+    import platform
+    return (f"{sys.platform} / {platform.platform()} / {platform.machine()} / "
+            f"python {platform.python_version()} ({platform.python_implementation()})")
+
+
+@check("python >= 3.10 (code minimum)")
 def _():
     assert sys.version_info >= (3, 10), sys.version
     return sys.version.split()[0]
+
+
+@check("requirements.txt pins match what is installed")
+def _():
+    """OS-aware: the laptop pins are the reference, but an older interpreter (e.g. a cloud
+    image on 3.11) legitimately cannot install numpy 2.5.1. Mismatches are reported per
+    package with the reason, so a deviation is visible instead of silent."""
+    from importlib.metadata import version, PackageNotFoundError
+    req = ROOT / "requirements.txt"
+    assert req.exists(), "requirements.txt missing"
+    pins, notes = {}, []
+    for line in req.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "==" not in line:
+            continue
+        name, want = line.split("==", 1)
+        pins[name.strip()] = want.strip()
+    for name, want in pins.items():
+        try:
+            got = version(name)
+        except PackageNotFoundError:
+            notes.append(f"{name}: NOT INSTALLED (pinned {want})"); continue
+        if got != want:
+            notes.append(f"{name}: installed {got} != pinned {want}")
+    needs = "3.12+" if "numpy" in pins and pins["numpy"] >= "2.5" else "3.10+"
+    head = f"{len(pins)} pins, interpreter needs {needs}"
+    if notes:
+        return head + " | DEVIATIONS: " + "; ".join(notes)
+    return head + " | all match"
+
+
+@check("scikit-learn absent (PLAN.md rule 10) and no module imports it")
+def _():
+    import importlib.util
+    installed = importlib.util.find_spec("sklearn") is not None
+    importers = [p.name for p in list(ROOT.glob("*.py")) + list((ROOT / "models").glob("*.py"))
+                 if re.search(r"^\s*(import|from)\s+sklearn", p.read_text(encoding="utf-8"), re.M)]
+    assert not importers, f"modules import sklearn: {importers}"
+    return ("no module imports sklearn" +
+            ("; note: sklearn IS installed in this environment but unused"
+             if installed else "; not installed"))
+
+
+@check("statsmodels Logit import path (OS-aware: statsmodels.api may be blocked)")
+def _():
+    """On the laptop, Windows Application Control blocks statsmodels.tsa, which
+    statsmodels.api imports. The framework therefore imports Logit from
+    statsmodels.discrete.discrete_model. That path must work on every OS."""
+    from statsmodels.discrete.discrete_model import Logit  # noqa: F401
+    try:
+        import statsmodels.api  # noqa: F401
+        api = "statsmodels.api also importable"
+    except Exception as e:
+        api = f"statsmodels.api blocked ({type(e).__name__}) — expected on this laptop"
+    return f"discrete.Logit OK; {api}"
 
 
 @check("packages")

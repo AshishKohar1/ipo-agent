@@ -202,7 +202,7 @@ def spec(horizon: str = "1y", blocks: list[str] | None = None) -> F.ModelSpec:
         target_desc=f"1 if {h['excess']} (IPO return − Nifty 50 TRI return, listing close → "
                     f"+{h['days']}d) > 0",
         realised_days=h["days"],
-        thresholds={},                     # no agreed thresholds yet for H
+        required_hit_rate={},              # no agreed hit-rate requirement for H yet
         notes=NOTES[horizon],
     )
 
