@@ -4,11 +4,11 @@
 source of truth. Every session: `git fetch`, check out `work`, `git pull`.
 
 ## Summary (updated at the end of every session)
-- **Finished:** Stage 0 (closed against `origin/main`); Stage 1 (laptop); Stage 2 (Sets A-D x L1/L2, pooled AUC + section-5 thresholds + paired bootstrap)
-- **In progress:** Stage 4 next (day-wise subscription + GMP), the only unblocked stage while Gate A is open
-- **Open gates:** **GATE A** - which feature set Model L uses. Recommendation: Set A for both targets (Set C for L1 optional). See reports/STAGE_02_REPORT.md
-- **Next stage:** Stage 3 and Stage 5 are BLOCKED on Gate A. Stage 4 and Stage 8 do not depend on it
-- **Blocked:** Stage 3, 5 (Gate A). Caveat: Stage 1's Linux/`pip install` half is unverified - the first cloud session must re-run check_env.py and stage1_env_check.py
+- **Finished:** Stage 0 (closed against `origin/main`); Stage 1 (laptop); Stage 2 (Sets A-D x L1/L2 -> Gate A)
+- **In progress:** none. Stage 8 (RHP extraction build) is the next unblocked stage and needs no decision
+- **Open gates:** **GATE A** - which Model L feature set (recommend Set A both targets); **STAGE 4 SOURCE DECISION** - 2 of 3 named sources unusable under rule 5
+- **Next stage:** Stage 8 (unblocked, SEBI + BSE SME both permitted and verified 5/5)
+- **Blocked:** Stage 3 + 5 (Gate A); Stage 4 (source decision). Caveat: Stage 1's Linux/`pip install` half is unverified - the first cloud session must re-run check_env.py and stage1_env_check.py
 
 ## Stages
 
@@ -18,7 +18,7 @@ source of truth. Every session: `git fetch`, check out `work`, `git pull`.
 | 1 | Cloud environment check | 0 + cloud setup | DONE | 2026-09-29 21:55 | 2026-09-29 22:10 | ran on the LAPTOP: check_env 13/13, 11/11 domains, integrity + estimator + SHA round-trip all pass. Linux/`pip install` half UNVERIFIED - first cloud session must re-run check_env.py and stage1_env_check.py |
 | 2 | Model L feature comparison | 1 | AWAITING_USER | 2026-09-29 22:10 | 2026-09-29 22:40 | Gate A open - see reports/STAGE_02_REPORT.md. Sets A-D x L1/L2 on 616 identical rows |
 | 3 | Calibration curve + final thresholds | Gate A | NOT_STARTED | | | |
-| 4 | Day-wise subscription + GMP history | 1 | NOT_STARTED | | | |
+| 4 | Day-wise subscription + GMP history | 1 | AWAITING_USER | 2026-09-29 22:45 | | BLOCKED on a source decision: IPO Ji disallows Anthropic bulk collection by name, InvestorGain signals ai-train=no, leaving 1 usable source vs rule 2's 2. Nothing scraped - see reports/STAGE_04_REPORT.md |
 | 5 | Final-day forecaster + GMP test | Gate A, 4 | NOT_STARTED | | | |
 | 6 | Productionize Model L | 3, 5 | NOT_STARTED | | | ends in Gate B |
 | 7 | Go live (Model L) | Gate B | NOT_STARTED | | | |
