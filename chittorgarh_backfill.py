@@ -73,16 +73,32 @@ def money_cr(s) -> float | None:
         # amount: "47,34,000 shares (agg. up to Rs 28.40 Cr)" returned 4,734,000 as the issue
         # size in crore on the first run. Withheld rather than assumed (H7).
         return None
-    v = float(m.group(1).replace(",", ""))
+    try:
+        v = float(m.group(1).replace(",", ""))
+    except ValueError:                 # e.g. "1,234..56" — a real cell on one page
+        return None
     u = (m.group(2) or "").strip().lower()
     return v * UNIT.get(u, 1.0)
 
 
 def pct(s) -> float | None:
+    """A percentage from a cell, or None.
+
+    `[\\d.]+` happily matches "23..47" — a real cell on one page — and float() then raises,
+    which killed the whole sweep after 1,618 ids. The pattern now requires a well-formed
+    number, and the conversion is guarded as well: a malformed cell must cost that cell,
+    not the run.
+    """
     if s is None:
         return None
-    m = re.search(r"([\d.]+)\s*%", str(s))
-    return float(m.group(1)) if m else None
+    m = re.search(r"(\d{1,3}(?:\.\d+)?)\s*%", str(s))
+    if not m:
+        return None
+    try:
+        v = float(m.group(1))
+    except ValueError:
+        return None
+    return v if 0 <= v <= 100 else None
 
 
 def fnum(s) -> float | None:
@@ -419,7 +435,15 @@ def main(limit=None, status_only=False, lo=ID_LO, hi=ID_HI):
                 break
             continue
         errs = 0
-        row, anchors = parse(r.text, ipo_id)
+        # A parser fault on one page must never take down a 2,861-id sweep. It did once:
+        # a "23..47" cell raised ValueError in pct() and the run stopped at id 1618.
+        try:
+            row, anchors = parse(r.text, ipo_id)
+        except Exception as e:
+            row, anchors = {"ipo_id": ipo_id,
+                            "note": f"parse failed: {type(e).__name__}: {e}"[:200]}, []
+            print(f"  id {ipo_id}: parse failed, page skipped — "
+                  f"{type(e).__name__}: {e}", flush=True)
         row["http"] = 200
         row["url"] = BASE.format(id=ipo_id)
         row["fetched_at"] = str(pd.Timestamp.now())

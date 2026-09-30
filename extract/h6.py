@@ -38,7 +38,8 @@ as `not_found`. A regex that ignores the negation would report every company as 
 """
 from __future__ import annotations
 import re
-from .base import Doc, Value, to_crore
+from .base import (Doc, Value, to_crore, MISSING_REASON_VALUES,
+                   classify_missing_reason)
 
 EXTRACTOR_VERSION = "2.0.0"
 NAME = "h6"
@@ -195,8 +196,20 @@ def V(ctx: Ctx, var: str, **kw) -> Value:
                  sha256=d.sha256, extractor=NAME, extractor_version=EXTRACTOR_VERSION, **kw)
 
 
-def miss(ctx: Ctx, var: str, note: str, status: str = "not_found") -> Value:
-    return V(ctx, var, value=None, status=status, note=note)
+def miss(ctx: Ctx, var: str, note: str, status: str = "not_found",
+         reason: str = "") -> Value:
+    """A refusal, with its H10 reason.
+
+    `reason` is one of the four `MISSING_REASON_VALUES`. Left empty it is derived from the
+    note by `classify_missing_reason()`, which is also what backfills rows written by a
+    batch that started before this column existed. Passing it explicitly is preferred:
+    the distinction that matters most — "the document does not disclose this" against
+    "the disclosure is on the page and I could not read it" — is the difference between a
+    dataset gap and an extractor gap, and only the call site knows which it is.
+    """
+    if reason and reason not in MISSING_REASON_VALUES:
+        raise ValueError(f"missing_reason {reason!r} is not one of {MISSING_REASON_VALUES}")
+    return V(ctx, var, value=None, status=status, note=note, missing_reason=reason)
 
 
 def hit(ctx: Ctx, var: str, value, i: int, sent: str, note: str, unit=None,
@@ -416,6 +429,7 @@ def litigation(ctx: Ctx) -> list[Value]:
         for i, m, sent in ctx.scan(re.compile(r"(?i)aggregate amount involved"), limit=2):
             u = ctx.unit_near(i, m.start())
             got = V(ctx, F_LIT_AMT, value=None, status="not_found", original_unit=u,
+                    missing_reason="present_but_unparsed",
                     page=ctx.doc.index_to_printed(i), pdf_page_index=i, source_text=sent,
                     note=f"an 'aggregate amount involved' column exists (unit "
                          f"{u or 'NOT FOUND'}) but no total is stated on the page; withheld "
@@ -579,7 +593,8 @@ def governance(ctx: Ctx) -> list[Value]:
     if sec is None:
         out.append(miss(ctx, F_PROM_EXP, "the 'OUR PROMOTER AND PROMOTER GROUP' section "
                                          "heading was not found, so no clause could be "
-                                         "attributed to a promoter rather than a director"))
+                                         "attributed to a promoter rather than a director",
+                        reason="section_not_found"))
     else:
         cands = [(int(m.group(1)), i, sent)
                  for i, m, sent in ctx.scan(PROM_EXP, lo=sec, hi=sec + 12, limit=40)]
@@ -594,6 +609,7 @@ def governance(ctx: Ctx) -> list[Value]:
                                 "quoted sentence names the promoter before modelling it."))
         else:
             out.append(V(ctx, F_PROM_EXP, value=None, status="not_applicable",
+                         missing_reason="not_present_on_page",
                          page=ctx.doc.index_to_printed(sec), pdf_page_index=sec,
                          source_text=ctx.flat[sec][:240],
                          note="the promoters section states no years of experience for anyone. "
@@ -666,7 +682,11 @@ def governance(ctx: Ctx) -> list[Value]:
     else:
         out.append(miss(ctx, F_INDEP_RATIO,
                         f"needs both counts (board={board_n}, independent={indep}); "
-                        "withheld rather than assumed"))
+                        "withheld rather than assumed",
+                        # one or both inputs are missing for their own recorded reason;
+                        # the ratio itself is never printed in any document
+                        reason="present_but_unparsed" if (board_n or indep)
+                        else "not_present_on_page"))
 
     pay = None
     for i, m, sent in ctx.scan(KMP_PAY, limit=8):
@@ -939,10 +959,12 @@ def contingent(ctx: Ctx) -> list[Value]:
                              "total, so this is a derived figure and may miss a row the "
                              "pattern did not reach")]
         return [V(ctx, F_CONTING, value=None, status="not_found", original_unit=u,
+                  missing_reason="present_but_unparsed",
                   page=ctx.doc.index_to_printed(i), pdf_page_index=i, source_text=sent,
                   note=f"a contingent-liabilities section exists (unit {u or 'NOT FOUND'}) but "
                        "no total row and no summable itemisation; withheld deliberately")]
-    return [miss(ctx, F_CONTING, "no contingent-liabilities section located")]
+    return [miss(ctx, F_CONTING, "no contingent-liabilities section located",
+                 reason="section_not_found")]
 
 
 # ================================================================ G. objects
@@ -1003,6 +1025,7 @@ def objects(ctx: Ctx) -> list[Value]:
         i, sent = ofs_only
         for var in (F_USES_N, F_GCP_PCT):
             out.append(V(ctx, var, value=None, status="not_applicable",
+                         missing_reason="not_present_on_page",
                          page=ctx.doc.index_to_printed(i), pdf_page_index=i, source_text=sent,
                          note="the offer is entirely an offer for sale, so there are no "
                               "objects of the offer and no general corporate purpose. "
@@ -1010,7 +1033,8 @@ def objects(ctx: Ctx) -> list[Value]:
     else:
         for var in (F_USES_N, F_GCP_PCT):
             out.append(miss(ctx, var, "no objects-of-the-offer table located and no "
-                                      "offer-for-sale-only statement"))
+                                      "offer-for-sale-only statement",
+                            reason="section_not_found"))
     return out
 
 
@@ -1114,11 +1138,12 @@ def extract(doc: Doc, pages: list[str]) -> list[Value]:
             for f in GROUP_FIELDS.get(g.__name__, ()):
                 if f not in have:
                     vals.append(miss(ctx, f, f"extractor group {g.__name__} raised "
-                                             f"{type(e).__name__}: {e}", status="unreadable"))
+                                             f"{type(e).__name__}: {e}", status="unreadable",
+                                     reason="present_but_unparsed"))
     have = {v.variable for v in vals}
     for f in FIELDS:
         if f not in have:
             vals.append(miss(ctx, f, "field not produced by any extractor group",
-                             status="unreadable"))
+                             status="unreadable", reason="present_but_unparsed"))
     vals += msci(ctx, vals)
     return vals

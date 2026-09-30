@@ -94,3 +94,47 @@ to cancel the day-wise backfill outright.
   it is not comparable to the ≥60% H6 target.
 - **B4 forward collection becomes the only source of day-wise data.** Every evening of delay
   loses one IPO permanently; it is scheduled in Stage 19, not Stage 4B.
+
+## 2026-10-01 — Gate C2 closed, and H10
+
+| Date (IST) | Gate / stage | Decision (verbatim) | Recorded by |
+|---|---|---|---|
+| 2026-10-01 | **Gate C2** / Stage 15 | **Keep every field. No pruning now; the priority is an exhaustive dataset, and we'll decide what to drop once coverage is visible.** | User |
+| 2026-10-01 | Stage 15 | **H10 — every extracted field carries a `missing_reason`**, recording one of `not_present_on_page`, `present_but_unparsed`, `section_not_found`, `document_unavailable`. "Without this, a field sitting at 45% at the end is uninterpretable." | User |
+
+### H10 as implemented
+
+- `missing_reason` is a column on `extract/base.Value`, set **explicitly at each refusal
+  site** in `extract/h6.py` — the distinction that matters is "the document does not
+  disclose this" against "the disclosure is on the page and I could not read it", which is
+  the difference between a dataset gap and an extractor gap, and only the call site knows
+  which it is.
+- `classify_missing_reason()` derives it from the refusal note as a fallback. The night
+  batch was already running when H10 was taken and its process holds the older module, so
+  `backfill_missing_reason.py` fills the column for rows already on disk without re-reading
+  a single PDF.
+- **A company whose document never reached an extractor produced no rows at all**, which is
+  worse than a missing value: the field is invisible rather than missing. The backfill emits
+  one row per H6 field for each such company with `document_unavailable`, so a field's
+  denominator is the whole queue and not just the companies a document was obtained for.
+- **Honest limit of the classification:** `not_present_on_page` is the *residual* category —
+  the default when neither a section-location failure nor a partial-parse marker is present
+  in the note. The other three are positively identified. So `not_present_on_page` should be
+  read as "not positively attributable to anything else", not as a verified absence.
+
+### First reading, on 96 companies (3,030 field-cells) — `reports/h6_coverage_with_reason.csv`
+
+The reason column changes the picture. Coverage on the real batch is far below the
+8-document sample, but the gap is overwhelmingly **disclosure, not extraction**:
+
+| Gap type | cells | What it means |
+|---|---|---|
+| `not_present_on_page` | 1,313 | the section was read; the field is not positively attributable elsewhere |
+| `present_but_unparsed` | 166 | **a genuine extractor gap** — concentrated in 4 fields |
+| `section_not_found` | 7 | promoter section heading not located |
+| `document_unavailable` | 270 | 9 companies (30 fields each) never reached an extractor |
+
+Only four fields carry a material `present_but_unparsed` count, and those are the only ones
+where more extractor work would pay: `board_independence_ratio` (69),
+`contingent_liabilities_cr` (41), `litigation_aggregate_amount_cr` (33), `board_size_n` (23).
+Every other low field is low because the documents do not print the number.

@@ -72,12 +72,59 @@ class Value:
     extractor_version: str = EXTRACTOR_VERSION
     status: str = "ok"                      # ok | not_found | unreadable | ambiguous
     note: str = ""
+    # Decision H10. Why a value is absent, so that a field sitting at 45% at the end of the
+    # batch is interpretable rather than just low. One of:
+    #   not_present_on_page   the section was located and read; the document does not
+    #                         disclose this field (or it is structurally inapplicable)
+    #   present_but_unparsed  the disclosure IS on the page — a header, a column, a
+    #                         partial match — but no value could be read from it safely
+    #   section_not_found     the section carrying this field could not be located
+    #   document_unavailable  no document was obtained, or it failed verification
+    # Empty for a value that was extracted (status ok or ambiguous).
+    missing_reason: str = ""
 
     def as_row(self) -> dict:
         d = asdict(self)
         if d["source_text"]:
             d["source_text"] = re.sub(r"\s+", " ", d["source_text"]).strip()[:300]
+        if d["status"] in ("ok", "ambiguous"):
+            d["missing_reason"] = ""            # nothing is missing
+        elif not d["missing_reason"]:
+            d["missing_reason"] = classify_missing_reason(d["note"], d["status"])
         return d
+
+
+# ---------------------------------------------------------------- H10 classification
+# The reason is set explicitly at each refusal site in `extract/h6.py`. This derives it from
+# the note as a fallback, so rows already written by a running batch can be backfilled
+# without re-reading a single PDF (`backfill_missing_reason.py`).
+MISSING_REASON_VALUES = ("not_present_on_page", "present_but_unparsed",
+                         "section_not_found", "document_unavailable")
+
+_SECTION_NOT_FOUND = re.compile(
+    r"(?i)section not located|not located by TOC|could not be located|"
+    r"section heading was not found|not be located|heading was not found")
+_PRESENT_UNPARSED = re.compile(
+    r"(?i)withheld|exists but|column exists|not positionally identifiable|"
+    r"no total row|unit NOT FOUND|could not be parsed|no name could be parsed|"
+    r"no summable|a nearby clause is not attribution|no value could be read|"
+    r"raised [A-Za-z]*Error|not produced by any extractor group")
+_DOC_UNAVAILABLE = re.compile(
+    r"(?i)source_unresolved|sha256_mismatch|missing_file|not_a_prospectus|"
+    r"document unavailable|fetch_failed")
+
+
+def classify_missing_reason(note: str | None, status: str = "not_found") -> str:
+    """Map a refusal note to one of the four H10 reasons. Never guesses outside the four."""
+    n = note or ""
+    if _DOC_UNAVAILABLE.search(n):
+        return "document_unavailable"
+    if _SECTION_NOT_FOUND.search(n):
+        return "section_not_found"
+    if _PRESENT_UNPARSED.search(n) or status == "unreadable":
+        return "present_but_unparsed"
+    # The default is the honest one: the section was read and the field is simply not there.
+    return "not_present_on_page"
 
 
 @dataclass
