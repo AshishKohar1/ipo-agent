@@ -1,0 +1,423 @@
+{
+  "generated": "2026-10-01 00:48:26.798594",
+  "stage": 16,
+  "decisions": [
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "G1",
+    "G2"
+  ],
+  "candidates": {
+    "L1": {
+      "n_common_rows": 616,
+      "candidates": {
+        "setA_baseline": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8084,
+          "claimed": 0.8832,
+          "vs_setA_pp": 0.0,
+          "verdict": "baseline"
+        },
+        "split_instead": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.798,
+          "claimed": 0.8807,
+          "vs_setA_pp": -1.03,
+          "verdict": "WORSE than Set A"
+        },
+        "plus_qib": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.808,
+          "claimed": 0.8818,
+          "vs_setA_pp": -0.03,
+          "verdict": "WORSE than Set A"
+        },
+        "plus_hni": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.811,
+          "claimed": 0.8823,
+          "vs_setA_pp": 0.27,
+          "verdict": "BETTER than Set A \u2014 investigate"
+        },
+        "plus_rii": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8085,
+          "claimed": 0.8826,
+          "vs_setA_pp": 0.01,
+          "verdict": "no better than Set A"
+        },
+        "plus_log_price": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8089,
+          "claimed": null,
+          "vs_setA_pp": 0.05,
+          "verdict": "BETTER than Set A \u2014 investigate"
+        },
+        "plus_market_heat": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8137,
+          "claimed": 0.8818,
+          "vs_setA_pp": 0.53,
+          "verdict": "BETTER than Set A \u2014 investigate"
+        },
+        "raw_subscription": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8089,
+          "claimed": 0.8711,
+          "vs_setA_pp": 0.05,
+          "verdict": "BETTER than Set A \u2014 investigate"
+        }
+      },
+      "vif_total_with_split": {
+        "log1p_total": 85.38,
+        "log_issue_size": 1.81,
+        "log1p_qib": 19.76,
+        "log1p_hni": 20.4,
+        "log1p_rii": 8.04
+      },
+      "vif_total_claimed": 90.0,
+      "split_coefs_std": {
+        "log1p_total": 2.334,
+        "log_issue_size": -0.265,
+        "log1p_qib": -0.162,
+        "log1p_hni": -0.297,
+        "log1p_rii": -0.498
+      },
+      "split_coefs_claimed": {
+        "log1p_total": 26.26,
+        "log1p_qib": -5.25,
+        "log1p_hni": -3.04
+      }
+    },
+    "L2": {
+      "n_common_rows": 616,
+      "candidates": {
+        "setA_baseline": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8809,
+          "claimed": 0.8832,
+          "vs_setA_pp": 0.0,
+          "verdict": "baseline"
+        },
+        "split_instead": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8721,
+          "claimed": 0.8807,
+          "vs_setA_pp": -0.88,
+          "verdict": "WORSE than Set A"
+        },
+        "plus_qib": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8793,
+          "claimed": 0.8818,
+          "vs_setA_pp": -0.16,
+          "verdict": "WORSE than Set A"
+        },
+        "plus_hni": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8824,
+          "claimed": 0.8823,
+          "vs_setA_pp": 0.15,
+          "verdict": "BETTER than Set A \u2014 investigate"
+        },
+        "plus_rii": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8799,
+          "claimed": 0.8826,
+          "vs_setA_pp": -0.1,
+          "verdict": "WORSE than Set A"
+        },
+        "plus_log_price": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.88,
+          "claimed": null,
+          "vs_setA_pp": -0.09,
+          "verdict": "WORSE than Set A"
+        },
+        "plus_market_heat": {
+          "n": 616,
+          "half_life": 2,
+          "pooled_auc": 0.8755,
+          "claimed": 0.8818,
+          "vs_setA_pp": -0.53,
+          "verdict": "WORSE than Set A"
+        },
+        "raw_subscription": {
+          "n": 616,
+          "half_life": 3,
+          "pooled_auc": 0.8802,
+          "claimed": 0.8711,
+          "vs_setA_pp": -0.07,
+          "verdict": "WORSE than Set A"
+        }
+      },
+      "vif_total_with_split": {
+        "log1p_total": 85.38,
+        "log_issue_size": 1.81,
+        "log1p_qib": 19.76,
+        "log1p_hni": 20.4,
+        "log1p_rii": 8.04
+      },
+      "vif_total_claimed": 90.0,
+      "split_coefs_std": {
+        "log1p_total": 2.5,
+        "log_issue_size": -0.089,
+        "log1p_qib": -0.286,
+        "log1p_hni": -0.107,
+        "log1p_rii": -0.277
+      },
+      "split_coefs_claimed": {
+        "log1p_total": 26.26,
+        "log1p_qib": -5.25,
+        "log1p_hni": -3.04
+      }
+    }
+  },
+  "h3_h4": {
+    "h3_quartiles": {
+      "Q1 institution-skewed": {
+        "median_listing_gain_pct": 20.38,
+        "claimed": 20.4,
+        "n": 155,
+        "reproduces": true
+      },
+      "Q2": {
+        "median_listing_gain_pct": 5.18,
+        "claimed": 4.1,
+        "n": 155,
+        "reproduces": false
+      },
+      "Q3": {
+        "median_listing_gain_pct": 1.49,
+        "claimed": 2.2,
+        "n": 155,
+        "reproduces": true
+      },
+      "Q4 retail-skewed": {
+        "median_listing_gain_pct": 2.44,
+        "claimed": 1.6,
+        "n": 155,
+        "reproduces": true
+      }
+    },
+    "h3_live_cutpoints": [
+      -1.810209675435484,
+      -0.8788709849609617,
+      -0.06695638951309177
+    ],
+    "h3_cutpoint_train_years_before": 2026,
+    "h3_n": 620,
+    "h4_issue_size": {
+      "L1": {
+        "log_issue_size_std_coef": -0.137,
+        "log1p_total_std_coef": 1.489,
+        "n": 620,
+        "claimed": -0.356
+      },
+      "L2": {
+        "log_issue_size_std_coef": -0.058,
+        "log1p_total_std_coef": 1.921,
+        "n": 620,
+        "claimed": -0.356
+      }
+    }
+  },
+  "final": {
+    "L1": {
+      "n": 620,
+      "half_life": 2,
+      "test_years": [
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "pooled_auc": 0.8081,
+      "mean_auc": 0.7255,
+      "per_year": [
+        {
+          "test_year": 2022,
+          "n_train": 322,
+          "eff_n_train": 145.42077165413588,
+          "n_test": 38,
+          "test_pos_rate": 0.6842105263157895,
+          "auc": 0.6987179487179487
+        },
+        {
+          "test_year": 2023,
+          "n_train": 360,
+          "eff_n_train": 166.29382513626055,
+          "n_test": 58,
+          "test_pos_rate": 0.7931034482758621,
+          "auc": 0.8007246376811594
+        },
+        {
+          "test_year": 2024,
+          "n_train": 418,
+          "eff_n_train": 195.4033835246453,
+          "n_test": 80,
+          "test_pos_rate": 0.7625,
+          "auc": 0.8334771354616048
+        },
+        {
+          "test_year": 2025,
+          "n_train": 498,
+          "eff_n_train": 245.26413699637072,
+          "n_test": 102,
+          "test_pos_rate": 0.696078431372549,
+          "auc": 0.8468877782825989
+        },
+        {
+          "test_year": 2026,
+          "n_train": 600,
+          "eff_n_train": 310.5083507748293,
+          "n_test": 20,
+          "test_pos_rate": 0.4,
+          "auc": 0.4479166666666667
+        }
+      ],
+      "brier_raw": 0.1599,
+      "brier_isotonic": 0.1579,
+      "isotonic_beats_raw": true,
+      "firing_rule": "fire iff isotonic-calibrated p >= 0.90",
+      "raw_equivalent_threshold": 0.8325150300601202,
+      "held_out_n_fire": 117,
+      "held_out_hits": 110,
+      "held_out_hit_rate": 0.9402,
+      "held_out_wilson_lo95": 0.8816,
+      "passes_c5": true,
+      "calibrator_claimed_mean": 0.9859,
+      "overclaim_pp": 4.57,
+      "std_coefs": {
+        "log1p_total": 1.4749,
+        "log_issue_size": 0.3138
+      },
+      "effective_n": 323.4,
+      "bundle": "model_l_v1.0_l1.joblib",
+      "profile_cutpoints": [
+        -1.809544506403265,
+        -0.8718829100997476,
+        -0.06127764466819144
+      ],
+      "profile_cutpoints_fitted_on": "years < 2026"
+    },
+    "L2": {
+      "n": 620,
+      "half_life": 2,
+      "test_years": [
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "pooled_auc": 0.8809,
+      "mean_auc": 0.878,
+      "per_year": [
+        {
+          "test_year": 2022,
+          "n_train": 322,
+          "eff_n_train": 145.42077165413588,
+          "n_test": 38,
+          "test_pos_rate": 0.34210526315789475,
+          "auc": 0.9046153846153846
+        },
+        {
+          "test_year": 2023,
+          "n_train": 360,
+          "eff_n_train": 166.29382513626055,
+          "n_test": 58,
+          "test_pos_rate": 0.5862068965517241,
+          "auc": 0.8676470588235294
+        },
+        {
+          "test_year": 2024,
+          "n_train": 418,
+          "eff_n_train": 195.4033835246453,
+          "n_test": 80,
+          "test_pos_rate": 0.6125,
+          "auc": 0.8874259381171824
+        },
+        {
+          "test_year": 2025,
+          "n_train": 498,
+          "eff_n_train": 245.26413699637072,
+          "n_test": 102,
+          "test_pos_rate": 0.4019607843137255,
+          "auc": 0.8676529388244703
+        },
+        {
+          "test_year": 2026,
+          "n_train": 600,
+          "eff_n_train": 310.5083507748293,
+          "n_test": 20,
+          "test_pos_rate": 0.15,
+          "auc": 0.8627450980392157
+        }
+      ],
+      "brier_raw": 0.1626,
+      "brier_isotonic": 0.1586,
+      "isotonic_beats_raw": true,
+      "firing_rule": "fire iff isotonic-calibrated p >= 0.80",
+      "raw_equivalent_threshold": 0.8929649298597194,
+      "held_out_n_fire": 96,
+      "held_out_hits": 84,
+      "held_out_hit_rate": 0.875,
+      "held_out_wilson_lo95": 0.7941,
+      "passes_c5": true,
+      "calibrator_claimed_mean": 0.9917,
+      "overclaim_pp": 11.67,
+      "std_coefs": {
+        "log1p_total": 1.8993,
+        "log_issue_size": 0.4094
+      },
+      "effective_n": 323.4,
+      "bundle": "model_l_v1.0_l2.joblib",
+      "profile_cutpoints": [
+        -1.809544506403265,
+        -0.8718829100997476,
+        -0.06127764466819144
+      ],
+      "profile_cutpoints_fitted_on": "years < 2026"
+    }
+  },
+  "sme_shadow": {
+    "L1": {
+      "n": 402,
+      "half_life": 2,
+      "pooled_auc": 0.7956,
+      "test_years": [
+        2026
+      ],
+      "bundle": "model_l_v1.0_l1_sme.joblib",
+      "shadow_mode": true
+    },
+    "L2": {
+      "n": 402,
+      "half_life": 2,
+      "pooled_auc": 0.8244,
+      "test_years": [
+        2026
+      ],
+      "bundle": "model_l_v1.0_l2_sme.joblib",
+      "shadow_mode": true
+    }
+  }
+}
