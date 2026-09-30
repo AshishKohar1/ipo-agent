@@ -1,8 +1,9 @@
 # Stage 3 — Calibration curve and final thresholds
 
-**Status:** DONE (analysis complete and verified). **Isotonic calibration is adopted for
-both targets.** One housekeeping item outstanding: `reports/stage3_calibration.json` still
-holds the first, superseded run — see "Open issues".
+**Status:** DONE. **Isotonic calibration is adopted for both targets** (decisions G1, G2).
+**Independently verified 2026-09-30: 14/14 reported figures reproduced from first
+principles** — see "Independent verification" below. `reports/stage3_calibration.json` has
+been regenerated from the corrected script, so the stale-file caveat no longer applies.
 
 ## What was done
 - Implemented both calibrators in pure numpy (`models/calibration.py`): PAV isotonic and two-parameter Platt, since scikit-learn is unavailable. Both unit-checked.
@@ -88,8 +89,27 @@ a literal probability.
 3. 2023 is unscoreable for the bucket rule (no prior year), so its held-out sample is smaller than the calibrators'. Noted rather than papered over.
 4. Calibration is fitted on **Set A only**, per Gate A decision A1. Set C (the standing challenger, A2) will need its own calibration if it is ever promoted.
 
+## Independent verification (2026-09-30)
+
+`verify_stage3.py` re-derives every figure above from the Stage 2 out-of-fold CSVs while
+sharing **no code** with `models/calibration.py` or `models/framework.py`:
+
+| Check | Result |
+|---|---|
+| Isotonic re-implemented via the **greatest convex minorant** of the cumulative-sum diagram (convex-hull scan, not the PAV stack) | max &#124;GCM − PAV&#124; = **0.000e+00** over 200 random problems → the PAV implementation is correct |
+| Platt, Brier, and the Wilson bound re-derived from their closed forms | agree |
+| Claims reproduced | **14 / 14** |
+| Leakage audit | asserted in code: for every test year T, calibrators and bucket thresholds were fitted/chosen on years strictly **< T**. Any violation would have raised |
+
+Confirmed exactly: isotonic L1 117 fires @ 94.0% (Wilson 88.2%); isotonic L2 96 @ 87.5%
+(79.4%); bucket L1 92 @ 92.4%; **bucket L2 83 @ 77.1% — fails the 80% requirement**; Brier
+raw/isotonic 0.1596/0.1579 (L1) and 0.1624/0.1586 (L2). Output:
+`reports/stage3_independent_verification.json`.
+
+Because the independent run agreed on every point, decisions **G1** and **G2** were recorded
+in `DECISIONS.md`.
+
 ## Open issues
-1. **`reports/stage3_calibration.json` is stale** — it holds the first run, before the out-of-time correction. The script now in the repo implements the corrected method; regenerate with `python stage3_calibration.py`. The numbers in this report come from the verified direct computation, not from that file.
 2. Held-out n is 260 with roughly 100 firing rows, so the Wilson bounds are wide. L1's bucket margin (85.1% against an 85.0% floor) is inside noise either way — another reason to prefer isotonic, which clears the floor by 3.2pp.
 3. When the three decision-point models arrive (Stage 5, decision C5), each needs its own calibrator and threshold. The isotonic machinery here applies unchanged.
 4. Isotonic cannot extrapolate beyond the probability range it was fitted on; as new years arrive its top bin should be watched.

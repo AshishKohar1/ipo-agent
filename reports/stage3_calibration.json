@@ -1,14 +1,14 @@
 {
-  "generated": "2026-09-30 11:33:45.704802",
+  "generated": "2026-09-30 17:54:43.944941",
   "targets": {
     "L1": {
       "n_oof": 298,
       "years": [
-        "2022",
-        "2023",
-        "2024",
-        "2025",
-        "2026"
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
       ],
       "required": 0.9,
       "methods": {
@@ -16,20 +16,20 @@
           "held_out_n": 260,
           "brier": 0.1595725319017161,
           "held_out_years": [
-            "2023",
-            "2024",
-            "2025",
-            "2026"
+            2023,
+            2024,
+            2025,
+            2026
           ]
         },
         "platt": {
           "held_out_n": 260,
           "brier": 0.15826655659465697,
           "held_out_years": [
-            "2023",
-            "2024",
-            "2025",
-            "2026"
+            2023,
+            2024,
+            2025,
+            2026
           ],
           "beats_raw": true
         },
@@ -37,67 +37,59 @@
           "held_out_n": 260,
           "brier": 0.15793434501157752,
           "held_out_years": [
-            "2023",
-            "2024",
-            "2025",
-            "2026"
+            2023,
+            2024,
+            2025,
+            2026
           ],
           "beats_raw": true
         }
       },
       "bucket_rule": {
-        "chosen": 0.77,
-        "at_chosen": {
-          "threshold": 0.77,
-          "n_fire": 128,
-          "fire_pct": 49.23076923076923,
-          "hits": 118,
-          "hit_rate": 0.921875,
-          "hit_rate_lo95": 0.8621517266143844,
-          "meets_hit_rate": true,
-          "meets_wilson": true,
-          "meets_min_fire": true
-        }
+        "thresholds_by_year": {
+          "2023": null,
+          "2024": 0.81,
+          "2025": 0.77,
+          "2026": 0.73
+        },
+        "n_fire": 92,
+        "hits": 85,
+        "hit_rate": 0.9239130434782609,
+        "hit_rate_lo95": 0.8511859253416171,
+        "passes_c5": true
       },
       "calibrated_rule": {
         "platt": {
-          "chosen": 0.81,
-          "passes_c5_audit": false,
-          "at_chosen": {
-            "threshold": 0.81,
-            "n_fire": 147,
-            "hits": 131,
-            "hit_rate": 0.891156462585034,
-            "hit_rate_lo95": 0.8305040722343908,
-            "mean_calibrated_p": 0.9004528851628766,
-            "meets_hit_rate": false,
-            "meets_wilson": false,
-            "meets_min_fire": true
-          }
+          "rule": "fire iff calibrated p >= 0.90",
+          "raw_equivalent_threshold": 0.8525910150149496,
+          "n_fire": 81,
+          "hits": 80,
+          "hit_rate": 0.9876543209876543,
+          "hit_rate_lo95": 0.9333295783588226,
+          "calibrator_claimed_mean": 0.9266062237362497,
+          "overclaim_pp": -6.104809725140459,
+          "passes_c5": true
         },
         "isotonic": {
-          "chosen": 0.72,
-          "passes_c5_audit": false,
-          "at_chosen": {
-            "threshold": 0.72,
-            "n_fire": 140,
-            "hits": 125,
-            "hit_rate": 0.8928571428571429,
-            "hit_rate_lo95": 0.8307416228909368,
-            "mean_calibrated_p": 0.9497808206530487,
-            "meets_hit_rate": false,
-            "meets_wilson": false,
-            "meets_min_fire": true
-          }
+          "rule": "fire iff calibrated p >= 0.90",
+          "raw_equivalent_threshold": 0.7455627216174516,
+          "n_fire": 117,
+          "hits": 110,
+          "hit_rate": 0.9401709401709402,
+          "hit_rate_lo95": 0.8816355822253121,
+          "calibrator_claimed_mean": 0.985174673634228,
+          "overclaim_pp": 4.500373346328779,
+          "passes_c5": true
         }
       },
       "adopted": {
-        "method": "bucket_rule_on_raw",
-        "calibrated": false,
-        "final_threshold": 0.77,
+        "method": "calibrated_isotonic",
+        "calibrated": true,
+        "firing_rule": "fire iff calibrated p >= 0.90",
+        "raw_equivalent_threshold": 0.7455627216174516,
         "reasoning": [
-          "isotonic: Brier improves but its threshold fails the C5 audit",
-          "platt: Brier improves but its threshold fails the C5 audit"
+          "isotonic: Brier 0.1579 beats raw 0.1596 AND the C5 audit passes (fires 117, hit 94.0%, lo95 88.2%)",
+          "bucket rule for comparison: fires 92, hit 92.4%, C5 PASS"
         ]
       },
       "reliability": {
@@ -322,11 +314,11 @@
     "L2": {
       "n_oof": 298,
       "years": [
-        "2022",
-        "2023",
-        "2024",
-        "2025",
-        "2026"
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
       ],
       "required": 0.8,
       "methods": {
@@ -334,20 +326,20 @@
           "held_out_n": 260,
           "brier": 0.16236107738825217,
           "held_out_years": [
-            "2023",
-            "2024",
-            "2025",
-            "2026"
+            2023,
+            2024,
+            2025,
+            2026
           ]
         },
         "platt": {
           "held_out_n": 260,
           "brier": 0.1557035230233457,
           "held_out_years": [
-            "2023",
-            "2024",
-            "2025",
-            "2026"
+            2023,
+            2024,
+            2025,
+            2026
           ],
           "beats_raw": true
         },
@@ -355,67 +347,59 @@
           "held_out_n": 260,
           "brier": 0.15856768417972011,
           "held_out_years": [
-            "2023",
-            "2024",
-            "2025",
-            "2026"
+            2023,
+            2024,
+            2025,
+            2026
           ],
           "beats_raw": true
         }
       },
       "bucket_rule": {
-        "chosen": 0.85,
-        "at_chosen": {
-          "threshold": 0.85,
-          "n_fire": 104,
-          "fire_pct": 40.0,
-          "hits": 87,
-          "hit_rate": 0.8365384615384616,
-          "hit_rate_lo95": 0.753734656692018,
-          "meets_hit_rate": true,
-          "meets_wilson": true,
-          "meets_min_fire": true
-        }
+        "thresholds_by_year": {
+          "2023": null,
+          "2024": 0.89,
+          "2025": 0.75,
+          "2026": 0.85
+        },
+        "n_fire": 83,
+        "hits": 64,
+        "hit_rate": 0.7710843373493976,
+        "hit_rate_lo95": 0.6699173072434108,
+        "passes_c5": false
       },
       "calibrated_rule": {
         "platt": {
-          "chosen": 0.32,
-          "passes_c5_audit": false,
-          "at_chosen": {
-            "threshold": 0.32,
-            "n_fire": 170,
-            "hits": 116,
-            "hit_rate": 0.6823529411764706,
-            "hit_rate_lo95": 0.6089980594040372,
-            "mean_calibrated_p": 0.8038238166534996,
-            "meets_hit_rate": false,
-            "meets_wilson": false,
-            "meets_min_fire": true
-          }
+          "rule": "fire iff calibrated p >= 0.80",
+          "raw_equivalent_threshold": 0.7464584008625056,
+          "n_fire": 113,
+          "hits": 93,
+          "hit_rate": 0.8230088495575221,
+          "hit_rate_lo95": 0.7423739397144052,
+          "calibrator_claimed_mean": 0.9059620864716154,
+          "overclaim_pp": 8.29532369140933,
+          "passes_c5": false
         },
         "isotonic": {
-          "chosen": 0.41,
-          "passes_c5_audit": false,
-          "at_chosen": {
-            "threshold": 0.41,
-            "n_fire": 163,
-            "hits": 112,
-            "hit_rate": 0.6871165644171779,
-            "hit_rate_lo95": 0.6123188323401395,
-            "mean_calibrated_p": 0.8332511570412913,
-            "meets_hit_rate": false,
-            "meets_wilson": false,
-            "meets_min_fire": true
-          }
+          "rule": "fire iff calibrated p >= 0.80",
+          "raw_equivalent_threshold": 0.7417452549387286,
+          "n_fire": 96,
+          "hits": 84,
+          "hit_rate": 0.875,
+          "hit_rate_lo95": 0.7941135793103388,
+          "calibrator_claimed_mean": 0.9921572213051647,
+          "overclaim_pp": 11.71572213051647,
+          "passes_c5": true
         }
       },
       "adopted": {
-        "method": "bucket_rule_on_raw",
-        "calibrated": false,
-        "final_threshold": 0.85,
+        "method": "calibrated_isotonic",
+        "calibrated": true,
+        "firing_rule": "fire iff calibrated p >= 0.80",
+        "raw_equivalent_threshold": 0.7417452549387286,
         "reasoning": [
-          "isotonic: Brier improves but its threshold fails the C5 audit",
-          "platt: Brier improves but its threshold fails the C5 audit"
+          "isotonic: Brier 0.1586 beats raw 0.1624 AND the C5 audit passes (fires 96, hit 87.5%, lo95 79.4%)",
+          "bucket rule for comparison: fires 83, hit 77.1%, C5 FAIL"
         ]
       },
       "reliability": {
