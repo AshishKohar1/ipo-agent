@@ -230,8 +230,15 @@ def is_transient(msg: str) -> bool:
 def main(limit: int | None = None, status_only: bool = False) -> None:
     q = build_queue()
     prog = load_progress()
-    settled = set(prog.loc[prog["status"].isin(["done", "failed", "sha256_mismatch"]),
-                           "company"])
+    # `source_unresolved` counts as settled. It is a deterministic outcome — SEBI's archive
+    # has no document matching the company name and filing window — not a transient error,
+    # and the reason is recorded per company. Leaving it unsettled made every restart retry
+    # the same unresolvable companies before reaching new ones, so a resumed run could
+    # never finish the queue. Delete those rows from data/rhp_progress.csv to retry them
+    # after a resolver improvement.
+    settled = set(prog.loc[prog["status"].isin(
+        ["done", "failed", "sha256_mismatch", "source_unresolved", "not_a_prospectus"]),
+        "company"])
     todo = q[~q["company"].isin(settled)]
 
     print(f"queue {len(q)} | settled {len(settled)} | to do {len(todo)} | "

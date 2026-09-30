@@ -9,8 +9,9 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 
 ## Summary (updated at the end of every session)
 - **Finished:** Stage 0, Stage 1 (laptop), Stage 2 → **Gate A closed** (Set A), Stage 3 → **isotonic calibration adopted** and independently verified, Stage 4A → Gate F2, Stage 14 (Amendment 02 applied)
-- **In progress:** Stage 15 (RHP extractor rebuild + night batch) → **Gate C2**; Stage 16 (`L_final_3pm`) → **Gate B**; Stages 17 and 18 night backfills
-- **Open gates:** **Gate B** and **Gate C2** when their stages report. Gate F2 is **closed by decision H1**
+- **In progress:** Stage 15b night batch (485 companies, ~19 h, resumable) and Stages 17+18 Chittorgarh sweep (2,861 ids, ~2.5 h) — both **running unattended** since 2026-10-01 01:05 and 01:26 IST
+- **Open gates:** **Gate B** (Model L v1.0 frozen, awaiting approval) and **Gate C2** (H6 coverage 59.6% usable / 63.0% adjusted vs a 60% target; `reports/SPOTCHECK_V2.csv`). Gate F2 is **closed by decision H1**
+- **Morning report:** `reports/NIGHT_RUN_REPORT.md`
 - **Cancelled:** Stage 4B and Stage 5 — no permitted source for day-wise subscription history (H1)
 - **Caveat:** Stage 1's Linux/`pip install` half is still unverified — every session so far has run on the Windows laptop, so the first genuine cloud session must re-run `check_env.py` and `stage1_env_check.py`
 
@@ -34,10 +35,10 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 | 12 | Hold-sizing backtest | 11 | NOT_STARTED | | | ends in Gate E |
 | 13 | Integration + wrap-up | 7, Gate E | NOT_STARTED | | | |
 | 14 | Apply Amendment 02 to PLAN/DECISIONS/CLAUDE | — | DONE | 2026-10-01 | 2026-10-01 | H1–H9 recorded in `DECISIONS.md`; PLAN sections replaced in place; 4B and 5 cancelled |
-| 15 | RHP extractor rebuild + night batch **[NIGHT]** | 14 | IN_PROGRESS | 2026-10-01 | | ends in **Gate C2** — H6-field coverage ≥60%, then the full batch, then `reports/SPOTCHECK_V2.*` |
-| 16 | Finalise and freeze `L_final_3pm` | 3, 14 | NOT_STARTED | | | ends in **Gate B**; deletes the L_day1/L_day2/forecaster code paths |
-| 17 | Aggregator-first financial backfill **[NIGHT]** | 14 | NOT_STARTED | | | H5 headline fields, reconciled under rule 2 |
-| 18 | Anchor / lock-in backfill **[NIGHT]** | 14 | NOT_STARTED | | | feeds Model H's empty ownership block |
+| 15a | H6 extractor rebuild | 14 | DONE | 2026-10-01 | 2026-10-01 | 30 H6 fields x 8 docs: **48.8% strict, 59.6% usable, 63.0% adjusted** (target 60%). Flat-text + cross-page scanning and full unit detection fixed both Stage 8 failures. **Ten wrong values caught and deleted**, each documented in `extract/h6.py`. 6 fields named as unreachable across vintages |
+| 15b | RHP night batch **[NIGHT]** | 15a | **IN_PROGRESS** (running) | 2026-10-01 01:05 | | 485 companies, ~140 s each, ~19 h, resumable. `data/rhp_progress.csv` + `reports/h6_batch_observations.csv`, commit every 5. Ends in **Gate C2** |
+| 16 | Finalise and freeze `L_final_3pm` | 3, 14 | DONE | 2026-10-01 | 2026-10-01 | **Gate B open.** L1 pooled AUC 0.8081 fires 117 @ 94.0%; L2 0.8809 fires 96 @ 87.5%; both PASS C5. `MODEL_L_CARD.md`. **2 of H2's 9 rejections do not reproduce**; H4's issue-size sign is half-life dependent and production is POSITIVE |
+| 17+18 | Chittorgarh backfill **[NIGHT]** | 14 | **IN_PROGRESS** (running) | 2026-10-01 01:26 | | One request per company serves BOTH stages: `/ipo/x/{id}/` carries the H5 financials and the anchor/lock-in block. ids 250-3110, >=3.2 s apart, robots.txt re-verified. Also yields an independent 2nd source for promoter holding |
 | 19 | Productionise + go live | Gate B | NOT_STARTED | | | absorbs Stages 6 and 7 with the single-model `predict_live` |
 
 ## Gates
@@ -49,6 +50,7 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 | F2 | 4A ID walk | ✅ **CLOSED** 2026-10-01 by **H1** | Cancel Stage 4B's backfill, cancel `L_day1`/`L_day2` and the forecaster, keep B4 forward collection, and backfill anchor/lock-in instead (now Stage 18) |
 | B | 6 | — | |
 | C | 8 | SUPERSEDED by Gate C2 | Spot-check delivered (20 rows, 5 companies) but coverage was 24% on the headline financials. H5/H6 re-scope the work rather than re-run it |
-| C2 | 15 | — | H6-field coverage ≥60% on the 8 manifest documents, the night batch's outcome, and `reports/SPOTCHECK_V2.csv`/`.xlsx` |
+| C2 | 15 | **AWAITING_USER** (opened 2026-10-01) | Coverage 59.6% usable / 63.0% adjusted vs a 60% target; 20-row spot-check from H6 fields only in `reports/SPOTCHECK_V2.csv`/`.xlsx`. Recommend approving the field set, but decide first whether the 11 fields at or below 50% are worth keeping as sparse columns |
+| B | 16 | **AWAITING_USER** (opened 2026-10-01) | `model_l_v1.0` frozen; both targets pass every C5 gate out-of-time. Decide on the POSITIVE issue-size coefficient the 2-year half-life produces, and on amending Amendment 02 section A where two of nine rejections did not reproduce |
 | D | 9 | — | |
 | E | 12 | — | |

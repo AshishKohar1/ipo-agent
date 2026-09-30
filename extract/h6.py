@@ -310,6 +310,11 @@ LIT_CAT = {
 NIL = re.compile(r"(?i)\b(?:nil|none|no outstanding|there are no|not applicable)\b")
 COUNT_HEADER = re.compile(r"(?i)(?:number|no\.?)\s+of\s+(?:matters|cases|claims|proceedings|"
                           r"litigations?)")
+# The statutory-disclosure and materiality-policy paragraphs read almost exactly like a real
+# litigation summary. Their roman-numeral clause numbers are not counts.
+POLICY_PROSE = re.compile(r"(?i)schedule v to the companies act|under any enactment|"
+                          r"materiality polic|in terms of the sebi icdr|"
+                          r"considered material if|\((?:i|ii|iii|iv|v|vi|vii|viii|ix|x)\)\s")
 
 
 def litigation(ctx: Ctx) -> list[Value]:
@@ -373,7 +378,13 @@ def litigation(ctx: Ctx) -> list[Value]:
     pd_rx = re.compile(r"(?i)(?:criminal|disciplinary)[^.]{0,160}?(?:against|involving|naming)"
                        r"[^.]{0,80}?(?:promoters?|directors?)[^.]{0,120}")
     got = False
-    for i, m, sent in ctx.scan(pd_rx, limit=6):
+    for i, m, sent in ctx.scan(pd_rx, limit=12):
+        # Every RHP restates its own materiality policy and the statutory disclosure
+        # requirements in almost this wording, as a roman-numbered list. Reading a count out
+        # of one gave Syngene 30 criminal cases against its promoters -- clause (viii)'s
+        # number, not a case count. Policy prose is rejected outright.
+        if POLICY_PROSE.search(sent):
+            continue
         if NIL.search(sent):
             out.append(hit(ctx, F_LIT_CRIM_PD, 0.0, i, sent, unit="count",
                            note="stated as none - relevant to veto red flag 6"))

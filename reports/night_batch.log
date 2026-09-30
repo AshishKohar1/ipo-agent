@@ -1,0 +1,10 @@
+queue 485 | settled 1 | to do 484 | free disk 152.7 GB
+  [   1/484] Urban Company Ltd                    source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Urban']
+  [   2/484] Dev Accelerator Ltd.                 done             ok=17 amb= 5 miss= 7   153s
+  [   3/484] Shringar House of Mangalsutra Ltd.   done             ok=12 amb= 2 miss=15   137s
+  [   4/484] Amanta Healthcare Ltd.               source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Amanta Healthcare', 'Amanta']
+  [   5/484] Anlon Healthcare Ltd.                done             ok=14 amb= 2 miss=13   151s
+    [checkpoint committed and pushed at 6 companies]
+  [   6/484] Vikran Engineering Ltd.              done             ok=12 amb= 4 miss=13   198s
