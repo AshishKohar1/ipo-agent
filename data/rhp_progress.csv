@@ -1,0 +1,3 @@
+company,isin,listing_date,segment,status,doc_type,source,url,sha256,pages,n_ok,n_ambiguous,n_not_applicable,n_not_found,secs,attempts,note,ran_at
+Euro Pratik Sales Ltd.,INE198501012,2025-09-23,mainboard,done,RHP,SEBI,https://www.sebi.gov.in/sebi_data/attachdocs/sep-2025/1757407216296.pdf,f031826006c649ed3088aee2d81bf3054fe8b264c45567577f375ec8aea4cfdd,490,13,1,3,13,138.4,1,"offset +3, toc 42 entries, sha256 recorded (first sight)",2026-10-01 01:17:39.209102
+Urban Company Ltd,INE0CAZ01013,2025-09-17,mainboard,source_unresolved,RHP,-,-,,,,,,,5.5,1,SEBI: no RHP matching name+date for queries ['Urban'],2026-10-01 01:19:57.567861
