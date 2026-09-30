@@ -1,0 +1,30 @@
+{
+  "n_fields": 30,
+  "n_docs": 8,
+  "cells": 240,
+  "ok": 115,
+  "ambiguous": 30,
+  "not_applicable": 13,
+  "not_found": 82,
+  "strict_pct": 47.9,
+  "usable_pct": 60.4,
+  "adjusted_pct": 50.7,
+  "usable_adjusted_pct": 63.9,
+  "target_pct": 60.0,
+  "fields_below_target": [
+    "kmp_remuneration_cr",
+    "board_independence_ratio",
+    "gcp_pct_proceeds",
+    "rpt_amount_cr",
+    "board_size_n",
+    "customer_concentration_top10_pct",
+    "pre_ipo_placement_flag",
+    "litigation_criminal_count",
+    "contingent_liabilities_cr",
+    "litigation_aggregate_amount_cr",
+    "litigation_tax_count",
+    "pre_ipo_placement_amount_cr",
+    "customer_concentration_top5_pct",
+    "litigation_statutory_count"
+  ]
+}
