@@ -8,8 +8,8 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 
 ## Summary (updated at the end of every session)
 - **Finished:** Stage 0, Stage 1 (laptop), Stage 2 → **Gate A closed** (Set A for both targets)
-- **In progress:** Stage 4A (Chittorgarh coverage sample) → ends at **Gate F**; Stage 3 (calibration) in parallel
-- **Open gates:** **Gate F** once 4A reports — no bulk fetch of 652 pages until the user sees the coverage table
+- **In progress:** Stage 3 (calibration + final thresholds); Stage 8 next if Gate F stays open
+- **Open gates:** **Gate F** (opened 2026-09-30) — how to resolve company->id; no bulk fetch until decided
 - **Next stage:** Stage 3 (calibration + final thresholds), then Stage 8 (RHP extraction), which needs no decision
 - **Blocked:** Stage 4B (Gate F); Stage 5 (needs 3 + 4B). Caveat: Stage 1's Linux/`pip install` half is unverified — the first cloud session must re-run `check_env.py` and `stage1_env_check.py`
 
@@ -21,7 +21,7 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 | 1 | Environment check | 0 | DONE | 2026-09-29 21:55 | 2026-09-29 22:10 | laptop: `check_env.py` 13/13, `stage1_env_check.py` all pass, 11/11 domains. **Linux/`pip install` half UNVERIFIED.** Tag `stage-01-done` |
 | 2 | Model L feature comparison | 1 | DONE | 2026-09-29 22:10 | 2026-09-30 | **Gate A closed by decision A1: Set A for both L1 and L2.** Sets A–D × L1/L2 on 616 identical rows; pooled AUC L1 0.8084 / L2 0.8809. `reports/STAGE_02_REPORT.md`. Tag `stage-02-done` |
 | 3 | Calibration curve + final thresholds | Gate A ✅ | IN_PROGRESS | 2026-09-30 | | isotonic + Platt in numpy, validated out-of-time; threshold rule C5 |
-| 4A | Chittorgarh 20-IPO coverage sample | 1 | IN_PROGRESS | 2026-09-30 | | ends at **Gate F**; ≥3 s per request, robots.txt re-read first (B2, B3) |
+| 4A | Chittorgarh 20-IPO coverage sample | 1 | AWAITING_USER | 2026-09-30 | 2026-09-30 | **Gate F open.** robots.txt unchanged; day-wise table confirmed rich on a closed IPO, but 0 of 20 sample IPOs testable - company->id needs a bulk id walk or a JS index. See reports/STAGE_04A_REPORT.md |
 | 4B | Day-wise subscription backfill (chunked) | Gate F | NOT_STARTED | | | day-1/day-2 flagged `single_source_unverified`; forward NSE+BSE snapshots per B4 |
 | 5 | Three decision-point models (`L_day1`, `L_day2`, `L_final_3pm`) | 3, 4B | NOT_STARTED | | | **no forecaster** (C1, C2); `L_final_3pm` approximated until ~40 real 3pm samples (C3) |
 | 6 | Productionize Model L | 3, 5 | NOT_STARTED | | | ends in Gate B |
@@ -38,7 +38,7 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 | Gate | After stage | Status | Decision (verbatim in DECISIONS.md) |
 |---|---|---|---|
 | A | 2 | ✅ **CLOSED** 2026-09-30 | A1: Model L uses **Set A** for both L1 and L2 (`log1p(Total)` + `log(issue size)`). A2: Set C retained as a standing challenger, promoted only by champion/challenger. A3: Sets B and D rejected; category figures still displayed in live reports |
-| F | 4A | — (opens when 4A reports) | Whether to bulk-fetch Chittorgarh day-wise data for all mainboard IPOs, given the coverage sample |
+| F | 4A | **AWAITING_USER** (opened 2026-09-30) | How to resolve company->Chittorgarh id: sample id-walk first (recommended), full id walk, browser-rendered year index, or forward-only |
 | B | 6 | — | |
 | C | 8 | — | |
 | D | 9 | — | |
