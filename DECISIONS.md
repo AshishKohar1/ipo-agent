@@ -138,3 +138,64 @@ Only four fields carry a material `present_but_unparsed` count, and those are th
 where more extractor work would pay: `board_independence_ratio` (69),
 `contingent_liabilities_cr` (41), `litigation_aggregate_amount_cr` (33), `board_size_n` (23).
 Every other low field is low because the documents do not print the number.
+
+## 2026-10-01 — H11: the issue-size sign, settled
+
+**Instruction (Gate B, Task 2):** "Test half-lives of 2, 3, 5, 8 years and none… Adopt the
+shortest half-life at which the issue-size sign stops flipping and matches the unweighted
+sign, provided its pooled AUC is within 1 percentage point of the best. If no half-life
+achieves this, say so and recommend dropping issue size entirely."
+
+### Evidence — Set A (`log1p_total` + `log_issue_size`), 620 mainboard rows, test years 2022–2026
+
+| Half-life | L1 pooled AUC | issue-size coef | sign | L1 fires | L1 hit | L1 C5 | L2 pooled AUC | issue-size coef | sign | L2 fires | L2 hit | L2 C5 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **2 y** | 0.8081 | **+0.314** | pos | 117 | 94.0% | PASS | 0.8809 | **+0.409** | pos | 96 | 87.5% | PASS |
+| **3 y** | 0.8062 | +0.232 | pos | 114 | 94.7% | PASS | 0.8792 | +0.313 | pos | 96 | 85.4% | PASS |
+| **5 y** | 0.8009 | +0.112 | pos | 112 | 94.6% | PASS | 0.8773 | +0.191 | pos | 92 | 85.9% | PASS |
+| **8 y** | 0.7988 | +0.021 | pos | 113 | 93.8% | PASS | 0.8762 | +0.102 | pos | 91 | 85.7% | PASS |
+| **none** | 0.7963 | **−0.137** | **neg** | 114 | 93.9% | PASS | 0.8737 | **−0.058** | **neg** | 92 | 83.7% | **FAIL** |
+
+### Control — `log1p_total` ALONE (issue size dropped)
+
+| Half-life | L1 pooled AUC | L1 fires | L1 hit | L1 Wilson | L1 C5 | L2 pooled AUC | L2 fires | L2 hit | L2 Wilson | L2 C5 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2 y | 0.8051 | 119 | 95.0% | 89.4% | PASS | 0.8797 | 96 | 85.4% | 77.0% | PASS |
+| 3 y | 0.8066 | 117 | 95.7% | 90.4% | PASS | 0.8796 | 95 | 85.3% | 76.8% | PASS |
+| 5 y | 0.8075 | 119 | 94.1% | 88.3% | PASS | 0.8801 | 94 | 85.1% | 76.5% | PASS |
+| 8 y | 0.8093 | 117 | 94.9% | 89.3% | PASS | 0.8803 | 94 | 85.1% | 76.5% | PASS |
+| **none** | **0.8112** | 117 | 94.9% | 89.3% | **PASS** | **0.8808** | 94 | 85.1% | 76.5% | **PASS** |
+
+### H11 — the decision
+
+**No half-life satisfies the adoption rule.** The issue-size coefficient is **positive at
+every finite half-life** (+0.314, +0.232, +0.112, +0.021 as the half-life lengthens) and
+**negative only unweighted** (−0.137). It does not stabilise anywhere — it crosses zero
+between 8 years and none. The only configuration matching the unweighted sign is
+half-life `none`, whose L1 pooled AUC is **1.18pp** below the best, outside the 1pp
+tolerance — and whose **L2 fails the C5 Wilson gate** (83.7% hit, lower bound 74.8% against
+the 75% floor).
+
+**H11: issue size is DROPPED. Model L becomes `log1p(Total subscription)` alone, with no
+recency weighting (half-life `none`).**
+
+The control makes this more than a tie-break — dropping issue size is *better* on every
+axis that matters:
+
+1. **Higher AUC.** L1 0.8112 against Set A's best 0.8081 (**+0.31pp**); L2 0.8808 against
+   0.8809 (−0.01pp, i.e. identical).
+2. **It fixes the failure.** Set A at half-life `none` fails L2's Wilson gate. The
+   total-only model **passes C5 at every half-life**, including `none`.
+3. **Nothing left to tune.** The AUC rises monotonically as the half-life lengthens
+   (0.8051 → 0.8112 on L1), so `none` is both the best and the end of the sequence. There is
+   no knob whose setting a reader could question, which was the whole objection.
+4. **Better calibration.** Held-out Brier 0.1549 (L1) and 0.1604 (L2), against Set A's
+   0.1579 and 0.1586 — better on L1, marginally worse on L2.
+
+**H11 supersedes A1 and H2's "Set A, frozen".** Set A is retained as a **standing
+challenger** in monthly retraining, on the same champion/challenger rule as Set C (A2) —
+promoted only if it wins, never by hand. **This is the one item at Gate B that changes a
+decision the user has twice frozen, so it is flagged for ratification rather than treated as
+settled.**
+
+Evidence: `reports/stage16b_half_life.json`, produced by `stage16b_half_life.py`.

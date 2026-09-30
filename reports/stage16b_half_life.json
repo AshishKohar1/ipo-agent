@@ -1,0 +1,455 @@
+{
+  "generated": "2026-10-01 05:24:34.401475",
+  "decision": "H11",
+  "reference_sign_unweighted": {
+    "L1": "neg",
+    "L2": "neg"
+  },
+  "set_a": {
+    "label": "Set A (log1p_total + log_issue_size)",
+    "features": [
+      "log1p_total",
+      "log_issue_size"
+    ],
+    "by_half_life": {
+      "2": {
+        "L1": {
+          "pooled_auc": 0.8081,
+          "mean_auc": 0.7255,
+          "effective_n": 323.4,
+          "std_coefs": {
+            "log1p_total": 1.4749,
+            "log_issue_size": 0.3138
+          },
+          "n_fire": 117,
+          "hits": 110,
+          "hit_rate": 0.9402,
+          "wilson_lo95": 0.8816,
+          "raw_equivalent_threshold": 0.8325150300601202,
+          "passes_c5": true,
+          "brier_raw": 0.1599,
+          "brier_isotonic": 0.1579
+        },
+        "L2": {
+          "pooled_auc": 0.8809,
+          "mean_auc": 0.878,
+          "effective_n": 323.4,
+          "std_coefs": {
+            "log1p_total": 1.8993,
+            "log_issue_size": 0.4094
+          },
+          "n_fire": 96,
+          "hits": 84,
+          "hit_rate": 0.875,
+          "wilson_lo95": 0.7941,
+          "raw_equivalent_threshold": 0.8929649298597194,
+          "passes_c5": true,
+          "brier_raw": 0.1626,
+          "brier_isotonic": 0.1586
+        }
+      },
+      "3": {
+        "L1": {
+          "pooled_auc": 0.8062,
+          "mean_auc": 0.737,
+          "effective_n": 389.8,
+          "std_coefs": {
+            "log1p_total": 1.4677,
+            "log_issue_size": 0.2321
+          },
+          "n_fire": 114,
+          "hits": 108,
+          "hit_rate": 0.9474,
+          "wilson_lo95": 0.8899,
+          "raw_equivalent_threshold": 0.8414338677354709,
+          "passes_c5": true,
+          "brier_raw": 0.1609,
+          "brier_isotonic": 0.1561
+        },
+        "L2": {
+          "pooled_auc": 0.8792,
+          "mean_auc": 0.8768,
+          "effective_n": 389.8,
+          "std_coefs": {
+            "log1p_total": 1.8923,
+            "log_issue_size": 0.3127
+          },
+          "n_fire": 96,
+          "hits": 82,
+          "hit_rate": 0.8542,
+          "wilson_lo95": 0.77,
+          "raw_equivalent_threshold": 0.8939559118236473,
+          "passes_c5": true,
+          "brier_raw": 0.1634,
+          "brier_isotonic": 0.1631
+        }
+      },
+      "5": {
+        "L1": {
+          "pooled_auc": 0.8009,
+          "mean_auc": 0.7362,
+          "effective_n": 474.9,
+          "std_coefs": {
+            "log1p_total": 1.4524,
+            "log_issue_size": 0.1118
+          },
+          "n_fire": 112,
+          "hits": 106,
+          "hit_rate": 0.9464,
+          "wilson_lo95": 0.888,
+          "raw_equivalent_threshold": 0.8582805611222445,
+          "passes_c5": true,
+          "brier_raw": 0.1619,
+          "brier_isotonic": 0.1544
+        },
+        "L2": {
+          "pooled_auc": 0.8773,
+          "mean_auc": 0.8695,
+          "effective_n": 474.9,
+          "std_coefs": {
+            "log1p_total": 1.878,
+            "log_issue_size": 0.1908
+          },
+          "n_fire": 92,
+          "hits": 79,
+          "hit_rate": 0.8587,
+          "wilson_lo95": 0.7731,
+          "raw_equivalent_threshold": 0.8909829659318637,
+          "passes_c5": true,
+          "brier_raw": 0.1646,
+          "brier_isotonic": 0.1649
+        }
+      },
+      "8": {
+        "L1": {
+          "pooled_auc": 0.7988,
+          "mean_auc": 0.7436,
+          "effective_n": 539.6,
+          "std_coefs": {
+            "log1p_total": 1.449,
+            "log_issue_size": 0.0211
+          },
+          "n_fire": 113,
+          "hits": 106,
+          "hit_rate": 0.9381,
+          "wilson_lo95": 0.8776,
+          "raw_equivalent_threshold": 0.8662084168336673,
+          "passes_c5": true,
+          "brier_raw": 0.1626,
+          "brier_isotonic": 0.1555
+        },
+        "L2": {
+          "pooled_auc": 0.8762,
+          "mean_auc": 0.8643,
+          "effective_n": 539.6,
+          "std_coefs": {
+            "log1p_total": 1.8757,
+            "log_issue_size": 0.1018
+          },
+          "n_fire": 91,
+          "hits": 78,
+          "hit_rate": 0.8571,
+          "wilson_lo95": 0.7708,
+          "raw_equivalent_threshold": 0.8939559118236473,
+          "passes_c5": true,
+          "brier_raw": 0.1658,
+          "brier_isotonic": 0.1659
+        }
+      },
+      "none": {
+        "L1": {
+          "pooled_auc": 0.7963,
+          "mean_auc": 0.7598,
+          "effective_n": 620.0,
+          "std_coefs": {
+            "log1p_total": 1.4888,
+            "log_issue_size": -0.1367
+          },
+          "n_fire": 114,
+          "hits": 107,
+          "hit_rate": 0.9386,
+          "wilson_lo95": 0.8787,
+          "raw_equivalent_threshold": 0.8870190380761522,
+          "passes_c5": true,
+          "brier_raw": 0.1638,
+          "brier_isotonic": 0.1566
+        },
+        "L2": {
+          "pooled_auc": 0.8737,
+          "mean_auc": 0.871,
+          "effective_n": 620.0,
+          "std_coefs": {
+            "log1p_total": 1.9206,
+            "log_issue_size": -0.0578
+          },
+          "n_fire": 92,
+          "hits": 77,
+          "hit_rate": 0.837,
+          "wilson_lo95": 0.7483,
+          "raw_equivalent_threshold": 0.9157575150300601,
+          "passes_c5": false,
+          "brier_raw": 0.1683,
+          "brier_isotonic": 0.1675
+        }
+      }
+    },
+    "n": 620,
+    "test_years": [
+      2022,
+      2023,
+      2024,
+      2025,
+      2026
+    ]
+  },
+  "control_total_only": {
+    "label": "control: log1p_total ONLY (issue size dropped)",
+    "features": [
+      "log1p_total"
+    ],
+    "by_half_life": {
+      "2": {
+        "L1": {
+          "pooled_auc": 0.8051,
+          "mean_auc": 0.7613,
+          "effective_n": 323.4,
+          "std_coefs": {
+            "log1p_total": 1.4022
+          },
+          "n_fire": 119,
+          "hits": 113,
+          "hit_rate": 0.9496,
+          "wilson_lo95": 0.8944,
+          "raw_equivalent_threshold": 0.8265691382765531,
+          "passes_c5": true,
+          "brier_raw": 0.1585,
+          "brier_isotonic": 0.1542
+        },
+        "L2": {
+          "pooled_auc": 0.8797,
+          "mean_auc": 0.872,
+          "effective_n": 323.4,
+          "std_coefs": {
+            "log1p_total": 1.7899
+          },
+          "n_fire": 96,
+          "hits": 82,
+          "hit_rate": 0.8542,
+          "wilson_lo95": 0.77,
+          "raw_equivalent_threshold": 0.8909829659318637,
+          "passes_c5": true,
+          "brier_raw": 0.1617,
+          "brier_isotonic": 0.1612
+        }
+      },
+      "3": {
+        "L1": {
+          "pooled_auc": 0.8066,
+          "mean_auc": 0.7613,
+          "effective_n": 389.8,
+          "std_coefs": {
+            "log1p_total": 1.4205
+          },
+          "n_fire": 117,
+          "hits": 112,
+          "hit_rate": 0.9573,
+          "wilson_lo95": 0.9038,
+          "raw_equivalent_threshold": 0.8315240480961924,
+          "passes_c5": true,
+          "brier_raw": 0.158,
+          "brier_isotonic": 0.1547
+        },
+        "L2": {
+          "pooled_auc": 0.8796,
+          "mean_auc": 0.872,
+          "effective_n": 389.8,
+          "std_coefs": {
+            "log1p_total": 1.8221
+          },
+          "n_fire": 95,
+          "hits": 81,
+          "hit_rate": 0.8526,
+          "wilson_lo95": 0.7677,
+          "raw_equivalent_threshold": 0.8909829659318637,
+          "passes_c5": true,
+          "brier_raw": 0.1619,
+          "brier_isotonic": 0.1605
+        }
+      },
+      "5": {
+        "L1": {
+          "pooled_auc": 0.8075,
+          "mean_auc": 0.7613,
+          "effective_n": 474.9,
+          "std_coefs": {
+            "log1p_total": 1.437
+          },
+          "n_fire": 119,
+          "hits": 112,
+          "hit_rate": 0.9412,
+          "wilson_lo95": 0.8835,
+          "raw_equivalent_threshold": 0.8394519038076151,
+          "passes_c5": true,
+          "brier_raw": 0.1572,
+          "brier_isotonic": 0.1564
+        },
+        "L2": {
+          "pooled_auc": 0.8801,
+          "mean_auc": 0.872,
+          "effective_n": 474.9,
+          "std_coefs": {
+            "log1p_total": 1.8496
+          },
+          "n_fire": 94,
+          "hits": 80,
+          "hit_rate": 0.8511,
+          "wilson_lo95": 0.7654,
+          "raw_equivalent_threshold": 0.8929649298597194,
+          "passes_c5": true,
+          "brier_raw": 0.1625,
+          "brier_isotonic": 0.1611
+        }
+      },
+      "8": {
+        "L1": {
+          "pooled_auc": 0.8093,
+          "mean_auc": 0.7613,
+          "effective_n": 539.6,
+          "std_coefs": {
+            "log1p_total": 1.4475
+          },
+          "n_fire": 117,
+          "hits": 111,
+          "hit_rate": 0.9487,
+          "wilson_lo95": 0.8926,
+          "raw_equivalent_threshold": 0.8463887775551102,
+          "passes_c5": true,
+          "brier_raw": 0.1564,
+          "brier_isotonic": 0.1555
+        },
+        "L2": {
+          "pooled_auc": 0.8803,
+          "mean_auc": 0.872,
+          "effective_n": 539.6,
+          "std_coefs": {
+            "log1p_total": 1.8679
+          },
+          "n_fire": 94,
+          "hits": 80,
+          "hit_rate": 0.8511,
+          "wilson_lo95": 0.7654,
+          "raw_equivalent_threshold": 0.8989108216432865,
+          "passes_c5": true,
+          "brier_raw": 0.1632,
+          "brier_isotonic": 0.1607
+        }
+      },
+      "none": {
+        "L1": {
+          "pooled_auc": 0.8112,
+          "mean_auc": 0.7613,
+          "effective_n": 620.0,
+          "std_coefs": {
+            "log1p_total": 1.4776
+          },
+          "n_fire": 117,
+          "hits": 111,
+          "hit_rate": 0.9487,
+          "wilson_lo95": 0.8926,
+          "raw_equivalent_threshold": 0.8662084168336673,
+          "passes_c5": true,
+          "brier_raw": 0.1551,
+          "brier_isotonic": 0.1549
+        },
+        "L2": {
+          "pooled_auc": 0.8808,
+          "mean_auc": 0.872,
+          "effective_n": 620.0,
+          "std_coefs": {
+            "log1p_total": 1.915
+          },
+          "n_fire": 94,
+          "hits": 80,
+          "hit_rate": 0.8511,
+          "wilson_lo95": 0.7654,
+          "raw_equivalent_threshold": 0.9068386773547094,
+          "passes_c5": true,
+          "brier_raw": 0.1655,
+          "brier_isotonic": 0.1604
+        }
+      }
+    },
+    "n": 620,
+    "test_years": [
+      2022,
+      2023,
+      2024,
+      2025,
+      2026
+    ]
+  },
+  "best_pooled_auc": {
+    "L1": 0.8081,
+    "L2": 0.8809
+  },
+  "rule_evaluation": [
+    {
+      "half_life": "2",
+      "sign_matches_and_stable": false,
+      "auc_within_1pp": true,
+      "auc_gap_pp": {
+        "L1": 0.0,
+        "L2": 0.0
+      },
+      "L1_sign": "pos",
+      "L2_sign": "pos"
+    },
+    {
+      "half_life": "3",
+      "sign_matches_and_stable": false,
+      "auc_within_1pp": true,
+      "auc_gap_pp": {
+        "L1": 0.19,
+        "L2": 0.17
+      },
+      "L1_sign": "pos",
+      "L2_sign": "pos"
+    },
+    {
+      "half_life": "5",
+      "sign_matches_and_stable": false,
+      "auc_within_1pp": true,
+      "auc_gap_pp": {
+        "L1": 0.72,
+        "L2": 0.36
+      },
+      "L1_sign": "pos",
+      "L2_sign": "pos"
+    },
+    {
+      "half_life": "8",
+      "sign_matches_and_stable": false,
+      "auc_within_1pp": true,
+      "auc_gap_pp": {
+        "L1": 0.93,
+        "L2": 0.47
+      },
+      "L1_sign": "pos",
+      "L2_sign": "pos"
+    },
+    {
+      "half_life": "none",
+      "sign_matches_and_stable": true,
+      "auc_within_1pp": false,
+      "auc_gap_pp": {
+        "L1": 1.18,
+        "L2": 0.72
+      },
+      "L1_sign": "neg",
+      "L2_sign": "neg"
+    }
+  ],
+  "chosen_half_life": null,
+  "recommend_dropping_issue_size": true,
+  "verdict": "NO half-life satisfies the rule. The issue-size sign is set by the recency knob, not by the data, so the variable cannot be defended. RECOMMEND DROPPING issue size: log1p(Total) alone costs -0.31pp on L1 and +0.01pp on L2 against the best Set A figure."
+}
