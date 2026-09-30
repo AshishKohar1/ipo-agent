@@ -275,7 +275,20 @@ matching table was tried.
 
 ## 5. Restarts, disk, and anything unsaved
 
-- **Restarts: none.** Neither night job has restarted.
+### Restarts
+
+| Job | Time IST | What happened |
+|---|---|---|
+| Chittorgarh sweep | started **01:26** | — |
+| Chittorgarh sweep | died **~01:40** | `pd.read_html` chose a parser per page and raised `ImportError: Import html5lib failed` on a page lxml could not handle, after 8 ids. The whole sweep died on one bad page. |
+| Chittorgarh sweep | restarted **01:52** | `html5lib` installed and pinned in `requirements.txt`; `read_html` now tries lxml, then html5lib, then the default, and an unparseable page costs that page rather than the run. |
+| SEBI night batch | started **01:05** | no restart |
+
+**One file was discarded in the restart.** Adding a `note` column changed the fixed schema
+from 49 to 50 fields, so `data/chittorgarh_backfill.csv` ended up with rows of both widths
+and pandas refused to read it back. It held 8 rows of freely re-fetchable public data, so I
+deleted it and let the sweep re-harvest those ids (26 seconds of requests) rather than
+hand-repair a corrupt file. Nothing else was lost.
 - **Disk:** 143 GB free at the time of writing. Floor 2 GB. PDFs are discarded after each
   company, so the batch's steady-state footprint is one PDF.
 - **Nothing is unsaved.** Every artefact is committed and pushed to `main`. Both night jobs

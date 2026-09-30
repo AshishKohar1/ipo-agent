@@ -133,9 +133,18 @@ def parse(html: str, ipo_id: int) -> tuple[dict, list[dict]]:
         name = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", h1.group(1))).strip()
         out["page_title"] = name
         out["company"] = re.sub(r"\s*IPO\s*Details?\s*$", "", name, flags=re.I).strip()
-    try:
-        tabs = pd.read_html(io.StringIO(html))
-    except ValueError:
+    # read_html picks a parser per page and raised ImportError on a page lxml could not
+    # handle, killing the whole sweep after 8 ids. html5lib is now a dependency AND the call
+    # is wrapped: one unparseable page must cost that page, not the run.
+    tabs = None
+    for flavor in ("lxml", "html5lib", None):
+        try:
+            tabs = pd.read_html(io.StringIO(html), flavor=flavor)
+            break
+        except Exception:
+            continue
+    if not tabs:
+        out["note"] = "no table could be parsed from the page"
         return out, []
 
     # ---- dates, face value ---------------------------------------------------
@@ -317,7 +326,7 @@ COLS = ["ipo_id", "http", "company", "page_title", "ipo_dates", "listed_on", "fa
         "total_subscription_x", "qib_x", "nii_x", "retail_x", "uses_of_proceeds_n",
         "has_gcp", "gcp_pct_proceeds", "anchor_shares", "anchor_pct_of_issue",
         "anchor_bid_date", "anchor_portion_cr", "anchor_lockin_note", "lockin_dates",
-        "url", "fetched_at"]
+        "url", "fetched_at", "note"]
 ANCHOR_COLS = ["ipo_id", "company", "name", "category", "shares", "amount_cr", "source",
                "url"]
 
