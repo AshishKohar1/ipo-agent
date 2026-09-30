@@ -3,6 +3,11 @@
 This file is the single source of instructions for building the IPO Analyst Agent.
 In Stage 0 it is committed to the repository as `PLAN.md`. Every session reads it.
 
+**Amended 2026-09-30 by `PLAN_AMENDMENT_01.md`** (kept in the repo as the audit trail).
+The amendment's decisions A1–A3, B1–B5, C1–C5, D1–D2, E1–E2, F1–F2 are merged into the
+sections below and logged in `DECISIONS.md`. Where this file and the amendment ever
+disagree, the amendment wins and this file should be corrected.
+
 ---
 
 ## 1. Objective
@@ -11,8 +16,9 @@ Build, validate and run two models for Indian IPOs, both of which improve as new
 
 - **Model L (listing gains) — decides whether to bid.**
   L1 = P(listing gain > 0). L2 = P(listing gain > 10%).
-  Runs before bidding closes. When final-day subscription isn't known yet, it uses a
-  conservative forecast of it.
+  Runs before bidding closes. **Three separate decision-point models** (`L_day1`,
+  `L_day2`, `L_final_3pm`), each trained only on what is knowable at that moment —
+  no forecaster (decisions C1, C2).
 - **Model H (hold after listing) — decides how much of an allotment to keep.**
   Runs after an IPO lists. Predicts P(IPO beats the Nifty 50 Total Return Index over the
   365 days from listing close) and recommends what % of the allotment to hold.
@@ -25,29 +31,45 @@ logging every prediction before its outcome is known, and retraining as new IPOs
 
 ---
 
-## 2. Current state (verify in Stages 0–1; do not assume)
+## 2. Current state (verify; do not assume)
+
+Updated 2026-09-30. Live stage status is in `PROGRESS.md`; that file wins on status.
 
 - Master dataset: 652 mainboard IPOs, 2010 to May 2026, with QIB/HNI/RII/Total subscription
   and listing gain. **Its `Date` column is the listing date, not the issue-open date.** True
-  open dates for 2021+ are in `issue_dates_recovered.csv`.
+  open dates for 2021+ are in `issue_dates_recovered.csv` (313 of 652 recovered).
 - `master_with_symbols.csv`: 578 of 652 with symbols. `exclude_reason` flags 29 rows
-  (13 FPO, 14 REIT/InvIT, 1 depository receipt, PROTEAN bad listing date).
-- Official Nifty 50 TRI from NSE Indices, 2009 to Sep 2026.
+  (13 FPO, 14 REIT/InvIT, 1 depository receipt, PROTEAN bad listing date). Excluded rows
+  are dropped from every model.
+- Official Nifty 50 TRI from NSE Indices, 2009 to Sep 2026, `data/NIFTY50_TRI.csv`.
 - Holding targets vs TRI: `excess_1y` 491 rows (40.3% beat index); `excess_3y` 331 rows (36.0%).
 - `models/framework.py`: numpy logistic regression (validated against statsmodels Logit to
-  3e-10), walk-forward validation, target-window embargo, recency weighting, calibration
-  and threshold tables. `models/model_l.py`, `models/model_h.py`, model cards.
-- Model L walk-forward: L1 AUC 0.765, ≥90% threshold → 97.7% hit rate. L2 AUC 0.878,
-  ≥80% → 79.7% (fails), ≥85% passes. Total vs QIB/HNI/RII collinearity (VIF 83) unresolved.
-- Model H baseline (subscription + size + listing gain only): pooled walk-forward AUC
-  0.525 (1y), 0.562 (3y).
+  3e-10), walk-forward validation, target-window embargo, recency weighting, `vif()`,
+  `threshold_section5()`, calibration and threshold tables, model cards.
+- **Stage 2 closed (Gate A).** Model L uses **Set A** = `log1p(Total)` + `log(issue size)`
+  for both targets (decision A1). Walk-forward on 616 mainboard rows, test years 2022–2026,
+  half-life 2 years chosen on pooled AUC: **L1 pooled AUC 0.8084** (Gini 0.617),
+  **L2 pooled AUC 0.8809** (Gini 0.762). Set C is the standing challenger (A2); Sets B and D
+  are rejected (A3). A paired bootstrap showed Set A reliably beats Set B on both targets and
+  every other difference sits inside sampling noise.
+- Out-of-fold predictions for all Stage 2 candidates are saved in `reports/oof/` — these are
+  Stage 3's input.
+- `market_heat.py`: leak-free market IPO heat (only IPOs that **listed** before this IPO's
+  bidding opened; 30d → 60d → expanding median). Used by the Set C challenger.
+- **Stage 4 sources settled (B1, B2).** IPO Ji, InvestorGain, ipoindex.in and iporupee.com
+  are all off-limits. Chittorgarh is permitted for personal use at ≥3s per request.
+  GMP is dropped as a model feature (B5) and is display-only (D1, D2).
 - `fetch_rhp.py` resolvers: SEBI (open), BSE SME (open), NSE (behind a disclaimer —
-  disabled), BSE mainboard (not implemented). 5 of 5 verification companies passed:
-  Hyundai, Jupiter, CapitalNumbers (SME, matched on net offer), Syngene, TD Power
-  (2011, prospectus fallback). 8 PDFs in `rhp_pdfs/`.
+  `NSE_DOWNLOADS_ALLOWED` stays False), BSE mainboard (not implemented). 5 of 5 verification
+  companies passed: Hyundai, Jupiter, CapitalNumbers (SME, matched on net offer), Syngene,
+  TD Power (2011, prospectus fallback). 8 PDFs in `rhp_pdfs/`, listed with URL + SHA-256 in
+  `data/verified_rhp_manifest.csv`.
+- `check_env.py` 13/13 and `stage1_env_check.py` pass on the laptop; all 11 required domains
+  reachable. **The Linux/cloud `pip install` path is still unverified** — the first cloud
+  session must re-run both.
 - Windows Application Control on the laptop blocks scikit-learn and parts of statsmodels.
-
----
+  Use the numpy estimator; import `Logit` from `statsmodels.discrete.discrete_model`, never
+  `statsmodels.api`.
 
 ## 3. Stage protocol — MANDATORY
 
@@ -55,7 +77,7 @@ Sessions can end without warning (memory, token or time limits). This protocol m
 no completed work is ever lost.
 
 **At the start of every session**
-1. `git fetch`, check out branch `work` (create it from `main` if missing), `git pull`.
+1. `git fetch`, then `git pull` on **`main`** (decision F1: single branch, no `work`).
 2. Read `CLAUDE.md`, `PLAN.md`, `PROGRESS.md`, `DECISIONS.md`.
 3. Choose the lowest-numbered stage that is not `DONE` and whose dependencies are met
    (section 6). If a stage is `IN_PROGRESS`, resume it from its last sub-checkpoint —
@@ -92,8 +114,12 @@ no completed work is ever lost.
     finished, in progress, open gates, next stage, anything blocked.
 
 Stage 0 runs only on the user's laptop. Stages 1+ run in Claude Code on the web (preferred)
-or on the laptop. The `work` branch on GitHub is the source of truth; on the laptop always
-`git pull` before running anything.
+or on the laptop. **`main` on GitHub is the source of truth** (decision F1) — there is a
+single branch; completed stages are marked with a tag (`git tag stage-NN-done`), not a
+branch. On the laptop always `git pull` before running anything.
+
+**Git on this laptop:** chain commands separately, not with `&&` (decision F2) — it fails
+in the older PowerShell here.
 
 ---
 
@@ -116,6 +142,13 @@ or on the laptop. The `work` branch on GitHub is the source of truth; on the lap
    `NSE_DOWNLOADS_ALLOWED` stays `False`. Respect robots.txt and site terms. Never bypass a
    disclaimer, login, CAPTCHA or click-through. If a site blocks automated access, stop
    using it and report. At least 3 s between SEBI requests, 1 s elsewhere.
+   **Blocked sources (decision B1) — never fetch, and never send a browser User-Agent to
+   work around them:** IPO Ji (robots.txt names ClaudeBot and anthropic-ai), InvestorGain
+   (`ai-train=no`), ipoindex.in (Terms of Use §10), iporupee.com (T&C). If any source's
+   robots.txt or terms change to prohibit access, stop using it and report.
+   **Chittorgarh is permitted for personal use (B2)** — robots.txt allows it and its
+   disclaimer restricts public and commercial use, not private analysis. **≥3 s between
+   requests, and re-read its robots.txt at the start of every run, aborting if it changed.**
 6. **Every PDF must pass `_verify_is_prospectus()`** before use.
 7. **No leakage.** Timestamp every feature by when it becomes knowable. Model L uses only
    information available before the bid deadline, or forecasts of it. Walk-forward
@@ -140,19 +173,83 @@ or on the laptop. The `work` branch on GitHub is the source of truth; on the lap
 - Required hit rates: **L1 90%, L2 80%.** Threshold = the lowest probability threshold whose
   out-of-sample hit rate meets the requirement **and** whose Wilson 95% lower bound is at
   least the requirement minus 5pp **and** which fires on at least 20 IPOs.
+  **Applied separately to each of the three decision-point models** (decision C5) — they
+  will land on different thresholds. Implemented in `framework.threshold_section5()`.
 - Walk-forward: for each test year T, train on IPOs listed before T. Use the last 5 test
   years with enough data. Select using **pooled** AUC (concatenate all out-of-fold
   predictions), not the mean of per-year AUCs.
 - Recency weight = 0.5^(age_years / half_life), half-life ∈ {2, 3, 5, 8 years, none},
   chosen by pooled AUC. Always report effective sample size (Σw)² / Σw².
 - Class weights balanced.
-- Feature set: decided at Gate A.
+- **Feature set: Set A** — `log1p(Total subscription)` + `log(issue size)`, for both L1 and
+  L2 (decision A1, Gate A closed 2026-09-30).
+- **Set C** (Set A + market IPO heat) is a **standing challenger** in monthly retraining.
+  It is statistically tied with Set A; promote it only via the champion/challenger rule,
+  never by hand (decision A2).
+- **Sets B and D (the QIB/HNI/RII split) are rejected** (decision A3). The category figures
+  are still **displayed** in every live report for the user's own judgement — they are not
+  model inputs.
 - Day naming: `day_1`, …, `day_before_final`, `final_day` — never "day 3".
-- Final-day forecaster outputs P10 / P50 / P90. **Model L is fed P10** (conservative).
-- GMP is tested as an input; included in production only if it improves held-out results.
-- Decision-point models D0–D3 are superseded by the forecaster approach.
+- **Three decision-point models per target** (decision C1), each trained only on what is
+  knowable at that moment:
+
+  | Model | Trained on | Role |
+  |---|---|---|
+  | `L_day1` | Day-1 subscription | Informational — "bid today?" |
+  | `L_day2` | Day-before-final subscription | Informational — "bid tomorrow?" |
+  | `L_final_3pm` | Final-day ~3pm subscription | **Production bidding model** |
+
+  Never feed day-N subscription into a model trained on final figures: the bias is large and
+  one-directional (observed: Adroit Industries QIB 1.82x on day 2 → 195x on the final day).
+- **No forecaster** (decision C2). The chained design (forecast final subscription → feed it
+  to Model L) is dropped: direct day-N models make one prediction instead of two and avoid
+  compounding error.
+- **`L_final_3pm` is approximated until real 3pm data exists** (decision C3). No historical
+  3pm snapshots exist, so the model card must label it **approximated, not measured**, and it
+  is rebuilt once ~40 IPOs of genuine 3pm data accumulate. If the approximation cannot be made
+  defensible, say so and fall back to the final-subscription model with a stated warning that
+  it overestimates at 3pm.
+- **Uncertainty is reported, not hidden** (decision C4). Report each model's AUC and firing
+  rate side by side, so the value of waiting a day is visible rather than assumed.
+- **GMP is not a model feature** (decisions B5, D1): no permitted historical source exists.
+  It is display-only — see "GMP" below.
 - Retraining monthly; champion/challenger; PSI drift monitoring.
 - Every IPO is ingested after listing — mainboard and SME, bid or not.
+
+### GMP — display only
+- GMP is **not** a model feature and **not** an automated fetch (D1). It appears in the live
+  report as a field the user fills in manually, clearly marked as outside the model.
+- Every live report logs the GMP value the user supplies (or blank) in
+  `predictions_log.csv`, so its incremental value over subscription can be measured
+  retrospectively after ~12 months (D2). Until then **no GMP-based rule may influence a
+  verdict.**
+- Required live-report format:
+
+```
+Orient Cables — closing today, bid by 4:00 PM
+  L_final_3pm  L1: 94%  -> BID        (threshold 90%)
+               L2: 71%  -> no         (threshold 85%)
+  Subscription: Total 8.77x | QIB 3.1x | HNI 14.2x | Retail 6.4x   [15:00]
+  Veto flags: none
+  GMP: ____%   [NOT IN MODEL — your judgement only]
+```
+
+### Live schedule — Model L
+The broker cutoff is **4:00 PM** (Paytm Money, user-confirmed — decision E1).
+
+| Job | Time IST | Action |
+|---|---|---|
+| Score | **15:00** daily | Fetch subscription for IPOs closing today, score `L_final_3pm`, write report |
+| Notify | **15:30** daily | Deliver the report — 30 minutes before cutoff |
+| Snapshot | **19:00** daily | Record day-wise subscription (NSE + BSE) for every open IPO |
+| Ingest | **Mon & Thu 08:00** | Add newly listed IPOs to the dataset, score past predictions |
+| Retrain | 1st of month, 08:00 | Champion/challenger |
+
+The 30-minute gap between scoring and notifying is deliberate: a slow fetch must not push
+the reminder past the cutoff. If the 15:00 job fails, retry immediately and still notify by
+15:30, marking the report `PARTIAL — verify subscription manually`.
+
+**Model L goes live without any forecaster** — it is not a prerequisite (decision E2).
 
 ### Model H
 - Post-listing model. Primary target `excess_1y` vs Nifty 50 TRI (label = excess > 0).
@@ -193,14 +290,17 @@ running Model H before bidding.
 
 ## 6. Dependencies
 
+Revised by amendment 01 section H. Live status is in `PROGRESS.md`.
+
 | Stage | Title | Depends on | Ends in |
 |---|---|---|---|
 | 0 | Repository setup (laptop) | — | — |
-| 1 | Cloud environment check | 0 + user's cloud setup | — |
-| 2 | Model L feature comparison | 1 | **Gate A** |
-| 3 | Calibration curve + final thresholds | Gate A | — |
-| 4 | Day-wise subscription + GMP history | 1 | — |
-| 5 | Final-day forecaster + GMP test | Gate A, 4 | — |
+| 1 | Environment check | 0 | — |
+| 2 | Model L feature comparison | 1 | **Gate A** ✅ closed 2026-09-30 |
+| 4A | Chittorgarh 20-IPO coverage sample | 1 | **Gate F** |
+| 4B | Day-wise subscription backfill (chunked) | Gate F | — |
+| 3 | Calibration curve + final thresholds | Gate A ✅ | — |
+| 5 | Three decision-point models (`L_day1`, `L_day2`, `L_final_3pm`) | 3, 4B | — |
 | 6 | Productionize Model L | 3, 5 | **Gate B** |
 | 7 | Go live (Model L) | Gate B | — |
 | 8 | RHP extraction build + spot-check | 1 | **Gate C** |
@@ -210,9 +310,9 @@ running Model H before bidding.
 | 12 | Hold-sizing backtest | 11 | **Gate E** |
 | 13 | Integration + wrap-up | 7, Gate E | — |
 
-When the next stage in order is blocked, move to the next unblocked one.
-
----
+When the next stage in order is blocked, move to the next unblocked one. **Stage 8 depends
+only on Stage 1 and needs no decision from the user — it is the fallback whenever a gate
+blocks everything else.**
 
 ## 7. Stages
 
@@ -236,13 +336,14 @@ Runs in Claude Code on the user's Windows laptop in `C:\Projects\ipo-agent`.
    - `DECISIONS.md` — empty decision log
    - `reports/`
 7. Update `CLAUDE.md` — merge, don't overwrite: add a "Session start" section pointing to
-   PLAN.md section 3; refresh "Current state" to match section 2; state that the `work`
-   branch is the source of truth.
+   PLAN.md section 3; refresh "Current state" to match section 2; state that **`main`**
+   is the source of truth.
 8. Warn if any single file exceeds 50 MB.
-9. `git init`, commit everything, add the remote URL the user provides, push `main`, create
-   branch `work` from `main`, push `work`. Git may open a browser for GitHub sign-in —
-   tell the user to complete it.
-10. Write `reports/STAGE_00_REPORT.md`, set Stage 0 `DONE`, commit and push to `work`.
+9. `git init`, commit everything, add the remote URL the user provides, push `main`. Git may
+   open a browser for GitHub sign-in — tell the user to complete it.
+   (Historical note: Stage 0 originally also created a `work` branch. Decision F1 of
+   2026-09-30 retired it — there is one branch, `main`.)
+10. Write `reports/STAGE_00_REPORT.md`, set Stage 0 `DONE`, commit and push to `main`.
 11. Final message to the user, in plain English: what was pushed, and the cloud setup steps
     (connect GitHub at claude.ai/code; create an environment with network access **Full**
     and setup script `pip install -r requirements.txt`; select this repository).
@@ -265,29 +366,28 @@ manifest has one row per PDF; `PROGRESS.md` shows Stage 0 `DONE`.
 
 **Acceptance:** all checks pass.
 
-### Stage 2 — Model L feature comparison → GATE A
-Mainboard, both targets (L1, L2). Four candidate sets:
+### Stage 2 — Model L feature comparison → GATE A  ✅ CLOSED 2026-09-30
 
-| Set | Features |
-|---|---|
-| A | log1p(Total) + log(issue size) |
-| B | log1p(QIB) + log1p(HNI) + log1p(RII) + log(issue size) |
-| C | Set A + market IPO heat |
-| D | Set B + market IPO heat |
+Four candidate sets were compared on mainboard IPOs for both targets, on an identical
+616-row sample, walk-forward over test years 2022–2026, half-life chosen on pooled AUC.
 
-**Market IPO heat** = mean listing gain of mainboard IPOs that listed in the 30 days before
-this IPO's bidding opened. Use the true open date where recovered; otherwise cutoff =
-listing date − 10 days. If fewer than 2 IPOs fall in the window, widen to 60 days; if still
-fewer than 2, use the long-run median and record a flag.
+| Set | Features | L1 pooled AUC | L2 pooled AUC | max VIF |
+|---|---|---|---|---|
+| **A** (chosen) | log1p(Total) + log(size) | 0.8084 | **0.8809** | 1.0 |
+| B | log1p(QIB/HNI/RII) + log(size) | 0.7980 | 0.8721 | 5.3 |
+| C (challenger) | A + market IPO heat | **0.8137** | 0.8755 | 1.1 |
+| D | B + market IPO heat | 0.8098 | 0.8718 | 5.3 |
 
-For each set report: pooled AUC and Gini; per-year AUC; chosen half-life; VIF for every
-feature; coefficient signs (every subscription coefficient must be positive); HC3
-significance; threshold tables for L1 (90%) and L2 (80%) under the section-5 rule.
+A paired bootstrap (3,000 resamples, identical rows) found **one reliable difference: Set A
+beats Set B on both targets.** Every other gap, including whether market heat helps, sits
+inside sampling noise. Half-life 2 years won for all eight combinations. Every subscription
+coefficient was positive. The "VIF 83" problem was an artefact of mixing Total *with* the
+categories — no candidate set does that.
 
-**Gate A report** must include: a side-by-side table; a recommendation; and this note —
-choosing Set B or D means the forecaster must predict three final-day categories, and QIB
-is the hardest because institutions often bid mostly on the final day. The user has said he
-leans towards the category split; show the evidence plainly either way.
+**Gate A decision (A1–A3):** Set A for both L1 and L2; Set C retained as a standing
+challenger for monthly retraining only; Sets B and D rejected, though the category figures
+are still displayed in live reports. Full evidence: `reports/STAGE_02_REPORT.md`.
+Out-of-fold predictions for all candidates: `reports/oof/`.
 
 ### Stage 3 — Calibration curve + final thresholds  (after Gate A)
 1. Walk-forward out-of-fold probabilities for the chosen set.
@@ -304,50 +404,79 @@ leans towards the category split; show the evidence plainly either way.
 
 **Acceptance:** final L1 and L2 thresholds recorded with evidence.
 
-### Stage 4 — Day-wise subscription and GMP history  [large — chunked]
-Scope: every mainboard IPO whose bidding opened on or after 1 Oct 2023; SME for the same
-period stored separately.
+### Stage 4A — Chittorgarh coverage sample → GATE F
 
-For each IPO and each bidding day, record end-of-day Total, QIB, HNI (NII) and RII
-subscription, plus GMP in ₹ and as % of the price-band cap. Label days `day_1` …
-`day_before_final`, `final_day`.
+Before fetching anything in bulk (decision B3). Chittorgarh's own note says that for past
+IPOs it publishes "final bidding detail as of the last day", so day-wise depth for older
+years is unverified and may thin out.
 
-- Subscription sources: Chittorgarh and IPO Ji; reconcile under rule 2.
-- GMP sources: InvestorGain and IPO Watch. GMP is unregulated and sites often copy each
-  other, so agreement does not prove accuracy — tag GMP `sentiment_grade`.
-- Respect rule 5. If a source forbids automated access, stop using it and report.
-- Progress in `data/daywise_progress.csv`; commit every 10 IPOs.
+1. **Read `chittorgarh.com/robots.txt` first and abort if it no longer permits access** (B2).
+2. Sample **20 mainboard IPOs** from `master_with_symbols.csv` spread across 2010, 2013,
+   2016, 2019, 2022 and 2025.
+3. For each, record: is the **"Day-wise Subscription Details"** table present, how many
+   bidding days it carries, which categories it has, and whether anchor allocation and
+   lock-in dates are present.
+4. **≥3 seconds between requests.**
 
-**Output:** `data/daywise_subscription.csv` in long format — ipo, isin, date, day_label,
-category, value, source_a, source_b, status.
+**Acceptance:** a coverage table by year. **Then stop at Gate F** — no bulk fetch until the
+user has seen the coverage.
 
-**Acceptance:** coverage by month; reconciliation counts; final-day Total matches the master
-Total within 5% for at least 95% of overlapping IPOs, with every mismatch logged.
+### Stage 4B — Day-wise subscription backfill  [large — chunked]  (after Gate F)
 
-### Stage 5 — Final-day forecaster + GMP test  (after Gate A and Stage 4)
-1. Predict log(final-day subscription) from log(day_before_final), log(day_1), category mix
-   at day_before_final, log issue size and number of bidding days. Recency-weighted.
-   P10 / P50 / P90 from residual quantiles. If Gate A chose categories, forecast QIB, HNI
-   and RII separately as well as Total.
-2. Also support a forecast from `day_1` alone, with wider bands.
-3. Validate walk-forward by quarter. Report P10–P90 coverage (target ~80%) and median
-   absolute log error.
-4. Integration test on history: L probability using (a) actual final subscription,
-   (b) forecast P10, (c) forecast P50. Report how often the verdict changes, and how often
-   P10 produces a bid where actual final would not.
-5. **GMP test:** corr(GMP %, final subscription); whether GMP improves the forecaster;
-   whether GMP and a `gmp_sub_divergence` feature (z(GMP) − z(subscription)) add to Model L
-   beyond subscription — pooled walk-forward AUC on the 3-year subset. Recommend include
-   or exclude; the decision is taken at Gate B.
+Replaces the original Stage 4 (amendment section G).
 
-**Acceptance:** P10–P90 coverage between 70% and 90%; GMP findings documented.
+**Scope:** every mainboard IPO in `master_with_symbols.csv` without an `exclude_reason`.
+SME stored separately.
+
+**Method:** for each IPO, resolve its Chittorgarh subscription page and extract the day-wise
+table (all categories, all days), plus anchor allocation and lock-in dates where present.
+
+**Capture per row:** ipo, isin, date, day_index, day_label (`day_1` … `day_before_final`,
+`final_day`), category, subscription_x, source, fetched_at.
+
+**Reconciliation:** the `final_day` Total must match the master dataset's Total within 5%.
+Mismatches → NULL with both values logged. Day-1 and day-2 values have **no second source**
+and are flagged `single_source_unverified`; they may be used for `L_day1` and `L_day2`, and
+those model cards must say so.
+
+**Forward collection (B4), independent of the backfill:** every evening, snapshot live
+subscription from the **NSE and BSE official APIs** for every open IPO. This builds a fully
+two-source, fully permitted history going forward.
+
+**Politeness and resumability:** ≥3 s between requests, per-IPO status in
+`data/daywise_progress.csv`, commit every 10 IPOs, resumable.
+
+**Acceptance:** coverage table by year; final-day reconciliation ≥95% on overlapping IPOs;
+every mismatch logged.
+
+### Stage 5 — Three decision-point models  (after Stage 3 and Stage 4B)
+
+Re-scoped by decisions C1–C4. **There is no forecaster.**
+
+1. Train and validate three models per target, each on only what is knowable at that moment:
+   `L_day1` (day-1 subscription), `L_day2` (day-before-final), `L_final_3pm` (final day
+   ~3pm). Features per Set A: `log1p(Total at that point)` + `log(issue size)`.
+2. Walk-forward with the same protocol as Stage 2; half-life selected on pooled AUC.
+3. Apply the section-5 threshold rule **separately to each model** (C5). They will land on
+   different thresholds.
+4. **`L_final_3pm` is approximated** until forward collection accumulates ~40 IPOs of real
+   3pm data (C3). Its model card must say **approximated, not measured**. If the
+   approximation cannot be made defensible, report that and fall back to the
+   final-subscription model, stating plainly that it overestimates at 3pm.
+5. Report each model's AUC and firing rate side by side (C4), so the value of waiting a day
+   is visible rather than assumed.
+
+**Acceptance:** three validated models per target with their own thresholds; the
+approximation in `L_final_3pm` documented; AUC and firing rate reported side by side.
 
 ### Stage 6 — Productionize Model L → GATE B
 1. Final fit with the chosen features, half-life and thresholds. Save `model_l_v1.0`, plus
    its coefficients as JSON so the scoring formula is portable.
-2. `predict_live(inputs, subscription_as_of)` with `subscription_as_of` ∈ {`final`,
-   `day_before_final`, `day_1`}. For anything but `final`, use forecaster P10 and label the
-   output `Forecast-based (P10) — conservative`.
+2. `predict_live(inputs, subscription_as_of)` with `subscription_as_of` ∈ {`final_3pm`,
+   `day_before_final`, `day_1`}, dispatching to the matching decision-point model
+   (`L_final_3pm`, `L_day2`, `L_day1`). No forecasting: each model was trained on the data
+   available at its own moment. `L_day1` and `L_day2` outputs are labelled
+   `Informational — not a bid decision`; `L_final_3pm` is the production bidding model.
 3. SME Model L in shadow mode; log to `sme_shadow_log.csv`.
 4. `predictions_log.csv` (append-only): IST timestamp, IPO, ISIN, segment, model version,
    inputs, subscription_as_of, probabilities, thresholds, verdict, veto flags.
@@ -360,25 +489,40 @@ Total within 5% for at least 95% of overlapping IPOs, with every mismatch logged
    alert above 0.25. Record every version in `models/registry.csv`.
 7. `run_live_l.py`:
    a. Get the IPO calendar (open and close dates) from two sources.
-   b. For IPOs whose final day is today or tomorrow, fetch current subscription (and GMP if
-      approved) from two sources and reconcile.
+   b. For IPOs whose final day is today or tomorrow, fetch current subscription from the
+      NSE and BSE official APIs and reconcile. **GMP is never fetched** (D1) — the report
+      carries a blank `GMP: ____%` field marked `[NOT IN MODEL — your judgement only]`, and
+      whatever the user supplies is logged for later evaluation (D2).
    c. Score; apply the red-flag veto where RHP data exists.
-   d. Write `reports/live/YYYY-MM-DD.md`: per IPO — name, segment, closing date,
-      subscription as-of, forecast band, L1/L2 probabilities, verdict, veto status, and the
-      line "Decide before your broker's IPO cutoff on <date>".
+   d. Write `reports/live/YYYY-MM-DD.md` in the format fixed by decision D2: per IPO —
+      name, closing date and **"bid by 4:00 PM"**, the model used, L1/L2 probabilities with
+      each model's own threshold and verdict, the displayed QIB/HNI/Retail/Total figures
+      with their as-of time (A3), veto flags, and the blank GMP field.
    e. Append to `predictions_log.csv`.
 8. Write `MODEL_L_CARD.md` v1.0.
 9. Dry run on currently open IPOs, or the most recent week if none are open.
 
-**Gate B report:** dry-run output, model card summary, GMP recommendation. Stop.
+**Gate B report:** dry-run output and model card summary for all three decision-point
+models, with each model's AUC, threshold and firing rate side by side. No GMP
+recommendation — GMP is display-only (B5, D1). Stop.
 
 ### Stage 7 — Go live  (after Gate B)
+
 Create Remote Routines via `/schedule` if available in the session; otherwise write exact
-setup steps in `LIVE_SETUP.md` for the user:
-- Daily 19:00 IST — `run_live_l.py` (day_before_final forecasts)
-- Daily 14:00 IST — `run_live_l.py` (final-day update, early enough for broker cutoffs)
-- Weekly, Monday 08:00 IST — `ingest_outcomes.py` + weekly digest
-- Monthly, 1st, 08:00 IST — `retrain_l.py`
+setup steps in `LIVE_SETUP.md` for the user. Schedule fixed by decision E1 — the broker
+cutoff is **4:00 PM** (Paytm Money):
+
+| Job | Time IST | Action |
+|---|---|---|
+| Score | **15:00** daily | Fetch subscription for IPOs closing today, score `L_final_3pm`, write the report |
+| Notify | **15:30** daily | Deliver the report — 30 minutes before the 4:00 PM cutoff |
+| Snapshot | **19:00** daily | Record day-wise subscription (NSE + BSE) for every open IPO (B4) |
+| Ingest | **Mon & Thu 08:00** | Add newly listed IPOs to the dataset, score past predictions |
+| Retrain | 1st of month, 08:00 | Champion/challenger, including the Set C challenger (A2) |
+
+The 30-minute gap between scoring and notifying is deliberate: a slow fetch must not push
+the reminder past the cutoff. If the 15:00 job fails, retry immediately and still notify by
+15:30, marking the report `PARTIAL — verify subscription manually`.
 
 Routines count against the account's daily run allowance — schedule nothing beyond this.
 
