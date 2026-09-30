@@ -173,16 +173,29 @@ in the older PowerShell here.
 - Required hit rates: **L1 90%, L2 80%.** Threshold = the lowest probability threshold whose
   out-of-sample hit rate meets the requirement **and** whose Wilson 95% lower bound is at
   least the requirement minus 5pp **and** which fires on at least 20 IPOs.
-  **Applied separately to each of the three decision-point models** (decision C5) — they
-  will land on different thresholds. Implemented in `framework.threshold_section5()`.
+  Implemented in `framework.threshold_section5()`. Applied to `L_final_3pm`, the only
+  Model L (decision H1); decision C5's "separately per decision-point model" is moot now
+  that there is one model. **Calibrated with isotonic regression before thresholding**
+  (decision G1); the report prints the verdict and the threshold met, never the raw
+  probability as a literal chance (decision G2).
 - Walk-forward: for each test year T, train on IPOs listed before T. Use the last 5 test
   years with enough data. Select using **pooled** AUC (concatenate all out-of-fold
   predictions), not the mean of per-year AUCs.
 - Recency weight = 0.5^(age_years / half_life), half-life ∈ {2, 3, 5, 8 years, none},
   chosen by pooled AUC. Always report effective sample size (Σw)² / Σw².
 - Class weights balanced.
-- **Feature set: Set A** — `log1p(Total subscription)` + `log(issue size)`, for both L1 and
-  L2 (decision A1, Gate A closed 2026-09-30).
+- **Feature set: Set A, FROZEN** — `log1p(Total subscription)` + `log(issue size)`, for
+  both L1 and L2 (decision A1, Gate A closed 2026-09-30; frozen by decision H2).
+  Nine literature-sourced candidates were tested out-of-sample on 624 mainboard IPOs and
+  **all nine were rejected** — the table is in `PLAN_AMENDMENT_02.md` section A. Total
+  subscription already aggregates every category's view expressed in money; re-adding the
+  components is double-counting and drives Total's VIF to 90.0, which is the source of
+  Dave (2022)'s negative coefficients (reproduced here: Total +26.26, QIB −5.25, HNI −3.04).
+  Do not re-test these nine without new evidence.
+- **Issue size coefficient (decision H4).** On 624 mainboard IPOs 2010–2026, controlling for
+  subscription, the standardised coefficient is **−0.356** — slightly negative, consistent
+  with Bansal & Khanna (2012) and Huang (2025). An earlier note claiming it had "flipped
+  sign" came from a 588-row SME-heavy 2025–26 sample and did not generalise. Small either way.
 - **Set C** (Set A + market IPO heat) is a **standing challenger** in monthly retraining.
   It is statistically tied with Set A; promote it only via the champion/challenger rule,
   never by hand (decision A2).
@@ -190,25 +203,27 @@ in the older PowerShell here.
   are still **displayed** in every live report for the user's own judgement — they are not
   model inputs.
 - Day naming: `day_1`, …, `day_before_final`, `final_day` — never "day 3".
-- **Three decision-point models per target** (decision C1), each trained only on what is
-  knowable at that moment:
-
-  | Model | Trained on | Role |
-  |---|---|---|
-  | `L_day1` | Day-1 subscription | Informational — "bid today?" |
-  | `L_day2` | Day-before-final subscription | Informational — "bid tomorrow?" |
-  | `L_final_3pm` | Final-day ~3pm subscription | **Production bidding model** |
-
-  Never feed day-N subscription into a model trained on final figures: the bias is large and
-  one-directional (observed: Adroit Industries QIB 1.82x on day 2 → 195x on the final day).
-- **No forecaster** (decision C2). The chained design (forecast final subscription → feed it
-  to Model L) is dropped: direct day-N models make one prediction instead of two and avoid
-  compounding error.
+- **One model only: `L_final_3pm`** (decision H1, supersedes C1). `L_day1`, `L_day2` and
+  the final-day forecaster are **cancelled and their code paths deleted**, not left dormant.
+  No permitted source publishes day-wise subscription history: Chittorgarh shows it live and
+  deletes it once an IPO closes (measured in Stage 4A — 0 of 50 pre-2026 pages carry it);
+  IPO Ji blocks Anthropic crawlers by name; InvestorGain, ipoindex.in and iporupee.com
+  prohibit scraping. Stage 4B is cancelled for the same reason.
+  Never feed day-N subscription into this model: the bias is large and one-directional
+  (observed: Adroit Industries QIB 1.82x on day 2 → 195x on the final day).
+- **No forecaster** (decision C2, reaffirmed by H1).
 - **`L_final_3pm` is approximated until real 3pm data exists** (decision C3). No historical
-  3pm snapshots exist, so the model card must label it **approximated, not measured**, and it
-  is rebuilt once ~40 IPOs of genuine 3pm data accumulate. If the approximation cannot be made
-  defensible, say so and fall back to the final-subscription model with a stated warning that
-  it overestimates at 3pm.
+  3pm snapshots exist, so it is trained on final-day subscription and the model card must
+  label it **approximated, not measured**, stating plainly that final-day figures
+  overestimate the 3pm position. It is rebuilt once ~40 IPOs of genuine 3pm data accumulate
+  from the 19:00 snapshot job (B4).
+- **Demand profile is displayed, never modelled** (decision H3).
+  `retail_skew = log1p(RII) − log1p(QIB)`. Measured on 624 IPOs, median listing gain by
+  quartile: most institution-skewed **+20.4%**, Q2 +4.1%, Q3 +2.2%, most retail-skewed
+  **+1.6%**. Real signal, but adding it changes nothing (AUC 0.8832 → 0.8811) because it is
+  already embedded in Total. It appears in the live report as
+  `Demand profile: institution-led | balanced | retail-skewed`, with quartile cut-points
+  fitted **on training data only**, and may never enter the model or override a verdict.
 - **Uncertainty is reported, not hidden** (decision C4). Report each model's AUC and firing
   rate side by side, so the value of waiting a day is visible rather than assumed.
 - **GMP is not a model feature** (decisions B5, D1): no permitted historical source exists.
@@ -275,6 +290,48 @@ Three or more flags → verdict `VETO`, shown alongside the model's own verdict.
 8. Negative operating cash flow in 2 of the last 3 years
 
 ### RHP handling
+
+**Decision H5 — aggregator-first for headline financials.** Stop extracting from the RHP
+anything an aggregator already publishes. Issue size, fresh/OFS split, offer price band, P/E
+and P/B at offer, EPS, RoNW, NAV, revenue, PAT, net worth and total borrowings come from the
+aggregator and the master dataset, with the RHP as the **verifying second source where
+found**. This satisfies rule 2 properly, because the two are genuinely independent
+derivations.
+
+**Decision H6 — RHP extraction covers only what nothing else publishes.** These are Model
+H's actual differentiators and exist only in the prospectus. Coverage is measured on **these**
+fields, not on the headline financials; target **≥60%**:
+
+- Related-party transactions as % of revenue
+- Litigation: counts and ₹ quantum of the top 5, by category, against company, promoters,
+  directors
+- Customer concentration (top-10 %), geographic concentration, licence dependence
+- Promoter experience (years), board size and independence ratio, KMP remuneration
+- Auditor qualification / emphasis of matter
+- Pre-IPO placement price and date; promoter holding pre and post issue; lock-in schedule
+- Contingent liabilities as % of net worth
+- Number of stated uses of proceeds; GCP as % of proceeds
+- Anchor investor list, allocation, mutual-fund share, lock-in expiry dates
+- MSCI six-key-issue governance capture: Ownership & Control, Board, Pay, Accounting,
+  Business Ethics, Tax Transparency
+
+**Decision H7 — provenance and refusal rules are non-negotiable.** Every extracted value
+carries page number, exact source text line, document URL, SHA-256 and extractor version.
+Where the unit is not present on the page, the ₹-crore conversion is **withheld**, not
+assumed. A doubtful value is deleted, never shipped.
+
+**Decision H8 — never ingest AI-generated summary tables as data.** A comparison table
+produced by a general web-search assistant was reviewed and rejected: Jupiter Life Line and
+Syngene shared an identical net worth (₹844.90 cr) and operating income (₹871.60 cr) across
+a 2023 hospital chain and a 2015 CRO; Syngene was listed as "100% OFS" while also claiming
+capital-expenditure use of proceeds; TD Power's net worth equalled its issue size; six
+values were marked approximate; no value carried a page citation. Such tables may prompt a
+human cross-check, never serve as a source. Related: the ipotrack.in article "Using IPO
+Subscription Data to Predict Listing Day Performance" is **fabricated** (Nykaa stated as
+23× / +9.4% / 2022 against an actual 81.78× / +77.87% / 2021; "Jio Financial Services IPO"
+never existed — it was a demerger). It is blacklisted; treat unattributed AI-written SEO
+content as hostile to the dataset.
+
 - RHP only; if SEBI has no RHP, use the final prospectus and label it. **No DRHPs.**
 - In the cloud: download → verify → extract → keep values, page numbers, source text line,
   SHA-256 and URL → **discard the PDF**. Any PDF can be re-fetched from SEBI and verified
@@ -298,10 +355,10 @@ Revised by amendment 01 section H. Live status is in `PROGRESS.md`.
 | 1 | Environment check | 0 | — |
 | 2 | Model L feature comparison | 1 | **Gate A** ✅ closed 2026-09-30 |
 | 4A | Chittorgarh 20-IPO coverage sample | 1 | **Gate F** |
-| 4B | Day-wise subscription backfill (chunked) | Gate F | — |
-| 3 | Calibration curve + final thresholds | Gate A ✅ | — |
-| 5 | Three decision-point models (`L_day1`, `L_day2`, `L_final_3pm`) | 3, 4B | — |
-| 6 | Productionize Model L | 3, 5 | **Gate B** |
+| 4B | ~~Day-wise subscription backfill~~ | — | **CANCELLED (H1)** |
+| 3 | Calibration curve + final thresholds | Gate A ✅ | — ✅ closed 2026-09-30 |
+| 5 | ~~Three decision-point models~~ | — | **CANCELLED (H1)** |
+| 6 | Productionize Model L | 3 | **Gate B** |
 | 7 | Go live (Model L) | Gate B | — |
 | 8 | RHP extraction build + spot-check | 1 | **Gate C** |
 | 9 | RHP batch pilot (10 companies) | Gate C | **Gate D** |
@@ -309,6 +366,17 @@ Revised by amendment 01 section H. Live status is in `PROGRESS.md`.
 | 11 | Model H scorecard | 10 | — |
 | 12 | Hold-sizing backtest | 11 | **Gate E** |
 | 13 | Integration + wrap-up | 7, Gate E | — |
+| 14 | Apply Amendment 02 to PLAN/DECISIONS/CLAUDE | — | — |
+| 15 | RHP extractor rebuild + night batch  **[NIGHT]** | 14 | **Gate C2** |
+| 16 | Finalise and freeze `L_final_3pm` | 3, 14 | **Gate B** |
+| 17 | Aggregator-first financial backfill  **[NIGHT]** | 14 | — |
+| 18 | Anchor / lock-in backfill from Chittorgarh  **[NIGHT]** | 14 | — |
+| 19 | Productionise + go live | Gate B | — |
+
+**Night-batch policy (decision H9).** Any task expected to exceed ~30 minutes runs as an
+unattended night batch: chunked, checkpointed per item, committed at least every 10 items,
+resumable, and safe to kill at any moment. Night batches are scheduled **immediately after**
+the model-logic changes in each session, so they use the idle hours.
 
 When the next stage in order is blocked, move to the next unblocked one. **Stage 8 depends
 only on Stage 1 and needs no decision from the user — it is the fallback whenever a gate
@@ -421,62 +489,36 @@ years is unverified and may thin out.
 **Acceptance:** a coverage table by year. **Then stop at Gate F** — no bulk fetch until the
 user has seen the coverage.
 
-### Stage 4B — Day-wise subscription backfill  [large — chunked]  (after Gate F)
+### Stage 4B — Day-wise subscription backfill  ❌ CANCELLED 2026-10-01 (decision H1)
 
-Replaces the original Stage 4 (amendment section G).
+**Reason: there is no permitted source for day-wise subscription history.** Stage 4A
+established that Chittorgarh publishes the day-wise table only while an IPO is open and
+removes it at close — 0 of 50 pre-2026 pages carried it, and the 2026 anchor's own table
+disappeared between two consecutive days. Every other aggregator that keeps it is blocked
+(IPO Ji names Anthropic crawlers; InvestorGain, ipoindex.in and iporupee.com prohibit
+scraping). A backfill would spend hours retrieving nothing.
 
-**Scope:** every mainboard IPO in `master_with_symbols.csv` without an `exclude_reason`.
-SME stored separately.
+**Kept from this stage:** forward collection (B4) — the 19:00 job snapshots live
+subscription from the NSE and BSE official APIs for every open IPO, building a two-source,
+fully permitted history going forward. Every night of delay loses one IPO permanently.
+Anchor allocation and lock-in dates *are* archived on Chittorgarh and are backfilled by
+**Stage 18** instead.
 
-**Method:** for each IPO, resolve its Chittorgarh subscription page and extract the day-wise
-table (all categories, all days), plus anchor allocation and lock-in dates where present.
+### Stage 5 — Three decision-point models  ❌ CANCELLED 2026-10-01 (decision H1)
 
-**Capture per row:** ipo, isin, date, day_index, day_label (`day_1` … `day_before_final`,
-`final_day`), category, subscription_x, source, fetched_at.
-
-**Reconciliation:** the `final_day` Total must match the master dataset's Total within 5%.
-Mismatches → NULL with both values logged. Day-1 and day-2 values have **no second source**
-and are flagged `single_source_unverified`; they may be used for `L_day1` and `L_day2`, and
-those model cards must say so.
-
-**Forward collection (B4), independent of the backfill:** every evening, snapshot live
-subscription from the **NSE and BSE official APIs** for every open IPO. This builds a fully
-two-source, fully permitted history going forward.
-
-**Politeness and resumability:** ≥3 s between requests, per-IPO status in
-`data/daywise_progress.csv`, commit every 10 IPOs, resumable.
-
-**Acceptance:** coverage table by year; final-day reconciliation ≥95% on overlapping IPOs;
-every mismatch logged.
-
-### Stage 5 — Three decision-point models  (after Stage 3 and Stage 4B)
-
-Re-scoped by decisions C1–C4. **There is no forecaster.**
-
-1. Train and validate three models per target, each on only what is knowable at that moment:
-   `L_day1` (day-1 subscription), `L_day2` (day-before-final), `L_final_3pm` (final day
-   ~3pm). Features per Set A: `log1p(Total at that point)` + `log(issue size)`.
-2. Walk-forward with the same protocol as Stage 2; half-life selected on pooled AUC.
-3. Apply the section-5 threshold rule **separately to each model** (C5). They will land on
-   different thresholds.
-4. **`L_final_3pm` is approximated** until forward collection accumulates ~40 IPOs of real
-   3pm data (C3). Its model card must say **approximated, not measured**. If the
-   approximation cannot be made defensible, report that and fall back to the
-   final-subscription model, stating plainly that it overestimates at 3pm.
-5. Report each model's AUC and firing rate side by side (C4), so the value of waiting a day
-   is visible rather than assumed.
-
-**Acceptance:** three validated models per target with their own thresholds; the
-approximation in `L_final_3pm` documented; AUC and firing rate reported side by side.
+**Reason: two of the three models have no training data and never will** — see Stage 4B.
+`L_day1` and `L_day2` are cancelled together with the final-day forecaster, and their code
+paths are **deleted, not left dormant**. The surviving model, `L_final_3pm`, is finalised by
+**Stage 16**.
 
 ### Stage 6 — Productionize Model L → GATE B
 1. Final fit with the chosen features, half-life and thresholds. Save `model_l_v1.0`, plus
    its coefficients as JSON so the scoring formula is portable.
-2. `predict_live(inputs, subscription_as_of)` with `subscription_as_of` ∈ {`final_3pm`,
-   `day_before_final`, `day_1`}, dispatching to the matching decision-point model
-   (`L_final_3pm`, `L_day2`, `L_day1`). No forecasting: each model was trained on the data
-   available at its own moment. `L_day1` and `L_day2` outputs are labelled
-   `Informational — not a bid decision`; `L_final_3pm` is the production bidding model.
+2. `predict_live(total_subscription, issue_size_cr, qib=None, rii=None)` → `L_final_3pm`
+   only (H1). It returns the L1 and L2 **verdicts** against their calibrated thresholds and
+   the demand-profile label (H3), and per decision G2 prints the verdict and the threshold
+   met — **never the raw probability as a literal chance**. There is no
+   `subscription_as_of` dispatch and no forecaster.
 3. SME Model L in shadow mode; log to `sme_shadow_log.csv`.
 4. `predictions_log.csv` (append-only): IST timestamp, IPO, ISIN, segment, model version,
    inputs, subscription_as_of, probabilities, thresholds, verdict, veto flags.
@@ -502,9 +544,9 @@ approximation in `L_final_3pm` documented; AUC and firing rate reported side by 
 8. Write `MODEL_L_CARD.md` v1.0.
 9. Dry run on currently open IPOs, or the most recent week if none are open.
 
-**Gate B report:** dry-run output and model card summary for all three decision-point
-models, with each model's AUC, threshold and firing rate side by side. No GMP
-recommendation — GMP is display-only (B5, D1). Stop.
+**Gate B report:** dry-run output and the `L_final_3pm` model card — AUC, calibrated
+threshold, firing rate and hit rate for L1 and L2. No GMP recommendation — GMP is
+display-only (B5, D1). Stop.
 
 ### Stage 7 — Go live  (after Gate B)
 
@@ -528,7 +570,16 @@ Routines count against the account's daily run allowance — schedule nothing be
 
 **Acceptance:** the first scheduled run succeeds and writes a report.
 
-### Stage 8 — RHP extraction build + spot-check → GATE C
+### Stage 8 — RHP extraction build + spot-check → GATE C  ⚠️ SUPERSEDED by Stage 15
+
+Stage 8 ran on 2026-09-30 and reached **24% coverage on the headline financial fields**
+(`reports/STAGE_08_REPORT.md`). Gate C was **not** closed. Decisions H5 and H6 re-scope the
+work: the headline financials move to the aggregator, and RHP extraction refocuses on the
+H6 field list. Stage 15 replaces steps 3–7 below; the framework, provenance model and
+section-location machinery built here are kept.
+
+The original text follows for the record.
+
 1. Re-fetch the documents in the manifest; verify each SHA-256; delete them at the end.
 2. Locate sections from the table of contents, with a regex fallback on section headers.
    Process page ranges only.
@@ -653,6 +704,79 @@ always-sell after tax. Otherwise H stays information-only.
 3. Model H retraining quarterly (one-year label lag), champion/challenger as for L.
 4. Final model cards, `CLAUDE.md`, `README.md`, and `reports/STAGE_13_REPORT.md`: what's
    live, every schedule, and how to operate it.
+
+---
+
+### Stage 14 — Apply Amendment 02  ✅
+Merge `PLAN_AMENDMENT_02.md` into this file in place, record H1–H9 in `DECISIONS.md`, update
+`CLAUDE.md`'s current-state table and stage list, and mark Stages 4B and 5 CANCELLED in
+`PROGRESS.md` with the reason. Commit and push.
+
+### Stage 15 — RHP extractor rebuild + night batch  [NIGHT] → GATE C2
+
+**15a — rebuild the extractors (H5, H6).**
+1. Remove the headline financial fields from RHP extraction; they now come from the
+   aggregator with the RHP as verifier (H5).
+2. Refocus the extractors on the **H6 field list**.
+3. Fix the two failures found in Stage 8: **case-sensitive and layout-variant table
+   detection**, and **unit detection** (lakh / lac / lacs / million / mn / crore / cr).
+4. Keep every H7 safeguard: page number, exact source text line, document URL, SHA-256,
+   extractor version, unit withheld rather than assumed, doubtful values deleted not shipped.
+5. Iterate against the 8 PDFs in `data/verified_rhp_manifest.csv` until **H6-field coverage
+   reaches ≥60%**. Report coverage per field and per document. If a field cannot reach 60%
+   across vintages, **say so plainly rather than loosening the rules.**
+
+**15b — night batch.** Queue every mainboard IPO in `master_with_symbols.csv` with an
+`excess_1y` label and no `exclude_reason`. Per company: resolve from SEBI (BSE SME for SME)
+→ download → verify SHA-256 and `_verify_is_prospectus()` → extract H6 fields → reconcile →
+write to the database → **discard the PDF**.
+
+Batch rules: ≥3 s between SEBI requests; per-company status in `data/rhp_progress.csv`;
+commit every 5 companies; fully resumable; retry transient errors up to 3 times with
+backoff; after two identical non-transient failures on one company mark it failed and move
+on; **if 5 consecutive companies fail, stop the batch and report** — the site has probably
+changed. Check free disk space before starting and **stop cleanly below 2 GB**.
+
+**Gate C2 deliverable:** a fresh ~20-row spot-check drawn **only from H6 fields**, at least
+3 per company, columns
+`# | Company | Field | Extracted value | Page | Exact source text line | Document URL`.
+Save as `reports/SPOTCHECK_V2.xlsx` and `.csv` and print it in full in the session message —
+the user reviews on a phone. Then stop.
+
+### Stage 16 — Finalise and freeze `L_final_3pm` → GATE B  (H1, H2, H3)
+1. Retrain on **Set A only**, mainboard, 624 rows, excluding flagged rows. Logistic,
+   class_weight balanced, walk-forward validation, **isotonic calibration** (G1), recency
+   half-life by **pooled** AUC.
+2. **Delete** the `L_day1`, `L_day2` and forecaster code paths entirely — not dormant.
+3. Add the demand-profile display (H3): compute `retail_skew`, fit quartile cut-points **on
+   training data only**, expose it as a report label. It must not enter the model or alter
+   any verdict.
+4. `predict_live` takes final-day subscription and issue size and returns the L1 and L2
+   verdicts against their calibrated thresholds plus the demand-profile label, printing the
+   verdict and the threshold met, never the raw probability as a literal chance (G2).
+5. **Verify the nine rejected candidates of H2 reproduce on the current dataset**, so the
+   rejection is recorded as evidence rather than assertion. Report any that disagree.
+6. Refit on all eligible data, save `model_l_v1.0`, write `MODEL_L_CARD.md`.
+
+**Gate B:** stop for approval before anything goes live.
+
+### Stage 17 — Aggregator-first financial backfill  [NIGHT]  (H5)
+Runs only after Stage 15b is running or complete, so the two do not contend for the same
+sites. Re-read `chittorgarh.com/robots.txt` first and **abort if it no longer permits
+access** (B2); ≥3 s between requests; resumable; commit every 10 companies.
+
+Collect the H5 headline fields per company, reconcile against the master dataset under rule
+2 (5% tolerance, **both** values logged on mismatch), and flag anything single-sourced.
+**Acceptance:** coverage by year and reconciliation outcomes.
+
+### Stage 18 — Anchor / lock-in backfill from Chittorgarh  [NIGHT]
+Anchor investor names, allocations and lock-in expiry dates are archived on Chittorgarh IPO
+pages (~41% overall, ~60% for 2020 onward) and feed Model H's empty ownership block. Same
+rate limits and resumability as Stage 17. **Acceptance:** coverage by year.
+
+### Stage 19 — Productionise + go live
+Stages 6 and 7 as written above, with the single-model `predict_live` of H1.
+**Model H's scorecard does not start until extraction is trusted.**
 
 ---
 

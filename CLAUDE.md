@@ -16,8 +16,12 @@ branch. On the laptop, always `git pull` before running anything. Never end a tu
 uncommitted work. Chain git commands separately, not with `&&` (decision F2).
 
 `PLAN.md` is the single source of instructions; where this file and `PLAN.md` disagree,
-`PLAN.md` wins. `PLAN.md` was amended on 2026-09-30 — see `PLAN_AMENDMENT_01.md` and
-`DECISIONS.md`.
+`PLAN.md` wins. `PLAN.md` was amended on 2026-09-30 and again on **2026-10-01** — see
+`PLAN_AMENDMENT_01.md`, `PLAN_AMENDMENT_02.md` and `DECISIONS.md`.
+
+**Night-batch policy (H9):** any task expected to exceed ~30 minutes runs as an unattended
+night batch — chunked, checkpointed per item, committed at least every 10 items, resumable,
+and safe to kill at any moment. Start it as early in the session as possible.
 
 ## What this project is
 
@@ -25,10 +29,15 @@ A two-model system for Indian IPOs, plus the data pipeline that feeds it.
 
 - **Model L** — P(listing gain), decides whether to bid. Targets: L1 `listing_gain > 0`
   (required hit rate 90%) and L2 `listing_gain > 10` (80%). **Features: Set A** =
-  `log1p(Total)` + `log(issue size)` (decision A1). Pooled walk-forward AUC: **L1 0.8084,
-  L2 0.8809**. Three decision-point models — `L_day1`, `L_day2`, `L_final_3pm` — and **no
-  forecaster** (C1, C2). (The earlier "AUC 0.883" came from random K-fold; the 0.765/0.878
-  pair came from the mean of per-year AUCs. Both are superseded by pooled AUC.)
+  `log1p(Total)` + `log(issue size)` — **frozen** (A1, H2); nine literature candidates were
+  tested and all nine rejected, so do not re-test them without new evidence. Pooled
+  walk-forward AUC: **L1 0.8084, L2 0.8809**. **One model only: `L_final_3pm`** (H1) —
+  `L_day1`, `L_day2` and the forecaster are cancelled and their code paths deleted, because
+  no permitted source publishes day-wise subscription history. Thresholds come from isotonic
+  calibration (G1), and reports print **the verdict and the threshold met, never the raw
+  probability as a literal chance** (G2). `retail_skew` is a **displayed** demand-profile
+  label, never a feature (H3). (The earlier "AUC 0.883" came from random K-fold; the
+  0.765/0.878 pair came from the mean of per-year AUCs. Both are superseded by pooled AUC.)
 - **Model H** — post-listing, decides how much of an allotment to keep. Target
   `excess_1y = IPO_return(listing close→+365d) − Nifty 50 TRI return(same window)`,
   label 1 if > 0; secondary `excess_3y`. Baseline walk-forward AUC 0.525 (1y), 0.562 (3y).
@@ -61,6 +70,16 @@ CAGR is 0.218. Never merge them.
    models are superseded.
 6. **Separate models for SME and mainboard.** Their coefficients differ in sign on market
    hotness and band width. Pooling is wrong.
+7. **Aggregator-first for headline financials (H5).** Do not extract from the RHP anything
+   an aggregator already publishes — issue size, fresh/OFS, price band, P/E, P/B, EPS, RoNW,
+   NAV, revenue, PAT, net worth, borrowings. Those come from the aggregator and the master,
+   with the RHP as the verifying second source. RHP extraction covers only the **H6** list:
+   what nothing else publishes.
+8. **Never ingest an AI-generated summary table as data (H8).** One was reviewed and
+   rejected — two unrelated companies with identical net worth, a "100% OFS" issue also
+   claiming capex use of proceeds, six values marked approximate, no page citations. Use
+   such tables to prompt a human check, never as a source. `ipotrack.in`'s subscription
+   article is **fabricated** and blacklisted.
 
 ## Data loading contract
 
@@ -72,7 +91,7 @@ CAGR is 0.218. Never merge them.
 - `python check_env.py` checks this contract, the packages and the network. It must
   pass before any overnight run.
 
-## Current state (updated 2026-09-30 after PLAN Amendment 01)
+## Current state (updated 2026-10-01 after PLAN Amendment 02)
 
 `PROGRESS.md` is authoritative for stage status; this table is the orientation summary.
 
@@ -86,13 +105,18 @@ CAGR is 0.218. Never merge them.
 | **Stage 0** | ✅ DONE — repo on GitHub, acceptance verified against the remote |
 | **Stage 1** | ✅ DONE on the laptop — `check_env.py` 13/13, `stage1_env_check.py` all pass, 11/11 domains. **Linux/cloud `pip install` still unverified** |
 | **Stage 2 / Gate A** | ✅ CLOSED 2026-09-30 — **Set A** for both targets (A1); Set C standing challenger (A2); Sets B/D rejected but categories still displayed (A3) |
-| Stage 3 | calibration curve + final thresholds — unblocked by Gate A |
-| Stage 4A → Gate F | Chittorgarh 20-IPO coverage sample, then stop for a decision (B3) |
-| Stage 4B | day-wise backfill after Gate F; day-1/day-2 flagged `single_source_unverified` |
-| Stage 5 | three decision-point models, **no forecaster** (C1, C2); `L_final_3pm` approximated until ~40 real 3pm samples (C3) |
+| **Stage 3** | ✅ DONE — isotonic calibration adopted (G1, G2), independently verified 14/14 by `verify_stage3.py`. Fire iff calibrated p ≥ 0.90 (L1) / ≥ 0.80 (L2) |
+| **Stage 4A / Gate F2** | ✅ CLOSED 2026-10-01 by H1. The ID walk solved company→Chittorgarh-id, but the day-wise table is **transient**: 0 of 50 pre-2026 pages carry it |
+| **Stage 4B** | ❌ **CANCELLED** (H1) — no permitted source for day-wise history |
+| **Stage 5** | ❌ **CANCELLED** (H1) — `L_day1`/`L_day2`/forecaster have no training data |
+| **Stage 14** | ✅ DONE — Amendment 02 applied |
+| **Stage 15** | RHP extractor rebuild on the H6 fields + night batch → **Gate C2**, target ≥60% coverage |
+| **Stage 16** | Finalise and freeze `L_final_3pm` → **Gate B** |
+| **Stage 17 / 18** | Night backfills: aggregator headline financials (H5); anchor and lock-in from Chittorgarh |
+| **Stage 19** | Productionise + go live (absorbs Stages 6 and 7) |
 | Model H | `models/model_h.py` baseline only: AUC 0.525 (1y), 0.562 (3y). RHP blocks are placeholders |
 | RHP fetcher | SEBI + BSE SME resolvers, 5/5 verified; `data/verified_rhp_manifest.csv` has all 8 PDFs with URL + SHA-256 |
-| RHP extraction | Stage 8 — depends only on Stage 1, needs no user decision, so it is the fallback when a gate blocks everything else |
+| RHP extraction | Stage 8 reached 24% on the headline financials and did **not** close Gate C; superseded by Stage 15, which measures coverage on the H6 fields instead. Framework (`extract/`), provenance model and TOC-driven section location with **measured** page offsets are kept |
 | GMP | **not a model feature and never fetched** (B5, D1). Display-only field in live reports, logged for later evaluation (D2) |
 | Live schedule | score 15:00, notify 15:30, snapshot 19:00, ingest Mon & Thu 08:00, retrain monthly — broker cutoff 4:00 PM (E1) |
 
@@ -107,7 +131,7 @@ scikit-learn); import `Logit` from `statsmodels.discrete.discrete_model`, never
 pip install -r requirements.txt   # Python >= 3.12
 python check_env.py               # must pass first
 python run_overnight.py           # symbols -> 1y/3y targets -> price history (resumable)
-python models/model_l.py          # Model L fits + cards
+python models/model_l.py          # L_final_3pm fit + card (the only Model L)
 python models/model_h.py          # Model H baseline + cards
 ```
 What to build next is decided by `PLAN.md` sections 6–7 and `PROGRESS.md`, not by this file.
