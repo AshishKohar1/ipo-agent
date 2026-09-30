@@ -1,0 +1,49 @@
+company,doc_type,extractor,status,n_ok,n_ambiguous,n_not_found
+Syngene International Ltd,RHP,objects,ran,2,0.0,3.0
+Syngene International Ltd,RHP,basis,ran,3,0.0,3.0
+Syngene International Ltd,RHP,financials,ran,1,0.0,7.0
+Syngene International Ltd,RHP,capital,ran,1,0.0,4.0
+Syngene International Ltd,RHP,litigation,ran,0,0.0,4.0
+Syngene International Ltd,RHP,rpt,ran,0,,
+Hyundai Motor India Limited,RHP,objects,ran,2,0.0,3.0
+Hyundai Motor India Limited,RHP,basis,ran,1,0.0,5.0
+Hyundai Motor India Limited,RHP,financials,ran,0,0.0,8.0
+Hyundai Motor India Limited,RHP,capital,ran,0,0.0,5.0
+Hyundai Motor India Limited,RHP,litigation,ran,0,0.0,4.0
+Hyundai Motor India Limited,RHP,rpt,ran,0,,
+CapitalNumbers Infotech Ltd.,PROSPECTUS,objects,ran,4,0.0,1.0
+CapitalNumbers Infotech Ltd.,PROSPECTUS,basis,ran,0,0.0,6.0
+CapitalNumbers Infotech Ltd.,PROSPECTUS,financials,ran,0,0.0,8.0
+CapitalNumbers Infotech Ltd.,PROSPECTUS,capital,ran,0,0.0,5.0
+CapitalNumbers Infotech Ltd.,PROSPECTUS,litigation,ran,0,0.0,4.0
+CapitalNumbers Infotech Ltd.,PROSPECTUS,rpt,ran,0,,
+Jupiter Life Line Limited,RHP,objects,ran,3,0.0,2.0
+Jupiter Life Line Limited,RHP,basis,ran,8,0.0,1.0
+Jupiter Life Line Limited,RHP,financials,ran,0,7.0,1.0
+Jupiter Life Line Limited,RHP,capital,ran,1,0.0,4.0
+Jupiter Life Line Limited,RHP,litigation,ran,0,0.0,4.0
+Jupiter Life Line Limited,RHP,rpt,ran,0,,
+TD Power Systems Ltd,PROSPECTUS,objects,ran,3,0.0,2.0
+TD Power Systems Ltd,PROSPECTUS,basis,ran,1,0.0,5.0
+TD Power Systems Ltd,PROSPECTUS,financials,ran,0,0.0,8.0
+TD Power Systems Ltd,PROSPECTUS,capital,ran,0,0.0,5.0
+TD Power Systems Ltd,PROSPECTUS,litigation,ran,0,0.0,4.0
+TD Power Systems Ltd,PROSPECTUS,rpt,ran,0,,
+Jupiter Life Line Limited,PROSPECTUS,objects,ran,4,0.0,1.0
+Jupiter Life Line Limited,PROSPECTUS,basis,ran,8,0.0,1.0
+Jupiter Life Line Limited,PROSPECTUS,financials,ran,0,7.0,1.0
+Jupiter Life Line Limited,PROSPECTUS,capital,ran,1,0.0,4.0
+Jupiter Life Line Limited,PROSPECTUS,litigation,ran,0,0.0,4.0
+Jupiter Life Line Limited,PROSPECTUS,rpt,ran,1,,
+Syngene International Ltd,PROSPECTUS,objects,ran,3,0.0,2.0
+Syngene International Ltd,PROSPECTUS,basis,ran,4,0.0,2.0
+Syngene International Ltd,PROSPECTUS,financials,ran,1,0.0,7.0
+Syngene International Ltd,PROSPECTUS,capital,ran,1,0.0,4.0
+Syngene International Ltd,PROSPECTUS,litigation,ran,0,0.0,4.0
+Syngene International Ltd,PROSPECTUS,rpt,ran,0,,
+Hyundai Motor India Limited,PROSPECTUS,objects,ran,4,0.0,1.0
+Hyundai Motor India Limited,PROSPECTUS,basis,ran,1,0.0,5.0
+Hyundai Motor India Limited,PROSPECTUS,financials,ran,0,0.0,8.0
+Hyundai Motor India Limited,PROSPECTUS,capital,ran,0,0.0,5.0
+Hyundai Motor India Limited,PROSPECTUS,litigation,ran,0,0.0,4.0
+Hyundai Motor India Limited,PROSPECTUS,rpt,ran,0,,
