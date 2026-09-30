@@ -1,28 +1,32 @@
 # Progress
 
-**Working branch: `work`** (on GitHub at github.com/AshishKohar1/ipo-agent). This is the
-source of truth. Every session: `git fetch`, check out `work`, `git pull`.
+**Working branch: `main`** (github.com/AshishKohar1/ipo-agent) — a single branch, no `work`
+(decision F1). Completed stages are marked with a tag, `stage-NN-done`. Every session:
+`git fetch`, then `git pull` on `main`. Chain git commands separately, not with `&&` (F2).
+
+Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-30).
 
 ## Summary (updated at the end of every session)
-- **Finished:** Stage 0 (closed against `origin/main`); Stage 1 (laptop); Stage 2 (Sets A-D x L1/L2 -> Gate A)
-- **In progress:** none. Stage 8 (RHP extraction build) is the next unblocked stage and needs no decision
-- **Open gates:** **GATE A** - which Model L feature set (recommend Set A both targets); **STAGE 4 SOURCE DECISION** - 2 of 3 named sources unusable under rule 5
-- **Next stage:** Stage 8 (unblocked, SEBI + BSE SME both permitted and verified 5/5)
-- **Blocked:** Stage 3 + 5 (Gate A); Stage 4 (source decision). Caveat: Stage 1's Linux/`pip install` half is unverified - the first cloud session must re-run check_env.py and stage1_env_check.py
+- **Finished:** Stage 0, Stage 1 (laptop), Stage 2 → **Gate A closed** (Set A for both targets)
+- **In progress:** Stage 4A (Chittorgarh coverage sample) → ends at **Gate F**; Stage 3 (calibration) in parallel
+- **Open gates:** **Gate F** once 4A reports — no bulk fetch of 652 pages until the user sees the coverage table
+- **Next stage:** Stage 3 (calibration + final thresholds), then Stage 8 (RHP extraction), which needs no decision
+- **Blocked:** Stage 4B (Gate F); Stage 5 (needs 3 + 4B). Caveat: Stage 1's Linux/`pip install` half is unverified — the first cloud session must re-run `check_env.py` and `stage1_env_check.py`
 
 ## Stages
 
 | Stage | Title | Depends on | Status | Started (IST) | Finished (IST) | Notes |
 |---|---|---|---|---|---|---|
-| 0 | Repository setup (laptop) | — | DONE | 2026-09-28 23:01 | 2026-09-29 | acceptance verified against `origin/main`; `work` branch created and pushed — see reports/STAGE_00_CLOSURE.md |
-| 1 | Cloud environment check | 0 + cloud setup | DONE | 2026-09-29 21:55 | 2026-09-29 22:10 | ran on the LAPTOP: check_env 13/13, 11/11 domains, integrity + estimator + SHA round-trip all pass. Linux/`pip install` half UNVERIFIED - first cloud session must re-run check_env.py and stage1_env_check.py |
-| 2 | Model L feature comparison | 1 | AWAITING_USER | 2026-09-29 22:10 | 2026-09-29 22:40 | Gate A open - see reports/STAGE_02_REPORT.md. Sets A-D x L1/L2 on 616 identical rows |
-| 3 | Calibration curve + final thresholds | Gate A | NOT_STARTED | | | |
-| 4 | Day-wise subscription + GMP history | 1 | AWAITING_USER | 2026-09-29 22:45 | | BLOCKED on a source decision: IPO Ji disallows Anthropic bulk collection by name, InvestorGain signals ai-train=no, leaving 1 usable source vs rule 2's 2. Nothing scraped - see reports/STAGE_04_REPORT.md |
-| 5 | Final-day forecaster + GMP test | Gate A, 4 | NOT_STARTED | | | |
+| 0 | Repository setup (laptop) | — | DONE | 2026-09-28 23:01 | 2026-09-29 | acceptance verified against the remote — `reports/STAGE_00_CLOSURE.md`. Tag `stage-00-done` |
+| 1 | Environment check | 0 | DONE | 2026-09-29 21:55 | 2026-09-29 22:10 | laptop: `check_env.py` 13/13, `stage1_env_check.py` all pass, 11/11 domains. **Linux/`pip install` half UNVERIFIED.** Tag `stage-01-done` |
+| 2 | Model L feature comparison | 1 | DONE | 2026-09-29 22:10 | 2026-09-30 | **Gate A closed by decision A1: Set A for both L1 and L2.** Sets A–D × L1/L2 on 616 identical rows; pooled AUC L1 0.8084 / L2 0.8809. `reports/STAGE_02_REPORT.md`. Tag `stage-02-done` |
+| 3 | Calibration curve + final thresholds | Gate A ✅ | IN_PROGRESS | 2026-09-30 | | isotonic + Platt in numpy, validated out-of-time; threshold rule C5 |
+| 4A | Chittorgarh 20-IPO coverage sample | 1 | IN_PROGRESS | 2026-09-30 | | ends at **Gate F**; ≥3 s per request, robots.txt re-read first (B2, B3) |
+| 4B | Day-wise subscription backfill (chunked) | Gate F | NOT_STARTED | | | day-1/day-2 flagged `single_source_unverified`; forward NSE+BSE snapshots per B4 |
+| 5 | Three decision-point models (`L_day1`, `L_day2`, `L_final_3pm`) | 3, 4B | NOT_STARTED | | | **no forecaster** (C1, C2); `L_final_3pm` approximated until ~40 real 3pm samples (C3) |
 | 6 | Productionize Model L | 3, 5 | NOT_STARTED | | | ends in Gate B |
-| 7 | Go live (Model L) | Gate B | NOT_STARTED | | | |
-| 8 | RHP extraction build + spot-check | 1 | NOT_STARTED | | | ends in Gate C |
+| 7 | Go live (Model L) | Gate B | NOT_STARTED | | | schedule per E1; broker cutoff 4:00 PM |
+| 8 | RHP extraction build + spot-check | 1 | NOT_STARTED | | | ends in Gate C. **Needs no user decision — the fallback when gates block everything else** |
 | 9 | RHP batch pilot (10 companies) | Gate C | NOT_STARTED | | | ends in Gate D |
 | 10 | RHP full batch (chunked) | Gate D | NOT_STARTED | | | |
 | 11 | Model H scorecard | 10 | NOT_STARTED | | | |
@@ -33,7 +37,8 @@ source of truth. Every session: `git fetch`, check out `work`, `git pull`.
 
 | Gate | After stage | Status | Decision (verbatim in DECISIONS.md) |
 |---|---|---|---|
-| A | 2 | **AWAITING_USER** (opened 2026-09-29) | |
+| A | 2 | ✅ **CLOSED** 2026-09-30 | A1: Model L uses **Set A** for both L1 and L2 (`log1p(Total)` + `log(issue size)`). A2: Set C retained as a standing challenger, promoted only by champion/challenger. A3: Sets B and D rejected; category figures still displayed in live reports |
+| F | 4A | — (opens when 4A reports) | Whether to bulk-fetch Chittorgarh day-wise data for all mainboard IPOs, given the coverage sample |
 | B | 6 | — | |
 | C | 8 | — | |
 | D | 9 | — | |

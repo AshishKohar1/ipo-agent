@@ -1,8 +1,23 @@
 # Stage 2 — Model L feature comparison → GATE A
 
-**Status:** AWAITING_USER (Gate A). All four candidate sets were fitted for both targets on
-an identical row set, with walk-forward validation, pooled-AUC half-life selection and the
-section-5 threshold rule. A decision is needed before Stage 3.
+**Status:** DONE. **Gate A closed 2026-09-30 by decision A1.**
+
+> **Gate A decision (verbatim, `PLAN_AMENDMENT_01.md`):**
+> **A1.** Model L uses **Set A** for both L1 and L2: `log1p(Total subscription)` + `log(issue size)`.
+> **A2.** **Set C** (Set A + market IPO heat) is retained as a **standing challenger** in monthly
+> retraining. It is statistically tied with Set A; promote it only if it wins on the
+> champion/challenger rule, never by hand.
+> **A3.** Set B and Set D (the QIB/HNI/RII split) are **rejected**. The paired bootstrap showed
+> Set B is reliably beaten on both targets. The three category figures are still **displayed**
+> in every live report for the user's own judgement — they are just not model inputs.
+
+This matches the recommendation below. Consequences now in force: Stage 3 uses Set A's
+out-of-fold predictions (`reports/oof/stage2_l1_setA.csv`, `stage2_l2_setA.csv`); Stage 5's
+three decision-point models use Set A features; Set C stays in `market_heat.py` for the
+monthly challenger; the QIB/HNI/RII figures are display-only in live reports.
+
+All four candidate sets were fitted for both targets on an identical row set, with
+walk-forward validation, pooled-AUC half-life selection and the section-5 threshold rule.
 
 ## What was done
 - Built `market_heat.py`: mean listing gain of mainboard IPOs that **listed** before this IPO's bidding opened (30d → 60d → expanding median), leak-free by construction.
@@ -98,7 +113,7 @@ Two findings worth stating plainly:
 
 ---
 
-# GATE A — decision needed
+# GATE A — CLOSED 2026-09-30 (decision A1: Set A for both targets)
 
 ## The decision
 **Which feature set does Model L use for L1 and L2?** Stage 3 (calibration and final
@@ -139,7 +154,6 @@ over A is **not** statistically established (95% CI −0.010 to +0.020), and hea
 a regime-dependent one that could weaken. For L2, heat slightly hurts and tightens the
 threshold to 0.91, so L2 should stay on Set A either way.
 
-Reply in the form:
-- `Gate A decision: Set A for both targets`, or
-- `Gate A decision: Set C for L1, Set A for L2`, or
-- any other choice, and I will record it verbatim in `DECISIONS.md` and continue.
+**Answered.** Decision A1 selected **Set A for both targets**, with Set C retained as a
+standing challenger (A2) rather than adopted for L1. Recorded verbatim in `DECISIONS.md`
+under 2026-09-30.
