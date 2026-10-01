@@ -199,3 +199,50 @@ decision the user has twice frozen, so it is flagged for ratification rather tha
 settled.**
 
 Evidence: `reports/stage16b_half_life.json`, produced by `stage16b_half_life.py`.
+
+## 2026-10-02 — H12 and H13 (user ratifications)
+
+| Date (IST) | Gate / stage | Decision (verbatim) | Recorded by |
+|---|---|---|---|
+| 2026-10-02 | **Gate B** / Stage 16 | **H12 — I ratify H11. Model L is a one-variable model: `log1p(Total subscription)`. Issue size is dropped.** | User |
+| 2026-10-02 | **Gate C2** / Stage 15 | **H13 — Gate C2 closed: keep all 30 H6 fields, prune only once full coverage is visible.** | User |
+
+### H12 — the user's supporting evidence, recorded verbatim
+
+The raw correlation between log issue size and listing gain is **negative in every era**:
+
+| Era | Correlation |
+|---|---|
+| 2010–17 | −0.045 |
+| 2018–21 | −0.227 |
+| 2022–23 | −0.081 |
+| 2024–26 | −0.069 |
+
+"The positive coefficient was an artefact of the 2-year half-life placing **72.5% of weight
+on 2024–2026**, where four large IPOs (Bajaj Housing +114%, Tata Technologies +140%, Premier
+Energies +120%, LG Electronics +50%) dominated."
+
+This is a better diagnosis than the one H11 recorded. H11 established only that the sign was
+*unstable* across half-lives and therefore indefensible; it did not identify the mechanism.
+The user's era-by-era correlations show the relationship is **consistently negative in the
+raw data**, and the recency weighting did not reveal a genuine regime change — it concentrated
+weight onto a handful of large, exceptionally successful recent issues. The direction of
+the full-sample coefficient (−0.137 L1, −0.058 L2) was right all along; the 2-year fit was
+measuring four companies.
+
+**Consequence for the model card.** `MODEL_L_CARD.md` says the sign "was set by the recency
+knob rather than by the data". That is true but understates it: the correct statement is that
+the data says negative in every era and the knob manufactured a positive. The card is
+updated accordingly.
+
+**H12 closes Gate B.** `model_l_v1.0` as built and productionised in Stage 19 is the ratified
+model: `log1p(Total)` alone, no recency weighting, isotonic calibration, thresholds at the
+required hit rates. Set A remains a standing challenger under A2's champion/challenger rule
+and is reported, never promoted by hand (`retrain_l.py`).
+
+### H13 — what it changes
+
+Nothing is pruned. `missing_reason` (H10) is what makes a low field interpretable, and a
+field is only a candidate for removal once the **full** queue has been attempted. The
+scorecard excludes a field by reading `low_variance` / coverage, not by the field being
+absent from the dataset.
