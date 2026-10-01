@@ -11,7 +11,9 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 - **Finished:** Stage 0, Stage 1 (laptop), Stage 2 → **Gate A closed** (Set A), Stage 3 → **isotonic calibration adopted** and independently verified, Stage 4A → Gate F2, Stage 14 (Amendment 02 applied)
 - **In progress:** Stage 15b night batch (485 companies, resumable) and Stages 17+18 Chittorgarh sweep (2,861 ids) — both running; the sweep was restarted 05:24 after dying on a malformed cell
 - **Gate C2:** ✅ **CLOSED 2026-10-01** — keep every field; `missing_reason` added (H10)
-- **Gate B:** **AWAITING RATIFICATION.** Model L v1.0 is built, frozen and productionised, but **H11 supersedes A1 and H2's frozen Set A** — that is the one item needing your word. Gate F2 closed by H1
+- **Gate B:** ✅ **CLOSED 2026-10-02 by H12** — Model L is a one-variable model, `log1p(Total)`; the user's era-by-era correlations confirm issue size is negative throughout and the 2-year half-life was measuring four companies
+- **Gate C2:** ✅ **CLOSED by H13** — keep all 30 H6 fields; `missing_reason` (H10) is what makes a low field interpretable
+- **Model H data prep:** 10 fields scorecard-ready, 14 collect-only, 6 to drop (`reports/COVERAGE_BEFORE_AFTER.md`). Scorecard NOT started, per instruction
 - **Morning report:** `reports/NIGHT_RUN_REPORT.md`
 - **Cancelled:** Stage 4B and Stage 5 — no permitted source for day-wise subscription history (H1)
 - **Caveat:** Stage 1's Linux/`pip install` half is still unverified — every session so far has run on the Windows laptop, so the first genuine cloud session must re-run `check_env.py` and `stage1_env_check.py`

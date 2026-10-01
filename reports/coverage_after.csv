@@ -1,0 +1,31 @@
+field,n_cells,extracted,coverage_pct,distinct_values,majority_share_pct,ok,ambiguous,not_applicable,not_present_on_page,present_but_unparsed,section_not_found,document_unavailable,unit_undetermined,verdict,why
+dual_class_flag,284,250,88.0,2,92.8,232,18,0,0,0,0,34,0,collect-only,93% of extracted values are the same — coverage 88% is real but the field barely discriminates
+litigation_criminal_count,284,124,43.7,12,83.9,104,20,0,126,0,0,34,0,collect-only,"44% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+customer_concentration_top10_pct,284,96,33.8,83,7.3,61,35,0,154,0,0,34,0,collect-only,"34% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+independent_directors_n,284,95,33.5,6,38.9,95,0,0,155,0,0,34,0,collect-only,"33% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+gcp_pct_proceeds,284,95,33.5,52,9.5,0,95,63,155,0,0,34,0,collect-only,"33% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+kmp_remuneration_cr,284,87,30.6,47,32.2,28,59,0,163,0,0,34,0,collect-only,"31% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+rpt_pct_revenue,284,68,23.9,63,2.9,40,28,0,182,0,0,34,0,collect-only,"24% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+board_independence_ratio,284,60,21.1,16,58.3,60,0,0,2,188,0,34,0,collect-only,"21% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+rpt_amount_cr,284,57,20.1,56,3.5,57,0,0,193,0,0,34,0,collect-only,"20% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+litigation_statutory_count,284,49,17.3,10,75.5,37,12,0,201,0,0,34,0,collect-only,"17% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+customer_concentration_top5_pct,284,40,14.1,39,5.0,18,22,0,210,0,0,34,0,collect-only,"14% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+litigation_tax_count,284,39,13.7,9,53.8,21,18,0,211,0,0,34,0,collect-only,"14% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+anchor_portion_shares,284,32,11.3,30,6.2,32,0,0,218,0,0,34,0,collect-only,"11% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+promoter_holding_post_pct,284,31,10.9,6,77.4,31,0,0,219,0,0,34,0,collect-only,"11% coverage is below the 50% floor; variance is fine, so it becomes useful if coverage improves"
+anchor_mf_reserved_pct,284,247,87.0,1,100.0,0,247,0,3,0,0,34,0,drop,"every one of the 247 extracted values is identical (33.33) — it cannot separate any two companies, whatever its coverage"
+geographic_concentration_flag,284,229,80.6,1,100.0,229,0,0,21,0,0,34,0,drop,"every one of the 229 extracted values is identical (1.0) — it cannot separate any two companies, whatever its coverage"
+licence_dependence_flag,284,167,58.8,1,100.0,167,0,0,83,0,0,34,0,drop,"every one of the 167 extracted values is identical (1.0) — it cannot separate any two companies, whatever its coverage"
+pre_ipo_placement_amount_cr,284,17,6.0,15,11.8,17,0,0,233,0,0,34,0,drop,6% coverage; too sparse to impute and too sparse to weight
+promoter_experience_years,284,11,3.9,10,18.2,0,11,213,213,0,26,34,0,drop,4% coverage; too sparse to impute and too sparse to weight
+litigation_aggregate_amount_cr,284,7,2.5,7,14.3,7,0,0,146,97,0,34,0,drop,2% coverage; too sparse to impute and too sparse to weight
+auditor_emphasis_flag,284,250,88.0,2,51.6,121,129,0,0,0,0,34,0,scorecard,"88% coverage, 2 distinct values, majority share 52%"
+litigation_criminal_promoters_directors,284,245,86.3,31,81.6,197,48,0,5,0,0,34,0,scorecard,"86% coverage, 31 distinct values, majority share 82%"
+promoter_lockin_months,284,241,84.9,4,51.0,229,12,0,9,0,0,34,0,scorecard,"85% coverage, 4 distinct values, majority share 51%"
+auditor_qualification_flag,284,232,81.7,2,87.5,232,0,0,18,0,0,34,0,scorecard,"82% coverage, 2 distinct values, majority share 88%"
+esop_exists_flag,284,222,78.2,2,62.6,222,0,0,28,0,0,34,0,scorecard,"78% coverage, 2 distinct values, majority share 63%"
+pre_ipo_placement_flag,284,193,68.0,2,72.0,156,37,0,57,0,0,34,0,scorecard,"68% coverage, 2 distinct values, majority share 72%"
+uses_of_proceeds_n,284,183,64.4,8,24.6,183,0,63,67,0,0,34,0,scorecard,"64% coverage, 8 distinct values, majority share 25%"
+board_size_n,284,181,63.7,13,33.1,145,36,0,0,69,0,34,0,scorecard,"64% coverage, 13 distinct values, majority share 33%"
+promoter_holding_pre_pct,284,163,57.4,140,8.6,163,0,0,87,0,0,34,0,scorecard,"57% coverage, 140 distinct values, majority share 9%"
+contingent_liabilities_cr,284,145,51.1,143,1.4,24,121,0,0,105,0,34,0,scorecard,"51% coverage, 143 distinct values, majority share 1%"

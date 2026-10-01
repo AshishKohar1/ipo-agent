@@ -104,3 +104,41 @@ robots.txt: PERMITTED — permitted; User-agent:* disallows ['/ipo/ipo_discussio
   [300/1243] id 2167: Valencia India                       size=49.0 sub=None anchor=None
   [325/1243] id 2192: Tkw Supply Chain International       size=None sub=None anchor=None
   [350/1243] id 2217: Sugs Lloyd                           size=86.0 sub=None anchor=4.99
+  [375/1243] id 2242: Gallard Steel                        size=38.0 sub=None anchor=10.64
+  [400/1243] id 2267: Cookwell Domestic Appliances         size=None sub=None anchor=None
+  [425/1243] id 2292: Jyoti Global Plast                   size=35.0 sub=None anchor=10.06
+  [450/1243] id 2317: Tata Capital                         size=15512.0 sub=None anchor=4641.83
+  [475/1243] id 2342: Vyara Tiles                          size=None sub=None anchor=None
+  [500/1243] id 2367: Liotech Industries                   size=36.0 sub=None anchor=None
+  [525/1243] id 2392: Silky Overseas                       size=31.0 sub=None anchor=7.68
+  [550/1243] id 2417: Kiaasa Retail                        size=70.0 sub=None anchor=None
+  [575/1243] id 2442: Tea Post                             size=None sub=None anchor=None
+  [600/1243] id 2467: Adon Agro Commodities                size=44.0 sub=None anchor=None
+  [625/1243] id 2492: Juniper Green Energy                 size=1800.0 sub=None anchor=539.4
+  [650/1243] id 2517: ABH Healthcare                       size=35.0 sub=None anchor=None
+  [675/1243] id 2542: Indira IVF Hospital                  size=None sub=None anchor=None
+  [700/1243] id 2567: Natrinai Ventures                    size=None sub=None anchor=None
+  [725/1243] id 2592: Knack Packaging                      size=439.0 sub=None anchor=131.25
+  [750/1243] id 2617: Digilogic Systems                    size=81.0 sub=None anchor=23.08
+  [775/1243] id 2642: Deon Energy                          size=150.0 sub=None anchor=None
+  [800/1243] id 2667: IPOs in India: 2026                  size=None sub=None anchor=None
+  [825/1243] id 2692: Rays Power Infra                     size=1150.0 sub=None anchor=None
+  [850/1243] id 2717: Sobo Films Holdings                  size=None sub=None anchor=None
+  [875/1243] id 2742: ATS Techno                           size=None sub=None anchor=None
+  [900/1243] id 2767: Raksan Transformers                  size=150.0 sub=47.43 anchor=42.86
+  [925/1243] id 2792: ENS Enterprises                      size=33.0 sub=None anchor=9.44
+  [950/1243] id 2817: Aureate Tradde                       size=27.0 sub=None anchor=None
+  [975/1243] id 2842: Craftech Paper Mills                 size=None sub=None anchor=None
+  [1000/1243] id 2867: Fusion Klassroom Edutech             size=39.0 sub=None anchor=11.08
+  [1025/1243] id 2892: K Sera Sera Productions FPO Detail   size=34.0 sub=None anchor=None
+  [1050/1243] id 2917: Plethico Pharmaceuticals             size=110.0 sub=None anchor=None
+  [1075/1243] id 2942: Kopybright India                     size=None sub=None anchor=None
+  [1100/1243] id 2967: Pioneer Fil-Med                      size=500.0 sub=None anchor=None
+  [1125/1243] id 2992: Sheetal Medicare Products            size=None sub=None anchor=None
+  [1150/1243] id 3017: Gokaldas Exports                     size=133.0 sub=None anchor=None
+  [1175/1243] id 3042: Vivimed Labs                         size=18.0 sub=None anchor=None
+  [1200/1243] id 3067: Compulink Systems                    size=27.0 sub=None anchor=None
+  [1225/1243] id 3092: Addsoft Technologies                 size=None sub=None anchor=None
+
+harvested this run: 1243
+total rows 2861 | named 2861 | issue size 2537

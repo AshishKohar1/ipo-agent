@@ -124,3 +124,279 @@ queue 485 | settled 1 | to do 484 | free disk 152.7 GB
   [  96/484] Unicommerce eSolutions Limited       done             ok=12 amb= 3 miss=12   145s
   [  97/484] Ola Electric Mobility Limited        done             ok=13 amb= 4 miss=12   243s
   [  98/484] Ceigall India Limited                done             ok=16 amb= 2 miss=11   149s
+  [  99/484] Akums Drugs and Pharmaceuticals Li   done             ok=13 amb= 5 miss=11   186s
+  [ 100/484] Sanstar Limited                      done             ok=13 amb= 1 miss=15   142s
+    [checkpoint committed and pushed at 101 companies]
+  [ 101/484] Emcure Pharmaceuticals Limited       done             ok=11 amb= 4 miss=14   178s
+  [ 102/484] Bansal Wire Industries Limited       done             ok=12 amb= 2 miss=15   154s
+  [ 103/484] Vraj Iron & Steel Limited            done             ok=13 amb= 4 miss=13   119s
+  [ 104/484] Allied Blenders and Distillers Lim   source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Allied Blenders and', 'Allied Blenders', 'Allied']
+  [ 105/484] Stanley Lifestyles Limited           done             ok=13 amb= 5 miss=11   170s
+    [checkpoint committed and pushed at 106 companies]
+  [ 106/484] Bharti Hexacom Ltd                   done             ok= 9 amb= 3 miss=15   187s
+  [ 107/484] SRM Contractors Ltd                  done             ok=11 amb= 3 miss=15   108s
+  [ 108/484] Krystal Integrated Services Ltd      done             ok=11 amb= 5 miss=14   150s
+  [ 109/484] Popular Vehicles & Services Ltd      done             ok=11 amb= 4 miss=14   151s
+  [ 110/484] Gopal Snacks Ltd                     done             ok=13 amb= 3 miss=11   147s
+    [checkpoint committed and pushed at 111 companies]
+  [ 111/484] J.G.Chemicals Ltd                    done             ok=11 amb= 4 miss=14   121s
+  [ 112/484] R K Swamy Ltd                        done             ok=11 amb= 7 miss=11   144s
+  [ 113/484] Mukka Proteins Ltd                   done             ok=13 amb= 5 miss=11   163s
+  [ 114/484] Exicom Tele-Systems Ltd              done             ok=11 amb= 3 miss=15   158s
+  [ 115/484] Platinum Industries Ltd              done             ok= 8 amb= 6 miss=15   114s
+    [checkpoint committed and pushed at 116 companies]
+  [ 116/484] GPT Healthcare Ltd                   done             ok=12 amb= 5 miss=13   150s
+  [ 117/484] Juniper Hotels Ltd                   done             ok=13 amb= 3 miss=13   194s
+  [ 118/484] Vibhor Steel Tubes Limited           done             ok=11 amb= 1 miss=17   125s
+  [ 119/484] Entero Healthcare Solutions Limite   done             ok= 8 amb= 5 miss=16   207s
+  [ 120/484] Jana Small Finance Bank Limited      done             ok=14 amb= 2 miss=14   181s
+    [checkpoint committed and pushed at 121 companies]
+  [ 121/484] Rashi Peripherals Limited            done             ok=10 amb= 5 miss=14   161s
+  [ 122/484] Capital Small Finance Bank Limited   done             ok=10 amb= 4 miss=15   161s
+  [ 123/484] BLS E-Services Limited               done             ok=12 amb= 3 miss=14   138s
+  [ 124/484] Nova Agritech Limited                done             ok=12 amb= 2 miss=15   155s
+  [ 125/484] Epack Durable Limited                done             ok=11 amb= 4 miss=14   137s
+    [checkpoint committed and pushed at 126 companies]
+  [ 126/484] Medi Assist Healthcare Services Li   done             ok= 9 amb= 3 miss=15   134s
+  [ 127/484] Jyoti CNC Automation Limited         done             ok=11 amb= 3 miss=15   158s
+  [ 128/484] Innova Captab Limited                done             ok=13 amb= 3 miss=13   159s
+  [ 129/484] Azad Engineering Limited             done             ok=13 amb= 5 miss=11   136s
+  [ 130/484] Happy Forgings Limited               done             ok=12 amb= 2 miss=15   157s
+    [checkpoint committed and pushed at 131 companies]
+  [ 131/484] Credo Brands Marketing Limited       done             ok=11 amb= 4 miss=12   128s
+  [ 132/484] RBZ Jewellers Limited                done             ok=13 amb= 3 miss=13   101s
+  [ 133/484] Motisons Jewellers Limited           done             ok=14 amb= 3 miss=12   106s
+  [ 134/484] Suraj Estate Developers Limited      done             ok=14 amb= 2 miss=13   141s
+  [ 135/484] Muthoot Microfin Limited             done             ok=13 amb= 3 miss=14   184s
+    [checkpoint committed and pushed at 136 companies]
+  [ 136/484] Inox India Limited                   source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Inox India', 'Inox']
+  [ 137/484] Doms Industries Limited              done             ok=10 amb= 3 miss=16   145s
+  [ 138/484] India Shelter Finance Limited        done             ok=14 amb= 2 miss=13   156s
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+  [ 139/484] Tata Technologies Limited            done             ok= 8 amb= 4 miss=15   164s
+  [ 140/484] Gandhar Oil Refineries Limited       not_a_prospectus ok= 0 amb= 0 miss= 0    21s   <-- FAILED
+        SEBI RHP 'Gandhar Oil Refinery (India) Limited - RHP' filed 2023-11-16 (name sim 0.94); company name not matched in cover (hits=1)
+    [checkpoint committed and pushed at 141 companies]
+  [ 141/484] Fedbank Financial Services Limited   done             ok= 9 amb= 5 miss=15   181s
+  [ 142/484] ASK Automotive Limited               done             ok=11 amb= 3 miss=13   148s
+  [ 143/484] Honasa Consumer Limited (Mamaearth   done             ok=11 amb= 6 miss=12   143s
+  [ 144/484] Cello World Limited                  done             ok=10 amb= 4 miss=13   177s
+  [ 145/484] Blue Jet Healthcare Limited          done             ok=10 amb= 2 miss=15   114s
+    [checkpoint committed and pushed at 146 companies]
+  [ 146/484] IRM Energy Limited                   done             ok=12 amb= 5 miss=12   327s
+  [ 147/484] Plaza Wires Limited                  done             ok=12 amb= 4 miss=13   103s
+  [ 148/484] Valiant Laboratories Limited         done             ok=10 amb= 3 miss=16   104s
+  [ 149/484] Updater Services Limited             done             ok=13 amb= 4 miss=12   156s
+  [ 150/484] Manoj Vaibhav Gems                   not_a_prospectus ok= 0 amb= 0 miss= 0    48s   <-- FAILED
+        SEBI RHP 'Manoj Vaibhav Gems N Jewellers Limited - RHP' filed 2023-09-12 (name sim 1.00); no prospectus marker in first 4 pages
+    [checkpoint committed and pushed at 151 companies]
+  [ 151/484] JSW Infrastructure Limited           done             ok=12 amb= 5 miss=12   158s
+  [ 152/484] Yatra Online Limited                 done             ok=12 amb= 6 miss=11   151s
+  [ 153/484] Signature Global India Limited       done             ok=15 amb= 1 miss=13   170s
+  [ 154/484] Sai Silks (Kalamandir) Limited       done             ok=13 amb= 5 miss=12   153s
+  [ 155/484] Samhi Hotels Limited                 not_a_prospectus ok= 0 amb= 0 miss= 0    19s   <-- FAILED
+        SEBI RHP 'Samhi Hotels Limited - RHP' filed 2023-09-11 (name sim 1.00); no prospectus marker in first 4 pages
+    [checkpoint committed and pushed at 156 companies]
+  [ 156/484] Zaggle Prepaid Ocean Limited         done             ok=11 amb= 3 miss=16   116s
+  [ 157/484] EMS Limited                          source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['EMS']
+  [ 158/484] R R Kabel Limited                    done             ok=11 amb= 4 miss=14   144s
+  [ 159/484] Jupiter Life Line Limited            done             ok=13 amb= 7 miss=10   121s
+  [ 160/484] Ratnaveer Precision Limited          done             ok=12 amb= 4 miss=13   183s
+    [checkpoint committed and pushed at 161 companies]
+  [ 161/484] Rishabh Instruments Limited          done             ok=12 amb= 5 miss=12   146s
+  [ 162/484] Vishnu Prakash R P Limited           done             ok= 8 amb= 5 miss=16   129s
+  [ 163/484] Aeroflex Industries Limited          done             ok=13 amb= 2 miss=14   121s
+  [ 164/484] Pyramid Technoplast Limited          done             ok=10 amb= 2 miss=17   118s
+  [ 165/484] TVS Supply Chain Solutions Limited   done             ok=13 amb= 5 miss=11   195s
+    [checkpoint committed and pushed at 166 companies]
+  [ 166/484] Concord Biotech Limited              done             ok=12 amb= 2 miss=13   120s
+  [ 167/484] SBFC Finance Limited                 done             ok=12 amb= 5 miss=11   164s
+  [ 168/484] Yatharth Hospital & Trauma Care Se   done             ok=14 amb= 4 miss=11   142s
+  [ 169/484] Netweb Technologies India Limited    done             ok=12 amb= 3 miss=14   136s
+  [ 170/484] Utkarsh Small Finance Bank Limited   done             ok= 9 amb= 4 miss=16   131s
+    [checkpoint committed and pushed at 171 companies]
+  [ 171/484] Senco Gold Limited                   done             ok=10 amb= 2 miss=17   135s
+  [ 172/484] Cyient DLM Limited                   done             ok=10 amb= 6 miss=13   127s
+  [ 173/484] Ideaforge Technologies Limited       not_a_prospectus ok= 0 amb= 0 miss= 0    28s   <-- FAILED
+        SEBI RHP 'Ideaforge Technology Limited - Corigendum to RHP' filed 2023-06-30 (name sim 0.95); no prospectus marker in first 4 pages
+  [ 174/484] HMA Agro Industries Limited          done             ok=16 amb= 4 miss= 9   113s
+  [ 175/484] Mankind Pharma Limited               done             ok=10 amb= 4 miss=13   225s
+    [checkpoint committed and pushed at 176 companies]
+  [ 176/484] Avalon Technologies Limited          done             ok=10 amb= 7 miss=12   161s
+  [ 177/484] Udayshivakumar Infosolutions Limit   not_a_prospectus ok= 0 amb= 0 miss= 0    17s   <-- FAILED
+        SEBI RHP 'Udayshivakumar Infra Limited - RHP' filed 2023-03-14 (name sim 0.89); company name not matched in cover (hits=1)
+  [ 178/484] Global Surfaces Limited              done             ok=11 amb= 5 miss=13   106s
+  [ 179/484] Divgi Torqtransfer Systems Limited   done             ok=12 amb= 5 miss=12   164s
+  [ 180/484] Radiant Cash Management Services L   done             ok=12 amb= 3 miss=14   123s
+    [checkpoint committed and pushed at 181 companies]
+  [ 181/484] Elin Electronics Limited             done             ok=15 amb= 8 miss= 7   138s
+  [ 182/484] KFin Technologies Limited            done             ok=12 amb= 3 miss=12   169s
+  [ 183/484] Landmark Cars Limited                done             ok=10 amb= 5 miss=14   189s
+  [ 184/484] Sula Vineyards Limited               done             ok=10 amb= 4 miss=14   156s
+  [ 185/484] Uniparts India Limited               done             ok=13 amb= 5 miss= 9   113s
+    [checkpoint committed and pushed at 186 companies]
+  [ 186/484] Dharmaj Crop Guard Limited           done             ok= 9 amb= 7 miss=13   115s
+  [ 187/484] Keystone Realtors Limited            done             ok=11 amb= 3 miss=15   150s
+  [ 188/484] Inox Green Energy Limited            done             ok= 8 amb= 5 miss=16   147s
+  [ 189/484] Kaynes Technology India Limited      done             ok=13 amb= 3 miss=13   147s
+  [ 190/484] Archean Chemical Industries Limite   done             ok=12 amb= 6 miss=11   128s
+    [checkpoint committed and pushed at 191 companies]
+  [ 191/484] Five Star Business Finance Limited   done             ok= 8 amb= 4 miss=15   156s
+  [ 192/484] Bikaji Foods International Limited   done             ok=11 amb= 3 miss=13   157s
+  [ 193/484] Global Health Limited                done             ok=10 amb= 5 miss=14   152s
+  [ 194/484] Tracxn Technologies                  done             ok=13 amb= 3 miss=11   126s
+  [ 195/484] Electronics Mart India               done             ok=12 amb= 3 miss=15    98s
+    [checkpoint committed and pushed at 196 companies]
+  [ 196/484] Harsha Engineers                     done             ok=13 amb= 4 miss=12   108s
+  [ 197/484] Tamilnad Mercantile                  done             ok=10 amb= 4 miss=16   173s
+  [ 198/484] Dreamfolks Services                  done             ok=11 amb= 1 miss=15    95s
+  [ 199/484] Syrma SGS Technologies               not_a_prospectus ok= 0 amb= 0 miss= 0    57s   <-- FAILED
+        SEBI RHP 'Syrma SGS Technology Ltd.' filed 2022-08-08 (name sim 0.94); company name not matched in cover (hits=1)
+  [ 200/484] Aether Industries                    done             ok=14 amb= 2 miss=13   131s
+    [checkpoint committed and pushed at 201 companies]
+  [ 201/484] eMudhra Ltd                          done             ok=12 amb= 3 miss=14   113s
+  [ 202/484] Ethos Limited                        source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Ethos']
+  [ 203/484] Paradeep Phosphates Limited          done             ok= 7 amb= 5 miss=18   177s
+  [ 204/484] Venus Pipes & Tubes Limited          done             ok= 9 amb= 4 miss=17   116s
+  [ 205/484] Delhivery Limited                    done             ok=11 amb= 1 miss=18   176s
+    [checkpoint committed and pushed at 206 companies]
+  [ 206/484] Prudent Corporate Advisory Service   done             ok=10 amb= 2 miss=15   176s
+  [ 207/484] Life Insurance Corporation of Indi   done             ok=12 amb= 3 miss=13   215s
+  [ 208/484] Rainbow Children’s Medicare Limite   done             ok=11 amb= 4 miss=14   144s
+  [ 209/484] Campus Activewear (India) Limited    done             ok=14 amb= 1 miss=12   156s
+  [ 210/484] Hariom Pipe Industries Limited       done             ok=12 amb= 3 miss=14    95s
+    [checkpoint committed and pushed at 211 companies]
+  [ 211/484] Veranda Learning Solutions Limited   done             ok=10 amb= 3 miss=16   108s
+  [ 212/484] Uma Exports Limited                  done             ok=11 amb= 5 miss=13    96s
+  [ 213/484] Vedant Fashions Limited              done             ok= 9 amb= 5 miss=13   154s
+  [ 214/484] AGS Transact Technologies Limited    done             ok=11 amb= 6 miss=10   118s
+  [ 215/484] CMS Info Systems Limited             done             ok=10 amb= 6 miss=11   108s
+    [checkpoint committed and pushed at 216 companies]
+  [ 216/484] Supriya Lifescience Limited          source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Supriya Lifescience', 'Supriya']
+  [ 217/484] HP Adhesives Limited                 done             ok= 8 amb= 4 miss=17    85s
+  [ 218/484] Data Patterns (India) Limited        done             ok=12 amb= 3 miss=14   116s
+  [ 219/484] MedPlus Health Services Limited      done             ok=14 amb= 4 miss=11   125s
+  [ 220/484] C.E. Info Systems Limited (MapmyIn   done             ok= 9 amb= 2 miss=16   197s
+    [checkpoint committed and pushed at 221 companies]
+  [ 221/484] Shriram Properties Limited           done             ok=12 amb= 5 miss=12   163s
+  [ 222/484] Rategain Travel Technologies Limit   done             ok=11 amb= 4 miss=14   165s
+  [ 223/484] Anand Rathi Wealth Limited           done             ok=10 amb= 3 miss=14   100s
+  [ 224/484] Tega Industries Limited              done             ok=12 amb= 7 miss= 9   124s
+  [ 225/484] Star Health and Allied Insurance C   done             ok=11 amb= 4 miss=12   147s
+    [checkpoint committed and pushed at 226 companies]
+  [ 226/484] Go Fashion (India) Limited           done             ok=12 amb= 5 miss=13   103s
+  [ 227/484] Tarsons Products                     done             ok=12 amb= 5 miss=12   107s
+  [ 228/484] Latent View Analytics                done             ok=13 amb= 2 miss=14   113s
+  [ 229/484] Sapphire Foods India                 done             ok= 9 amb= 5 miss=13   150s
+  [ 230/484] One97 Communications                 done             ok=11 amb= 3 miss=16   207s
+    [checkpoint committed and pushed at 231 companies]
+  [ 231/484] PB Fintech                           done             ok= 9 amb= 6 miss=15   150s
+  [ 232/484] S.J.S Enterprises Limited            source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['S.J.S Enterprises', 'S.J.S']
+  [ 233/484] Sigachi Industries Limited           done             ok=12 amb= 3 miss=14   112s
+  [ 234/484] Fino Payments Bank Limited           done             ok=12 amb= 6 miss=11   145s
+  [ 235/484] FSN E Commerce Ventures Limited (N   done             ok=11 amb= 5 miss=13   144s
+    [checkpoint committed and pushed at 236 companies]
+  [ 236/484] Aditya Birla Sun Life AMC Limited    done             ok=10 amb= 4 miss=13   141s
+  [ 237/484] Paras Defence and Space Technologi   done             ok=12 amb= 5 miss=12    95s
+  [ 238/484] NTPC Green Energy Limited            done             ok=12 amb= 2 miss=15   181s
+  [ 239/484] Afcons Infrastructure Limited        done             ok=13 amb= 4 miss=12   262s
+  [ 240/484] Northern ARC Capital Limited         source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Northern ARC Capital', 'Northern ARC', 'Northern']
+    [checkpoint committed and pushed at 241 companies]
+  [ 241/484] Indian Renewable Energy Developmen   done             ok= 8 amb= 2 miss=18   241s
+  [ 242/484] ESAF Small Finance Bank Limited      done             ok=13 amb= 2 miss=14   177s
+  [ 243/484] IKIO Technologies Limited (formerl   source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['IKIO Technologies', 'IKIO']
+  [ 244/484] Abans Financial Services Limited     source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Abans Financial Services', 'Abans Financial', 'Abans']
+  [ 245/484] Fusion Finance Ltd                   source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Fusion Finance', 'Fusion']
+    [checkpoint committed and pushed at 246 companies]
+  [ 246/484] DCX Systems Ltd                      done             ok=11 amb= 4 miss=14   135s
+  [ 247/484] AWL Agri Business Limited (formerl   source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['AWL Agri Business', 'AWL Agri', 'AWL']
+  [ 248/484] Sansera Engineering Limited          done             ok=13 amb= 5 miss= 9   118s
+  [ 249/484] Vijaya Diagnostic Centre Limited     done             ok=11 amb= 3 miss=13   104s
+  [ 250/484] Acutaas Chemicals Limited            source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Acutaas Chemicals', 'Acutaas']
+    [checkpoint committed and pushed at 251 companies]
+  [ 251/484] Aptus Value Housing Finance India    done             ok= 9 amb= 4 miss=14   118s
+  [ 252/484] Chemplast Sanmar Limited             done             ok= 8 amb= 6 miss=15   136s
+  [ 253/484] Nuvoco Vistas Corporation Limited    done             ok=11 amb= 5 miss=14   139s
+  [ 254/484] CarTrade Tech Limited                done             ok=11 amb= 4 miss=13   111s
+  [ 255/484] Devyani International Limited        done             ok=14 amb= 7 miss= 8   140s
+    [checkpoint committed and pushed at 256 companies]
+  [ 256/484] Windlas Biotech Limited              done             ok=16 amb= 3 miss=11   111s
+  [ 257/484] Exxaro Tiles Limited                 done             ok=10 amb= 4 miss=15    88s
+  [ 258/484] Krsnaa Diagnostics Limited           done             ok=12 amb= 6 miss=11   107s
+  [ 259/484] Rolex Rings Limited                  done             ok=12 amb= 1 miss=16    89s
+  [ 260/484] Alivus Life Sciences Limited         source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Alivus Life Sciences', 'Alivus Life', 'Alivus']
+    [checkpoint committed and pushed at 261 companies]
+  [ 261/484] Tatva Chintan Pharma Chem Limited    done             ok=13 amb= 4 miss=12    95s
+  [ 262/484] Eternal Limited                      source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Eternal']
+  [ 263/484] G R Infraprojects Limited            done             ok=12 amb= 3 miss=12   193s
+  [ 264/484] Clean Science and Technology Limit   done             ok=14 amb= 3 miss=10    95s
+  [ 265/484] India Pesticides Limited             done             ok=17 amb= 3 miss= 9   108s
+    [checkpoint committed and pushed at 266 companies]
+  [ 266/484] Dodla Dairy Limited                  done             ok=10 amb= 5 miss=14   100s
+  [ 267/484] Krishna Institute of Medical Scien   done             ok= 7 amb= 5 miss=17   146s
+  [ 268/484] Sona BLW Precision Forgings Limite   done             ok=15 amb= 4 miss=10   143s
+  [ 269/484] Shyam Metalics and Energy Limited    done             ok=11 amb= 4 miss=14   136s
+  [ 270/484] Nazara Technologies Limited          done             ok=12 amb= 3 miss=12   132s
+    [checkpoint committed and pushed at 271 companies]
+  [ 271/484] Suryoday Small Finance Bank Limite   done             ok=16 amb= 2 miss=11   149s
+    transient (SEBI: error ConnectionError: ('Connection aborted.', Connect), retry 1 in 6s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 2 in 13s
+    transient (SEBI: error ConnectTimeout: HTTPSConnectionPool(host='www.se), retry 3 in 26s
+  [ 272/484] Kalyan Jewellers India Limited       source_unresolved ok= 0 amb= 0 miss= 0    65s   <-- FAILED
+        SEBI: error ConnectTimeout: HTTPSConnectionPool(host='www.sebi.gov.in', port=443): Max retries exceeded with url: /sebiweb/home/HomeAction.do?doListin
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 1 in 6s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 2 in 13s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 3 in 26s
+  [ 273/484] Craftsman Automation Limited         source_unresolved ok= 0 amb= 0 miss= 0     2s   <-- FAILED
+        SEBI: error ConnectionError: HTTPSConnectionPool(host='www.sebi.gov.in', port=443): Max retries exceeded with url: /sebiweb/home/HomeAction.do?doListi
+    transient (SEBI: error ConnectTimeout: HTTPSConnectionPool(host='www.se), retry 1 in 6s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 2 in 13s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 3 in 26s
+  [ 274/484] Laxmi Organic Industries Limited     source_unresolved ok= 0 amb= 0 miss= 0     2s   <-- FAILED
+        SEBI: error ConnectionError: HTTPSConnectionPool(host='www.sebi.gov.in', port=443): Max retries exceeded with url: /sebiweb/home/HomeAction.do?doListi
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 1 in 6s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 2 in 13s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 3 in 26s
+  [ 275/484] Anupam Rasayan India Limited         source_unresolved ok= 0 amb= 0 miss= 0     2s   <-- FAILED
+        SEBI: error ConnectionError: HTTPSConnectionPool(host='www.sebi.gov.in', port=443): Max retries exceeded with url: /sebiweb/home/HomeAction.do?doListi
+    [checkpoint committed and pushed at 276 companies]
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 1 in 6s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 2 in 13s
+    transient (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.s), retry 3 in 26s
+  [ 276/484] Easy Trip Planners Limited           source_unresolved ok= 0 amb= 0 miss= 0     2s   <-- FAILED
+        SEBI: error ConnectionError: HTTPSConnectionPool(host='www.sebi.gov.in', port=443): Max retries exceeded with url: /sebiweb/home/HomeAction.do?doListi
+
+STOP: 5 consecutive failures — the source has probably changed. Nothing further attempted.
+    [checkpoint committed and pushed at 277 companies]
+
+processed this run: 276 | total settled: 278
+status
+done                 244
+source_unresolved     26
+not_a_prospectus       8
+free disk 150.1 GB

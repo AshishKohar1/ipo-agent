@@ -1,0 +1,118 @@
+# Model L live jobs on GitHub Actions.
+#
+# Why Actions as well as Windows Task Scheduler: the app-based schedules only fire while the
+# desktop app is open, and Task Scheduler only while the laptop is awake. Neither is reliable
+# for a job whose entire value is landing before a 16:00 IST broker cutoff. Actions runs
+# regardless — but GitHub's scheduler drifts 5–15 minutes under load, which is why the score
+# job is set for 15:00 IST rather than 15:30: even a 15-minute drift still lands 45 minutes
+# before the cutoff.
+#
+# Cron here is UTC. IST is UTC+5:30.
+#   15:00 IST = 09:30 UTC
+#   17:30 IST = 12:00 UTC
+#
+# The jobs are idempotent: each writes a run marker and a second run on the same date and
+# capture point exits as a no-op. A drifted-then-retried schedule, a manual dispatch on top
+# of a scheduled run, and a re-run of a failed job all therefore cost nothing and cannot
+# append a duplicate row to predictions_log.csv.
+#
+# NETWORK: NSE currently resets or times out this project's User-Agent and BSE returns 403.
+# The jobs log the block and write nothing invented. They do NOT fall back to a browser
+# User-Agent (project rule 3). A request for permitted access has been sent to NSE; until it
+# is answered, a run that reports "no subscription could be fetched" is the job working
+# correctly, not failing.
+
+name: Model L live
+
+on:
+  schedule:
+    - cron: "30 9 * * 1-5"      # 15:00 IST, weekdays — score, capture, report
+    - cron: "0 12 * * 1-5"      # 17:30 IST, weekdays — final capture after close
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "which job to run"
+        required: true
+        default: "score"
+        type: choice
+        options: [score, final, rehearse]
+
+concurrency:
+  # One live job at a time. Two runs appending to predictions_log.csv concurrently would
+  # interleave rows; the idempotency marker prevents duplicates but not interleaving.
+  group: model-l-live
+  cancel-in-progress: false
+
+permissions:
+  contents: write              # the job commits snapshots and the prediction log
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Decide which job this run is
+        id: which
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "0 12 * * 1-5" ]; then
+            echo "mode=final" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=score" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run
+        env:
+          PYTHONIOENCODING: utf-8
+          TZ: Asia/Kolkata
+        run: |
+          case "${{ steps.which.outputs.mode }}" in
+            score)    python run_live_l.py --score ;;
+            final)    python run_live_l.py --final ;;
+            rehearse) python run_live_l.py --rehearse ;;
+          esac
+
+      - name: Commit whatever was produced
+        env:
+          TZ: Asia/Kolkata
+        run: |
+          git config user.name  "ipo-agent[bot]"
+          git config user.email "ashishkohar4@gmail.com"
+          git add -A data/subscription_snapshots.csv predictions_log.csv \
+                     reports/live data/live_run_markers.csv || true
+          if git diff --cached --quiet; then
+            echo "nothing produced — most likely the exchange block. Not committing."
+            exit 0
+          fi
+          git commit -m "Live ${{ steps.which.outputs.mode }} run $(date +%Y-%m-%dT%H:%M%z)
+
+          Automated by .github/workflows/live-model-l.yml. Verdicts are the
+          threshold met, never a probability (decision G2)."
+          # Another run may have pushed between checkout and here.
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
+
+      - name: Summarise for the run log
+        if: always()
+        run: |
+          echo "### Model L — ${{ steps.which.outputs.mode }}" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "reports/live/$(TZ=Asia/Kolkata date +%F).md" ]; then
+            cat "reports/live/$(TZ=Asia/Kolkata date +%F).md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No report written. If the diagnostics show the exchange refusing this host, that is the job working as designed — it logs the block and invents nothing." >> "$GITHUB_STEP_SUMMARY"
+          fi

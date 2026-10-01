@@ -239,8 +239,41 @@ def write_report(scored: list[dict], when: pd.Timestamp, diag: list[str]) -> Pat
 
 
 # ---------------------------------------------------------------- entry points
+MARKERS = ROOT / "data" / "live_run_markers.csv"
+
+
+def already_ran(capture_point: int, when: pd.Timestamp) -> bool:
+    """Idempotency. GitHub's scheduler drifts and may retry, a manual dispatch can land on
+    top of a scheduled run, and a failed job can be re-run — so a second run for the same
+    date and capture point must be a NO-OP rather than a duplicate row in the prediction
+    log. The marker is the record of what has already happened."""
+    if not MARKERS.exists():
+        return False
+    try:
+        m = pd.read_csv(MARKERS)
+    except Exception:
+        return False
+    key = f"{when.date()}|{capture_point}"
+    return bool((m["key"].astype(str) == key).any())
+
+
+def mark_ran(capture_point: int, when: pd.Timestamp, n: int) -> None:
+    row = pd.DataFrame([{"key": f"{when.date()}|{capture_point}",
+                         "date": str(when.date()), "capture_point": capture_point,
+                         "ran_at": str(when), "n_snapshots": n}])
+    MARKERS.parent.mkdir(parents=True, exist_ok=True)
+    row.to_csv(MARKERS, mode="a", header=not MARKERS.exists(), index=False,
+               encoding="utf-8")
+
+
 def capture(capture_point: int, score: bool, dry: bool = False) -> dict:
     when = pd.Timestamp.now()
+    if not dry and already_ran(capture_point, when):
+        out = {"when": str(when), "capture_point": capture_point, "skipped": True,
+               "reason": (f"a {capture_point} capture is already recorded for "
+                          f"{when.date()} — this run is a no-op by design (idempotent)")}
+        print(json.dumps(out, indent=2))
+        return out
     sess = _session()
     ipos, why = nse_open_ipos(sess)
     diag = [f"open-IPO lookup: {why}"]
@@ -280,6 +313,7 @@ def capture(capture_point: int, score: bool, dry: bool = False) -> dict:
         for s in scored:
             PL.log_prediction(s["ipo"], s["isin"], s["result"],
                               capture_point=capture_point, source=s["source"])
+        mark_ran(capture_point, when, len(snaps))
     path = write_report(scored, when, diag) if score else None
     out = {"when": str(when), "capture_point": capture_point, "n_ipos": len(ipos),
            "n_snapshots": len(snaps), "n_scored": len(scored), "report": str(path) if path
