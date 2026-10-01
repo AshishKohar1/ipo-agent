@@ -1,0 +1,30 @@
+{
+  "checked_at": "2026-10-01 21:38:35.622548",
+  "exchanges": {
+    "NSE": {
+      "host": "https://www.nseindia.com",
+      "paths": [
+        "/api/corporate-governance",
+        "/api/corporate-share-holdings-master",
+        "/api/annual-reports"
+      ],
+      "robots_http": 200,
+      "robots_excerpt": "User-agent: *\nAllow: /\nDisallow: /market-data-test\nSitemap: https://www.nseindia.com/sitemap.xml",
+      "disallow": [
+        "/market-data-test"
+      ],
+      "permitted": true,
+      "why": "permitted; User-agent:* disallows ['/market-data-test']"
+    },
+    "BSE": {
+      "host": "https://www.bseindia.com",
+      "paths": [
+        "/corporate/Comp_Resultsnew.aspx",
+        "/corporate/Sharehold.aspx"
+      ],
+      "robots_http": 403,
+      "permitted": false,
+      "why": "robots.txt returned HTTP 403, so the rules could not be read. Treated as a REFUSAL \u2014 'I could not read the rules' is not 'the rules allow it'."
+    }
+  }
+}
