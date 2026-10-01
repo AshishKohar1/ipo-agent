@@ -1,0 +1,17 @@
+field,kind,n,majority_share,majority_value,distinct,low_variance,note
+cust_conc_below_50,binary,95,0.5158,0.0,2,False,
+cust_conc_below_40_lit,binary,95,0.5895,0.0,2,False,
+conc_risk_factor_present,binary,227,1.0,1.0,1,True,
+any_criminal_vs_promoter_director,binary,243,0.8189,0.0,2,False,
+auditor_qualified,binary,229,0.8777,0.0,2,False,
+auditor_emphasis,binary,247,0.5223,1.0,2,False,
+esop_exists,binary,219,0.6256,0.0,2,False,
+dual_class,binary,247,0.9271,0.0,2,True,
+licence_dependence,binary,164,1.0,1.0,1,True,
+pre_ipo_placement,binary,191,0.7225,0.0,2,False,
+anchor_book_existed,binary,210,0.981,1.0,2,True,
+cust_conc_top10_pct,continuous,95,,,83,,"median 50.00, p25 29.48, p75 69.65"
+kmp_remuneration_pct_pat,continuous,71,,,46,,"median 0.12, p25 0.00, p75 18.58"
+promoter_post_pct_aggregator,continuous,202,,,195,,"median 67.23, p25 55.27, p75 74.79"
+promoter_post_pct_rhp,continuous,29,,,6,,"median 20.00, p25 20.00, p75 20.00"
+anchor_portion_cr,continuous,166,,,164,,"median 235.94, p25 124.82, p75 559.69"

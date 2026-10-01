@@ -136,6 +136,28 @@ def sentence_at(flat: str, start: int, end: int, pad: int = 260) -> str:
     return flat[a:b].strip()
 
 
+# Task 4, fix 1 — the document-level unit convention.
+#
+# Most RHPs state their unit ONCE, in a table header or a note: "(₹ in lakhs)", "(Rs. in
+# millions)". The first version of this module required the unit to sit adjacent to the
+# number, so an amount printed in a table whose header carried the unit was rejected
+# outright. That is where the unit failures actually are: 628 money values across the batch
+# came back `not_found` with the note "no amount with a unit", against only 3 that were
+# found-but-withheld. Detecting the convention once per document and applying it recovers
+# values the page genuinely states, without inferring anything.
+#
+# It is still DETERMINISTIC: the convention is read off the document, and where the document
+# does not state one the value stays NULL with missing_reason = unit_undetermined. There is
+# no plausibility step anywhere in this path (H8).
+UNIT_CANON = {"crores": "crore", "cr": "crore", "cr.": "crore",
+              "millions": "million", "mn": "million",
+              "lakhs": "lakh", "lacs": "lakh", "lac": "lakh",
+              "billions": "billion", "bn": "billion", "thousands": "thousand"}
+UNIT_DECL = re.compile(r"\(\s*(?:in\s+)?(?:₹|`|rs\.?|inr)\s*(?:in\s+)?" + UNIT_RE
+                       + r"[^)]{0,30}\)|\(\s*(?:₹|`|rs\.?|inr)?\s*in\s+" + UNIT_RE
+                       + r"[^)]{0,30}\)", re.I)
+
+
 class Ctx:
     """Flattened page text for one document, plus section ranges."""
 
@@ -151,6 +173,38 @@ class Ctx:
         self.flat = [b + (" " + base[k + 1][:400] if k + 1 < len(base) else "")
                      for k, b in enumerate(base)]
         self.n = len(pages)
+        self.doc_unit, self.doc_unit_evidence = self._document_unit()
+
+    def _document_unit(self) -> tuple[str | None, str]:
+        """The document's own stated money convention: the modal "(Rs in X)" declaration.
+
+        A document can legitimately use more than one (a lakh-denominated SME cover with a
+        million-denominated financial annexure), so the MODE is taken and the count of each
+        is recorded as evidence. Where the mode does not hold a clear majority the
+        convention is withheld rather than guessed -- a 100x error is worse than a NULL.
+        """
+        from collections import Counter
+        c = Counter()
+        for ft in self.flat:
+            if not ft:
+                continue
+            for m in UNIT_DECL.finditer(ft):
+                u = re.search(UNIT_RE, m.group(0), re.I)
+                if u:
+                    # Normalise before counting. Counting "million" and "millions" as
+                    # different units split Hyundai's vote 57/57 and failed the majority
+                    # test, so the document was reported as having no convention when in
+                    # fact all 121 of its declarations say the same thing.
+                    c[UNIT_CANON.get(u.group(1).lower().rstrip("."),
+                                     u.group(1).lower().rstrip("."))] += 1
+        if not c:
+            return None, "no '(Rs in X)' declaration anywhere in the document"
+        tot = sum(c.values())
+        unit, k = c.most_common(1)[0]
+        ev = f"{dict(c)} across {tot} declarations"
+        if k / tot < 0.6:
+            return None, f"no clear convention -- {ev}; withheld rather than guessed"
+        return unit, f"modal declaration '{unit}' ({k}/{tot}); {ev}"
 
     def scan(self, rx: re.Pattern, lo: int = 0, hi: int | None = None, limit: int = 1):
         """Yield (page_index, match, sentence) for the first `limit` matches in [lo, hi]."""
@@ -188,6 +242,103 @@ FIELDS: list[str] = []
 def field(name):
     FIELDS.append(name)
     return name
+
+
+# Task 4, fix 2 -- anchor reconciliation. Where an aggregator or the master already gives
+# the same quantity, the unit is the one that makes extraction agree with it. If the known
+# value is Rs 844 cr and extraction returns 84,490 with an unknown unit, only lakhs fits
+# (84,490 lakh = 844.9 cr); millions would give 8,449 cr and crore 84,490 cr, both an order
+# of magnitude out. This is arithmetic, not judgement.
+ANCHOR_TOL = 0.05
+
+
+def resolve_unit(value: float | None, page_unit: str | None, doc_unit: str | None,
+                 anchor_cr: float | None = None) -> tuple[str | None, float | None, str, str]:
+    """-> (unit, value_crore, source_of_unit, note). Deterministic only.
+
+    Order of precedence, strongest evidence first:
+      1. a unit on the page beside the number
+      2. an anchor value that only one unit can reconcile with
+      3. the document's own stated convention
+      4. nothing -- NULL, with missing_reason unit_undetermined
+
+    There is deliberately NO plausibility step. Resolving a unit by reasoning that a figure
+    "looks too small for a director's salary" is what produced the fabricated comparison
+    table rejected in H8: it fails silently and the output looks correct.
+    """
+    if value is None:
+        return page_unit, None, "none", "no value to convert"
+    if page_unit:
+        return page_unit, to_crore(value, page_unit), "page", "unit printed beside the value"
+    if anchor_cr is not None and anchor_cr != 0:
+        fits = []
+        for u in ("lakh", "million", "crore", "thousand", "billion"):
+            cr = to_crore(value, u)
+            if cr is None or cr == 0:
+                continue
+            if abs(cr - anchor_cr) / max(abs(cr), abs(anchor_cr)) <= ANCHOR_TOL:
+                fits.append((u, cr))
+        if len(fits) == 1:
+            u, cr = fits[0]
+            return u, cr, "anchor", (f"only '{u}' reconciles {value:,.2f} with the known "
+                                     f"{anchor_cr:,.2f} cr (within {ANCHOR_TOL:.0%}); "
+                                     "the other units are an order of magnitude out")
+        if len(fits) > 1:
+            return None, None, "ambiguous_anchor", (
+                f"{len(fits)} units reconcile with the known {anchor_cr:,.2f} cr "
+                f"({[u for u, _ in fits]}) -- cannot disambiguate, withheld")
+    if doc_unit:
+        return doc_unit, to_crore(value, doc_unit), "document_convention", (
+            "unit NOT printed beside the value; taken from the document's own stated "
+            "convention. Flagged ambiguous -- the declaration is elsewhere in the document.")
+    return None, None, "undetermined", (
+        "no unit beside the value, no anchor to reconcile against, and the document states "
+        "no convention. value_crore WITHHELD (H7); missing_reason unit_undetermined. No "
+        "plausibility inference is attempted (H8).")
+
+
+# The number is often printed WITHOUT its unit, because the unit is declared once for the
+# table or the document. AMT_ONLY therefore makes the unit optional and the unit comes from
+# resolve_unit(). Requiring an adjacent unit is what rejected 628 money values in the batch.
+AMT_ONLY = re.compile(r"(?:₹|`|rs\.?|inr)?\s*([\d,]+(?:\.\d+)?)\s*("
+                      + UNIT_RE + r")?", re.I)
+
+
+# A page cross-reference is not an amount. Making the unit optional opened this hole
+# immediately: Syngene's related-party sentence reads "as disclosed in 'Related Party
+# Transactions' on page 173", and the document convention then stamped 'million' on it,
+# producing a confident Rs 17.3 cr that is a PAGE NUMBER. The guards below are what keep the
+# optional-unit path honest.
+PAGE_REF = re.compile(r"(?i)(?:\bpages?|\bpg\.?)\s*$")
+DATE_DAY = re.compile(r"(?i)\b(?:january|february|march|april|may|june|july|august|"
+                      r"september|october|november|december)\s*$")
+
+
+def amount_here(text, require_formatting=True):
+    """The first number in `text`, plus its unit if one is printed beside it.
+
+    When no unit is printed beside the number the caller is relying on the document
+    convention, so the number must LOOK like a printed amount: it must carry a decimal point
+    or a thousands separator. A bare integer with no unit beside it is far more often a page
+    reference, a clause number or a year than a money figure, and a wrong unit is a 10x to
+    100x error. Set `require_formatting=False` only where the surrounding pattern already
+    guarantees an amount.
+    """
+    m = AMT_ONLY.search(text or "")
+    if not m:
+        return None, None
+    raw, unit = m.group(1), (m.group(2) or None)
+    before = (text or "")[:m.start()]
+    if PAGE_REF.search(before[-18:]):
+        return None, None
+    # A day-of-month is not an amount either. This one actually fired: "...in the financial
+    # years ended March 31, 2023..." gave Jupiter a related-party total of 31 million and
+    # Hyundai 30 million off "June 30, 2024". Both looked entirely plausible.
+    if DATE_DAY.search(before[-14:]):
+        return None, None
+    if unit is None and require_formatting and not re.search(r"[.,]", raw):
+        return None, None
+    return fnum(raw), unit
 
 
 def V(ctx: Ctx, var: str, **kw) -> Value:
@@ -285,17 +436,27 @@ def rpt(ctx: Ctx) -> list[Value]:
     amt = None
     for i, m, sent in ctx.scan(re.compile(
             r"(?i)(?:aggregate value of such |value of )?related[- ]part(?:y|ies) "
-            r"transactions?[^.]{0,200}?((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*" + UNIT_RE + ")"),
+            r"transactions?[^.]{0,200}?((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*(?:" + UNIT_RE + r")?)"),
             limit=4):
         if EXCLUDE_RPT.search(sent):
             continue
-        im = INLINE_AMT.search(m.group(1))
-        if im:
-            v, u = fnum(im.group(1)), im.group(2)
-            amt = hit(ctx, F_RPT_AMT, v, i, sent, unit=u, crore=to_crore(v, u),
-                      note="aggregate related-party value as stated; SINGLE-SOURCE (rule 3)")
+        # The related-party sentence is too loose to trust an unformatted number in: it
+        # routinely contains a page cross-reference and a date, and the optional-unit path
+        # read 173 (a page) and 31 (a day of month) as amounts. For THIS field the unit must
+        # be printed beside the number; the document convention is not enough.
+        v, pu = amount_here(m.group(1))
+        if v is not None and pu is not None:
+            u, cr, src, why = resolve_unit(v, pu, ctx.doc_unit)
+            amt = V(ctx, F_RPT_AMT, value=v, original_unit=u, value_crore=cr,
+                    page=ctx.doc.index_to_printed(i), pdf_page_index=i, source_text=sent,
+                    status=("ok" if src == "page" else
+                            "ambiguous" if cr is not None else "not_found"),
+                    missing_reason=("" if cr is not None else "unit_undetermined"),
+                    note=f"aggregate related-party value; unit via {src} - {why}; "
+                         "SINGLE-SOURCE (rule 3)")
             break
-    out.append(amt or miss(ctx, F_RPT_AMT, "no aggregate related-party amount with a unit"))
+    out.append(amt or miss(ctx, F_RPT_AMT, "no aggregate related-party amount found",
+                           reason="not_present_on_page"))
     return out
 
 
@@ -309,7 +470,7 @@ F_LIT_AMT = field("litigation_aggregate_amount_cr")
 LIT_SUMMARY = re.compile(r"(?i)(?:disciplinary actions? by|category of )?[^.]{0,80}?"
                          r"statutory or regulatory[^.]{0,200}?aggregate")
 LIT_AGG_AMT = re.compile(r"(?i)aggregate amount involved (?:in such proceedings )?"
-                         r"(?:is|was|of)?\s*((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*" + UNIT_RE + ")")
+                         r"(?:is|was|of)?\s*((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*(?:" + UNIT_RE + r")?)")
 # "1. Criminal proceedings Nil." / "Criminal proceedings 3" / "Criminal 2 1,027.65"
 LIT_CAT = {
     F_LIT_CRIM: r"(?i)criminal (?:proceedings?|matters?|cases?|litigation)",
@@ -418,11 +579,17 @@ def litigation(ctx: Ctx) -> list[Value]:
     # aggregate amount
     got = None
     for i, m, sent in ctx.scan(LIT_AGG_AMT, limit=3):
-        im = INLINE_AMT.search(m.group(1))
-        if im:
-            v, u = fnum(im.group(1)), im.group(2)
-            got = hit(ctx, F_LIT_AMT, v, i, sent, unit=u, crore=to_crore(v, u),
-                      note="aggregate amount involved, as stated; SINGLE-SOURCE (rule 3)")
+        v, pu = amount_here(m.group(1))
+        if v is not None:
+            pu = pu or ctx.unit_near(i, m.start())
+            u, cr, src, why = resolve_unit(v, pu, ctx.doc_unit)
+            got = V(ctx, F_LIT_AMT, value=v, original_unit=u, value_crore=cr,
+                    page=ctx.doc.index_to_printed(i), pdf_page_index=i, source_text=sent,
+                    status=("ok" if src == "page" else
+                            "ambiguous" if cr is not None else "not_found"),
+                    missing_reason=("" if cr is not None else "unit_undetermined"),
+                    note=f"aggregate amount involved; unit via {src} - {why}; "
+                         "SINGLE-SOURCE (rule 3)")
             break
     if got is None:
         # a bare header with a unit but no inline amount: withhold the crore value
@@ -765,7 +932,7 @@ F_ESOP = field("esop_exists_flag")
 F_DUAL = field("dual_class_flag")
 
 PREIPO_AMT = re.compile(r"(?i)pre[- ]?ipo\s+placement[^.]{0,240}?(?:aggregating (?:to|up to)\s*)"
-                        r"((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*" + UNIT_RE + ")")
+                        r"((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*(?:" + UNIT_RE + r")?)")
 PREIPO_ANY = re.compile(r"(?i)pre[- ]?ipo\s+placement[^.]{0,200}")
 PREIPO_NO = re.compile(r"(?i)(?:(?:no|not undertaken|has not (?:undertaken|completed)|did not"
                        r" undertake)[^.]{0,60}pre[- ]?ipo\s+placement"
@@ -817,14 +984,18 @@ def ownership(ctx: Ctx) -> list[Value]:
     amt = None
     if pi is None:
         for i, m, sent in ctx.scan(PREIPO_AMT, limit=3):
-            im = INLINE_AMT.search(m.group(1))
-            if im:
-                v, u = fnum(im.group(1)), im.group(2)
+            v, pu = amount_here(m.group(1))
+            if v is not None:
+                u, cr, src, why = resolve_unit(v, pu, ctx.doc_unit)
                 pi = hit(ctx, F_PREIPO_FLAG, 1.0, i, sent, unit="bool",
                          note="a pre-IPO placement with a stated amount")
-                amt = hit(ctx, F_PREIPO_AMT, v, i, sent, unit=u, crore=to_crore(v, u),
-                          note="pre-IPO placement amount as stated; relevant to veto red "
-                               "flag 5 (placement within 12 months below the issue price)")
+                amt = V(ctx, F_PREIPO_AMT, value=v, original_unit=u, value_crore=cr,
+                        page=ctx.doc.index_to_printed(i), pdf_page_index=i, source_text=sent,
+                        status=("ok" if src == "page" else
+                                "ambiguous" if cr is not None else "not_found"),
+                        missing_reason=("" if cr is not None else "unit_undetermined"),
+                        note=f"pre-IPO placement amount; unit via {src} - {why}; "
+                             "relevant to veto red flag 5")
                 break
     if pi is None:
         for i, m, sent in ctx.scan(PREIPO_ANY, limit=4):
@@ -917,7 +1088,7 @@ CONTING_TOTAL = re.compile(r"(?i)total\s+contingent\s+liabilit(?:y|ies)[^\d]{0,3
 # March 31, 2011 aggregated to Rs. 5,455.56 million on a stand-alone basis."
 CONTING_AGG = re.compile(r"(?i)contingent liabilit(?:y|ies)[^.]{0,160}?"
                          r"(?:aggregated to|aggregating to|amounted to|stood at)\s*"
-                         r"((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*" + UNIT_RE + ")")
+                         r"((?:₹|`|rs\.?)?\s*[\d,]+(?:\.\d+)?\s*(?:" + UNIT_RE + r")?)")
 # the abbreviations page defines Ind AS 37 by name; it is not a disclosure of any amount
 CONTING_NOISE = re.compile(r"(?i)indian accounting standard 37|ind as 37|"
                            r"notified under section 133")
@@ -934,12 +1105,14 @@ def contingent(ctx: Ctx) -> list[Value]:
                         note="stated in prose as an aggregate, with its unit in the same "
                              "sentence")]
     for i, m, sent in ctx.scan(CONTING_TOTAL, limit=3):
-        v, u = fnum(m.group(1)), ctx.unit_near(i, m.start())
-        return [hit(ctx, F_CONTING, v, i, sent, unit=u, crore=to_crore(v, u),
-                    status="ok" if u else "ambiguous",
-                    note="a stated 'total contingent liabilities' row; unit "
-                         + ("from the page or table header" if u else
-                            "NOT FOUND - value_crore withheld rather than assumed (H7)"))]
+        v = fnum(m.group(1))
+        u, cr, src, why = resolve_unit(v, ctx.unit_near(i, m.start()), ctx.doc_unit)
+        return [V(ctx, F_CONTING, value=v, original_unit=u, value_crore=cr,
+                  page=ctx.doc.index_to_printed(i), pdf_page_index=i, source_text=sent,
+                  status=("ok" if src == "page" else
+                          "ambiguous" if cr is not None else "not_found"),
+                  missing_reason=("" if cr is not None else "unit_undetermined"),
+                  note=f"a stated 'total contingent liabilities' row; unit via {src} - {why}")]
     # no explicit total: sum the itemised rows only when a unit is present and the items are
     # clearly delimited. Otherwise withhold — a partial sum is worse than no number.
     for i, m, sent in ctx.scan(CONTING_HEAD, limit=10):
