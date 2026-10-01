@@ -8,3 +8,118 @@ queue 485 | settled 1 | to do 484 | free disk 152.7 GB
   [   5/484] Anlon Healthcare Ltd.                done             ok=14 amb= 2 miss=13   151s
     [checkpoint committed and pushed at 6 companies]
   [   6/484] Vikran Engineering Ltd.              done             ok=12 amb= 4 miss=13   198s
+  [   7/484] Mangal Electrical Industries Ltd.    done             ok=11 amb= 4 miss=14   180s
+  [   8/484] Gem Aromatics Ltd                    done             ok=14 amb= 2 miss=13   179s
+  [   9/484] Shreeji Shipping Global Ltd.         done             ok=11 amb= 4 miss=14   162s
+  [  10/484] Patel Retail Ltd                     not_a_prospectus ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI RHP 'Patel Retail Limited - RHP' filed 2025-08-25 (name sim 1.00); only 1 pages — likely an addendum, not the full document
+    [checkpoint committed and pushed at 11 companies]
+  [  11/484] Vikram Solar Ltd                     done             ok=12 amb= 5 miss=12   210s
+  [  12/484] Regaal Resources Ltd.                done             ok=10 amb= 7 miss=13   186s
+  [  13/484] BlueStone Jewellery & Lifestyle Lt   done             ok=11 amb= 4 miss=14   197s
+  [  14/484] JSW Cement Ltd                       done             ok=12 amb= 4 miss=13   233s
+  [  15/484] All Time Plastics Ltd.               done             ok=11 amb= 2 miss=16   215s
+    [checkpoint committed and pushed at 16 companies]
+  [  16/484] Highway Infrastructure Ltd.          done             ok=14 amb= 4 miss=11   188s
+  [  17/484] M & B Engineering Ltd                source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['M & B', 'M &', 'M']
+  [  18/484] Sri Lotus Developers & Realty Ltd    source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Sri Lotus Developers', 'Sri Lotus', 'Sri']
+  [  19/484] National Securities Depository Ltd   done             ok= 9 amb= 3 miss=16   181s
+  [  20/484] Aditya Infotech Ltd                  done             ok=12 amb= 5 miss=13   177s
+    [checkpoint committed and pushed at 21 companies]
+  [  21/484] Laxmi India Finance Ltd              done             ok=16 amb= 2 miss=11   178s
+  [  22/484] Shanti Gold International Ltd        done             ok=17 amb= 3 miss= 9   131s
+  [  23/484] Brigade Hotel Ventures Limited       done             ok=10 amb= 3 miss=16   137s
+  [  24/484] GNG Electronics Limited              done             ok=12 amb= 3 miss=14   121s
+  [  25/484] Indiqube Spaces Limited              done             ok=12 amb= 4 miss=13   236s
+    [checkpoint committed and pushed at 26 companies]
+  [  26/484] Anthem Biosciences Limited           done             ok=11 amb= 3 miss=14   307s
+  [  27/484] Smartworks Coworking Limited         done             ok=12 amb= 6 miss=11   310s
+  [  28/484] Travel Food Services Limited         done             ok=11 amb= 2 miss=14   341s
+  [  29/484] Crizac Limited                       done             ok=12 amb= 2 miss=13   324s
+  [  30/484] Indogulf Cropsciences Limited        source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Indogulf Cropsciences', 'Indogulf']
+    [checkpoint committed and pushed at 31 companies]
+  [  31/484] HDB Financial Services Limited       done             ok=14 amb= 2 miss=13   534s
+  [  32/484] Sambhv Steel Tubes Limited           done             ok=10 amb= 4 miss=15   249s
+  [  33/484] Globe Civil Projects Limited         done             ok=14 amb= 5 miss=10   182s
+  [  34/484] Kalpataru Limited                    done             ok=10 amb= 6 miss=13   242s
+  [  35/484] Ellenbarrie Industrial Gases Limit   done             ok=11 amb= 3 miss=15   135s
+    [checkpoint committed and pushed at 36 companies]
+  [  36/484] Oswal Pumps Limited                  done             ok=11 amb= 5 miss=13   162s
+  [  37/484] Scoda Tubes Limited                  done             ok=10 amb= 4 miss=13   136s
+  [  38/484] Prostarm Info Systems Limited        done             ok=10 amb= 6 miss=13   133s
+  [  39/484] Aegis Vopak Terminals Limited        done             ok=12 amb= 5 miss=12   150s
+  [  40/484] Schloss Bangalore Limited            done             ok=13 amb= 3 miss=13   181s
+    [checkpoint committed and pushed at 41 companies]
+  [  41/484] Belrise Industries Limited           done             ok=10 amb= 3 miss=16   191s
+  [  42/484] Borana Weaves Limited                done             ok=14 amb= 2 miss=13   123s
+  [  43/484] Ather Energy Limited                 done             ok=13 amb= 3 miss=13   161s
+  [  44/484] Quality Power Electronics Limited    done             ok=14 amb= 4 miss=11   114s
+  [  45/484] Hexaware Technologies Limited        done             ok= 9 amb= 6 miss=12   172s
+    [checkpoint committed and pushed at 46 companies]
+  [  46/484] Ajax Engineering Limited             done             ok=13 amb= 5 miss= 9   139s
+  [  47/484] Dr Agarwal's Healthcare Limited      not_a_prospectus ok= 0 amb= 0 miss= 0    12s   <-- FAILED
+        SEBI RHP 'Dr. Agarwal's Healthcare Limited - RHP' filed 2025-01-23 (name sim 1.00); company name not matched in cover (hits=1)
+  [  48/484] Stallion India Fluorochem Limited    done             ok=10 amb= 5 miss=14    98s
+  [  49/484] Laxmi Dental Limited                 done             ok=11 amb= 5 miss=13   180s
+  [  50/484] Quadrant Future Tek Limited          done             ok=10 amb= 4 miss=15   128s
+    [checkpoint committed and pushed at 51 companies]
+  [  51/484] Indo Farm Equipment Limited          done             ok=15 amb= 6 miss= 8   179s
+  [  52/484] Unimech Aerospace and Manufacturin   done             ok=12 amb= 5 miss=12   145s
+  [  53/484] Ventive Hospitality Limited          done             ok= 9 amb= 4 miss=16   257s
+  [  54/484] Carraro India Limited                done             ok= 9 amb= 5 miss=13   141s
+  [  55/484] Senores Pharmaceuticals Limited      done             ok=11 amb= 1 miss=17   144s
+    [checkpoint committed and pushed at 56 companies]
+  [  56/484] Concord Enviro Systems Limited       done             ok= 9 amb= 5 miss=15   180s
+  [  57/484] Mamata Machinery Limited             done             ok=14 amb= 4 miss= 9   113s
+  [  58/484] Sanathan Textiles Limited            done             ok=12 amb= 3 miss=14   134s
+  [  59/484] Dam Capital Advisors Limited         done             ok=10 amb= 4 miss=13   108s
+  [  60/484] Transrail Lighting Limited           done             ok=10 amb= 5 miss=14   166s
+    [checkpoint committed and pushed at 61 companies]
+  [  61/484] International Gemmological Institu   done             ok=12 amb= 6 miss=11   228s
+  [  62/484] Inventurus Knowledge Solutions Lim   done             ok=16 amb= 3 miss= 8   208s
+  [  63/484] Vishal Mega Mart Limited             done             ok=11 amb= 5 miss=12   137s
+  [  64/484] One Mobikwik Systems Limited         done             ok=12 amb= 3 miss=14   168s
+  [  65/484] Sai Life Sciences Limited            done             ok=11 amb= 4 miss=15   155s
+    [checkpoint committed and pushed at 66 companies]
+  [  66/484] Suraksha Diagnostic Limited          done             ok= 8 amb= 4 miss=15   142s
+  [  67/484] Enviro Infra Engineers Limited       done             ok=10 amb= 3 miss=14   142s
+  [  68/484] Zinka Logistics Solution Limited (   done             ok=12 amb= 2 miss=15   146s
+  [  69/484] Niva Bupa Health Insurance Company   done             ok= 8 amb= 5 miss=14   189s
+  [  70/484] Swiggy Limited                       done             ok=11 amb= 5 miss=14   150s
+    [checkpoint committed and pushed at 71 companies]
+  [  71/484] ACME Solar Holdings Limited          done             ok=15 amb= 3 miss=11   196s
+  [  72/484] Sagility India Limited               done             ok=12 amb= 2 miss=13   133s
+  [  73/484] Godavari Biorefineries Limited       done             ok=11 amb= 6 miss=12   143s
+  [  74/484] Waaree Energies Limited              done             ok=12 amb= 5 miss=13   177s
+  [  75/484] Deepak Builders & Engineers India    done             ok=11 amb= 6 miss=12   126s
+    [checkpoint committed and pushed at 76 companies]
+  [  76/484] Hyundai Motor India Limited          done             ok=15 amb= 4 miss= 8   140s
+  [  77/484] Garuda Construction and Engineerin   done             ok= 9 amb= 3 miss=17    97s
+  [  78/484] Diffusion Engineers Limited          done             ok=12 amb= 6 miss=11   122s
+  [  79/484] KRN Heat Exchanger and Refrigerati   done             ok=15 amb= 3 miss=11   107s
+  [  80/484] Manba Finance Limited                done             ok= 9 amb= 3 miss=17   135s
+    [checkpoint committed and pushed at 81 companies]
+  [  81/484] Arkade Developers Limited            done             ok=13 amb= 2 miss=14   130s
+  [  82/484] Western Carriers Limited             done             ok=10 amb= 5 miss=14   133s
+  [  83/484] P N Gadgil Jewellers Limited         done             ok=13 amb= 3 miss=14   152s
+  [  84/484] Tolins Tyres Limited                 done             ok=12 amb= 3 miss=14   162s
+  [  85/484] Bajaj Housing Finance Limited        done             ok=10 amb= 4 miss=13   201s
+    [checkpoint committed and pushed at 86 companies]
+  [  86/484] Kross Limited                        source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Kross']
+  [  87/484] Shree Tirupati Balajee Agro Tradin   done             ok=12 amb= 1 miss=16   136s
+  [  88/484] Gala Precision Engineering Limited   done             ok=10 amb= 4 miss=15   131s
+  [  89/484] Baazar Style Retail Limited          done             ok=11 amb= 3 miss=15   152s
+  [  90/484] Ecos (India) Mobility & Hospitalit   done             ok=13 amb= 3 miss=11   107s
+    [checkpoint committed and pushed at 91 companies]
+  [  91/484] Premier Energies Limited             done             ok= 9 amb= 2 miss=16   161s
+  [  92/484] Orient Technologies Limited          done             ok=13 amb= 2 miss=14   149s
+  [  93/484] Interarch Building Products Limite   done             ok=11 amb= 2 miss=16   164s
+  [  94/484] Saraswati Saree Depot Limited        done             ok=13 amb= 2 miss=14   108s
+  [  95/484] Brainbees Solutions Limited          done             ok= 9 amb= 4 miss=17   225s
+    [checkpoint committed and pushed at 96 companies]
+  [  96/484] Unicommerce eSolutions Limited       done             ok=12 amb= 3 miss=12   145s
+  [  97/484] Ola Electric Mobility Limited        done             ok=13 amb= 4 miss=12   243s

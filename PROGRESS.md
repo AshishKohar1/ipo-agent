@@ -9,8 +9,9 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 
 ## Summary (updated at the end of every session)
 - **Finished:** Stage 0, Stage 1 (laptop), Stage 2 → **Gate A closed** (Set A), Stage 3 → **isotonic calibration adopted** and independently verified, Stage 4A → Gate F2, Stage 14 (Amendment 02 applied)
-- **In progress:** Stage 15b night batch (485 companies, ~19 h, resumable) and Stages 17+18 Chittorgarh sweep (2,861 ids, ~2.5 h) — both **running unattended** since 2026-10-01 01:05 and 01:26 IST
-- **Open gates:** **Gate B** (Model L v1.0 frozen, awaiting approval) and **Gate C2** (H6 coverage 59.6% usable / 63.0% adjusted vs a 60% target; `reports/SPOTCHECK_V2.csv`). Gate F2 is **closed by decision H1**
+- **In progress:** Stage 15b night batch (485 companies, resumable) and Stages 17+18 Chittorgarh sweep (2,861 ids) — both running; the sweep was restarted 05:24 after dying on a malformed cell
+- **Gate C2:** ✅ **CLOSED 2026-10-01** — keep every field; `missing_reason` added (H10)
+- **Gate B:** **AWAITING RATIFICATION.** Model L v1.0 is built, frozen and productionised, but **H11 supersedes A1 and H2's frozen Set A** — that is the one item needing your word. Gate F2 closed by H1
 - **Morning report:** `reports/NIGHT_RUN_REPORT.md`
 - **Cancelled:** Stage 4B and Stage 5 — no permitted source for day-wise subscription history (H1)
 - **Caveat:** Stage 1's Linux/`pip install` half is still unverified — every session so far has run on the Windows laptop, so the first genuine cloud session must re-run `check_env.py` and `stage1_env_check.py`
@@ -39,7 +40,8 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 | 15b | RHP night batch **[NIGHT]** | 15a | **IN_PROGRESS** (running) | 2026-10-01 01:05 | | 485 companies, ~140 s each, ~19 h, resumable. `data/rhp_progress.csv` + `reports/h6_batch_observations.csv`, commit every 5. Ends in **Gate C2** |
 | 16 | Finalise and freeze `L_final_3pm` | 3, 14 | DONE | 2026-10-01 | 2026-10-01 | **Gate B open.** L1 pooled AUC 0.8081 fires 117 @ 94.0%; L2 0.8809 fires 96 @ 87.5%; both PASS C5. `MODEL_L_CARD.md`. **2 of H2's 9 rejections do not reproduce**; H4's issue-size sign is half-life dependent and production is POSITIVE |
 | 17+18 | Chittorgarh backfill **[NIGHT]** | 14 | **IN_PROGRESS** (running) | 2026-10-01 01:26 | | One request per company serves BOTH stages: `/ipo/x/{id}/` carries the H5 financials and the anchor/lock-in block. ids 250-3110, >=3.2 s apart, robots.txt re-verified. Also yields an independent 2nd source for promoter holding |
-| 19 | Productionise + go live | Gate B | NOT_STARTED | | | absorbs Stages 6 and 7 with the single-model `predict_live` |
+| 19 | Productionise + go live | Gate B | **DONE (awaiting Gate B ratification)** | 2026-10-01 | 2026-10-01 | `model_l_v1.0` on H11 (log1p(Total) alone, no recency weighting); coefficients exported as portable JSON and VERIFIED to reproduce every verdict standalone. `predictions_log.py` (append-only), `ingest_outcomes.py`, `run_live_l.py` (dual 15:00/17:30 capture), `retrain_l.py`, `LIVE_SETUP.md`. **5 schedules created.** BLOCKER: NSE/BSE official APIs refuse this host — jobs log honestly and invent nothing |
+| 16b | Settle the issue-size sign | 16 | DONE | 2026-10-01 | 2026-10-01 | **H11**: no half-life defends the sign, so issue size is DROPPED. log1p(Total) alone is +0.31pp better on L1, identical on L2, and passes C5 where Set A failed. `reports/stage16b_half_life.json` |
 
 ## Gates
 
