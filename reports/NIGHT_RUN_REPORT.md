@@ -319,3 +319,96 @@ hand-repair a corrupt file. Nothing else was lost.
    list to fix and the only one that gets worse with delay.
 5. **Stage 1's Linux/cloud half is still unverified.** Every session so far has run on this
    laptop.
+
+---
+
+# Update — 2026-10-01 05:45 IST (session 2)
+
+## Night job progress
+
+### SEBI batch — 99 of 485 settled (20.4%)
+
+| | |
+|---|---|
+| `done` | **90** |
+| `source_unresolved` | 7 |
+| `not_a_prospectus` | 2 |
+| Rate | **23.1 companies/hour** (mean 172 s, median 154 s) |
+| Remaining | 386 → **~16.7 h**, estimated completion **2026-10-01 22:22 IST** |
+| Field yield | mean **11.7 `ok` + 3.7 `ambiguous` of 30** per company (51% usable) |
+
+**Failures by reason and by year** — every one is a recent issue:
+
+| Listing year | `source_unresolved` | `not_a_prospectus` |
+|---|---|---|
+| 2024 | 1 | 0 |
+| 2025 | 6 | 2 |
+| 2010–2023 | 0 | 0 |
+
+The batch is working backwards from the newest listings, so this is the 2024–25 cohort only.
+All nine failures are SEBI's archive not carrying a document that matches the company name
+and filing window, or carrying one that fails `_verify_is_prospectus()`. Neither is
+transient, and both are recorded with the queries tried. **No company has failed for a
+reason that suggests the site changed**, and the 5-consecutive-failure circuit breaker has
+not come close to tripping.
+
+**It died once.** The session's usage-limit pause took both jobs with it; the SEBI batch was
+found alive and untouched, the Chittorgarh sweep dead (see below).
+
+### Chittorgarh sweep — 1,955 of 2,861 ids (68.3%)
+
+| Field | Rows | Share |
+|---|---|---|
+| company name | 1,955 | 100% |
+| issue size | 1,890 | 97% |
+| restated financials (PAT) | 1,769 | 90% |
+| **promoter holding pre/post** | **1,881** | **96%** |
+| anchor allocation | 561 | 29% |
+| lock-in expiry dates | 810 | 41% |
+
+#### ⚠️ Correction: anchor data is NOT 41% spread across the years — it is **0% before 2022**
+
+| Listing year | Rows | Anchor allocation | % |
+|---|---|---|---|
+| 2010–2021 | 917 | **0** | **0%** |
+| 2022 | 148 | 39 | 26% |
+| 2023 | 239 | 121 | 51% |
+| 2024 | 340 | 247 | 73% |
+| 2025 | 180 | 137 | 76% |
+| 2026 | 21 | 14 | 67% |
+
+Stage 4A estimated "~41% overall, ~60% for 2020 onward" from a 50-id probe. On 1,955 ids the
+truth is sharper and worse for the older half: **Chittorgarh publishes no anchor allocation
+at all for any IPO that listed before 2022**, and coverage only becomes useful from 2023.
+
+**What this means for Model H.** The anchor block — allocation, mutual-fund share, lock-in
+expiry — can only be populated for 2022-onward IPOs, roughly 730 of 2,861 ids. `excess_1y`
+needs a listing plus 365 days, so the usable anchor-labelled set is smaller still. **Any
+Model H feature built on anchor data will be fitted on the most recent cohort only**, and
+must be declared as such rather than presented as a feature of the whole history. That is a
+decision for Gate E, not something to paper over with an imputed zero.
+
+#### The compensating find: promoter holding is **96%** across every year
+
+Promoter holding pre- and post-issue comes back for 1,881 of 1,955 ids — including **37 of 37
+in 2010**. I had expected this to be thin for the older vintages and it is not. It matters
+twice over:
+
+1. It is a genuinely **independent second source** for two H6 fields the RHP alone could
+   never satisfy under rule 2.
+2. It populates the ownership block for the **whole** history, which anchor data cannot — so
+   Model H's ownership signal does not have to be a 2022-onward feature after all.
+
+Restated financials tell the same story in reverse: 0% before 2013, then 90%+ from 2014.
+
+### Restarts, session 2
+
+| Job | Time IST | What happened |
+|---|---|---|
+| SEBI batch | — | **survived** the usage-limit pause; found alive at 05:21, untouched |
+| Chittorgarh sweep | died **02:59** | `ValueError: could not convert string to float: '23..47'` — a malformed cell raised inside `pct()` and killed the sweep at id 1,618 |
+| Chittorgarh sweep | restarted **05:24** | `pct()` and `money_cr()` now require a well-formed number and guard the conversion, and the per-id parse is wrapped so a bad page costs that page, not the run |
+
+I also mis-read the process table at 05:21 and briefly reported both jobs dead: the memory
+column contains a comma (`233,120 K`), so my numeric filter parsed it as 233 and discarded
+the row. The SEBI batch had never stopped. Corrected within the same turn.

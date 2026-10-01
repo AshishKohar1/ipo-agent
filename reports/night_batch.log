@@ -123,3 +123,4 @@ queue 485 | settled 1 | to do 484 | free disk 152.7 GB
     [checkpoint committed and pushed at 96 companies]
   [  96/484] Unicommerce eSolutions Limited       done             ok=12 amb= 3 miss=12   145s
   [  97/484] Ola Electric Mobility Limited        done             ok=13 amb= 4 miss=12   243s
+  [  98/484] Ceigall India Limited                done             ok=16 amb= 2 miss=11   149s
