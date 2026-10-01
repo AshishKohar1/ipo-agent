@@ -44,8 +44,14 @@ import dataio
 
 MODEL_ID = "model_l_v1.0"
 DECISION_POINT = "L_final_3pm"
-SET_A = ["log1p_total", "log_issue_size"]
-FEATURES = SET_A                       # frozen by H2
+SET_A = ["log1p_total", "log_issue_size"]      # the standing challenger (A2-style), not the champion
+# Decision H11: issue size is DROPPED. Its standardised coefficient is positive at every
+# finite half-life and negative only unweighted -- it never stabilises, so its direction was
+# set by the recency knob rather than by the data. log1p(Total) alone scores HIGHER on L1
+# (0.8112 vs 0.8081), identically on L2, passes the C5 gates at every half-life including
+# `none` where Set A fails L2's Wilson bound, and leaves no knob to tune.
+FEATURES = ["log1p_total"]
+HALF_LIFE = None                       # H11: no recency weighting; AUC is monotone in it
 REQUIRED = {"L1": 0.90, "L2": 0.80}    # promised hit rates, not thresholds
 CUTS = {"L1": 0.0, "L2": 10.0}
 
@@ -81,7 +87,12 @@ def _num(df, *names):
 
 
 def make_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Set A only. `retail_skew` is computed alongside but is NOT a feature (H3)."""
+    """The production feature, plus the challenger's. Only `FEATURES` reaches the model.
+
+    `log_issue_size` is still computed so the Set A challenger can be fitted from the same
+    frame in monthly retraining, and `retail_skew` so the demand-profile label can be
+    derived -- neither is a model input (H11, H3).
+    """
     out = pd.DataFrame(index=df.index)
     out["log1p_total"] = np.log1p(_num(df, "Total", "total"))
     size = _num(df, "Issue_Size(crores)", "Issue_Size", "issue_size_cr")
@@ -129,23 +140,41 @@ NOTES = [
     "**One model only (H1).** `L_day1`, `L_day2` and the final-day forecaster are cancelled: "
     "no permitted source publishes day-wise subscription history. Their code paths do not "
     "exist — there is nothing dormant to fall back to.",
-    "**Approximated at 3pm, not measured (C3).** Trained on FINAL subscription because no "
-    "historical 3pm snapshot exists. Final-day figures overestimate the 3pm position — "
-    "observed intraday drift is large and one-directional (Adroit Industries QIB 1.82x on "
-    "day 2 to 195x on the final day). Rebuild once ~40 real 3pm samples accumulate (B4).",
-    "**Feature set frozen at Set A (H2).** Nine candidates rejected; `stage16_model_l.py` "
-    "re-tests them each time and records disagreements rather than asserting the result.",
+    "**Trained on 5pm final subscription, fed 3pm figures live — so it UNDERSTATES, and "
+    "that makes it conservative (C3).** No historical 3pm snapshot exists, so the model is "
+    "fitted on final-day subscription and then scored on the position at ~15:00. "
+    "Institutional bids concentrate in the final hours (observed: Adroit Industries QIB "
+    "1.82x on day 2 against 195x at close), so a 3pm figure is systematically LOWER than "
+    "the figure the model was trained on. The probability it returns is therefore too low, "
+    "not too high: **the model will miss good IPOs rather than recommend bad ones.** A "
+    "near-threshold `no` should be read as uncertain, not as a negative verdict. "
+    "**The size of this bias is unmeasured** until the 15:00/17:30 paired capture "
+    "accumulates data (`data/subscription_snapshots.csv`); it cannot be estimated from any "
+    "existing source.",
+    "**Feature set is `log1p(Total)` alone (H11), superseding Set A.** Issue size was "
+    "dropped: its coefficient is positive at every finite half-life and negative only "
+    "unweighted, so its direction came from the recency knob rather than the data. Dropping "
+    "it RAISED L1 pooled AUC (0.8112 vs 0.8081), left L2 unchanged (0.8808 vs 0.8809), and "
+    "fixed the one configuration where Set A failed L2's Wilson gate. Set A is retained as a "
+    "standing challenger on the A2 champion/challenger rule, never promoted by hand.",
+    "**The evidence for several rejected candidates is WEAKER than PLAN.md states.** "
+    "Re-tested on the current dataset: the log transform improves pooled AUC by "
+    "**0.07pp, not the 1.2pp** recorded in Amendment 02, so it is justified on "
+    "distributional grounds and not by AUC; and `plus_hni` is **marginally better** "
+    "(+0.26pp L1, +0.15pp L2), not worse as recorded. Market heat helps L1 (+0.53pp) and "
+    "hurts L2 (-0.54pp), so the Set C challenger should be tracked per target. The feature "
+    "choice still stands — every gap is under 0.6pp, inside this dataset's noise band — but "
+    "the published figures should not be quoted as measured here.",
     "**`retail_skew` is displayed, never modelled (H3).** Adding it moves pooled AUC by less "
     "than the noise band and it is already embedded in Total.",
     "**Isotonic calibration (G1), and it overclaims (G2).** Among rows it places above the "
     "requirement it claims a mean 98.5% and delivers 94.0% (L1), and claims 99.2% and "
     "delivers 87.5% (L2). Reports must print the verdict and the threshold met, never the "
     "probability as a literal chance.",
-    "**The issue-size coefficient's sign depends on the recency half-life.** Unweighted it is "
-    "negative (L1 -0.137, L2 -0.058, consistent with H4's direction); at the selected 2-year "
-    "half-life it is positive (+0.314, +0.409). The production model therefore carries a "
-    "POSITIVE issue-size coefficient. H4's magnitude of -0.356 does not reproduce at any "
-    "half-life. Recent years genuinely behave differently — this is not a sample artefact.",
+    "**No recency weighting (H11).** Pooled AUC rises monotonically as the half-life "
+    "lengthens (L1 0.8051 at 2y to 0.8112 unweighted), so `none` is both the best setting "
+    "and the end of the sequence. Every training row counts equally and there is no knob a "
+    "reader could question. Effective sample size equals the row count.",
     "`class_weight='balanced'` pushes probabilities towards 0.5; thresholds are validated on "
     "out-of-fold hit rates, not read off the probability scale.",
     "Survivorship does not affect Model L: the target is realised on listing day for every IPO.",

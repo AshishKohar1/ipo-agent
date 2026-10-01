@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-01 00:48:26.798594",
+  "generated": "2026-10-01 05:27:34.511963",
   "stage": 16,
   "decisions": [
     "H1",
@@ -241,7 +241,7 @@
   "final": {
     "L1": {
       "n": 620,
-      "half_life": 2,
+      "half_life": "none",
       "test_years": [
         2022,
         2023,
@@ -249,67 +249,66 @@
         2025,
         2026
       ],
-      "pooled_auc": 0.8081,
-      "mean_auc": 0.7255,
+      "pooled_auc": 0.8112,
+      "mean_auc": 0.7613,
       "per_year": [
         {
           "test_year": 2022,
           "n_train": 322,
-          "eff_n_train": 145.42077165413588,
+          "eff_n_train": 322.0,
           "n_test": 38,
           "test_pos_rate": 0.6842105263157895,
-          "auc": 0.6987179487179487
+          "auc": 0.6666666666666666
         },
         {
           "test_year": 2023,
           "n_train": 360,
-          "eff_n_train": 166.29382513626055,
+          "eff_n_train": 360.0,
           "n_test": 58,
           "test_pos_rate": 0.7931034482758621,
-          "auc": 0.8007246376811594
+          "auc": 0.8460144927536232
         },
         {
           "test_year": 2024,
           "n_train": 418,
-          "eff_n_train": 195.4033835246453,
+          "eff_n_train": 418.0,
           "n_test": 80,
           "test_pos_rate": 0.7625,
-          "auc": 0.8334771354616048
+          "auc": 0.8369283865401208
         },
         {
           "test_year": 2025,
           "n_train": 498,
-          "eff_n_train": 245.26413699637072,
+          "eff_n_train": 498.0,
           "n_test": 102,
           "test_pos_rate": 0.696078431372549,
-          "auc": 0.8468877782825989
+          "auc": 0.8264425261244889
         },
         {
           "test_year": 2026,
           "n_train": 600,
-          "eff_n_train": 310.5083507748293,
+          "eff_n_train": 600.0,
           "n_test": 20,
           "test_pos_rate": 0.4,
-          "auc": 0.4479166666666667
+          "auc": 0.6302083333333334
         }
       ],
-      "brier_raw": 0.1599,
-      "brier_isotonic": 0.1579,
+      "brier_raw": 0.1551,
+      "brier_isotonic": 0.1549,
       "isotonic_beats_raw": true,
       "firing_rule": "fire iff isotonic-calibrated p >= 0.90",
-      "raw_equivalent_threshold": 0.8325150300601202,
+      "raw_equivalent_threshold": 0.8662084168336673,
       "held_out_n_fire": 117,
-      "held_out_hits": 110,
-      "held_out_hit_rate": 0.9402,
-      "held_out_wilson_lo95": 0.8816,
+      "held_out_hits": 111,
+      "held_out_hit_rate": 0.9487,
+      "held_out_wilson_lo95": 0.8926,
       "passes_c5": true,
-      "calibrator_claimed_mean": 0.9859,
-      "overclaim_pp": 4.57,
+      "calibrator_claimed_mean": 1.0,
+      "overclaim_pp": 5.13,
       "std_coefs": {
-        "log1p_total": 1.4749,
-        "log_issue_size": 0.3138
+        "log1p_total": 1.4776
       },
-      "effective_n": 323.4,
+      "effective_n": 620.0,
       "bundle": "model_l_v1.0_l1.joblib",
       "profile_cutpoints": [
         -1.809544506403265,
@@ -320,7 +319,7 @@
     },
     "L2": {
       "n": 620,
-      "half_life": 2,
+      "half_life": "none",
       "test_years": [
         2022,
         2023,
@@ -328,67 +327,66 @@
         2025,
         2026
       ],
-      "pooled_auc": 0.8809,
-      "mean_auc": 0.878,
+      "pooled_auc": 0.8808,
+      "mean_auc": 0.872,
       "per_year": [
         {
           "test_year": 2022,
           "n_train": 322,
-          "eff_n_train": 145.42077165413588,
+          "eff_n_train": 322.0,
           "n_test": 38,
           "test_pos_rate": 0.34210526315789475,
-          "auc": 0.9046153846153846
+          "auc": 0.8984615384615384
         },
         {
           "test_year": 2023,
           "n_train": 360,
-          "eff_n_train": 166.29382513626055,
+          "eff_n_train": 360.0,
           "n_test": 58,
           "test_pos_rate": 0.5862068965517241,
-          "auc": 0.8676470588235294
+          "auc": 0.8933823529411765
         },
         {
           "test_year": 2024,
           "n_train": 418,
-          "eff_n_train": 195.4033835246453,
+          "eff_n_train": 418.0,
           "n_test": 80,
           "test_pos_rate": 0.6125,
-          "auc": 0.8874259381171824
+          "auc": 0.8926925608953259
         },
         {
           "test_year": 2025,
           "n_train": 498,
-          "eff_n_train": 245.26413699637072,
+          "eff_n_train": 498.0,
           "n_test": 102,
           "test_pos_rate": 0.4019607843137255,
-          "auc": 0.8676529388244703
+          "auc": 0.8520591763294683
         },
         {
           "test_year": 2026,
           "n_train": 600,
-          "eff_n_train": 310.5083507748293,
+          "eff_n_train": 600.0,
           "n_test": 20,
           "test_pos_rate": 0.15,
-          "auc": 0.8627450980392157
+          "auc": 0.8235294117647058
         }
       ],
-      "brier_raw": 0.1626,
-      "brier_isotonic": 0.1586,
+      "brier_raw": 0.1655,
+      "brier_isotonic": 0.1604,
       "isotonic_beats_raw": true,
       "firing_rule": "fire iff isotonic-calibrated p >= 0.80",
-      "raw_equivalent_threshold": 0.8929649298597194,
-      "held_out_n_fire": 96,
-      "held_out_hits": 84,
-      "held_out_hit_rate": 0.875,
-      "held_out_wilson_lo95": 0.7941,
+      "raw_equivalent_threshold": 0.9068386773547094,
+      "held_out_n_fire": 94,
+      "held_out_hits": 80,
+      "held_out_hit_rate": 0.8511,
+      "held_out_wilson_lo95": 0.7654,
       "passes_c5": true,
-      "calibrator_claimed_mean": 0.9917,
-      "overclaim_pp": 11.67,
+      "calibrator_claimed_mean": 0.9891,
+      "overclaim_pp": 13.81,
       "std_coefs": {
-        "log1p_total": 1.8993,
-        "log_issue_size": 0.4094
+        "log1p_total": 1.915
       },
-      "effective_n": 323.4,
+      "effective_n": 620.0,
       "bundle": "model_l_v1.0_l2.joblib",
       "profile_cutpoints": [
         -1.809544506403265,
@@ -402,7 +400,7 @@
     "L1": {
       "n": 402,
       "half_life": 2,
-      "pooled_auc": 0.7956,
+      "pooled_auc": 0.7917,
       "test_years": [
         2026
       ],
@@ -412,7 +410,7 @@
     "L2": {
       "n": 402,
       "half_life": 2,
-      "pooled_auc": 0.8244,
+      "pooled_auc": 0.8349,
       "test_years": [
         2026
       ],

@@ -43,7 +43,18 @@ w("**There is one Model L** (decision H1). `L_day1`, `L_day2` and the final-day 
   "search confirms **no day-wise or forecaster code path exists**, in this module or any "
   "other; there is nothing dormant to fall back to.")
 w("")
-w("**Features: Set A, frozen (A1, H2)** — `log1p(Total subscription)` + `log(issue size)`.")
+w("**Feature: `log1p(Total subscription)` alone (decision H11).** Issue size was **dropped**: "
+  "its standardised coefficient is positive at every finite half-life (+0.314 at 2 y, +0.232 "
+  "at 3 y, +0.112 at 5 y, +0.021 at 8 y) and negative only unweighted (−0.137), so its "
+  "direction was set by the recency knob rather than by the data. Dropping it **raised** L1 "
+  "pooled AUC (0.8112 vs 0.8081), left L2 unchanged (0.8808 vs 0.8809), and **fixed the one "
+  "configuration where Set A failed** L2's Wilson gate. Set A is retained as a standing "
+  "challenger on the A2 champion/challenger rule. **H11 supersedes A1 and H2 and needs "
+  "ratification at Gate B.**")
+w("")
+w("**No recency weighting (H11).** Pooled AUC is monotone in the half-life, so `none` is both "
+  "the best setting and the end of the sequence: there is no knob left for a reader to "
+  "question, which was the whole objection. Effective sample size equals the row count.")
 w("")
 w("## Performance")
 w("")
@@ -103,20 +114,17 @@ w("## Coefficients, and one thing to know about them")
 w("")
 w("| Feature | L1 (std) | L2 (std) |")
 w("|---|---|---|")
-for k in ML.SET_A:
+for k in ML.FEATURES:
     w(f"| `{k}` | {f['L1']['std_coefs'][k]:+.3f} | {f['L2']['std_coefs'][k]:+.3f} |")
 w("")
 h4 = hh["h4_issue_size"]
-w(f"**The issue-size coefficient's sign is decided by the recency half-life, not by the data "
-  f"as a whole.** Unweighted it is negative (L1 {h4['L1']['log_issue_size_std_coef']:+.3f}, "
-  f"L2 {h4['L2']['log_issue_size_std_coef']:+.3f}), consistent with decision H4's direction. "
-  f"At the selected 2-year half-life it is **positive** "
-  f"({f['L1']['std_coefs']['log_issue_size']:+.3f}, "
-  f"{f['L2']['std_coefs']['log_issue_size']:+.3f}), so **the production model carries a "
-  f"positive issue-size coefficient.** H4's magnitude of {h4['L1']['claimed']:+.3f} does not "
-  f"reproduce at any half-life tried (none, 8, 5, 3, 2 years). Recent years genuinely behave "
-  f"differently from the full history — this is not the sample artefact H4 took it for. "
-  f"**Flagged for Gate B.**")
+w(f"Issue size is no longer a feature, so there is no issue-size coefficient in production. "
+  f"For the record, the reason it was dropped: unweighted it is "
+  f"{h4['L1']['log_issue_size_std_coef']:+.3f} (L1) and "
+  f"{h4['L2']['log_issue_size_std_coef']:+.3f} (L2) — decision H4's direction, though nowhere "
+  f"near its stated {h4['L1']['claimed']:+.3f} — and positive at every finite half-life. A "
+  f"variable whose direction is decided by a tuning knob cannot be defended, and removing it "
+  f"cost nothing. The full sweep is in `reports/stage16b_half_life.json` and decision H11.")
 w("")
 w("## Demand profile — displayed, never modelled (H3)")
 w("")

@@ -259,8 +259,13 @@ def part3_final() -> dict:
         req = REQUIRED[target]
         sp = ML.spec(target, "mainboard")           # the production spec, not a local copy
         df = F.prepare(sp)
-        best, tab, runs, years = F.select_half_life(df, sp)
-        oof, per = runs[best]
+        # H11 fixes the half-life at `none`: pooled AUC is monotone in it, so there is
+        # nothing to select and no knob whose setting could be questioned. Selecting it by
+        # AUC each run is what produced the +0.314 issue-size coefficient the whole of
+        # stage16b_half_life.py was written to investigate.
+        best = ML.HALF_LIFE
+        years = F.test_years(df, sp)
+        oof, per = F.walk_forward(df, sp, best, years)
         pooled = float(F.roc_auc_score(oof["y"], oof["p"]))
         oof.to_csv(oof_dir / f"stage16_{target.lower()}_setA.csv", index=False)
 
@@ -324,7 +329,36 @@ def part3_final() -> dict:
         print(f"      standardised coefficients: "
               + ", ".join(f"{a} {b:+.3f}" for a, b in coefs.items())
               + f" | effective n {F.effective_n(w):.0f} of {len(df)}")
-        print(f"      saved {path.name}")
+        # PLAN Stage 6 step 1: the scoring formula as portable JSON, so a verdict can be
+        # reproduced without unpickling a model or importing this repo.
+        coef_json = {
+            "model_id": ML.MODEL_ID, "target": target, "decision_point": ML.DECISION_POINT,
+            "features": list(sp.features), "half_life": best,
+            "standardised_coefficients": {a: float(b) for a, b in coefs.items()},
+            "intercept": float(pipe.intercept_),
+            "standardiser_mean": {a: float(b) for a, b in zip(sp.features, pipe.mean_)},
+            "standardiser_scale": {a: float(b) for a, b in zip(sp.features, pipe.scale_)},
+            "scoring": (
+                "1. build features: log1p_total = log(1 + Total_subscription_x)\n"
+                "2. standardise:    z_i = (x_i - standardiser_mean_i) / standardiser_scale_i\n"
+                "3. logit        = intercept + sum_i(standardised_coefficients_i * z_i)\n"
+                "4. p_raw        = 1 / (1 + exp(-logit))\n"
+                "5. p_cal        = interp(p_raw, isotonic_x, isotonic_y), clipped to [0,1]\n"
+                "6. VERDICT      = BID iff p_cal >= required_hit_rate\n"
+                "   Equivalently, without step 5: BID iff p_raw >= raw_equivalent_threshold.\n"
+                "   Per G2, report the verdict and the threshold met -- never p_cal as a "
+                "literal chance."),
+            "required_hit_rate": req,
+            "raw_equivalent_threshold": raw_equiv,
+            "isotonic_x": [float(v) for v in prod_cal.x_],
+            "isotonic_y": [float(v) for v in prod_cal.y_],
+            "profile_cutpoints": cuts,
+            "decisions": ["H1", "H3", "H11", "G1", "G2", "C3"],
+            "generated": str(pd.Timestamp.now()),
+        }
+        cj = ROOT / "models" / f"{sp.name}_coefficients.json"
+        cj.write_text(json.dumps(coef_json, indent=2, default=str), encoding="utf-8")
+        print(f"      saved {path.name} and {cj.name}")
 
         out[target] = {
             "n": int(len(df)), "half_life": "none" if best is None else best,
