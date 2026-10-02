@@ -90,10 +90,26 @@ def _verify_is_prospectus(pdf_bytes: bytes, company: str) -> tuple[bool, str]:
     if not re.search(r"RED HERRING PROSPECTUS|PROSPECTUS", head):
         return False, "no prospectus marker in first 4 pages"
 
-    # company-name check: require 2+ distinctive tokens to co-occur
-    toks = [t for t in re.findall(r"[A-Za-z]{4,}", company.upper())
-            if t not in {"LIMITED", "PRIVATE", "INDIA", "COMPANY"}]
-    hits = sum(1 for t in toks[:4] if t in head)
+    # Company-name check: 2+ distinctive tokens must co-occur, compared on a 5-character
+    # STEM rather than the whole token.
+    #
+    # NARROW EXCEPTION, added 2026-10-02 after reviewing the 8 not_a_prospectus cases. Four
+    # of them were this check rejecting the correct document over a singular/plural ending:
+    #   Gandhar Oil REFINERIES (master) against REFINERY (cover)
+    #   Syrma SGS TECHNOLOGIES (master) against TECHNOLOGY (cover)
+    #   Dr Agarwal's HEALTHCARE (master) against HEALTH CARE (cover, two words)
+    # A 5-character stem matches REFIN/TECHN/HEALT in each pair and still distinguishes any
+    # two genuinely different companies — no real-world pair of issuers differs only after
+    # the fifth letter of two separate tokens.
+    #
+    # This exception is deliberately limited to the NAME test. The prospectus-marker test
+    # and the 100-page test are untouched: those caught two genuinely wrong documents
+    # (Patel Retail, a 1-page addendum; Ideaforge, SEBI's own "Corigendum to RHP") and
+    # loosening either would let an addendum into the pipeline.
+    STOP = {"LIMITED", "PRIVATE", "INDIA", "COMPANY", "LTD"}
+    toks = [t for t in re.findall(r"[A-Za-z]{4,}", company.upper()) if t not in STOP]
+    head_stems = {w[:5] for w in re.findall(r"[A-Z]{4,}", head)}
+    hits = sum(1 for t in toks[:4] if t in head or t[:5] in head_stems)
     if toks and hits < min(2, len(toks)):
         return False, f"company name not matched in cover (hits={hits})"
     if n < 100:

@@ -54,13 +54,28 @@ from extract import h6                 # noqa: E402
 PROGRESS = ROOT / "data" / "rhp_progress.csv"
 OBS = ROOT / "reports" / "h6_batch_observations.csv"
 TMP = ROOT / "rhp_pdfs" / "_batch_tmp"
-MIN_GAP_S = 3.2                 # >= 3 s between requests to the same source
+# Raised from 3.2 s to 5 s. The first run stopped at 278 of 485 when SEBI began refusing
+# connections and five in a row tripped the breaker — which is the breaker working, but the
+# trigger was throttling rather than the site changing.
+MIN_GAP_S = 5.0
 MIN_FREE_GB = 2.0
 MAX_TRANSIENT_RETRIES = 3
 MAX_CONSECUTIVE_FAILS = 5
 COMMIT_EVERY = 5
-TRANSIENT = ("timeout", "timed out", "connection", "connectionerror", "temporarily",
-             "502", "503", "504", "429", "reset by peer", "ssl")
+
+# THROTTLING IS NOT FAILURE, and conflating the two is what stopped the first run 207
+# companies early. A 429, a 503 or a dropped connection means "slow down"; a missing
+# document means "this one is not here". They are counted separately: throttling backs off
+# and does NOT advance the consecutive-failure breaker, while a genuine failure does.
+THROTTLE = ("429", "503", "502", "504", "too many requests", "rate limit", "retry-after",
+            "connectionerror", "connection aborted", "connection reset", "reset by peer",
+            "max retries exceeded", "timeout", "timed out", "read timed out",
+            "remotedisconnected", "temporarily")
+TRANSIENT = THROTTLE + ("ssl",)
+# Backoff for throttling: 10 s, 30 s, 90 s, 270 s, then hold at 600 s. Cumulative, so a
+# throttled site is given real time to recover instead of being hammered on a fixed gap.
+THROTTLE_BACKOFF_S = (10, 30, 90, 270, 600)
+MAX_THROTTLE_PAUSES = 12        # ~30 min of cumulative backoff before giving up for tonight
 
 PROGRESS_COLS = ["company", "isin", "listing_date", "segment", "status", "doc_type",
                  "source", "url", "sha256", "pages", "n_ok", "n_ambiguous",
@@ -226,8 +241,40 @@ def is_transient(msg: str) -> bool:
     return any(k in m for k in TRANSIENT)
 
 
+def is_throttle(msg: str) -> bool:
+    """Is the source asking us to slow down, rather than telling us a document is absent?"""
+    m = (msg or "").lower()
+    return any(k in m for k in THROTTLE)
+
+
 # ---------------------------------------------------------------- main loop
-def main(limit: int | None = None, status_only: bool = False) -> None:
+def clear_retryable() -> int:
+    """Priority 2b: re-queue the companies whose only problem was a refused connection.
+
+    Those were never missing documents — the five recorded as `fetch_error` are
+    Anupam Rasayan, Craftsman Automation, Easy Trip Planners, Kalyan Jewellers and Laxmi
+    Organic. Their progress rows are removed so the resumable queue picks them up again.
+    """
+    if not PROGRESS.exists():
+        return 0
+    p = pd.read_csv(PROGRESS, keep_default_na=False, na_values=[""])
+    note = p["note"].astype(str)
+    retryable = (note.str.contains("ConnectionError|Max retries|Timeout|timed out",
+                                   case=False, regex=True)
+                 & ~p["status"].isin(["done"]))
+    k = int(retryable.sum())
+    if k:
+        p[~retryable].to_csv(PROGRESS, index=False, encoding="utf-8")
+        print(f"re-queued {k} company/companies whose fetch was refused rather than missing:")
+        for c in p.loc[retryable, "company"]:
+            print(f"    - {c}")
+    return k
+
+
+def main(limit: int | None = None, status_only: bool = False,
+         retry_failed: bool = False) -> None:
+    if retry_failed:
+        clear_retryable()
     q = build_queue()
     prog = load_progress()
     # `source_unresolved` counts as settled. It is a deterministic outcome — SEBI's archive
@@ -254,6 +301,7 @@ def main(limit: int | None = None, status_only: bool = False) -> None:
     known = manifest_hashes()
     TMP.mkdir(parents=True, exist_ok=True)
     consecutive, n_done, last = 0, 0, 0.0
+    throttle_pauses = 0
 
     for row in todo.itertuples(index=False):
         if limit is not None and n_done >= limit:
@@ -269,6 +317,7 @@ def main(limit: int | None = None, status_only: bool = False) -> None:
         last = time.time()
 
         res, attempt, seen_msgs = None, 0, []
+        throttled_this_company = 0
         while attempt < MAX_TRANSIENT_RETRIES:
             attempt += 1
             try:
@@ -279,9 +328,24 @@ def main(limit: int | None = None, status_only: bool = False) -> None:
                 if not is_transient(msg):
                     break                      # a real refusal, not worth retrying
                 seen_msgs.append(msg)
-                back = MIN_GAP_S * (2 ** attempt)
-                print(f"    transient ({msg[:60]}), retry {attempt} in {back:.0f}s",
-                      flush=True)
+                if is_throttle(msg):
+                    throttle_pauses += 1
+                    throttled_this_company += 1
+                    back = THROTTLE_BACKOFF_S[min(throttle_pauses - 1,
+                                                  len(THROTTLE_BACKOFF_S) - 1)]
+                    print(f"    THROTTLED ({msg[:70]}) — backing off {back}s "
+                          f"(pause {throttle_pauses}/{MAX_THROTTLE_PAUSES}); this does NOT "
+                          f"count toward the failure breaker", flush=True)
+                    if throttle_pauses >= MAX_THROTTLE_PAUSES:
+                        print(f"\nSTOP: {throttle_pauses} throttle pauses — SEBI is rate "
+                              f"limiting persistently. Stopping cleanly; the queue is "
+                              f"resumable and nothing is lost.", flush=True)
+                        break
+                    attempt -= 1               # a throttle is not one of the 3 real retries
+                else:
+                    back = MIN_GAP_S * (2 ** attempt)
+                    print(f"    transient ({msg[:60]}), retry {attempt} in {back:.0f}s",
+                          flush=True)
                 time.sleep(back)
                 last = time.time()
             except Exception as e:
@@ -309,7 +373,15 @@ def main(limit: int | None = None, status_only: bool = False) -> None:
         append_progress(res)
 
         ok = res.get("status") == "done"
-        consecutive = 0 if ok else consecutive + 1
+        # A company abandoned purely because the source was throttling is NOT a failure of
+        # that company, so it must not advance the breaker — otherwise five throttles in a
+        # row stop a run that would have completed, which is exactly what happened at 278.
+        throttle_only = (not ok) and throttled_this_company > 0 and is_throttle(
+            str(res.get("note") or ""))
+        if ok or throttle_only:
+            consecutive = 0
+        else:
+            consecutive += 1
         n_done += 1
         flag = "" if ok else "   <-- FAILED"
         print(f"  [{n_done:4d}/{len(todo)}] {str(row.company)[:34]:36s} "
@@ -322,8 +394,11 @@ def main(limit: int | None = None, status_only: bool = False) -> None:
         if n_done % COMMIT_EVERY == 0:
             commit(len(settled) + n_done)
 
+        if throttle_pauses >= MAX_THROTTLE_PAUSES:
+            break
         if consecutive >= MAX_CONSECUTIVE_FAILS:
-            print(f"\nSTOP: {consecutive} consecutive failures — the source has probably "
+            print(f"\nSTOP: {consecutive} consecutive GENUINE failures (throttling is "
+                  f"counted separately and did not contribute) — the source has probably "
                   f"changed. Nothing further attempted.")
             break
 
@@ -341,5 +416,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--status", action="store_true")
+    ap.add_argument("--retry-failed", action="store_true",
+                    help="re-queue companies whose fetch was refused (Priority 2b)")
     a = ap.parse_args()
-    main(a.limit, a.status)
+    main(a.limit, a.status, a.retry_failed)
