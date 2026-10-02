@@ -83,13 +83,42 @@ def _verify_is_prospectus(pdf_bytes: bytes, company: str) -> tuple[bool, str]:
     try:
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             n = len(pdf.pages)
-            head = " ".join((pdf.pages[i].extract_text() or "")
-                            for i in range(min(4, n))).upper()
+            # NARROW WIDENING, 2026-10-03, after reading the two outstanding
+            # not_a_prospectus PDFs that could only be settled by opening them:
+            #
+            #   Manoj Vaibhav Gems (416 pages) — pages 1-2 are SCANNED IMAGES with zero
+            #     extractable text, page 3 is "(This page is intentionally left blank)",
+            #     page 4 is the table of contents, and the marker first appears on page 5
+            #     ("This Red Herring Prospectus..."). A fixed 4-PAGE window therefore
+            #     rejected a genuine 416-page RHP purely because its cover was scanned.
+            #
+            # So the window is now the first 4 pages THAT CONTAIN TEXT, searched within
+            # the first 12 pages. What the test actually needs is four pages of readable
+            # front matter; counting image pages towards that budget measures the scanner,
+            # not the document.
+            #
+            # This does NOT weaken the test. Samhi Hotels — the other outstanding case —
+            # is a ONE-PAGE scan with no text at all: it still fails here, and fails the
+            # >=100-page test as well. Patel Retail's 1-page addendum and SEBI's own
+            # "Corigendum to RHP" for Ideaforge also still fail. The company-name test and
+            # the >=100-page test are untouched.
+            texts, idx = [], 0
+            while len(texts) < 4 and idx < min(12, n):
+                t = pdf.pages[idx].extract_text() or ""
+                if t.strip():
+                    texts.append(t)
+                idx += 1
+            head = " ".join(texts).upper()
+            n_scanned = idx - len(texts)
     except Exception as e:
         return False, f"unreadable pdf: {e}"
 
     if not re.search(r"RED HERRING PROSPECTUS|PROSPECTUS", head):
-        return False, "no prospectus marker in first 4 pages"
+        return False, (f"no prospectus marker in the first {len(texts)} page(s) with text"
+                       + (f" ({n_scanned} leading page(s) had no extractable text)"
+                          if n_scanned else "")
+                       + (" — the document has no extractable text at all"
+                          if not texts else ""))
 
     # Company-name check: 2+ distinctive tokens must co-occur, compared on a 5-character
     # STEM rather than the whole token.

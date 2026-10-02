@@ -289,3 +289,151 @@ while an IPO is open. Both read successfully:
 | Vishal Nirmiti | 2665 | 30 Sep – 05 Oct | 1.00x | 0.84x | 0.49x | **0.60x** |
 
 Both close **Monday 5 October**, so the first scheduled run is also the first real test.
+
+## 2026-10-03 — H15 to H18
+
+Taken while fixing the live pipeline, which had failed silently for three days. H15 and H17
+are mine to take — they implement rules already decided. **H16 and H18 need the user's
+ratification**, because each changes a promise the system makes.
+
+### H15 — the live path carries no modelling dependency
+
+Every scheduled run from 1–3 Oct died in ~35 s with `ModuleNotFoundError: No module named
+'joblib'` at `models/framework.py:32`. `send_daily_email.py` imported `model_l`, which
+imports `framework`, which imports `joblib`; joblib reaches the laptop only as a
+scikit-learn dependency, and scikit-learn is banned (rule 10), so `requirements.txt` never
+listed it and the cloud never got it. A *modelling* dependency was breaking *mail delivery*.
+
+**Decision.** Live scoring reads the portable coefficient JSON through `score_l.py`, which
+imports only `json`, `math` and `bisect`. No joblib, framework, dataio, numpy or pandas.
+The live path is verified to import in a venv containing **no joblib at all**, so this class
+of failure cannot reach the email again. joblib is also now listed explicitly in
+`requirements.txt` for the fitting path.
+
+The JSON is the artefact of record for live scoring; the joblib bundle remains the artefact
+of record for fitting. `score_l.self_test()` checks they produce identical verdicts wherever
+the bundle can be loaded, and the two forms of the threshold rule were measured to fire
+within 0.4% of the same Total subscription.
+
+A clean-environment audit of every module the scheduled jobs touch found **joblib was the
+only missing package**. It also surfaced a pre-existing break: `model_h` imported
+`mb_features`, renamed `make_features` when the `L_day1`/`L_day2` paths were deleted under
+H1.
+
+### H16 — L2's threshold under-delivers, and not because the window is thin (NEEDS RATIFICATION)
+
+The 2026-10 retrain reported L2 delivering **76.0% (19/25) against an 80% promise**. 25
+fires is thin, so the window was widened to see whether the shortfall persists as the fire
+count grows.
+
+| Out-of-sample window | Fires | Hits | Delivered | Wilson 95% LB | Meets 80%? |
+|---|---|---|---|---|---|
+| 12 months | 25 | 19 | **76.0%** | 56.6% | no |
+| 18 months | 38 | 32 | 84.2% | 69.6% | yes |
+| 24 months | 54 | 48 | 88.9% | 77.8% | yes |
+| **36 months** | **125** | **97** | **77.6%** | 69.5% | **no** |
+| **48 months** | **138** | **106** | **76.8%** | 69.1% | **no** |
+| **60 months** | **160** | **125** | **78.1%** | 71.1% | **no** |
+
+It is **not** a small-sample artefact: at 125–160 fires the delivered rate sits at
+76.8–78.1%. The 18- and 24-month windows are the exceptions, and the 24-month figure
+(88.9%) is the 2024–25 hot market — the same window that produced H11's false positive sign
+on issue size.
+
+L1 is the control and clears its promise in every window — 92.3% / 92.9% / 95.2% / 91.0% at
+39–145 fires. So this is specific to L2's threshold, not general degradation and not the
+window.
+
+The derivation itself said so. Stage 16 chose L2's threshold on a delivered 85.1% over 94
+fires with a **Wilson 95% lower bound of 76.5%**, passing C5 only because the rule allows
+5pp of slack. 76–78% is that lower bound materialising. The central estimate was the
+optimistic read all along.
+
+**Recommendation: re-derive L2's threshold on current data at Gate B.** Re-deriving by the
+C5 rule on the last 36 months gives 0.84 (0.82 at 48 months), which delivers **92.2% on 64
+fires** — but at the cost of roughly **half the bids**. Those figures come from models
+refitted on each window's training half, so the threshold numbers are not transplantable to
+the production bundle; the re-derivation must be done on the production fit.
+
+Until it is, **L2's stated 80% is not currently supported by the data.** L1's 90% is.
+
+### H17 — a failed run no longer locks out its own retry
+
+`mark_ran()` wrote an idempotency marker even when the run captured zero rows, and
+`already_ran()` only checked that the key existed. A failure therefore recorded itself as a
+success and blocked every retry for that slot. Three slots were stuck:
+`2026-10-01|1730`, `2026-10-02|1730`, `2026-10-02|1500`.
+
+**Decision.** A marker counts as "ran" only if `n_snapshots > 0`. Zero-row markers are kept
+as the audit trail of failed attempts but do not lock. The three stuck slots were cleared by
+the logic change rather than by deleting rows. Idempotency suppresses duplicate *work*,
+never duplicate *attempts at work that has not happened*.
+
+### H18 — name similarity cannot identify a company rename (NEEDS RATIFICATION)
+
+Our master carries current names; SEBI filings carry the name at filing time, so a renamed
+company resolves to nothing and reports `source_unresolved` — which reads as SEBI not having
+the document rather than as us asking the wrong question. `manual_rhp/SOURCES.csv` shows
+**8 of 28 hand-sourced companies had a genuine rename**, not the 4 the user spotted.
+
+Two systematic sources were tried and **rejected**, and both are documented in
+`company_aliases.py` so they are not retried as if new:
+
+* **Aggregator name matching.** Free and looked systematic — the 2,861-row Chittorgarh
+  harvest, zero requests. It produced 98 candidates that are mostly *different companies*:
+  Godrej Properties to Godrej Agrovet, Power Grid Corporation to Powerica, Jaypee Infratech
+  to Rahee Infratech, ARSS Infrastructure to JSW Infrastructure. Renamed companies need not
+  have similar names (Eternal/Zomato scores far below any usable band) while unrelated
+  Indian companies routinely share a word. Feeding these to the resolver would fetch
+  **another company's filing**. Making the aggregator usable needs a name-independent key,
+  and `mine_chittorgarh.py` joined on normalised *name*, so by construction it can offer no
+  rename evidence.
+
+* **"Formerly known as" on RHP covers.** Right idea, wrong anchor. A cover page also names
+  the lead managers, the registrar and the selling shareholders, each with its own
+  "formerly". Unanchored it produced Alivus to IDFC Securities (the BRLM), Alivus to Karvy
+  Fintech (the registrar), M & B Engineering to "Link Intime India Private 12th Floor" (an
+  *address*), Urban Company to SAIF Partners (a shareholder). Anchored to require the
+  issuer's own name immediately before "formerly", it is reliable, and it contributed one
+  new verified alias: Sri Lotus Developers & Realty, formerly AKP Holdings, read off its own
+  cover.
+
+**Decision.** `data/company_aliases.csv` holds only aliases with document or user evidence —
+23 of them. Every entry records what the evidence is and how it was obtained.
+`fetch_rhp.py` resolves against the current name **first**, then aliases, so a company that
+already resolved resolves identically.
+
+**ISIN, not name, is the key that should have been used.** It is the only identifier immune
+to renaming. `symbols.py` now tries ISIN first everywhere.
+
+One entry is `our_data_error`, not `rename`: the company is and always was Udayshivakumar
+**Infra**, so this is our master carrying a wrong name. An `our_data_error` should be fixed
+at source; a `rename` must be kept forever. **The master still needs that fix.**
+
+### Verifier: one narrow widening, stated exactly
+
+The two outstanding `not_a_prospectus` cases are settled, because the PDFs were in hand:
+
+* **Manoj Vaibhav Gems** — 416 pages, but pages 1–2 are **scanned images with zero
+  extractable text**, page 3 is blank and page 4 is the table of contents, so the marker
+  first appears on page 5. A fixed 4-page window rejected a genuine RHP because its cover
+  was scanned. The window is now the first 4 pages **that contain text**, searched within
+  the first 12. What the test needs is four pages of readable front matter; counting image
+  pages against that budget measures the scanner, not the document.
+* **Samhi Hotels** — **one page, zero text.** Genuinely not a prospectus. The verifier was
+  right, and still rejects it after the widening. The document needs re-sourcing.
+
+The company-name test and the ≥100-page test are untouched. Patel Retail's 1-page addendum
+and SEBI's own "Corigendum to RHP" for Ideaforge also still fail.
+
+### Not a decision, but it must be recorded: an existing rule-3 violation
+
+`fetch_nifty_tri.py` sends a **spoofed Chrome User-Agent** to niftyindices.com. That
+predates the current rules and contradicts project rule 3 ("never send a browser
+User-Agent"). It is how `data/NIFTY50_TRI.csv` was obtained and is why that host appears
+reachable. With our honest User-Agent, `www.niftyindices.com` **read-times-out on every
+path including `/robots.txt`** — retried at 40 s and twice at 75 s, on both the apex and
+`www` hosts — so its permission cannot be established at all. `market_context.py` does not
+copy the spoof: it logs NULL with `permission_unverifiable`. The existing TRI file on disk
+is kept and used; no new spoofed request is made. **Whether to keep or remove that
+User-Agent is the user's call.**

@@ -402,3 +402,353 @@ not_a_prospectus       8
 free disk 150.1 GB
 queue 485 | settled 272 | to do 213 | free disk 146.8 GB
   [   1/213] Kalyan Jewellers India Limited       done             ok=11 amb= 5 miss=13   154s
+  [   2/213] Craftsman Automation Limited         done             ok=10 amb= 6 miss=13   127s
+  [   3/213] Laxmi Organic Industries Limited     done             ok= 8 amb= 7 miss=14   118s
+  [   4/213] Anupam Rasayan India Limited         done             ok=10 amb= 4 miss=15   138s
+  [   5/213] Easy Trip Planners Limited           done             ok=11 amb= 5 miss=11   127s
+    [checkpoint committed and pushed at 277 companies]
+  [   6/213] MTAR Technologies Limited            done             ok=10 amb= 6 miss=14   139s
+  [   7/213] Heranba Industries Limited           done             ok=14 amb= 3 miss=12   115s
+  [   8/213] Railtel Corporation of India Limit   done             ok= 9 amb= 3 miss=15   154s
+  [   9/213] Nureca Limited                       done             ok=10 amb= 2 miss=17    95s
+  [  10/213] Stove Kraft Limited                  done             ok=10 amb= 8 miss=11    97s
+    [checkpoint committed and pushed at 282 companies]
+  [  11/213] Home First Finance Company India L   done             ok=10 amb= 7 miss=11   129s
+  [  12/213] Indigo Paints Limited                done             ok=11 amb= 9 miss=10   120s
+  [  13/213] Indian Railway Finance Corporation   done             ok=14 amb= 3 miss=13   120s
+  [  14/213] Antony Waste Handling Cell Ltd       done             ok= 8 amb= 5 miss=16   125s
+  [  15/213] Mrs Bectors Food Specialities Ltd    done             ok=10 amb= 5 miss=12   124s
+    [checkpoint committed and pushed at 287 companies]
+  [  16/213] Restaurant Brands Asia Ltd           source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Restaurant Brands Asia', 'Restaurant Brands', 'Restaurant']
+  [  17/213] Gland Pharma Ltd                     done             ok=13 amb= 4 miss=13   117s
+  [  18/213] Equitas Small Finance Bank Ltd       done             ok=10 amb= 5 miss=14   148s
+  [  19/213] UTI Asset Management Company Ltd     done             ok=13 amb= 2 miss=13   138s
+  [  20/213] Likhitha Infrastructure Ltd          done             ok=11 amb= 2 miss=16    95s
+    [checkpoint committed and pushed at 292 companies]
+  [  21/213] Mazagon Dock Shipbuilders Ltd        done             ok= 6 amb= 4 miss=18   109s
+  [  22/213] Angel One Ltd                        source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Angel One', 'Angel']
+  [  23/213] Computer Age Management Services L   done             ok= 9 amb= 7 miss=11   110s
+  [  24/213] Chemcon Speciality Chemicals Ltd     done             ok=11 amb= 4 miss=14   106s
+  [  25/213] Route Mobile Ltd                     done             ok= 9 amb= 7 miss=13   124s
+    [checkpoint committed and pushed at 297 companies]
+  [  26/213] Happiest Minds Technologies Ltd      done             ok=13 amb= 3 miss=13   158s
+    THROTTLED (SEBI: error ConnectionError: HTTPSConnectionPool(host='www.sebi.gov.in) — backing off 10s (pause 1/12); this does NOT count toward the failure breaker
+  [  27/213] Rossari Biotech Ltd                  done             ok=13 amb= 1 miss=16   164s
+  [  28/213] SBI Cards & Payment Services Ltd     done             ok= 9 amb= 4 miss=14   191s
+  [  29/213] Prince Pipes and Fittings Ltd        done             ok= 9 amb= 5 miss=16   173s
+  [  30/213] Ujjivan Small Finance Bank Ltd       done             ok=11 amb= 4 miss=14   134s
+    [checkpoint committed and pushed at 302 companies]
+  [  31/213] CSB Bank Ltd                         done             ok=10 amb= 5 miss=15   192s
+  [  32/213] Vishwaraj Sugar Industries Ltd       done             ok= 8 amb= 5 miss=15    91s
+  [  33/213] Indian Railway Catering and Touris   done             ok=12 amb= 1 miss=14    91s
+  [  34/213] Spandana Sphoorty Financial Ltd      done             ok= 9 amb= 6 miss=14   174s
+  [  35/213] Affle (India) Ltd                    source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Affle']
+    [checkpoint committed and pushed at 307 companies]
+  [  36/213] Indiamart Intermesh Ltd              done             ok= 6 amb= 4 miss=17   151s
+  [  37/213] Neogen Chemicals Ltd                 done             ok=12 amb= 4 miss=13   148s
+  [  38/213] Polycab India Ltd                    done             ok= 8 amb= 2 miss=20   194s
+  [  39/213] Metropolis Healthcare Ltd            done             ok= 5 amb= 6 miss=16   184s
+  [  40/213] Rail Vikas Nigam Ltd                 done             ok= 9 amb= 4 miss=15   135s
+    [checkpoint committed and pushed at 312 companies]
+  [  41/213] MSTC Ltd                             source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['MSTC']
+  [  42/213] Chalet Hotels Ltd                    done             ok= 7 amb= 4 miss=18   199s
+  [  43/213] Xelpmoc Design and Technologies Lt   done             ok=11 amb= 5 miss=13   105s
+  [  44/213] AAVAS Financiers Ltd                 done             ok= 6 amb= 3 miss=18   159s
+  [  45/213] Garden Reach Shipbuilders & Engine   done             ok= 7 amb= 4 miss=17   138s
+    [checkpoint committed and pushed at 317 companies]
+  [  46/213] Ircon International Ltd              done             ok= 9 amb= 4 miss=15   199s
+  [  47/213] CreditAccess Grameen Ltd             done             ok= 9 amb= 4 miss=14   130s
+  [  48/213] HDFC Asset Management Company Ltd    done             ok= 8 amb= 2 miss=17   151s
+  [  49/213] Varroc Engineering Ltd               done             ok= 9 amb= 3 miss=15   168s
+  [  50/213] Fine Organic Industries Ltd          done             ok= 6 amb= 1 miss=20   136s
+    [checkpoint committed and pushed at 322 companies]
+  [  51/213] Rites Ltd                            source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Rites']
+  [  52/213] Indostar Capital Finance Ltd         done             ok= 7 amb= 5 miss=15   125s
+  [  53/213] Lemon Tree Hotels Ltd                done             ok= 4 amb= 3 miss=20   159s
+  [  54/213] Mishra Dhatu Nigam Ltd (MIDHANI)     done             ok= 9 amb= 3 miss=16    93s
+  [  55/213] Sandhar Technologies Ltd             done             ok=14 amb= 4 miss=11   164s
+    [checkpoint committed and pushed at 327 companies]
+  [  56/213] Hindustan Aeronautics Ltd (HAL)      done             ok=10 amb= 3 miss=15   162s
+  [  57/213] Dharan Infra EPC Ltd                 source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Dharan Infra EPC', 'Dharan Infra', 'Dharan']
+  [  58/213] Bandhan Bank Ltd                     done             ok= 9 amb= 3 miss=18   145s
+  [  59/213] Bharat Dynamics Ltd                  done             ok=10 amb= 2 miss=16    94s
+  [  60/213] H.G. Infra Engineering Ltd           source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['H.G. Infra Engineering', 'H.G. Infra', 'H.G.']
+    [checkpoint committed and pushed at 332 companies]
+  [  61/213] Galaxy Surfactants Ltd               done             ok= 6 amb= 3 miss=18   124s
+  [  62/213] Amber Enterprises India Ltd          done             ok=13 amb= 3 miss=13   124s
+  [  63/213] Newgen Software Technologies Ltd     done             ok= 6 amb= 5 miss=18   127s
+  [  64/213] Apollo Micro Systems Ltd             done             ok= 9 amb= 5 miss=15    81s
+  [  65/213] Astron Paper & Board Mill Ltd        done             ok=11 amb= 4 miss=15   108s
+    [checkpoint committed and pushed at 337 companies]
+  [  66/213] Shalby Ltd                           done             ok=10 amb= 3 miss=16   139s
+  [  67/213] HDFC Life Insurance Company Ltd      source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['HDFC Life Insurance', 'HDFC Life', 'HDFC']
+  [  68/213] Khadim India Ltd                     done             ok= 9 amb= 5 miss=16    93s
+  [  69/213] New India Assurance Company Ltd      done             ok=13 amb= 3 miss=12   182s
+  [  70/213] Mahindra Logistics Ltd               done             ok= 7 amb= 4 miss=16   160s
+    [checkpoint committed and pushed at 342 companies]
+  [  71/213] Nippon Life India Asset Management   done             ok=10 amb= 3 miss=14   140s
+  [  72/213] General Insurance Corporation of I   done             ok=10 amb= 1 miss=19   168s
+  [  73/213] Indian Energy Exchange Ltd           done             ok= 8 amb= 3 miss=17   110s
+  [  74/213] MAS Financial Services Ltd           done             ok=11 amb= 4 miss=13   144s
+  [  75/213] Godrej Agrovet Ltd                   done             ok=10 amb= 3 miss=14   162s
+    [checkpoint committed and pushed at 347 companies]
+  [  76/213] Prataap Snacks Ltd                   source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Prataap Snacks', 'Prataap']
+  [  77/213] SBI Life Insurance Company Ltd       done             ok= 8 amb= 5 miss=15   134s
+  [  78/213] ICICI Lombard General Insurance Co   done             ok= 8 amb= 6 miss=13   156s
+  [  79/213] Capacit'e Infraprojects Ltd          source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ["Capacit'e Infraprojects", "Capacit'e"]
+  [  80/213] Matrimony.com Ltd                    done             ok= 9 amb= 3 miss=15   140s
+    [checkpoint committed and pushed at 352 companies]
+  [  81/213] Bharat Road Network Ltd              done             ok= 9 amb= 3 miss=17   204s
+  [  82/213] Dixon Technologies (India) Ltd       done             ok= 9 amb= 4 miss=16   151s
+  [  83/213] Apex Frozen Foods Ltd                done             ok=11 amb= 2 miss=16    81s
+  [  84/213] Cochin Shipyard Ltd                  done             ok= 7 amb= 2 miss=21   115s
+  [  85/213] Salasar Techno Engineering Ltd       done             ok= 9 amb= 3 miss=17   110s
+    [checkpoint committed and pushed at 357 companies]
+  [  86/213] AU Small Finance Bank Ltd            done             ok=10 amb= 4 miss=13   122s
+  [  87/213] GTPL Hathway Ltd                     done             ok=11 amb= 3 miss=15   223s
+  [  88/213] Central Depository Services Ltd      done             ok=10 amb= 3 miss=14   440s
+  [  89/213] ERIS Lifesciences Ltd                done             ok=11 amb= 2 miss=14   154s
+  [  90/213] Tejas Networks Ltd                   done             ok=12 amb= 3 miss=15   355s
+    [checkpoint committed and pushed at 362 companies]
+  [  91/213] PSP Projects Ltd                     done             ok=12 amb= 1 miss=16   238s
+  [  92/213] Housing & Urban Development Corpor   done             ok= 9 amb= 2 miss=17   444s
+  [  93/213] S Chand & Company Ltd                done             ok=10 amb= 5 miss=15   341s
+  [  94/213] Shankara Building Products Ltd       done             ok=11 amb= 3 miss=15   197s
+  [  95/213] CL Educate Ltd                       done             ok= 7 amb= 4 miss=18   271s
+    [commit skipped: ]
+  [  96/213] Avenue Supermarts Ltd (DMart)        done             ok=10 amb= 6 miss=14   207s
+  [  97/213] Music Broadcast Ltd                  done             ok= 9 amb= 4 miss=16   188s
+  [  98/213] BSE Ltd (Bombay Stock Exchange)      source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['BSE']
+  [  99/213] Laurus Labs Ltd                      done             ok=10 amb= 4 miss=16   324s
+  [ 100/213] Sheela Foam Ltd                      done             ok= 9 amb= 4 miss=15   220s
+    [commit skipped: ]
+  [ 101/213] Varun Beverages Ltd                  done             ok=15 amb= 2 miss=13   315s
+  [ 102/213] PNB Housing Finance Ltd              done             ok= 8 amb= 3 miss=19   280s
+  [ 103/213] Endurance Technologies Ltd           done             ok= 9 amb= 2 miss=16   333s
+  [ 104/213] HPL Electric & Power Ltd             done             ok= 6 amb= 1 miss=22   499s
+  [ 105/213] ICICI Prudential Life Insurance Co   done             ok= 7 amb= 5 miss=15   386s
+    [commit skipped: ]
+  [ 106/213] GNA Axles Ltd                        source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['GNA Axles', 'GNA']
+  [ 107/213] L&T Technology Services Ltd          done             ok=12 amb= 6 miss= 9   226s
+  [ 108/213] RBL Bank Ltd                         done             ok=10 amb= 4 miss=16   316s
+  [ 109/213] S P Apparels Ltd                     source_unresolved ok= 0 amb= 0 miss= 0     9s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['S P Apparels', 'S P', 'S']
+  [ 110/213] Dilip Buildcon Ltd                   done             ok=10 amb= 2 miss=17   250s
+    [commit skipped: ]
+  [ 111/213] Advanced Enzyme Technologies Ltd     done             ok=13 amb= 2 miss=15   258s
+  [ 112/213] Quess Corp Ltd                       done             ok= 8 amb= 2 miss=20   233s
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+  [ 113/213] Mahanagar Gas Ltd                    done             ok= 5 amb= 4 miss=19   159s
+  [ 114/213] Parag Milk Foods Ltd                 done             ok= 7 amb= 3 miss=20   236s
+  [ 115/213] Thyrocare Technologies Ltd           done             ok=12 amb= 2 miss=13   170s
+    [commit skipped: ]
+  [ 116/213] Bharat Wire Ropes Ltd                done             ok= 7 amb= 4 miss=18   297s
+  [ 117/213] Healthcare Global Enterprises Ltd    done             ok=14 amb= 3 miss=12   344s
+  [ 118/213] Quick Heal Technologies Ltd          done             ok= 6 amb= 4 miss=18   199s
+  [ 119/213] Team Lease Services Ltd              done             ok=14 amb= 2 miss=14   187s
+  [ 120/213] Precision Camshafts Ltd              done             ok=10 amb= 2 miss=17   104s
+    [commit skipped: ]
+  [ 121/213] Narayana Hrudayalaya Ltd             done             ok=10 amb= 2 miss=15   164s
+  [ 122/213] Dr Lal Pathlabs Ltd                  done             ok= 9 amb= 3 miss=15   188s
+  [ 123/213] Alkem Laboratories Ltd               done             ok= 7 amb= 3 miss=18   269s
+  [ 124/213] S H Kelkar & Company Ltd             done             ok= 7 amb= 5 miss=18   220s
+  [ 125/213] Interglobe Aviation Ltd              done             ok= 3 amb= 1 miss=26   111s
+    [commit skipped: ]
+  [ 126/213] Coffee Day Enterprises Ltd           done             ok=13 amb= 4 miss=12   313s
+  [ 127/213] Sadbhav Infrastructure Project Ltd   done             ok=11 amb= 4 miss=14   266s
+  [ 128/213] Shree Pushkar Chemicals Ltd          done             ok= 6 amb= 3 miss=21   106s
+  [ 129/213] Navkar Corporation Ltd               done             ok= 9 amb= 2 miss=18   184s
+  [ 130/213] Power Mech Projects Ltd              done             ok=11 amb= 2 miss=16   196s
+    [commit skipped: ]
+  [ 131/213] Syngene International Ltd            done             ok=16 amb= 1 miss=10   114s
+  [ 132/213] PNC Infratech Ltd                    done             ok= 8 amb= 5 miss=17   119s
+  [ 133/213] UFO Moviez India Ltd                 done             ok= 8 amb= 2 miss=18   164s
+  [ 134/213] MEP Infrastructure Developers Ltd    done             ok=10 amb= 3 miss=17   168s
+  [ 135/213] VRL Logistics Ltd                    done             ok= 6 amb= 6 miss=17   108s
+    [commit skipped: ]
+  [ 136/213] Inox Wind Ltd                        done             ok=10 amb= 1 miss=18   151s
+  [ 137/213] Imagicaaworld Entertainment Ltd      source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Imagicaaworld Entertainment', 'Imagicaaworld']
+  [ 138/213] Ortel Communications Ltd             done             ok=10 amb= 1 miss=18   158s
+  [ 139/213] Monte Carlo Fashions Ltd             done             ok= 9 amb= 1 miss=17    92s
+  [ 140/213] Shemaroo Entertainment Ltd           done             ok= 7 amb= 2 miss=21   102s
+    [commit skipped: ]
+  [ 141/213] Sharda Cropchem Ltd                  done             ok= 9 amb= 3 miss=16   127s
+  [ 142/213] Snowman Logistics Ltd                done             ok= 9 amb= 5 miss=15   114s
+  [ 143/213] Wonderla Holidays Ltd                done             ok=12 amb= 1 miss=16   121s
+  [ 144/213] Just Dial Ltd                        done             ok=10 amb= 3 miss=15   182s
+  [ 145/213] Repco Home Finance Ltd               done             ok=11 amb= 2 miss=17   152s
+    [commit skipped: ]
+  [ 146/213] V-Mart Retail Ltd                    done             ok=12 amb= 3 miss=14   180s
+  [ 147/213] Indus Towers Ltd                     source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Indus Towers', 'Indus']
+  [ 148/213] PC Jeweller Ltd                      done             ok=11 amb= 3 miss=15   160s
+  [ 149/213] CARE Ratings Ltd                     source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['CARE Ratings', 'CARE']
+  [ 150/213] Speciality Restaurants Ltd           done             ok=10 amb= 2 miss=17   166s
+    [commit skipped: ]
+  [ 151/213] Tribhovandas Bhimji Zaveri Ltd       done             ok= 7 amb= 3 miss=20   100s
+  [ 152/213] MT Educare Ltd                       done             ok=10 amb= 3 miss=14   224s
+  [ 153/213] NBCC (India) Ltd                     source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['NBCC']
+  [ 154/213] Multi Commodity Exchange of India    done             ok= 7 amb= 1 miss=19   169s
+  [ 155/213] Indo Thai Securities Ltd             done             ok=12 amb= 1 miss=17    63s
+    [commit skipped: ]
+  [ 156/213] Flexituff Ventures International L   source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Flexituff Ventures International', 'Flexituff Ventures', 'Flexituff']
+  [ 157/213] Onelife Capital Advisors Ltd         done             ok= 7 amb= 2 miss=21    67s
+  [ 158/213] Ujaas Energy Ltd                     source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Ujaas Energy', 'Ujaas']
+  [ 159/213] Setubandhan Infrastructure Ltd       source_unresolved ok= 0 amb= 0 miss= 0     5s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Setubandhan Infrastructure', 'Setubandhan']
+  [ 160/213] PG Electroplast Ltd                  done             ok=10 amb= 2 miss=17    80s
+    [commit skipped: ]
+  [ 161/213] TD Power Systems Ltd                 done             ok=11 amb= 2 miss=17   110s
+  [ 162/213] Brooks Laboratories Ltd              done             ok=12 amb= 3 miss=15   117s
+  [ 163/213] Tree House Education & Accessories   done             ok= 9 amb= 2 miss=19   130s
+  [ 164/213] L&T Finance Holdings Ltd             source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['L&T Finance Holdings', 'L&T Finance', 'L&T']
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The start and end byte have different lengths.
+Ignoring (part of) ToUnicode map because the PDF data does not conform to the format. This could result in (cid) values in the output. The difference between the start and end offsets does not match the code length.
+  [ 165/213] Inventure Growth & Securities Ltd    done             ok= 9 amb= 1 miss=19   123s
+    [commit skipped: ]
+  [ 166/213] Bharatiya Global Infomedia Ltd       done             ok= 9 amb= 2 miss=18    65s
+  [ 167/213] Kridhan Infra Ltd                    source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Kridhan Infra', 'Kridhan']
+  [ 168/213] Rushil Decor Ltd                     done             ok= 9 amb= 2 miss=19   146s
+  [ 169/213] Vaswani Industries Ltd               done             ok= 8 amb= 3 miss=19    91s
+  [ 170/213] Muthoot Finance Ltd                  done             ok= 9 amb= 0 miss=20    84s
+    [commit skipped: ]
+  [ 171/213] PTC India Financial Services Ltd     done             ok= 8 amb= 2 miss=20    88s
+  [ 172/213] Lovable Lingerie Ltd                 done             ok= 9 amb= 2 miss=19    78s
+  [ 173/213] Fineotex Chemical Ltd                done             ok= 6 amb= 3 miss=21    47s
+  [ 174/213] Punjab & Sind Bank                   done             ok= 8 amb= 1 miss=21   146s
+  [ 175/213] A2Z Infra Engineering Ltd            source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['A2Z Infra Engineering', 'A2Z Infra', 'A2Z']
+    [commit skipped: ]
+  [ 176/213] Ravikumar Distilleries Ltd           source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Ravikumar Distilleries', 'Ravikumar']
+  [ 177/213] MOIL Ltd                             source_unresolved ok= 0 amb= 0 miss= 0     6s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['MOIL']
+  [ 178/213] RPP Infra Projects Ltd               done             ok= 8 amb= 2 miss=20   122s
+  [ 179/213] Gravita India Ltd                    done             ok= 5 amb= 3 miss=22    82s
+  [ 180/213] Coal India Ltd                       source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Coal India', 'Coal']
+    [commit skipped: ]
+  [ 181/213] Shah Metacorp Ltd                    source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Shah Metacorp', 'Shah']
+  [ 182/213] Prestige Estates Projects Ltd        not_a_prospectus ok= 0 amb= 0 miss= 0    15s   <-- FAILED
+        SEBI RHP 'Prestige Estates Projects Limited' filed 2013-01-18 (name sim 1.00); company name not matched in cover (hits=1)
+  [ 183/213] Oberoi Realty Ltd                    done             ok= 8 amb= 4 miss=18   159s
+  [ 184/213] Jupiter Wagons Ltd                   source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Jupiter Wagons', 'Jupiter']
+  [ 185/213] Bedmutha Industries Ltd              done             ok= 7 amb= 2 miss=21    89s
+    [commit skipped: ]
+  [ 186/213] Ashoka Buildcon Ltd                  done             ok=14 amb= 1 miss=15   120s
+  [ 187/213] Va Tech Wabag Ltd                    not_a_prospectus ok= 0 amb= 0 miss= 0    19s   <-- FAILED
+        SEBI RHP 'VA Tech Wabag Limited' filed 2010-09-20 (name sim 1.00); only 1 pages — likely an addendum, not the full document
+  [ 188/213] Cantabil Retail India Ltd            done             ok= 8 amb= 4 miss=18    61s
+  [ 189/213] Orient Green Power Company Ltd       done             ok=11 amb= 5 miss=14   199s
+  [ 190/213] Ramky Infrastructure Ltd             done             ok= 9 amb= 2 miss=19   127s
+    [commit skipped: ]
+  [ 191/213] CP Capital Ltd                       source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['CP Capital', 'CP']
+  [ 192/213] Indosolar Limited                    done             ok= 9 amb= 2 miss=18   121s
+  [ 193/213] Gujarat Pipavav Port Limited         done             ok= 7 amb= 4 miss=19   144s
+  [ 194/213] Prakash Steelage Limited             done             ok= 4 amb= 3 miss=23   100s
+  [ 195/213] Bajaj Consumer Care Limited          source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Bajaj Consumer Care', 'Bajaj Consumer', 'Bajaj']
+    [commit skipped: ]
+  [ 196/213] Hindustan Media Ventures Limited     done             ok= 7 amb= 3 miss=20   238s
+  [ 197/213] SJVN Limited                         source_unresolved ok= 0 amb= 0 miss= 0    11s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['SJVN']
+  [ 198/213] Tarapur Transformers Limited         done             ok= 7 amb= 0 miss=23   133s
+  [ 199/213] Intrasoft Technologies Limited       done             ok= 8 amb= 2 miss=19   191s
+  [ 200/213] Persistent Systems Limited           done             ok=10 amb= 5 miss=14   200s
+    [commit skipped: ]
+  [ 201/213] IL&FS Transportation Networks Limi   source_unresolved ok= 0 amb= 0 miss= 0    11s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['IL&FS Transportation Networks', 'IL&FS Transportation', 'IL&FS']
+  [ 202/213] Man Infraconstruction Limited        done             ok= 9 amb= 1 miss=20   152s
+  [ 203/213] Texmo Pipes and Products Limited     done             ok= 8 amb= 0 miss=22    94s
+    THROTTLED (SEBI: error ChunkedEncodingError: ('Connection broken: IncompleteRead() — backing off 30s (pause 2/12); this does NOT count toward the failure breaker
+  [ 204/213] Hathway Cable & Datacom Limited      done             ok= 7 amb= 1 miss=22   284s
+  [ 205/213] Emmbi Industries Limited             source_unresolved ok= 0 amb= 0 miss= 0     8s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Emmbi Industries', 'Emmbi']
+    [commit skipped: ]
+  [ 206/213] Valor Estates Limited                source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Valor Estates', 'Valor']
+  [ 207/213] Thangamayil Jewellery Limited        source_unresolved ok= 0 amb= 0 miss= 0     7s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['Thangamayil Jewellery', 'Thangamayil']
+  [ 208/213] Vascon Engineers Limited             done             ok= 6 amb= 3 miss=20   244s
+  [ 209/213] Jubilant Foodworks Limited           done             ok=12 amb= 1 miss=17   176s
+  [ 210/213] D B Corp Limited                     source_unresolved ok= 0 amb= 0 miss= 0     9s   <-- FAILED
+        SEBI: no RHP matching name+date for queries ['D B Corp', 'D B', 'D']
+    [commit skipped: ]
+  [ 211/213] Godrej Properties Limited            done             ok= 9 amb= 4 miss=17   283s
+  [ 212/213] JSW Energy Limited                   done             ok= 9 amb= 5 miss=16   253s
+  [ 213/213] MBL Infrastructure Limited           not_a_prospectus ok= 0 amb= 0 miss= 0    17s   <-- FAILED
+        SEBI RHP 'MBL Infrastrctures Limited' filed 2009-11-27 (name sim 0.94); only 1 pages — likely an addendum, not the full document
+    [commit skipped: ]
+
+processed this run: 213 | total settled: 486
+status
+done                 418
+source_unresolved     57
+not_a_prospectus      11
+free disk 152.7 GB
