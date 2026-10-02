@@ -1,0 +1,2 @@
+csv_company_name,file,doc_type,status,sha256,pages,name_on_document,name_check,source_url,n_ok,n_ambiguous,n_not_in_drhp,n_missing,secs,note,ran_at
+Syrma SGS Technologies,Syrma SGS Technologies.pdf,RHP,done,480cad6793c3d47f7445d291a5bf0ff53e56d755435b84f67419db105def64e9,779,Syrma SGS Technology Ltd,matched the name on the document,https://www.sebi.gov.in/filings/public-issues/aug-2022/syrma-sgs-technology-ltd-_61790.html,18,5,0,13,386.4,,2026-10-03 02:51:23.602358
