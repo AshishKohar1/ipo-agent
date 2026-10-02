@@ -246,3 +246,46 @@ Nothing is pruned. `missing_reason` (H10) is what makes a low field interpretabl
 field is only a candidate for removal once the **full** queue has been attempted. The
 scorecard excludes a field by reading `low_variance` / coverage, not by the field being
 absent from the dataset.
+
+## 2026-10-02 — H14: the live subscription source
+
+**robots.txt re-read before recording this** (2026-10-02, HTTP 200). Chittorgarh **still
+permits** access: `User-agent: *` → `Allow: /`, with only `/ipo/ipo_discussions.asp`
+disallowed. The file now names fifteen crawlers and blocks each with `Disallow: /` —
+AmazonAdBot, Adsbot-Google, CCBot, GPTBot, OAI-SearchBot, omgili, omgilibot, MAZBot,
+ChatGPT-User, Baiduspider, DataForSeoBot, AhrefsBot, PetalBot — and **no Claude, Anthropic,
+`ai-train` or `noai` token appears anywhere in it**. We are not any of the named agents and
+are not crawling: a handful of specific pages per weekday at ≥3 s. Decision B2's permission
+stands. **The direction of travel is worth watching**, and `robots_ok()` already aborts the
+run if a Claude or Anthropic token ever appears.
+
+| Date (IST) | Gate / stage | Decision (verbatim) | Recorded by |
+|---|---|---|---|
+| 2026-10-02 | Stage 19 / live | **H14 — Chittorgarh is the live subscription source for Model L v1.0, accepted as single-source and therefore outside rule 2's two-source standard.** Every reading is tagged `single_source_unverified` in `predictions_log.csv`, and every email carries "Subscription from a single source — verify on your broker app before bidding." If NSE or BSE later grant access they become the primary pair and Chittorgarh the corroborator. | User |
+
+### Why this was needed
+
+NSE times out on every path for our User-Agent and BSE returns 403 even on its own
+`robots.txt`. Both are recorded in `reports/exchange_permission_check.json`. Chittorgarh is
+the only permitted source that publishes subscription **during** bidding.
+
+### What single-source costs, stated plainly
+
+Rule 2 exists because a wrong Total corrupts the only input Model L has (H12). With one
+source there is nothing to reconcile against, so **a Chittorgarh error becomes a wrong
+verdict with no check able to catch it.** That is the risk the user has accepted, and it is
+why the caveat is mandatory on every email rather than a footnote. The mitigation is
+behavioural, not technical: the user verifies on the broker app before bidding.
+
+### Verified working, 2026-10-02
+
+`/ipo/` is the IPO dashboard and carries the calendar with an `O` (open) / `P` (past) badge
+and the issue dates. `/ipo_subscription/x/{id}/` carries live category-wise subscription
+while an IPO is open. Both read successfully:
+
+| IPO | id | Window | QIB | NII | Retail | **Total** |
+|---|---|---|---|---|---|---|
+| Nityas Gems & Jewellery | 2974 | 30 Sep – 05 Oct | 0.38x | 0.27x | 1.32x | **0.69x** |
+| Vishal Nirmiti | 2665 | 30 Sep – 05 Oct | 1.00x | 0.84x | 0.49x | **0.60x** |
+
+Both close **Monday 5 October**, so the first scheduled run is also the first real test.
