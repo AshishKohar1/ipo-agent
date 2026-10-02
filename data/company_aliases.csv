@@ -1,0 +1,24 @@
+current_name,filing_name,kind,evidence_source,evidence,added_on
+Udayshivakumar Infosolutions,Udayshivakumar Infra,our_data_error,user,"given directly by the user, 2026-10-03",2026-10-03
+Dr Agarwal's Healthcare Limited,Dr. Agarwal's Healthcare Limited,punctuation,document,https://www.sebi.gov.in/filings/public-issues/jan-2025/dr-agarwal-s-healthcare-limited-rhp_91170.html,2026-10-03
+S.J.S Enterprises Limited,SJS Enterprises Ltd,punctuation,document,https://www.sebi.gov.in/filings/public-issues/oct-2021/sjs-enterprises-ltd-rhp_53518.html,2026-10-03
+AWL Agri Business Limited (formerly Adani Wilmar Limited),Adani Wilmar Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/jan-2022/adani-wilmar-limited_55482.html,2026-10-03
+Abans Financial Services Limited,Abans Holdings Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/dec-2022/abans-holdings-limited-rhp_65916.html,2026-10-03
+Acutaas Chemicals,Ami Organics,rename,user,"given directly by the user, 2026-10-03",2026-10-03
+Acutaas Chemicals Limited,Ami Organics Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/aug-2021/ami-organics-limited_52088.html,2026-10-03
+Alivus Life Sciences,Glenmark Life Sciences,rename,user,"given directly by the user, 2026-10-03",2026-10-03
+Alivus Life Sciences Limited,Glenmark Life Sciences Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/jul-2021/glenmark-life-sciences-limited_51264.html,2026-10-03
+Eternal,Zomato,rename,user,"given directly by the user, 2026-10-03",2026-10-03
+Eternal Limited,Zomato Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/jul-2021/zomato-limited-rhp_50950.html,2026-10-03
+Fusion Finance Ltd,Fusion Micro Finance Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/nov-2022/fusion-micro-finance-limited-prospectus_64774.html,2026-10-03
+IKIO Technologies Limited (formerly IKIO Lighting Limited),IKIO Lighting Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/jun-2023/ikio-lighting-limited-prospectus_72462.html,2026-10-03
+Sri Lotus Developers & Realty Ltd,AKP Holdings Limited,rename,document,'formerly' on the cover of Sri Lotus Developers & Realty Ltd.pdf,2026-10-03
+Udayshivakumar Infosolutions Limited,Udayshivakumar Infra Limited,rename,document,https://www.sebi.gov.in/filings/public-issues/mar-2023/udayshivakumar-infra-limited-rhp_68963.html,2026-10-03
+Gandhar Oil Refineries Limited,Gandhar Oil Refinery (India) Limited,source_typo,document,https://www.sebi.gov.in/filings/public-issues/nov-2023/gandhar-oil-refinery-india-limited-rhp_79156.html,2026-10-03
+Ideaforge Technologies Limited,Ideaforge Technology Limited,source_typo,document,https://www.sebi.gov.in/filings/public-issues/jun-2023/ideaforge-technology-limited-rhp_72859.html,2026-10-03
+Manoj Vaibhav Gems,Manoj Vaibhav Gems N Jewellers Limited,source_typo,document,https://www.sebi.gov.in/filings/public-issues/sep-2023/manoj-vaibhav-gems-n-jewellers-limited-rhp_76861.html,2026-10-03
+Sri Lotus Developers & Realty Ltd,SRI LOTUS DEVELOPERS AND REALTY LIMITED,source_typo,document,https://www.sebi.gov.in/filings/public-issues/jan-2025/sri-lotus-developers-and-realty-limited_90557.html,2026-10-03
+Supriya Lifescience Limited,Supiya Lifescience Limited,source_typo,document,https://www.sebi.gov.in/filings/public-issues/dec-2021/supiya-lifescience-limited-rhp_54566.html,2026-10-03
+Syrma SGS Technologies,Syrma SGS Technology Ltd,source_typo,document,https://www.sebi.gov.in/filings/public-issues/aug-2022/syrma-sgs-technology-ltd-_61790.html,2026-10-03
+Patel Retail Ltd,Patel Retail Limited,suffix,document,https://www.sebi.gov.in/filings/public-issues/aug-2025/patel-retail-limited-rhp_95942.html,2026-10-03
+Urban Company Ltd,Urban Company Limited,suffix,document,https://www.sebi.gov.in/filings/public-issues/sep-2025/urban-company-limited-rhp_96511.html,2026-10-03

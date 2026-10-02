@@ -27,6 +27,7 @@ from dataclasses import dataclass, asdict
 import requests
 
 import dataio
+import company_aliases
 
 ROOT = Path(__file__).resolve().parent
 DB   = ROOT / "ipo.db"
@@ -121,7 +122,17 @@ def _verify_is_prospectus(pdf_bytes: bytes, company: str) -> tuple[bool, str]:
 # resolvers — each returns (url | None, reason)
 # ======================================================================
 def _name_ok(title_company: str, company: str) -> float:
-    return dataio.prefix_sim(dataio.yahoo_query(title_company), dataio.yahoo_query(company))
+    """Best similarity against the company's current name OR any known historical one.
+
+    Priority 3: our master carries CURRENT names and SEBI filings carry the name at filing
+    time. Eternal was filed as Zomato, Acutaas Chemicals as Ami Organics. Scoring only
+    against the current name made those filings score ~0 and the company came back
+    `source_unresolved`, which looks like SEBI not having the document rather than like us
+    asking the wrong question. Every alias carries its evidence — see company_aliases.py.
+    """
+    t = dataio.yahoo_query(title_company)
+    return max(dataio.prefix_sim(t, dataio.yahoo_query(n))
+               for n in company_aliases.names_to_try(company))
 
 
 def _in_window(filed, listing_date, doc_type) -> bool:
@@ -138,10 +149,18 @@ def resolve_sebi(sess, company, isin, doc_type, listing_date=None):
     smid, smtext = SEBI_SMID[doc_type]
     sess.get(SOURCES["SEBI"], timeout=30)                     # session cookie
     hdr = {"X-Requested-With": "XMLHttpRequest", "Referer": SOURCES["SEBI"]}
-    words = dataio.yahoo_query(company).split()
+    # Queries for the current name first, then for each known historical name. Current
+    # name first means a company that already resolved resolves identically, so adding the
+    # alias map cannot regress anything.
+    queries = []
+    for nm in company_aliases.names_to_try(company):
+        w = dataio.yahoo_query(nm).split()
+        for q in (" ".join(w[:3]), " ".join(w[:2]), w[0] if w else ""):
+            if q and q not in queries:
+                queries.append(q)
     tried = []
-    for q in (" ".join(words[:3]), " ".join(words[:2]), words[0] if words else ""):
-        if not q or q in tried:
+    for q in queries:
+        if q in tried:
             continue
         tried.append(q)
         data = {"nextValue": "1", "next": "s", "search": q, "fromDate": "", "toDate": "",
