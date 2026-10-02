@@ -1,0 +1,91 @@
+{
+  "run_at": "2026-10-02 21:42:05.646592",
+  "window_months": 12,
+  "targets": {
+    "L1": {
+      "champion_total_only": {
+        "features": [
+          "log1p_total"
+        ],
+        "n_train": 509,
+        "n_test_window": 111,
+        "window_from": "2025-05-08",
+        "pooled_auc": 0.8131,
+        "brier": 0.1789,
+        "n_fire": 39,
+        "hits": 36,
+        "hit_rate": 0.9231,
+        "psi": {
+          "log1p_total": 0.1218
+        },
+        "psi_max": 0.1218,
+        "psi_alert": false
+      },
+      "challenger_setA": {
+        "features": [
+          "log1p_total",
+          "log_issue_size"
+        ],
+        "n_train": 509,
+        "n_test_window": 111,
+        "window_from": "2025-05-08",
+        "pooled_auc": 0.7948,
+        "brier": 0.1857,
+        "n_fire": 39,
+        "hits": 35,
+        "hit_rate": 0.8974,
+        "psi": {
+          "log1p_total": 0.1218,
+          "log_issue_size": 1.322
+        },
+        "psi_max": 1.322,
+        "psi_alert": true
+      },
+      "decision": "KEEP champion \u2014 challenger loses on AUC 0.7948 < 0.8131, Brier 0.1857 > 0.1789"
+    },
+    "L2": {
+      "champion_total_only": {
+        "features": [
+          "log1p_total"
+        ],
+        "n_train": 509,
+        "n_test_window": 111,
+        "window_from": "2025-05-08",
+        "pooled_auc": 0.8295,
+        "brier": 0.1997,
+        "n_fire": 25,
+        "hits": 19,
+        "hit_rate": 0.76,
+        "psi": {
+          "log1p_total": 0.1218
+        },
+        "psi_max": 0.1218,
+        "psi_alert": false
+      },
+      "challenger_setA": {
+        "features": [
+          "log1p_total",
+          "log_issue_size"
+        ],
+        "n_train": 509,
+        "n_test_window": 111,
+        "window_from": "2025-05-08",
+        "pooled_auc": 0.8187,
+        "brier": 0.199,
+        "n_fire": 30,
+        "hits": 22,
+        "hit_rate": 0.7333,
+        "psi": {
+          "log1p_total": 0.1218,
+          "log_issue_size": 1.322
+        },
+        "psi_max": 1.322,
+        "psi_alert": true
+      },
+      "decision": "KEEP champion \u2014 challenger loses on AUC 0.8187 < 0.8295"
+    }
+  },
+  "alerts": [
+    "L2: the champion's threshold delivered 76.0% in the last 12 months against a 80% promise (19/25 fires). The window is small, so this is a warning rather than a failure -- but if it persists the threshold must be re-derived, not explained away."
+  ]
+}

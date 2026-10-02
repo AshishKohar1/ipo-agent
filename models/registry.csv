@@ -1,0 +1,5 @@
+run_at,target,name,features,half_life,pooled_auc,brier,n_train,n_test_window,decision,psi_max,psi_alert,note
+2026-10-02 21:42:05.646592,L1,champion_total_only,log1p_total,,0.8131,0.1789,509,111,"KEEP champion — challenger loses on AUC 0.7948 < 0.8131, Brier 0.1857 > 0.1789",0.1218,False,window from 2025-05-08
+2026-10-02 21:42:05.646592,L1,challenger_setA,log1p_total;log_issue_size,,0.7948,0.1857,509,111,"KEEP champion — challenger loses on AUC 0.7948 < 0.8131, Brier 0.1857 > 0.1789",1.322,True,window from 2025-05-08
+2026-10-02 21:42:05.646592,L2,champion_total_only,log1p_total,,0.8295,0.1997,509,111,KEEP champion — challenger loses on AUC 0.8187 < 0.8295,0.1218,False,window from 2025-05-08
+2026-10-02 21:42:05.646592,L2,challenger_setA,log1p_total;log_issue_size,,0.8187,0.199,509,111,KEEP champion — challenger loses on AUC 0.8187 < 0.8295,1.322,True,window from 2025-05-08
