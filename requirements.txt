@@ -8,6 +8,13 @@ yfinance==1.7.0
 pdfplumber==0.11.10
 openpyxl==3.1.5
 statsmodels==0.15.0
+# joblib is listed EXPLICITLY, not inherited. It arrives on the laptop only because
+# scikit-learn once pulled it in; scikit-learn is banned (rule 10), so the cloud never got
+# it and every scheduled run from 1-3 Oct 2026 died in ~35s with
+#   ModuleNotFoundError: No module named 'joblib'   at models/framework.py:32
+# It is still only needed for FITTING (framework.py's bundle dump/load). The live email
+# path no longer touches it at all — see score_l.py.
+joblib==1.6.0
 beautifulsoup4==4.15.0
 lxml==6.1.1
 html5lib>=1.1

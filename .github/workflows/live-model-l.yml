@@ -1,41 +1,52 @@
 # Model L live jobs on GitHub Actions.
 #
-# Why Actions as well as Windows Task Scheduler: the app-based schedules only fire while the
-# desktop app is open, and Task Scheduler only while the laptop is awake. Neither is reliable
-# for a job whose entire value is landing before a 16:00 IST broker cutoff. Actions runs
-# regardless — but GitHub's scheduler drifts 5–15 minutes under load, which is why the score
-# job is set for 15:00 IST rather than 15:30: even a 15-minute drift still lands 45 minutes
-# before the cutoff.
+# WHICH JOB CALLS WHICH SCRIPT (Priority 1c) — there is now exactly ONE live pipeline:
 #
-# Cron here is UTC. IST is UTC+5:30.
-#   15:00 IST = 09:30 UTC
-#   17:30 IST = 12:00 UTC
+#   15:00 IST (cron "30 9 * * 1-5")  ->  python send_daily_email.py
+#       Chittorgarh market view, scores every mainboard IPO closing today, logs the
+#       predictions, appends the 1500 snapshot, writes reports/live/<date>.md, SENDS THE
+#       EMAIL.
+#   17:30 IST (cron "0 12 * * 1-5")  ->  python send_daily_email.py --final
+#       Chittorgarh again after the close, appends the 1730 snapshot and the day's index
+#       closes. NO email: the bid window has shut, so there is nothing left to decide.
+#
+# `run_live_l.py` is NOT scheduled any more. It reads NSE (connection reset) and BSE (403)
+# and has never captured a row, yet it wrote to the same report path as the working
+# pipeline — so on 2 Oct its failing 21:49 run overwrote the good Chittorgarh report. It is
+# kept as a manually-run exchange-access probe writing to reports/live/exchange_probe/,
+# ready for the day NSE answers the access request.
+#
+# Why Actions as well as the laptop: app-based schedules only fire while the desktop app is
+# open and Task Scheduler only while the laptop is awake. Neither is reliable for a job
+# whose whole value is landing before a 16:00 IST broker cutoff. GitHub's scheduler drifts
+# 5-15 minutes under load, which is why the scoring job is set for 15:00 rather than 15:30:
+# even a 15-minute drift still lands 45 minutes before the cutoff.
+#
+# Cron here is UTC. IST is UTC+5:30.  15:00 IST = 09:30 UTC   17:30 IST = 12:00 UTC
 #
 # The jobs are idempotent: each writes a run marker and a second run on the same date and
-# capture point exits as a no-op. A drifted-then-retried schedule, a manual dispatch on top
-# of a scheduled run, and a re-run of a failed job all therefore cost nothing and cannot
-# append a duplicate row to predictions_log.csv.
+# capture point exits as a no-op. Since Priority 1f, a marker only counts when the run
+# actually captured something — a failed attempt no longer locks out its own retry.
 #
-# NETWORK: NSE currently resets or times out this project's User-Agent and BSE returns 403.
-# The jobs log the block and write nothing invented. They do NOT fall back to a browser
-# User-Agent (project rule 3). A request for permitted access has been sent to NSE; until it
-# is answered, a run that reports "no subscription could be fetched" is the job working
-# correctly, not failing.
+# NETWORK: NSE resets or times out this project's User-Agent, BSE returns 403 even on
+# robots.txt, and niftyindices.com read-times-out on every path including /robots.txt. The
+# jobs log each block and write nothing invented. They do NOT fall back to a browser
+# User-Agent (project rule 3).
 
 name: Model L live
 
 on:
   schedule:
-    - cron: "30 9 * * 1-5"      # 15:00 IST, weekdays — score, capture, report
-    - cron: "0 12 * * 1-5"      # 17:30 IST, weekdays — final capture after close
+    - cron: "30 9 * * 1-5"      # 15:00 IST, weekdays — score, snapshot, report, EMAIL
+    - cron: "0 12 * * 1-5"      # 17:30 IST, weekdays — final snapshot + index closes
   workflow_dispatch:
     inputs:
       mode:
         description: "which job to run"
         required: true
-        default: "score"
+        default: "email"
         type: choice
-        options: [email, score, final, rehearse]
+        options: [email, final, dry-run, probe, rehearse]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -48,14 +59,19 @@ permissions:
 
 jobs:
   live:
-    runs-on: ubuntu-latest
+    # Priority 1h: PINNED. `ubuntu-latest` migrates to Ubuntu 26 on 19 Oct 2026, and a
+    # runner image changing underneath a job whose entire value is landing before a broker
+    # cutoff is a risk taken for nothing. Bump this deliberately, after a manual dispatch
+    # on the new image has passed.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      # Priority 1h: checkout@v4 and setup-python@v5 run on the deprecated Node 20.
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -64,6 +80,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      # Fails the run BEFORE any fetch if the live path has picked up a dependency that
+      # requirements.txt does not list. This is the check that would have caught the joblib
+      # breakage on 1 Oct instead of three silent days later.
+      - name: Verify the live path imports in this environment
+        run: |
+          python -c "import send_daily_email, chittorgarh_live, score_l, predictions_log, live_markers, market_context; print('live path imports OK')"
+          python score_l.py --self-test
+          python live_markers.py --self-test
+          python market_context.py --self-test
+          python send_daily_email.py --self-test
 
       - name: Decide which job this run is
         id: which
@@ -85,11 +112,14 @@ jobs:
           # market, and silence must always mean something broke.
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          # Priority 1e. Falls back to GMAIL_ADDRESS when unset.
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
           case "${{ steps.which.outputs.mode }}" in
             email)    python send_daily_email.py ;;
-            score)    python run_live_l.py --score ;;
-            final)    python run_live_l.py --final ;;
+            final)    python send_daily_email.py --final ;;
+            dry-run)  python send_daily_email.py --dry-run ;;
+            probe)    python run_live_l.py --probe ;;
             rehearse) python run_live_l.py --rehearse ;;
           esac
 
@@ -100,9 +130,11 @@ jobs:
           git config user.name  "ipo-agent[bot]"
           git config user.email "ashishkohar4@gmail.com"
           git add -A data/subscription_snapshots.csv predictions_log.csv \
+                     data/market_context.csv data/market_context_notes.csv \
+                     data/live_fetch_log.csv \
                      reports/live data/live_run_markers.csv || true
           if git diff --cached --quiet; then
-            echo "nothing produced — most likely the exchange block. Not committing."
+            echo "nothing produced — most likely a source block. Not committing."
             exit 0
           fi
           git commit -m "Live ${{ steps.which.outputs.mode }} run $(date +%Y-%m-%dT%H:%M%z)
@@ -118,7 +150,9 @@ jobs:
         run: |
           echo "### Model L — ${{ steps.which.outputs.mode }}" >> "$GITHUB_STEP_SUMMARY"
           if [ -f "reports/live/$(TZ=Asia/Kolkata date +%F).md" ]; then
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
             cat "reports/live/$(TZ=Asia/Kolkata date +%F).md" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "No report written. If the diagnostics show the exchange refusing this host, that is the job working as designed — it logs the block and invents nothing." >> "$GITHUB_STEP_SUMMARY"
+            echo "No report written. The 17:30 leg writes no report by design; for the 15:00 leg, check the diagnostics above." >> "$GITHUB_STEP_SUMMARY"
           fi

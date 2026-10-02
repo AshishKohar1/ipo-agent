@@ -30,7 +30,10 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import framework as F
 import dataio
-from model_l import mb_features
+# `mb_features` was renamed `make_features` when the L_day1/L_day2 code paths were
+# deleted under H1. This import had been broken ever since, which the clean-env
+# audit of 2026-10-03 surfaced; same function, new name.
+from model_l import make_features
 
 HORIZONS = {"1y": dict(file="holding_target.csv", label="H_label", days=365,
                        excess="excess_1y_pp"),
@@ -148,7 +151,7 @@ def load(horizon: str) -> pd.DataFrame:
 
 def features_with(blocks: list[str]):
     def make(df: pd.DataFrame) -> pd.DataFrame:
-        out = mb_features(df)
+        out = make_features(df)
         out["listing_gain"] = pd.to_numeric(df.get("Listing Gain", df.get("listing_gain")),
                                             errors="coerce")
         for b in blocks:

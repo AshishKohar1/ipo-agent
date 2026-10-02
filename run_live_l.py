@@ -1,28 +1,36 @@
 """
-run_live_l.py — PLAN Stage 6 step 7 / Stage 19, with the dual capture of Task 4.
+run_live_l.py — the NSE+BSE exchange-access PROBE. **No longer a scheduled job.**
 
-Three entry points, scheduled separately:
+Retired from the schedule on 2026-10-03 (Priority 1c). It is kept, not deleted, because
+the moment NSE answers the access request this is the two-source reconciled pipeline that
+H14 says becomes primary — with Chittorgarh demoted to corroborator. Deleting it would
+mean rebuilding it from scratch to collect on that.
 
-    python run_live_l.py --score        15:00 IST  fetch, reconcile, score, snapshot, log
-    python run_live_l.py --notify       15:30 IST  deliver the report written at 15:00
-    python run_live_l.py --final        17:30 IST  re-fetch the SAME IPOs after close
+Why it was retired
+------------------
+It reads NSE (connection reset / read timeout for this project's User-Agent) and BSE (403
+even on its own robots.txt), so it has never captured a single row. Worse, it wrote its
+report to the SAME path as the working Chittorgarh pipeline — `reports/live/<date>.md` —
+so on 2 Oct its failing 21:49 run overwrote the good report that had been produced minutes
+earlier. A pipeline that cannot fetch anything was destroying the output of one that can.
 
-**Why the pairing exists.** The model is trained on final (≈5pm) subscription but scored on
-the ~15:00 position. Institutional bids concentrate in the last hours, so the 15:00 figure is
-systematically lower and the model systematically understates. Nothing in any permitted
-historical source measures that gap — Chittorgarh deletes its day-wise table at close
-(Stage 4A). The only way it ever becomes measurable is to capture both points ourselves,
-starting now. Every day without the pairing is a day the bias stays describable but not
-quantifiable.
+Two things changed:
+  * its reports now go to `reports/live/exchange_probe/<date>.md`, which nothing else
+    writes and no email reads;
+  * the 15:00 and 17:30 schedules both call `send_daily_email.py` instead. See
+    LIVE_SETUP.md for the mapping of schedule to script.
 
-Both captures append to `data/subscription_snapshots.csv`:
-    ipo, isin, timestamp_ist, capture_point (1500|1730), qib_x, hni_x, rii_x, total_x,
-    source, reconciled, note
+`--notify` is gone with the schedule: the email IS the notification now, sent by
+`send_daily_email.py` at the 15:00 leg.
 
-**GMP is never fetched** (D1). The report carries a blank field for the user to fill in by
-hand, and whatever they supply is logged for later evaluation (D2).
+**Run this by hand to test whether the exchanges have started answering.** It invents
+nothing when they refuse; a run reporting "no subscription could be fetched" is the probe
+working correctly.
 
-    python run_live_l.py --dry-run      rehearse on open IPOs, or the last week if none
+    python run_live_l.py --probe        try both exchanges now, write the probe report
+    python run_live_l.py --rehearse     exercise scoring/report contract without fetching
+
+**GMP is never fetched** (D1). **No browser User-Agent is ever sent** (rule 3).
 """
 from __future__ import annotations
 import sys as _sys
@@ -38,11 +46,14 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "models"))
-import model_l as ML               # noqa: E402
+import score_l as ML               # noqa: E402  — portable JSON, no joblib
 import predictions_log as PL       # noqa: E402
+import live_markers as LM          # noqa: E402
 
 SNAPSHOTS = ROOT / "data" / "subscription_snapshots.csv"
-LIVE_DIR = ROOT / "reports" / "live"
+# Priority 1c: a path of its own. Nothing else writes here and no email reads it,
+# so this probe can never again overwrite the Chittorgarh report.
+LIVE_DIR = ROOT / "reports" / "live" / "exchange_probe"
 TOL = 0.05                         # rule 2
 CUTOFF = "4:00 PM"                 # Paytm Money, user-confirmed (E1)
 UA = {"User-Agent": "ipo-agent/1.0 (personal research; contact ashishkohar4@gmail.com)",
@@ -239,31 +250,10 @@ def write_report(scored: list[dict], when: pd.Timestamp, diag: list[str]) -> Pat
 
 
 # ---------------------------------------------------------------- entry points
-MARKERS = ROOT / "data" / "live_run_markers.csv"
-
-
-def already_ran(capture_point: int, when: pd.Timestamp) -> bool:
-    """Idempotency. GitHub's scheduler drifts and may retry, a manual dispatch can land on
-    top of a scheduled run, and a failed job can be re-run — so a second run for the same
-    date and capture point must be a NO-OP rather than a duplicate row in the prediction
-    log. The marker is the record of what has already happened."""
-    if not MARKERS.exists():
-        return False
-    try:
-        m = pd.read_csv(MARKERS)
-    except Exception:
-        return False
-    key = f"{when.date()}|{capture_point}"
-    return bool((m["key"].astype(str) == key).any())
-
-
-def mark_ran(capture_point: int, when: pd.Timestamp, n: int) -> None:
-    row = pd.DataFrame([{"key": f"{when.date()}|{capture_point}",
-                         "date": str(when.date()), "capture_point": capture_point,
-                         "ran_at": str(when), "n_snapshots": n}])
-    MARKERS.parent.mkdir(parents=True, exist_ok=True)
-    row.to_csv(MARKERS, mode="a", header=not MARKERS.exists(), index=False,
-               encoding="utf-8")
+# Priority 1f: the marker logic moved to live_markers.py so both legs of a day share one
+# implementation, and so a run that captured ZERO rows no longer locks out its retry.
+already_ran, mark_ran = LM.already_ran, LM.mark_ran
+MARKERS = LM.MARKERS
 
 
 def capture(capture_point: int, score: bool, dry: bool = False) -> dict:
@@ -295,9 +285,7 @@ def capture(capture_point: int, score: bool, dry: bool = False) -> dict:
                 "timestamp_ist": str(when), "capture_point": capture_point, **rec}
         snaps.append(snap)
         if score and rec.get("total_x"):
-            size = pd.to_numeric(m["Issue_Size(crores)"], errors="coerce").iloc[0] \
-                if len(m) else None
-            res = ML.predict_live(total=rec["total_x"], issue_size_cr=size,
+            res = ML.predict_live(total=rec["total_x"],
                                   qib=rec.get("qib_x"), rii=rec.get("rii_x"))
             res["inputs"]["hni"] = rec.get("hni_x")
             scored.append({"ipo": d["ipo"], "isin": d.get("isin"), "closes": d.get("closes"),
@@ -344,12 +332,10 @@ def rehearse(days: int = 30, dry: bool = True) -> dict:
     ]
     for r in recent.itertuples():
         tot = pd.to_numeric(pd.Series([r.Total]), errors="coerce").iloc[0]
-        size = pd.to_numeric(pd.Series([getattr(r, "_15", None)]), errors="coerce").iloc[0]
         if pd.isna(tot):
             diag.append(f"{r.company}: NO CALL — Total subscription missing")
             continue
-        res = ML.predict_live(total=float(tot), issue_size_cr=None if pd.isna(size)
-                              else float(size),
+        res = ML.predict_live(total=float(tot),
                               qib=float(r.QIB) if pd.notna(r.QIB) else None,
                               rii=float(r.RII) if pd.notna(r.RII) else None)
         res["inputs"]["hni"] = float(r.HNI) if pd.notna(r.HNI) else None
@@ -370,37 +356,17 @@ def rehearse(days: int = 30, dry: bool = True) -> dict:
     return out
 
 
-def notify() -> dict:
-    """Deliver the report written at 15:00 — 30 minutes before the cutoff.
-
-    Deliberately does NOT re-fetch or re-score: a slow fetch at 15:30 must not push the
-    reminder past the cutoff. If the 15:00 report is missing, that is itself the alert.
-    """
-    when = pd.Timestamp.now()
-    path = LIVE_DIR / f"{when.date()}.md"
-    if not path.exists():
-        msg = (f"ALERT: no report for {when.date()}. The 15:00 scoring job did not run or "
-               f"did not write. Verify subscription manually before the {CUTOFF} cutoff.")
-        print(msg)
-        return {"ok": False, "message": msg}
-    text = path.read_text(encoding="utf-8")
-    print(text)
-    return {"ok": True, "report": str(path), "chars": len(text)}
-
-
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--score", action="store_true", help="15:00 — fetch, score, snapshot")
-    ap.add_argument("--notify", action="store_true", help="15:30 — deliver the report")
-    ap.add_argument("--final", action="store_true", help="17:30 — final capture only")
+    ap.add_argument("--probe", "--score", dest="probe", action="store_true",
+                    help="try both exchanges now and write the probe report")
+    ap.add_argument("--final", action="store_true", help="capture only, no scoring")
     ap.add_argument("--rehearse", action="store_true",
                     help="dry run on the most recent IPOs when none are open")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     if a.rehearse:
         return rehearse(dry=a.dry_run)
-    if a.notify:
-        return notify()
     if a.final:
         return capture(1730, score=False, dry=a.dry_run)
     return capture(1500, score=True, dry=a.dry_run)
