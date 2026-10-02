@@ -41,6 +41,7 @@ import sys as _sys
 if hasattr(_sys.stdout, "reconfigure"):
     _sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import argparse
+import gc
 import hashlib
 import sys
 import time
@@ -55,6 +56,12 @@ import dataio                                              # noqa: E402
 from extract.base import Doc, Value                        # noqa: E402
 from extract import h6                                     # noqa: E402
 from fetch_rhp import _verify_is_prospectus                 # noqa: E402
+# Reuse the night batch's page reader rather than writing another one. A naive
+#   pages = [pg.extract_text() for pg in pdf.pages]
+# never releases pdfplumber's per-page layout cache: on the first 400-page document it
+# reached 3.4 GB and left this 8 GB laptop with 424 MB free, which is why that reader
+# calls pg.flush_cache() and gc.collect() as it goes. The lesson was already paid for once.
+from rhp_night_batch import page_texts_all                  # noqa: E402
 
 MANUAL = ROOT / "manual_rhp"
 SOURCES = MANUAL / "SOURCES.csv"
@@ -150,14 +157,15 @@ def process(row: dict, check_only: bool = False) -> dict:
                     "secs": round(time.time() - t0, 1)})
         return out
 
+    del raw                      # ~10-60 MB per document; not needed past verification
     import pdfplumber
     with pdfplumber.open(p) as pdf:
         out["pages"] = len(pdf.pages)
-        if check_only:
-            out.update({"status": "verified", "note": "",
-                        "secs": round(time.time() - t0, 1)})
-            return out
-        pages = [(pg.extract_text() or "") for pg in pdf.pages]
+    if check_only:
+        out.update({"status": "verified", "note": "",
+                    "secs": round(time.time() - t0, 1)})
+        return out
+    pages = page_texts_all(p)
 
     doc = Doc(path=p, company=row["csv_company_name"], doc_type=row["doc_type"],
               sha256=out["sha256"], doc_url=row["source_url"], n_pages=out["pages"])
@@ -242,6 +250,7 @@ def main(check_only: bool = False) -> dict:
                 f"{out.get('secs', 0):5.0f}s"
                 + (f"  <-- {out.get('note', '')[:70]}" if out["status"] != "done" else ""))
         record(out)
+        gc.collect()
         counts[out["status"]] = counts.get(out["status"], 0) + 1
     log(f"manual_rhp finished: {counts}")
     return counts
