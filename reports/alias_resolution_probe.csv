@@ -1,0 +1,69 @@
+company,isin,listing_date,prior_status,n_aliases,aliases,resolved,url,why,ran_at
+Urban Company Ltd,INE0CAZ01013,2025-09-17,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['Urban'],2026-10-03 02:47:03.933452
+Urban Company Ltd,INE0CAZ01013,2025-09-17,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['Urban'],2026-10-03 02:47:08.918286
+Amanta Healthcare Ltd.,INE084K01015,2025-09-09,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Amanta Healthcare', 'Amanta']",2026-10-03 02:47:13.918784
+Patel Retail Ltd,INE0R8B01010,2025-08-26,not_a_prospectus,0,,True,https://www.sebi.gov.in/sebi_data/attachdocs/aug-2025/1756114035182.PDF,SEBI RHP 'Patel Retail Limited - RHP' filed 2025-08-25 (name sim 1.00),2026-10-03 02:47:18.919332
+M & B Engineering Ltd,INE08N601015,2025-08-06,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['M & B', 'M &', 'M']",2026-10-03 02:47:23.919538
+Sri Lotus Developers & Realty Ltd,INE0V9Q01010,2025-08-06,source_unresolved,2,AKP Holdings Limited; SRI LOTUS DEVELOPERS AND REALTY LIMITED,False,,"SEBI: no RHP matching name+date for queries ['Sri Lotus Developers', 'Sri Lotus', 'Sri', 'AKP Holdings', 'AKP', 'SRI LOTUS DEVELOPERS', 'SRI LOTUS', 'SRI']",2026-10-03 02:47:28.920275
+Indogulf Cropsciences Limited,INE05J901018,2025-07-03,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Indogulf Cropsciences', 'Indogulf']",2026-10-03 02:47:34.127233
+Dr Agarwal's Healthcare Limited,INE943P01029,2025-02-04,not_a_prospectus,0,,True,https://www.sebi.gov.in/sebi_data/attachdocs/jan-2025/1737950366510.pdf,SEBI RHP 'Dr. Agarwal's Healthcare Limited - RHP' filed 2025-01-23 (name sim 1.00),2026-10-03 02:47:39.128069
+Kross Limited,INE0O6601022,2024-09-16,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['Kross'],2026-10-03 02:47:44.128344
+Allied Blenders and Distillers Limited,INE552Z01027,2024-07-02,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Allied Blenders and', 'Allied Blenders', 'Allied']",2026-10-03 02:47:49.128546
+Inox India Limited,INE616N01034,2023-12-21,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Inox India', 'Inox']",2026-10-03 02:47:54.128756
+Gandhar Oil Refineries Limited,INE717W01049,2023-11-30,not_a_prospectus,1,Gandhar Oil Refinery (India) Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/nov-2023/1700135458197.pdf,SEBI RHP 'Gandhar Oil Refinery (India) Limited - RHP' filed 2023-11-16 (name sim 1.00),2026-10-03 02:47:59.128856
+Manoj Vaibhav Gems,INE0KNT01012,2023-10-03,not_a_prospectus,1,Manoj Vaibhav Gems N Jewellers Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/sep-2023/1694665689625.pdf,SEBI RHP 'Manoj Vaibhav Gems N Jewellers Limited - RHP' filed 2023-09-12 (name sim 1.00),2026-10-03 02:48:04.129213
+Samhi Hotels Limited,INE08U801020,2023-09-22,not_a_prospectus,0,,True,https://www.sebi.gov.in/sebi_data/attachdocs/sep-2023/1694433129750.pdf,SEBI RHP 'Samhi Hotels Limited - RHP' filed 2023-09-11 (name sim 1.00),2026-10-03 02:48:09.129532
+EMS Limited,INE0OV601013,2023-09-21,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['EMS'],2026-10-03 02:48:14.130118
+Ideaforge Technologies Limited,INE349Y01013,2023-07-07,not_a_prospectus,1,Ideaforge Technology Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/jun-2023/1688127836124.pdf,SEBI RHP 'Ideaforge Technology Limited - Corigendum to RHP' filed 2023-06-30 (name sim 1.00),2026-10-03 02:48:19.169894
+Udayshivakumar Infosolutions Limited,INE0N0Y01013,2023-04-03,not_a_prospectus,1,Udayshivakumar Infra,True,https://www.sebi.gov.in/sebi_data/attachdocs/mar-2023/1678786532713.pdf,SEBI RHP 'Udayshivakumar Infra Limited - RHP' filed 2023-03-14 (name sim 1.00),2026-10-03 02:48:24.168356
+Syrma SGS Technologies,INE0DYJ01015,2022-08-26,not_a_prospectus,1,Syrma SGS Technology Ltd,True,https://www.sebi.gov.in/sebi_data/attachdocs/aug-2022/1659936753703.pdf,SEBI RHP 'Syrma SGS Technology Ltd.' filed 2022-08-08 (name sim 1.00),2026-10-03 02:48:29.168464
+Ethos Limited,INE04TZ01018,2022-05-30,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['Ethos'],2026-10-03 02:48:34.171400
+Supriya Lifescience Limited,INE07RO01027,2021-12-28,source_unresolved,1,Supiya Lifescience Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/may-2023/1683089206730.pdf,SEBI RHP 'Supiya Lifescience Limited - RHP' filed 2021-12-13 (name sim 1.00),2026-10-03 02:48:39.173160
+S.J.S Enterprises Limited,INE284S01014,2021-11-15,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['S.J.S Enterprises', 'S.J.S']",2026-10-03 02:48:44.172632
+Northern ARC Capital Limited,INE850M01015,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Northern ARC Capital', 'Northern ARC', 'Northern']",2026-10-03 02:48:49.671337
+IKIO Technologies Limited (formerly IKIO Lighting Limited),INE0LOJ01019,,source_unresolved,1,IKIO Lighting Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/may-2023/1685448884386.pdf,SEBI RHP 'IKIO Lighting Limited - RHP' filed 2023-05-30 (name sim 1.00),2026-10-03 02:48:54.425702
+Abans Financial Services Limited,INE00ZE01026,,source_unresolved,1,Abans Holdings Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/dec-2022/1670404259679.pdf,SEBI RHP 'Abans Holdings Limited - RHP' filed 2022-12-07 (name sim 1.00),2026-10-03 02:48:59.172838
+Fusion Finance Ltd,INE139R01012,,source_unresolved,1,Fusion Micro Finance Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/may-2023/1684485535717.pdf,SEBI RHP 'Fusion Micro Finance Limited - RHP' filed 2022-11-01 (name sim 1.00),2026-10-03 02:49:04.173030
+AWL Agri Business Limited (formerly Adani Wilmar Limited),INE699H01024,,source_unresolved,1,Adani Wilmar Limited,True,https://www.sebi.gov.in/sebi_data/attachdocs/jan-2022/1642747331166.pdf,SEBI RHP 'Adani Wilmar Limited' filed 2022-01-21 (name sim 1.00),2026-10-03 02:49:09.173522
+Acutaas Chemicals Limited,INE00FF01025,,source_unresolved,1,Ami Organics,True,https://www.sebi.gov.in/sebi_data/attachdocs/jun-2023/1687843626729.pdf,SEBI RHP 'Ami Organics Limited' filed 2021-08-26 (name sim 1.00),2026-10-03 02:49:14.174391
+Alivus Life Sciences Limited,INE03Q201024,,source_unresolved,1,Glenmark Life Sciences,True,https://www.sebi.gov.in/sebi_data/attachdocs/jul-2021/1626776506746.pdf,SEBI RHP 'Glenmark Life Sciences Limited' filed 2021-07-20 (name sim 1.00),2026-10-03 02:49:19.175045
+Eternal Limited,INE758T01015,,source_unresolved,1,Zomato,True,https://www.sebi.gov.in/sebi_data/attachdocs/jul-2021/1625733194227.pdf,SEBI RHP 'Zomato Limited - RHP' filed 2021-07-08 (name sim 1.00),2026-10-03 02:49:24.179386
+Restaurant Brands Asia Ltd,INE07T201019,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Restaurant Brands Asia', 'Restaurant Brands', 'Restaurant']",2026-10-03 02:49:29.179429
+Angel One Ltd,INE732I01021,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Angel One', 'Angel']",2026-10-03 02:49:34.209389
+Affle (India) Ltd,INE00WC01027,,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['Affle'],2026-10-03 02:49:39.208002
+MSTC Ltd,INE255X01014,,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['MSTC'],2026-10-03 02:49:44.207920
+Rites Ltd,INE320J01015,,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['Rites'],2026-10-03 02:49:49.208452
+Dharan Infra EPC Ltd,INE278R01034,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Dharan Infra EPC', 'Dharan Infra', 'Dharan']",2026-10-03 02:49:54.209201
+H.G. Infra Engineering Ltd,INE926X01010,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['H.G. Infra Engineering', 'H.G. Infra', 'H.G.']",2026-10-03 02:49:59.209227
+HDFC Life Insurance Company Ltd,INE795G01014,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['HDFC Life Insurance', 'HDFC Life', 'HDFC']",2026-10-03 02:50:04.217227
+Prataap Snacks Ltd,INE393P01035,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Prataap Snacks', 'Prataap']",2026-10-03 02:50:09.210428
+Capacit'e Infraprojects Ltd,INE264T01014,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries [""Capacit'e Infraprojects"", ""Capacit'e""]",2026-10-03 02:50:14.212553
+BSE Ltd (Bombay Stock Exchange),INE118H01025,,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['BSE'],2026-10-03 02:50:19.212963
+GNA Axles Ltd,INE934S01014,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['GNA Axles', 'GNA']",2026-10-03 02:50:24.213055
+S P Apparels Ltd,INE212I01016,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['S P Apparels', 'S P', 'S']",2026-10-03 02:50:29.212194
+Imagicaaworld Entertainment Ltd,INE172N01012,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Imagicaaworld Entertainment', 'Imagicaaworld']",2026-10-03 02:50:34.217787
+Indus Towers Ltd,INE121J01017,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Indus Towers', 'Indus']",2026-10-03 02:50:39.215814
+CARE Ratings Ltd,INE752H01013,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['CARE Ratings', 'CARE']",2026-10-03 02:50:44.219035
+NBCC (India) Ltd,INE095N01031,,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['NBCC'],2026-10-03 02:50:49.217874
+Flexituff Ventures International Ltd,INE060J01017,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Flexituff Ventures International', 'Flexituff Ventures', 'Flexituff']",2026-10-03 02:50:54.232283
+Ujaas Energy Ltd,INE899L01030,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Ujaas Energy', 'Ujaas']",2026-10-03 02:50:59.232481
+Setubandhan Infrastructure Ltd,INE023M01027,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Setubandhan Infrastructure', 'Setubandhan']",2026-10-03 02:51:04.233045
+L&T Finance Holdings Ltd,INE498L01015,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['L&T Finance Holdings', 'L&T Finance', 'L&T']",2026-10-03 02:51:09.233997
+Kridhan Infra Ltd,INE524L01026,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Kridhan Infra', 'Kridhan']",2026-10-03 02:51:14.234179
+A2Z Infra Engineering Ltd,INE619I01012,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['A2Z Infra Engineering', 'A2Z Infra', 'A2Z']",2026-10-03 02:51:19.233566
+Ravikumar Distilleries Ltd,INE722J01012,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Ravikumar Distilleries', 'Ravikumar']",2026-10-03 02:51:24.234044
+MOIL Ltd,INE490G01020,,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['MOIL'],2026-10-03 02:51:29.234429
+Coal India Ltd,INE522F01014,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Coal India', 'Coal']",2026-10-03 02:51:34.234701
+Shah Metacorp Ltd,INE482J01021,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Shah Metacorp', 'Shah']",2026-10-03 02:51:39.234942
+Prestige Estates Projects Ltd,INE811K01011,,not_a_prospectus,0,,False,,SEBI: 2 matching filings and no listing date to choose,2026-10-03 02:51:44.235333
+Jupiter Wagons Ltd,INE209L01016,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Jupiter Wagons', 'Jupiter']",2026-10-03 02:51:49.235748
+Va Tech Wabag Ltd,INE956G01038,,not_a_prospectus,0,,True,https://www.sebi.gov.in/sebi_data/attachdocs/1287471630642.pdf,SEBI RHP 'VA Tech Wabag Limited' filed 2010-09-20 (name sim 1.00),2026-10-03 02:51:54.236311
+CP Capital Ltd,INE521J01018,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['CP Capital', 'CP']",2026-10-03 02:51:59.236551
+Bajaj Consumer Care Limited,INE933K01021,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Bajaj Consumer Care', 'Bajaj Consumer', 'Bajaj']",2026-10-03 02:52:04.236604
+SJVN Limited,INE002L01015,,source_unresolved,0,,False,,SEBI: no RHP matching name+date for queries ['SJVN'],2026-10-03 02:52:09.237302
+IL&FS Transportation Networks Limited,INE975G01012,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['IL&FS Transportation Networks', 'IL&FS Transportation', 'IL&FS']",2026-10-03 02:52:14.237659
+Emmbi Industries Limited,INE753K01015,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Emmbi Industries', 'Emmbi']",2026-10-03 02:52:19.237973
+Valor Estates Limited,INE879I01012,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Valor Estates', 'Valor']",2026-10-03 02:52:24.238379
+Thangamayil Jewellery Limited,INE085J01014,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['Thangamayil Jewellery', 'Thangamayil']",2026-10-03 02:52:29.238805
+D B Corp Limited,INE950I01011,,source_unresolved,0,,False,,"SEBI: no RHP matching name+date for queries ['D B Corp', 'D B', 'D']",2026-10-03 02:52:34.239153
+MBL Infrastructure Limited,INE912H01013,,not_a_prospectus,0,,True,https://www.sebi.gov.in/sebi_data/attachdocs/1289459616496.pdf,SEBI RHP 'MBL Infrastrctures Limited' filed 2009-11-27 (name sim 0.94),2026-10-03 02:52:39.239629
