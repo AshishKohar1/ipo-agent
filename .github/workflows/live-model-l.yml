@@ -35,7 +35,7 @@ on:
         required: true
         default: "score"
         type: choice
-        options: [score, final, rehearse]
+        options: [email, score, final, rehearse]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -73,15 +73,21 @@ jobs:
           elif [ "${{ github.event.schedule }}" = "0 12 * * 1-5" ]; then
             echo "mode=final" >> "$GITHUB_OUTPUT"
           else
-            echo "mode=score" >> "$GITHUB_OUTPUT"
+            echo "mode=email" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run
         env:
           PYTHONIOENCODING: utf-8
           TZ: Asia/Kolkata
+          # Read by send_daily_email.py. A missing secret FAILS the run rather than
+          # skipping the email: a silently skipped email looks identical to a quiet
+          # market, and silence must always mean something broke.
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: |
           case "${{ steps.which.outputs.mode }}" in
+            email)    python send_daily_email.py ;;
             score)    python run_live_l.py --score ;;
             final)    python run_live_l.py --final ;;
             rehearse) python run_live_l.py --rehearse ;;
