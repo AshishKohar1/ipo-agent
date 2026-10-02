@@ -131,8 +131,12 @@ def _numbers(r: dict, as_of: str) -> list[str]:
             f"Retail {x('rii_x'):>7s}        (display only)"]
 
 
-def compose(mv: dict, scored: dict) -> tuple[str, str]:
+def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[str, str]:
+    # `today` is passed in rather than read from the clock, so the header date and the
+    # market view can never disagree -- they did during the Monday rehearsal, which
+    # printed Monday's market under Saturday's heading.
     now = pd.Timestamp.now()
+    today = today or now
     as_of = now.strftime("%H:%M")
     closing = mv["closing_today"]
     open_not = mv["open_not_closing"]
@@ -148,7 +152,7 @@ def compose(mv: dict, scored: dict) -> tuple[str, str]:
         urgent = "none closing"
     subject = f"{SUBJECT_PREFIX}{n_open} open, {urgent}"
 
-    L = [f"IPO MARKET — {now.strftime('%A %d %B').replace(' 0', ' ')}", ""]
+    L = [f"IPO MARKET — {today.strftime('%A %d %B').replace(' 0', ' ')}", ""]
 
     L += ["===== CLOSING TODAY — bid by 4:00 PM =====", ""]
     if not closing:
@@ -309,7 +313,7 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
             PL.log_prediction(r["ipo"], r.get("isin"), res, capture_point=capture_point,
                               source="chittorgarh single_source_unverified (H14)")
 
-    subject, body = compose(mv, scored)
+    subject, body = compose(mv, scored, today)
     LIVE_DIR.mkdir(parents=True, exist_ok=True)
     (LIVE_DIR / f"{today.date()}.md").write_text(body, encoding="utf-8")
     out = send(subject, body, dry)
