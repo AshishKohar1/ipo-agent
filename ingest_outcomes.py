@@ -46,6 +46,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+import symbols as SY       # noqa: E402
 sys.path.insert(0, str(ROOT / "models"))
 import predictions_log as PL        # noqa: E402
 
@@ -235,22 +236,37 @@ def main(since: str | None = None, dry: bool = False) -> pd.DataFrame:
             save_state(now, 0)
         return pd.DataFrame()
 
+    # Priority 5a: resolution moved to symbols.py. The old code matched a 14-character
+    # name prefix against master_with_symbols.csv, which stops at 2026-05-14 -- so every
+    # 2026 listing failed before any price was fetched -- and which cannot match a company
+    # that listed under a former name (Priority 3). symbols.py tries ISIN first, then
+    # names including known aliases, and falls back to data/NSE_EQUITY_L.csv, which carries
+    # an ISIN for every row and runs to 2026-09-25.
     sym = pd.read_csv(ROOT / "master_with_symbols.csv")
     sym["norm"] = sym["company"].str.lower().str.replace(r"[^a-z0-9]", "", regex=True)
     rows, last = [], 0.0
     for r in cand.itertuples():
-        norm = str(r.ipo).lower()
-        norm = "".join(ch for ch in norm if ch.isalnum())
+        res = SY.resolve(str(r.ipo), getattr(r, "isin", None))
+        symbol, isin = res["symbol"], res["isin"]
+        if symbol is None:
+            print(f"  {str(r.ipo)[:34]:36s} {'-':12s} UNRESOLVED - {res['note'][:90]}")
+            continue
+
+        norm = "".join(ch for ch in str(r.ipo).lower() if ch.isalnum())
         m = sym[sym["norm"].str.startswith(norm[:14])] if len(norm) >= 6 else sym.iloc[0:0]
-        symbol = m["symbol"].iloc[0] if len(m) else None
-        isin = m["isin"].iloc[0] if len(m) else None
         offer = pd.to_numeric(m["Offer Price"], errors="coerce").iloc[0] if len(m) else None
         offer_src = "master"
         if offer is None or pd.isna(offer):
             offer = getattr(r, "offer_price_cg", None)
             offer_src = "chittorgarh_price_band (SINGLE SOURCE - flag it)"
 
-        bse_code = m["bse_code"].iloc[0] if len(m) and "bse_code" in m else None
+        # Priority 5b / rule 6: the segment comes from the bid-time record, never from a
+        # default. A NULL segment means the row is logged and NOT used for training;
+        # pooling an SME listing into mainboard would break rule 6 silently.
+        seg = SY.segment_for(str(r.ipo), isin)
+
+        bse_code = res.get("bse_code") or (
+            m["bse_code"].iloc[0] if len(m) and "bse_code" in m else None)
         a = b = {"ok": False, "why": "no symbol resolved"}
         corroboration = {"ok": False}
         if symbol:
@@ -262,13 +278,15 @@ def main(since: str | None = None, dry: bool = False) -> pd.DataFrame:
             b = price_bse(bse_code, r.listing_date)
             corroboration = price_yfinance(symbol, r.listing_date)
         rec = reconcile_gain(offer, a, b)
-        row = {"ipo": r.ipo, "isin": isin, "symbol": symbol, "segment": "mainboard",
+        row = {"ipo": r.ipo, "isin": isin, "symbol": symbol, "segment": seg["segment"],
                "listing_date": str(pd.Timestamp(r.listing_date).date()),
                "offer_price": offer,
                "listing_open": a.get("open") if a.get("ok") else b.get("open"),
                "listing_close": a.get("close") if a.get("ok") else b.get("close"),
                "ingested_at": str(now), **rec}
-        row["note"] = (f"{row.get('note','')} | offer price from {offer_src}"
+        row["note"] = (f"{row.get('note','')} | symbol via {res['source']}"
+                       f" | segment: {seg['source']}"
+                       f" | offer price from {offer_src}"
                        + (f" | yfinance corroboration close "
                           f"{corroboration['close']:.2f} (ADJUSTED series - not used in the "
                           f"gain)" if corroboration.get("ok") else ""))
