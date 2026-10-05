@@ -1,1 +1,5 @@
 ipo,isin,ipo_id,segment,date,timestamp_ist,capture_point,qib_x,hni_x,rii_x,emp_x,total_x,sector,source,reconciled,note
+TNA Solutions,,3216,sme,2026-10-06,2026-10-06 00:06:50.229775,1500,4.77,1.94,2.42,,2.99,,chittorgarh,single_source_unverified,
+Acme India Industries,,2748,sme,2026-10-06,2026-10-06 00:06:50.229775,1500,5.7,3.36,2.82,,3.76,,chittorgarh,single_source_unverified,
+Paramount Syntex,,2743,sme,2026-10-06,2026-10-06 00:06:50.229775,1500,119.29,0.03,0.44,,1.52,,chittorgarh,single_source_unverified,
+R.K.Fashion Accessories,,3138,sme,2026-10-06,2026-10-06 00:06:50.229775,1500,14.11,0.62,0.01,,0.4,,chittorgarh,single_source_unverified,

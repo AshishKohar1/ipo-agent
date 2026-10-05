@@ -92,3 +92,10 @@ fetched_at_ist,url,http_status,bytes,note
 2026-10-03 01:47:20.551364,https://www.chittorgarh.com/ipo_subscription/x/3216/,200,217151,
 2026-10-03 01:47:23.727968,https://www.chittorgarh.com/ipo_subscription/x/2748/,200,206128,
 2026-10-03 01:47:26.943280,https://www.chittorgarh.com/ipo_subscription/x/2743/,200,197705,
+2026-10-06 00:06:50.768543,https://www.chittorgarh.com/robots.txt,200,0,permitted; User-agent:* disallows ['/ipo/ipo_discussions.asp']
+2026-10-06 00:06:51.255383,https://www.chittorgarh.com/ipo/,200,130389,
+2026-10-06 00:06:54.008409,https://www.chittorgarh.com/ipo/ipo_dashboard.asp?a=sme,200,161053,
+2026-10-06 00:06:57.878539,https://www.chittorgarh.com/ipo_subscription/x/3216/,200,198856,
+2026-10-06 00:07:01.102084,https://www.chittorgarh.com/ipo_subscription/x/2748/,200,186632,
+2026-10-06 00:07:04.263703,https://www.chittorgarh.com/ipo_subscription/x/2743/,200,178200,
+2026-10-06 00:07:07.484876,https://www.chittorgarh.com/ipo_subscription/x/3138/,200,174190,
