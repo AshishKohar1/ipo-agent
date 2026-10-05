@@ -343,9 +343,14 @@ def targets() -> pd.DataFrame:
     d = m.copy()
     if "exclude_reason" in d:
         d = d[d["exclude_reason"].isna()]
-    ld = pd.to_datetime(d.get("listing_date"), errors="coerce")
-    if ld.isna().all():
-        ld = pd.to_datetime(d.get("issue_open_date"), errors="coerce")
+    # KNOWN DATA DEFECT (CLAUDE.md): the master's `issue_open_date` column actually holds
+    # the LISTING date, and `listing_date` is a partial copy of it -- 310 of 623 rows,
+    # 2021 onward only, and identical to `issue_open_date` on every row where both exist.
+    # So `issue_open_date` is the complete column and the one to use. Preferring
+    # `listing_date` silently dropped 313 companies and the whole of 2010-2021 from the
+    # first backfill run.
+    ld = pd.to_datetime(d.get("issue_open_date"), errors="coerce")
+    ld = ld.fillna(pd.to_datetime(d.get("listing_date"), errors="coerce"))
     d["ld"] = ld
     d = d.dropna(subset=["ld"])
     return d[["company", "isin", "symbol", "bse_code", "ld", "Offer Price"]].rename(
@@ -488,7 +493,17 @@ def self_test() -> int:
     chk("404 is distinguished from throttling",
         "not a trading day" in src and "503" in src)
 
-    print("\n[6] column mapping for all four bhavcopy formats")
+    print("\n[6] the target set covers the whole history, not just 2021+")
+    try:
+        t = targets()
+        yrs = pd.to_datetime(t["listing_date"]).dt.year
+        chk("targets() returns the full master", len(t) > 600, str(len(t)))
+        chk("and reaches back to 2010", int(yrs.min()) <= 2010, str(yrs.min()))
+        chk("and forward to 2026", int(yrs.max()) >= 2026, str(yrs.max()))
+    except Exception as e:
+        chk("targets() runs", False, f"{type(e).__name__}: {e}")
+
+    print("\n[7] column mapping for all four bhavcopy formats")
     bse_old = pd.DataFrame({"SC_CODE": [1], "SC_NAME": ["X "], "OPEN": [1.0],
                             "CLOSE": [2.0], "PREVCLOSE": [0.0]})
     chk("BSE old maps", _norm(bse_old, "bse")["open"].iloc[0] == 1.0)
