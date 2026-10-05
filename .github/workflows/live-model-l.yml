@@ -129,10 +129,20 @@ jobs:
         run: |
           git config user.name  "ipo-agent[bot]"
           git config user.email "ashishkohar4@gmail.com"
-          git add -A data/subscription_snapshots.csv predictions_log.csv \
-                     data/market_context.csv data/market_context_notes.csv \
-                     data/live_fetch_log.csv \
-                     reports/live data/live_run_markers.csv || true
+          # Priority 4a. `git add -A a b c` stages NOTHING if any one pathspec is
+          # missing: it exits 128 before staging anything, and the `|| true` that used to
+          # be here masked that completely. data/subscription_snapshots.csv did not exist,
+          # so every run that produced no snapshot staged nothing, printed "nothing
+          # produced", exited 0 and looked GREEN while leaving no record in the repo that
+          # it had run at all. Staging each path on its own means one absent file can no
+          # longer suppress the others.
+          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv reports/live; do
+            if [ -e "$f" ]; then
+              git add -A -- "$f" || echo "could not stage $f"
+            else
+              echo "not produced this run: $f"
+            fi
+          done
           if git diff --cached --quiet; then
             echo "nothing produced — most likely a source block. Not committing."
             exit 0

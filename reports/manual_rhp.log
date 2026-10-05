@@ -1,3 +1,31 @@
 2026-10-03 02:51:23    pairing: 'AWL Agri Business Limited (formerly Adani Wilmar Limited)': file found under the name 'Adani Wilmar Limited'
 2026-10-03 02:51:23  manual_rhp: 28 paired, 0 already settled, 28 to do
 2026-10-03 02:57:49    [  1/28] Syrma SGS Technologies               RHP   done             ok= 18 amb= 5 drhp= 0 miss= 13   386s
+2026-10-03 03:02:10    [  2/28] Gandhar Oil Refineries Limited       RHP   done             ok= 20 amb= 4 drhp= 0 miss= 12   261s
+2026-10-03 03:04:52    [  3/28] Ideaforge Technologies Limited       RHP   done             ok= 21 amb= 3 drhp= 0 miss= 12   161s
+2026-10-03 03:07:43    [  4/28] Manoj Vaibhav Gems                   RHP   done             ok= 18 amb= 6 drhp= 0 miss= 12   171s
+2026-10-03 03:07:58    [  5/28] Samhi Hotels Limited                 RHP   not_a_prospectus ok=  0 amb= 0 drhp= 0 miss=  0    15s  <-- no prospectus marker in the first 0 page(s) with text (1 leading page(
+2026-10-03 03:09:42    [  6/28] Udayshivakumar Infosolutions Limit   RHP   done             ok= 17 amb= 2 drhp= 0 miss= 17   104s
+2026-10-03 03:12:27    [  7/28] Dr Agarwal's Healthcare Limited      RHP   done             ok= 18 amb= 4 drhp= 0 miss= 14   166s
+2026-10-03 03:17:48    [  8/28] Patel Retail Ltd                     RHP   done             ok= 19 amb= 3 drhp= 0 miss= 14   320s
+2026-10-03 03:19:25    [  9/28] S.J.S Enterprises Limited            RHP   done             ok= 19 amb= 4 drhp= 0 miss= 13    96s
+2026-10-03 03:20:49    [ 10/28] Supriya Lifescience Limited          RHP   done             ok= 15 amb= 5 drhp= 0 miss= 16    84s
+2026-10-03 03:22:51    [ 11/28] Ethos Limited                        RHP   done             ok= 17 amb= 2 drhp= 0 miss= 17   122s
+2026-10-03 03:24:50    [ 12/28] EMS Limited                          RHP   done             ok= 16 amb= 2 drhp= 0 miss= 18   119s
+2026-10-03 03:27:20    [ 13/28] Inox India Limited                   RHP   done             ok= 16 amb= 3 drhp= 0 miss= 17   150s
+2026-10-03 03:30:19    [ 14/28] Allied Blenders and Distillers Lim   DRHP  done             ok= 15 amb= 6 drhp= 2 miss= 15   179s
+2026-10-03 03:32:02    [ 15/28] Kross Limited                        RHP   done             ok= 19 amb= 2 drhp= 0 miss= 15   103s
+2026-10-03 03:34:33    [ 16/28] Northern ARC Capital Limited         DRHP  done             ok= 18 amb= 4 drhp= 3 miss= 14   151s
+2026-10-03 03:36:23    [ 17/28] Amanta Healthcare Ltd.               DRHP  done             ok= 15 amb= 4 drhp= 3 miss= 17   110s
+2026-10-03 03:40:47    [ 18/28] Indogulf Cropsciences Limited        RHP   done             ok= 20 amb= 4 drhp= 0 miss= 12   264s
+2026-10-03 03:42:48    [ 19/28] M & B Engineering Ltd                RHP   done             ok= 18 amb= 3 drhp= 0 miss= 15   121s
+2026-10-03 03:44:49    [ 20/28] Sri Lotus Developers & Realty Ltd    DRHP  done             ok= 17 amb= 4 drhp= 3 miss= 15   120s
+2026-10-03 03:47:05    [ 21/28] Urban Company Ltd                    RHP   done             ok= 17 amb= 5 drhp= 0 miss= 14   136s
+2026-10-03 03:49:06    [ 22/28] AWL Agri Business Limited (formerl   RHP   done             ok= 14 amb= 5 drhp= 0 miss= 17   121s
+2026-10-03 03:50:32    [ 23/28] Abans Financial Services Limited     RHP   done             ok= 17 amb= 3 drhp= 0 miss= 16    86s
+2026-10-03 03:52:01    [ 24/28] Acutaas Chemicals Limited            RHP   done             ok= 20 amb= 5 drhp= 0 miss= 11    88s
+2026-10-03 03:53:32    [ 25/28] Alivus Life Sciences Limited         RHP   done             ok= 17 amb= 6 drhp= 0 miss= 13    92s
+2026-10-03 03:55:26    [ 26/28] Eternal Limited                      RHP   done             ok= 15 amb= 5 drhp= 0 miss= 16   114s
+2026-10-03 03:57:51    [ 27/28] Fusion Finance Ltd                   RHP   done             ok= 11 amb= 4 drhp= 0 miss= 21   145s
+2026-10-03 04:00:01    [ 28/28] IKIO Technologies Limited (formerl   RHP   done             ok= 16 amb= 4 drhp= 0 miss= 16   129s
+2026-10-03 04:00:01  manual_rhp finished: {'done': 27, 'not_a_prospectus': 1}
