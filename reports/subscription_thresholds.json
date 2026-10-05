@@ -1,0 +1,1022 @@
+{
+  "L1": {
+    "target": "L1",
+    "promise": 0.9,
+    "cut_pct": 0.0,
+    "n_rows": 620,
+    "date_range": [
+      "2010-01-04",
+      "2026-05-08"
+    ],
+    "base_rate": 0.6838709677419355,
+    "in_sample": {
+      "threshold": 16.860000000000003,
+      "n_fire": 284,
+      "hits": 256,
+      "hit_rate": 0.9014084507042254,
+      "wilson_lo95": 0.8611972276045776,
+      "fire_pct": 45.806451612903224,
+      "near_miss": null
+    },
+    "walk_forward_at_promise": {
+      "per_year": [
+        {
+          "year": 2015,
+          "threshold": 5.43,
+          "n_test": 19,
+          "n_fire": 7,
+          "hits": 6,
+          "hit_rate": 0.8571428571428571,
+          "trained_on": 123
+        },
+        {
+          "year": 2016,
+          "threshold": 5.43,
+          "n_test": 27,
+          "n_fire": 17,
+          "hits": 13,
+          "hit_rate": 0.7647058823529411,
+          "trained_on": 142
+        },
+        {
+          "year": 2017,
+          "threshold": 11.63,
+          "n_test": 36,
+          "n_fire": 16,
+          "hits": 16,
+          "hit_rate": 1.0,
+          "trained_on": 169
+        },
+        {
+          "year": 2018,
+          "threshold": 8.59,
+          "n_test": 24,
+          "n_fire": 8,
+          "hits": 7,
+          "hit_rate": 0.875,
+          "trained_on": 205
+        },
+        {
+          "year": 2019,
+          "threshold": 8.59,
+          "n_test": 16,
+          "n_fire": 7,
+          "hits": 7,
+          "hit_rate": 1.0,
+          "trained_on": 229
+        },
+        {
+          "year": 2020,
+          "threshold": 5.43,
+          "n_test": 14,
+          "n_fire": 10,
+          "hits": 9,
+          "hit_rate": 0.9,
+          "trained_on": 245
+        },
+        {
+          "year": 2021,
+          "threshold": 5.43,
+          "n_test": 63,
+          "n_fire": 44,
+          "hits": 38,
+          "hit_rate": 0.8636363636363636,
+          "trained_on": 259
+        },
+        {
+          "year": 2022,
+          "threshold": 5.43,
+          "n_test": 38,
+          "n_fire": 15,
+          "hits": 13,
+          "hit_rate": 0.8666666666666667,
+          "trained_on": 322
+        },
+        {
+          "year": 2023,
+          "threshold": 6.14,
+          "n_test": 58,
+          "n_fire": 47,
+          "hits": 40,
+          "hit_rate": 0.851063829787234,
+          "trained_on": 360
+        },
+        {
+          "year": 2024,
+          "threshold": 8.59,
+          "n_test": 80,
+          "n_fire": 61,
+          "hits": 52,
+          "hit_rate": 0.8524590163934426,
+          "trained_on": 418
+        },
+        {
+          "year": 2025,
+          "threshold": 11.63,
+          "n_test": 102,
+          "n_fire": 65,
+          "hits": 57,
+          "hit_rate": 0.8769230769230769,
+          "trained_on": 498
+        },
+        {
+          "year": 2026,
+          "threshold": 11.88,
+          "n_test": 20,
+          "n_fire": 3,
+          "hits": 1,
+          "hit_rate": 0.3333333333333333,
+          "trained_on": 600
+        }
+      ],
+      "n_fire": 300,
+      "hits": 259,
+      "pooled_hit_rate": 0.8633333333333333,
+      "pooled_wilson_lo95": 0.8198437047874653,
+      "n_years": 12
+    },
+    "calibration": {
+      "chosen_internal_target": 0.95,
+      "sweep": [
+        {
+          "internal_target": 0.9,
+          "n_fire": 300,
+          "hits": 259,
+          "pooled_hit_rate": 0.8633333333333333,
+          "pooled_wilson_lo95": 0.8198437047874653,
+          "n_years": 12
+        },
+        {
+          "internal_target": 0.91,
+          "n_fire": 268,
+          "hits": 236,
+          "pooled_hit_rate": 0.8805970149253731,
+          "pooled_wilson_lo95": 0.8362977565302094,
+          "n_years": 11
+        },
+        {
+          "internal_target": 0.92,
+          "n_fire": 262,
+          "hits": 230,
+          "pooled_hit_rate": 0.8778625954198473,
+          "pooled_wilson_lo95": 0.832662824880165,
+          "n_years": 11
+        },
+        {
+          "internal_target": 0.93,
+          "n_fire": 226,
+          "hits": 201,
+          "pooled_hit_rate": 0.8893805309734514,
+          "pooled_wilson_lo95": 0.8418024624759756,
+          "n_years": 9
+        },
+        {
+          "internal_target": 0.94,
+          "n_fire": 221,
+          "hits": 197,
+          "pooled_hit_rate": 0.8914027149321267,
+          "pooled_wilson_lo95": 0.8435000603885077,
+          "n_years": 9
+        },
+        {
+          "internal_target": 0.95,
+          "n_fire": 214,
+          "hits": 193,
+          "pooled_hit_rate": 0.9018691588785047,
+          "pooled_wilson_lo95": 0.8546459024885779,
+          "n_years": 9
+        },
+        {
+          "internal_target": 0.96,
+          "n_fire": 205,
+          "hits": 187,
+          "pooled_hit_rate": 0.9121951219512195,
+          "pooled_wilson_lo95": 0.8654871084828075,
+          "n_years": 9
+        },
+        {
+          "internal_target": 0.97,
+          "n_fire": 189,
+          "hits": 176,
+          "pooled_hit_rate": 0.9312169312169312,
+          "pooled_wilson_lo95": 0.8858873994665198,
+          "n_years": 8
+        },
+        {
+          "internal_target": 0.98,
+          "n_fire": 164,
+          "hits": 156,
+          "pooled_hit_rate": 0.9512195121951219,
+          "pooled_wilson_lo95": 0.9067056887374152,
+          "n_years": 6
+        },
+        {
+          "internal_target": 0.99,
+          "n_fire": 115,
+          "hits": 110,
+          "pooled_hit_rate": 0.9565217391304348,
+          "pooled_wilson_lo95": 0.9022408250995757,
+          "n_years": 5
+        }
+      ]
+    },
+    "walk_forward_calibrated": {
+      "per_year": [
+        {
+          "year": 2015,
+          "threshold": null,
+          "n_test": 19,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2016,
+          "threshold": null,
+          "n_test": 27,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2017,
+          "threshold": null,
+          "n_test": 36,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2018,
+          "threshold": 12.13,
+          "n_test": 24,
+          "n_fire": 6,
+          "hits": 6,
+          "hit_rate": 1.0,
+          "trained_on": 205
+        },
+        {
+          "year": 2019,
+          "threshold": 12.13,
+          "n_test": 16,
+          "n_fire": 7,
+          "hits": 7,
+          "hit_rate": 1.0,
+          "trained_on": 229
+        },
+        {
+          "year": 2020,
+          "threshold": 11.01,
+          "n_test": 14,
+          "n_fire": 9,
+          "hits": 8,
+          "hit_rate": 0.8888888888888888,
+          "trained_on": 245
+        },
+        {
+          "year": 2021,
+          "threshold": 12.13,
+          "n_test": 63,
+          "n_fire": 41,
+          "hits": 36,
+          "hit_rate": 0.8780487804878049,
+          "trained_on": 259
+        },
+        {
+          "year": 2022,
+          "threshold": 19.29,
+          "n_test": 38,
+          "n_fire": 10,
+          "hits": 9,
+          "hit_rate": 0.9,
+          "trained_on": 322
+        },
+        {
+          "year": 2023,
+          "threshold": 20.95,
+          "n_test": 58,
+          "n_fire": 34,
+          "hits": 32,
+          "hit_rate": 0.9411764705882353,
+          "trained_on": 360
+        },
+        {
+          "year": 2024,
+          "threshold": 20.95,
+          "n_test": 80,
+          "n_fire": 50,
+          "hits": 45,
+          "hit_rate": 0.9,
+          "trained_on": 418
+        },
+        {
+          "year": 2025,
+          "threshold": 26.51,
+          "n_test": 102,
+          "n_fire": 54,
+          "hits": 49,
+          "hit_rate": 0.9074074074074074,
+          "trained_on": 498
+        },
+        {
+          "year": 2026,
+          "threshold": 27.28,
+          "n_test": 20,
+          "n_fire": 3,
+          "hits": 1,
+          "hit_rate": 0.3333333333333333,
+          "trained_on": 600
+        }
+      ],
+      "n_fire": 214,
+      "hits": 193,
+      "pooled_hit_rate": 0.9018691588785047,
+      "pooled_wilson_lo95": 0.8546459024885779,
+      "n_years": 9
+    },
+    "shipped": {
+      "threshold": 28.39,
+      "n_fire": 242,
+      "hits": 230,
+      "hit_rate": 0.9504132231404959,
+      "wilson_lo95": 0.9153396953886476,
+      "fire_pct": 39.03225806451613,
+      "near_miss": null,
+      "internal_target": 0.95
+    },
+    "fires_per_year": [
+      {
+        "year": 2010,
+        "n_ipos": 67,
+        "n_fire": 15,
+        "n_hit": 15,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2011,
+        "n_ipos": 37,
+        "n_fire": 1,
+        "n_hit": 1,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2012,
+        "n_ipos": 11,
+        "n_fire": 2,
+        "n_hit": 2,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2013,
+        "n_ipos": 3,
+        "n_fire": 0,
+        "n_hit": 0,
+        "hit_rate": null
+      },
+      {
+        "year": 2014,
+        "n_ipos": 5,
+        "n_fire": 3,
+        "n_hit": 3,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2015,
+        "n_ipos": 19,
+        "n_fire": 5,
+        "n_hit": 4,
+        "hit_rate": 0.8
+      },
+      {
+        "year": 2016,
+        "n_ipos": 27,
+        "n_fire": 10,
+        "n_hit": 10,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2017,
+        "n_ipos": 36,
+        "n_fire": 16,
+        "n_hit": 16,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2018,
+        "n_ipos": 24,
+        "n_fire": 4,
+        "n_hit": 4,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2019,
+        "n_ipos": 16,
+        "n_fire": 6,
+        "n_hit": 6,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2020,
+        "n_ipos": 14,
+        "n_fire": 8,
+        "n_hit": 8,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2021,
+        "n_ipos": 63,
+        "n_fire": 32,
+        "n_hit": 31,
+        "hit_rate": 0.96875
+      },
+      {
+        "year": 2022,
+        "n_ipos": 38,
+        "n_fire": 8,
+        "n_hit": 8,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2023,
+        "n_ipos": 58,
+        "n_fire": 32,
+        "n_hit": 31,
+        "hit_rate": 0.96875
+      },
+      {
+        "year": 2024,
+        "n_ipos": 80,
+        "n_fire": 45,
+        "n_hit": 42,
+        "hit_rate": 0.9333333333333333
+      },
+      {
+        "year": 2025,
+        "n_ipos": 102,
+        "n_fire": 52,
+        "n_hit": 48,
+        "hit_rate": 0.9230769230769231
+      },
+      {
+        "year": 2026,
+        "n_ipos": 20,
+        "n_fire": 3,
+        "n_hit": 1,
+        "hit_rate": 0.3333333333333333
+      }
+    ]
+  },
+  "L2": {
+    "target": "L2",
+    "promise": 0.8,
+    "cut_pct": 10.0,
+    "n_rows": 620,
+    "date_range": [
+      "2010-01-04",
+      "2026-05-08"
+    ],
+    "base_rate": 0.43548387096774194,
+    "in_sample": {
+      "threshold": 26.66,
+      "n_fire": 248,
+      "hits": 200,
+      "hit_rate": 0.8064516129032258,
+      "wilson_lo95": 0.7527584777776821,
+      "fire_pct": 40.0,
+      "near_miss": null
+    },
+    "walk_forward_at_promise": {
+      "per_year": [
+        {
+          "year": 2015,
+          "threshold": 31.11,
+          "n_test": 19,
+          "n_fire": 5,
+          "hits": 4,
+          "hit_rate": 0.8,
+          "trained_on": 123
+        },
+        {
+          "year": 2016,
+          "threshold": 31.11,
+          "n_test": 27,
+          "n_fire": 9,
+          "hits": 7,
+          "hit_rate": 0.7777777777777778,
+          "trained_on": 142
+        },
+        {
+          "year": 2017,
+          "threshold": 43.84,
+          "n_test": 36,
+          "n_fire": 14,
+          "hits": 12,
+          "hit_rate": 0.8571428571428571,
+          "trained_on": 169
+        },
+        {
+          "year": 2018,
+          "threshold": 26.51,
+          "n_test": 24,
+          "n_fire": 4,
+          "hits": 3,
+          "hit_rate": 0.75,
+          "trained_on": 205
+        },
+        {
+          "year": 2019,
+          "threshold": 29.55,
+          "n_test": 16,
+          "n_fire": 6,
+          "hits": 6,
+          "hit_rate": 1.0,
+          "trained_on": 229
+        },
+        {
+          "year": 2020,
+          "threshold": 24.47,
+          "n_test": 14,
+          "n_fire": 9,
+          "hits": 8,
+          "hit_rate": 0.8888888888888888,
+          "trained_on": 245
+        },
+        {
+          "year": 2021,
+          "threshold": 19.29,
+          "n_test": 63,
+          "n_fire": 37,
+          "hits": 30,
+          "hit_rate": 0.8108108108108109,
+          "trained_on": 259
+        },
+        {
+          "year": 2022,
+          "threshold": 18.03,
+          "n_test": 38,
+          "n_fire": 10,
+          "hits": 8,
+          "hit_rate": 0.8,
+          "trained_on": 322
+        },
+        {
+          "year": 2023,
+          "threshold": 18.03,
+          "n_test": 58,
+          "n_fire": 36,
+          "hits": 29,
+          "hit_rate": 0.8055555555555556,
+          "trained_on": 360
+        },
+        {
+          "year": 2024,
+          "threshold": 17.41,
+          "n_test": 80,
+          "n_fire": 51,
+          "hits": 41,
+          "hit_rate": 0.803921568627451,
+          "trained_on": 418
+        },
+        {
+          "year": 2025,
+          "threshold": 17.2,
+          "n_test": 102,
+          "n_fire": 60,
+          "hits": 36,
+          "hit_rate": 0.6,
+          "trained_on": 498
+        },
+        {
+          "year": 2026,
+          "threshold": 26.51,
+          "n_test": 20,
+          "n_fire": 3,
+          "hits": 1,
+          "hit_rate": 0.3333333333333333,
+          "trained_on": 600
+        }
+      ],
+      "n_fire": 244,
+      "hits": 185,
+      "pooled_hit_rate": 0.7581967213114754,
+      "pooled_wilson_lo95": 0.7007367647445263,
+      "n_years": 12
+    },
+    "calibration": {
+      "chosen_internal_target": 0.87,
+      "sweep": [
+        {
+          "internal_target": 0.8,
+          "n_fire": 244,
+          "hits": 185,
+          "pooled_hit_rate": 0.7581967213114754,
+          "pooled_wilson_lo95": 0.7007367647445263,
+          "n_years": 12
+        },
+        {
+          "internal_target": 0.81,
+          "n_fire": 226,
+          "hits": 173,
+          "pooled_hit_rate": 0.7654867256637168,
+          "pooled_wilson_lo95": 0.7060934067729822,
+          "n_years": 11
+        },
+        {
+          "internal_target": 0.82,
+          "n_fire": 200,
+          "hits": 152,
+          "pooled_hit_rate": 0.76,
+          "pooled_wilson_lo95": 0.6962653454427199,
+          "n_years": 8
+        },
+        {
+          "internal_target": 0.83,
+          "n_fire": 190,
+          "hits": 146,
+          "pooled_hit_rate": 0.7684210526315789,
+          "pooled_wilson_lo95": 0.7034779532746607,
+          "n_years": 7
+        },
+        {
+          "internal_target": 0.84,
+          "n_fire": 186,
+          "hits": 144,
+          "pooled_hit_rate": 0.7741935483870968,
+          "pooled_wilson_lo95": 0.7089091884701272,
+          "n_years": 7
+        },
+        {
+          "internal_target": 0.85,
+          "n_fire": 179,
+          "hits": 141,
+          "pooled_hit_rate": 0.7877094972067039,
+          "pooled_wilson_lo95": 0.722082764034753,
+          "n_years": 7
+        },
+        {
+          "internal_target": 0.86,
+          "n_fire": 172,
+          "hits": 136,
+          "pooled_hit_rate": 0.7906976744186046,
+          "pooled_wilson_lo95": 0.7238828747336743,
+          "n_years": 7
+        },
+        {
+          "internal_target": 0.87,
+          "n_fire": 156,
+          "hits": 126,
+          "pooled_hit_rate": 0.8076923076923077,
+          "pooled_wilson_lo95": 0.7387526287757789,
+          "n_years": 7
+        },
+        {
+          "internal_target": 0.88,
+          "n_fire": 142,
+          "hits": 118,
+          "pooled_hit_rate": 0.8309859154929577,
+          "pooled_wilson_lo95": 0.7608219589629348,
+          "n_years": 7
+        },
+        {
+          "internal_target": 0.89,
+          "n_fire": 128,
+          "hits": 109,
+          "pooled_hit_rate": 0.8515625,
+          "pooled_wilson_lo95": 0.7797712148689778,
+          "n_years": 6
+        },
+        {
+          "internal_target": 0.9,
+          "n_fire": 116,
+          "hits": 100,
+          "pooled_hit_rate": 0.8620689655172413,
+          "pooled_wilson_lo95": 0.7876428823074824,
+          "n_years": 6
+        },
+        {
+          "internal_target": 0.91,
+          "n_fire": 111,
+          "hits": 97,
+          "pooled_hit_rate": 0.8738738738738738,
+          "pooled_wilson_lo95": 0.7993724735211748,
+          "n_years": 6
+        },
+        {
+          "internal_target": 0.92,
+          "n_fire": 99,
+          "hits": 90,
+          "pooled_hit_rate": 0.9090909090909091,
+          "pooled_wilson_lo95": 0.8361842304768151,
+          "n_years": 6
+        },
+        {
+          "internal_target": 0.93,
+          "n_fire": 76,
+          "hits": 67,
+          "pooled_hit_rate": 0.881578947368421,
+          "pooled_wilson_lo95": 0.7900058191184283,
+          "n_years": 5
+        },
+        {
+          "internal_target": 0.94,
+          "n_fire": 74,
+          "hits": 66,
+          "pooled_hit_rate": 0.8918918918918919,
+          "pooled_wilson_lo95": 0.8009095372797369,
+          "n_years": 5
+        },
+        {
+          "internal_target": 0.95,
+          "n_fire": 72,
+          "hits": 65,
+          "pooled_hit_rate": 0.9027777777777778,
+          "pooled_wilson_lo95": 0.812647509746432,
+          "n_years": 5
+        },
+        {
+          "internal_target": 0.96,
+          "n_fire": 69,
+          "hits": 62,
+          "pooled_hit_rate": 0.8985507246376812,
+          "pooled_wilson_lo95": 0.8050790434713212,
+          "n_years": 5
+        },
+        {
+          "internal_target": 0.97,
+          "n_fire": 52,
+          "hits": 47,
+          "pooled_hit_rate": 0.9038461538461539,
+          "pooled_wilson_lo95": 0.79390118138839,
+          "n_years": 3
+        },
+        {
+          "internal_target": 0.98,
+          "n_fire": 52,
+          "hits": 47,
+          "pooled_hit_rate": 0.9038461538461539,
+          "pooled_wilson_lo95": 0.79390118138839,
+          "n_years": 3
+        },
+        {
+          "internal_target": 0.99,
+          "n_fire": 22,
+          "hits": 19,
+          "pooled_hit_rate": 0.8636363636363636,
+          "pooled_wilson_lo95": 0.6666458812053,
+          "n_years": 2
+        }
+      ]
+    },
+    "walk_forward_calibrated": {
+      "per_year": [
+        {
+          "year": 2015,
+          "threshold": null,
+          "n_test": 19,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2016,
+          "threshold": null,
+          "n_test": 27,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2017,
+          "threshold": null,
+          "n_test": 36,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2018,
+          "threshold": null,
+          "n_test": 24,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2019,
+          "threshold": null,
+          "n_test": 16,
+          "n_fire": 0,
+          "hits": 0,
+          "hit_rate": null,
+          "note": "no threshold qualified on prior years"
+        },
+        {
+          "year": 2020,
+          "threshold": 79.53,
+          "n_test": 14,
+          "n_fire": 5,
+          "hits": 5,
+          "hit_rate": 1.0,
+          "trained_on": 245
+        },
+        {
+          "year": 2021,
+          "threshold": 69.62,
+          "n_test": 63,
+          "n_fire": 20,
+          "hits": 19,
+          "hit_rate": 0.95,
+          "trained_on": 259
+        },
+        {
+          "year": 2022,
+          "threshold": 44.17,
+          "n_test": 38,
+          "n_fire": 4,
+          "hits": 4,
+          "hit_rate": 1.0,
+          "trained_on": 322
+        },
+        {
+          "year": 2023,
+          "threshold": 28.55,
+          "n_test": 58,
+          "n_fire": 32,
+          "hits": 26,
+          "hit_rate": 0.8125,
+          "trained_on": 360
+        },
+        {
+          "year": 2024,
+          "threshold": 32.05,
+          "n_test": 80,
+          "n_fire": 43,
+          "hits": 38,
+          "hit_rate": 0.8837209302325582,
+          "trained_on": 418
+        },
+        {
+          "year": 2025,
+          "threshold": 28.55,
+          "n_test": 102,
+          "n_fire": 51,
+          "hits": 33,
+          "hit_rate": 0.6470588235294118,
+          "trained_on": 498
+        },
+        {
+          "year": 2026,
+          "threshold": 54.02,
+          "n_test": 20,
+          "n_fire": 1,
+          "hits": 1,
+          "hit_rate": 1.0,
+          "trained_on": 600
+        }
+      ],
+      "n_fire": 156,
+      "hits": 126,
+      "pooled_hit_rate": 0.8076923076923077,
+      "pooled_wilson_lo95": 0.7387526287757789,
+      "n_years": 7
+    },
+    "shipped": {
+      "threshold": 54.01999999999999,
+      "n_fire": 167,
+      "hits": 147,
+      "hit_rate": 0.8802395209580839,
+      "wilson_lo95": 0.8222568798528183,
+      "fire_pct": 26.93548387096774,
+      "near_miss": null,
+      "internal_target": 0.87
+    },
+    "fires_per_year": [
+      {
+        "year": 2010,
+        "n_ipos": 67,
+        "n_fire": 4,
+        "n_hit": 4,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2011,
+        "n_ipos": 37,
+        "n_fire": 0,
+        "n_hit": 0,
+        "hit_rate": null
+      },
+      {
+        "year": 2012,
+        "n_ipos": 11,
+        "n_fire": 1,
+        "n_hit": 1,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2013,
+        "n_ipos": 3,
+        "n_fire": 0,
+        "n_hit": 0,
+        "hit_rate": null
+      },
+      {
+        "year": 2014,
+        "n_ipos": 5,
+        "n_fire": 2,
+        "n_hit": 2,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2015,
+        "n_ipos": 19,
+        "n_fire": 1,
+        "n_hit": 1,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2016,
+        "n_ipos": 27,
+        "n_fire": 7,
+        "n_hit": 6,
+        "hit_rate": 0.8571428571428571
+      },
+      {
+        "year": 2017,
+        "n_ipos": 36,
+        "n_fire": 11,
+        "n_hit": 9,
+        "hit_rate": 0.8181818181818182
+      },
+      {
+        "year": 2018,
+        "n_ipos": 24,
+        "n_fire": 4,
+        "n_hit": 3,
+        "hit_rate": 0.75
+      },
+      {
+        "year": 2019,
+        "n_ipos": 16,
+        "n_fire": 4,
+        "n_hit": 4,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2020,
+        "n_ipos": 14,
+        "n_fire": 7,
+        "n_hit": 7,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2021,
+        "n_ipos": 63,
+        "n_fire": 23,
+        "n_hit": 21,
+        "hit_rate": 0.9130434782608695
+      },
+      {
+        "year": 2022,
+        "n_ipos": 38,
+        "n_fire": 3,
+        "n_hit": 3,
+        "hit_rate": 1.0
+      },
+      {
+        "year": 2023,
+        "n_ipos": 58,
+        "n_fire": 21,
+        "n_hit": 20,
+        "hit_rate": 0.9523809523809523
+      },
+      {
+        "year": 2024,
+        "n_ipos": 80,
+        "n_fire": 37,
+        "n_hit": 34,
+        "hit_rate": 0.918918918918919
+      },
+      {
+        "year": 2025,
+        "n_ipos": 102,
+        "n_fire": 41,
+        "n_hit": 31,
+        "hit_rate": 0.7560975609756098
+      },
+      {
+        "year": 2026,
+        "n_ipos": 20,
+        "n_fire": 1,
+        "n_hit": 1,
+        "hit_rate": 1.0
+      }
+    ]
+  }
+}

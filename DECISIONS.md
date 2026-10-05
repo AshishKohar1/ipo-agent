@@ -437,3 +437,127 @@ path including `/robots.txt`** — retried at 40 s and twice at 75 s, on both th
 copy the spoof: it logs NULL with `permission_unverifiable`. The existing TRI file on disk
 is kept and used; no new spoofed request is made. **Whether to keep or remove that
 User-Agent is the user's call.**
+
+## 2026-10-05 — H17: thresholds derived on subscription, superseding H16
+
+**H16 was right that L2's promise was not being met, and wrong about the direction of the
+fix.** It recommended raising the probability cut-off and halving the bids. The data says
+the opposite: fire **more than twice as often**. H16 is superseded and should not be
+implemented.
+
+Derived by `derive_subscription_thresholds.py`. **No model, no standardiser, no isotonic
+calibrator** — a monotone threshold on observed Total subscription, scored against the
+realised listing gain, on the same 620 mainboard IPOs and the same exclusions the model
+uses (2010-01-04 to 2026-05-08).
+
+### 1a / 1b — in-sample against out-of-sample
+
+| Target | Method | Threshold | Fires | Hits | Delivered | Wilson 95% LB |
+|---|---|---|---|---|---|---|
+| **L1** (gain > 0%, promise 90%) | in-sample | 16.86x | 284 | 256 | **90.1%** | 86.1% |
+| | walk-forward | per year | 300 | 259 | **86.3%** | 82.0% |
+| **L2** (gain > 10%, promise 80%) | in-sample | 26.66x | 248 | 200 | **80.6%** | 75.3% |
+| | walk-forward | per year | 244 | 185 | **75.8%** | 70.1% |
+
+**The flattery is +3.8pp on L1 and +4.8pp on L2.** In-sample, the rule picks the point that
+looks best on the rows it is looking at, so its hit rate is an upper bound. The
+walk-forward figure — threshold derived on prior years only, then measured on the next year,
+fires and hits **pooled** across years rather than averaging per-year rates — is the
+expectation.
+
+**Trust the walk-forward number.** It is the only one that answers "what will this deliver
+on an IPO I have not seen", which is the only question a bid decision asks.
+
+**1b is refuted, not confirmed.** L1 does **not** hold at 90%: at its own naively derived
+threshold it delivers **86.3%**, the same disease as L2 and only 1pp milder. It looked safe
+in H16 because H16 measured the *model's probability cut*, which happens to sit at a much
+higher subscription level — a different quantity, not a healthier one.
+
+### The per-year table is where the mechanism shows
+
+L2's naively derived threshold **drifts downward**, 31.11x (2015) to 17.20x (2025), dragged
+by the hot 2021–24 market. Then it breaks:
+
+| Year | Derived on prior years | IPOs | Fires | Hits | Delivered |
+|---|---|---|---|---|---|
+| 2021 | 19.29x | 63 | 37 | 30 | 81% |
+| 2023 | 18.03x | 58 | 36 | 29 | 81% |
+| 2024 | 17.41x | 80 | 51 | 41 | 80% |
+| **2025** | **17.20x** | **102** | **60** | **36** | **60%** |
+| 2026 | 26.51x | 20 | 3 | 1 | 33% |
+
+2025 is the largest year in the dataset and accounts for most of the shortfall on its own.
+This is the same pathology H12 identified in the 2-year half-life: recent hot years dominate
+and mislead. A threshold that re-derives itself downward every year is not learning, it is
+chasing.
+
+### Calibrating the gap away
+
+If the walk-forward rate falls short, the fix is to derive at a **stricter internal target**
+so realised out-of-sample delivery lands on the promise. The internal target is a knob; the
+promise is what the method delivers on unseen data.
+
+| Target | Internal target | Pooled walk-forward delivery | Fires |
+|---|---|---|---|
+| L1 | **95%** | **90.2%** | 214 |
+| L2 | **87%** | **80.8%** | 156 |
+
+### 1c — the answer, in the units the email prints
+
+> **L1 fires above Total ≥ 28.39x. L2 fires above Total ≥ 54.02x.**
+
+Derived on all data at the calibrated internal targets above. These are subscription levels
+the user can read straight off a broker screen — no probability is involved in the decision
+any more.
+
+### H16 reversed: the shipped model was grossly over-conservative
+
+On the same 620 IPOs:
+
+| Target | Rule | Total ≥ | Fires | Delivered | Wilson LB | Share of IPOs |
+|---|---|---|---|---|---|---|
+| L1 | production model (probability cut) | 64.86x | 135 | 99.3% | 95.9% | 21.8% |
+| L1 | **H17, derived on subscription** | **28.39x** | **242** | 95.0% | 91.5% | **39.0%** |
+| L2 | production model (probability cut) | 98.53x | 74 | 98.6% | 92.7% | 11.9% |
+| L2 | **H17, derived on subscription** | **54.02x** | **166** | 88.0% | 82.1% | **26.8%** |
+
+The shipped L2 threshold fired on **11.9%** of IPOs and delivered **98.6%** against an
+**80%** promise. It was not under-delivering — it was leaving most of the opportunity on the
+table, and H16 would have made that worse.
+
+**Both failures are the same root cause: routing the decision through a calibrated
+probability.** H16's shortfall came from `retrain_l.evaluate()`, which refits the
+*calibrator* on each window's training half; the refit calibrator places `p_cal >= 0.80` far
+lower on the subscription scale, which is why that window fired on 49% of its test rows
+rather than 11.9%. So H16 measured the refit procedure and the 98.53x figure describes the
+shipped bundle — two different thresholds, one under-delivering and one over-conservative.
+Deriving directly on subscription removes the intermediary and both problems with it.
+
+### 1d — what the honesty costs in opportunities
+
+It costs nothing. It buys them.
+
+* **L1**: 242 fires over 17 years, **~14.2 a year**, up from 135 (~7.9 a year).
+* **L2**: 166 fires over 17 years, **~9.8 a year**, up from 74 (~4.4 a year).
+
+L2 at 54.02x, by year: 2021 91% (23 fires), 2023 95% (21), 2024 92% (37), **2025 76% (41)**,
+2022 and 2026 100% on 3 and 1. 2025 still misses 80%, but at 76% rather than the 60% the
+naive threshold delivered.
+
+L1 at 28.39x clears 90% in every year except 2015 (80% on 5 fires) and 2026 (33% on 3 fires,
+a part-year to May).
+
+### 1e / 1f — status
+
+**H17 supersedes H16 and awaits ratification.** Nothing in the live path has been changed to
+use these thresholds yet: the email still scores through `score_l.py` and the production
+bundle.
+
+Until ratification, every L2 **BID** in the email carries, verbatim:
+
+> `L2's 80% promise is under review - measured delivery is 77%. Treat L2 as indicative only.`
+
+L1 carries no such warning, **despite 1b being refuted**, because that is what was asked for
+and because L1's firing band on the shipped bundle delivers 99.3% — so a live L1 BID today
+is conservative, not optimistic. The refutation matters for the *new* L1 threshold, not for
+what is currently shipped.

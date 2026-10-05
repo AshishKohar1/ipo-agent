@@ -107,6 +107,15 @@ def secrets() -> tuple[str, str, str]:
 
 
 # ---------------------------------------------------------------- composition
+# Priority 1f. Printed under any L2 BID until H17 is ratified. H17 derived the firing
+# levels directly on Total subscription instead of through a calibrated probability, and
+# found L2's naive threshold delivers 75.8% out of sample against its 80% promise. L1
+# carries no warning: its firing band on the SHIPPED bundle delivers 99.3%, so a live L1
+# BID today is conservative rather than optimistic.
+L2_UNDER_REVIEW = ("L2's 80% promise is under review - measured delivery is 77%. "
+                   "Treat L2 as indicative only.")
+
+
 def _verdict_block(res: dict) -> list[str]:
     """The thresholds are read from the model export, never retyped here — a hardcoded
     number is how a report starts claiming a promise the model was not validated against.
@@ -114,8 +123,11 @@ def _verdict_block(res: dict) -> list[str]:
     l1, l2 = res["L1"], res["L2"]
     t1 = l1.get("required_hit_rate", 0) * 100
     t2 = l2.get("required_hit_rate", 0) * 100
-    return [f"  L1 (any listing gain):  {l1['verdict']:<10s} threshold {t1:.0f}%",
-            f"  L2 (gain above 10%):    {l2['verdict']:<10s} threshold {t2:.0f}%"]
+    out = [f"  L1 (any listing gain):  {l1['verdict']:<10s} threshold {t1:.0f}%",
+           f"  L2 (gain above 10%):    {l2['verdict']:<10s} threshold {t2:.0f}%"]
+    if str(l2.get("verdict", "")).upper().startswith("BID"):
+        out.append(f"  ** {L2_UNDER_REVIEW}")
+    return out
 
 
 def _numbers(r: dict, as_of: str) -> list[str]:
@@ -418,10 +430,44 @@ def self_test() -> int:
     chk("SME is PROVISIONAL", "PROVISIONAL" in body)
     chk("the midweek mainboard IPO gets no verdict",
         "No verdict until the final day" in body)
-    for banned in ("provisional verdict", "indicative", "estimated verdict"):
-        chk(f"no '{banned}' anywhere", banned.lower() not in body.lower())
+    # The guard is against an INVENTED VERDICT for an IPO the model cannot score, not
+    # against the words themselves. H17's mandated L2 caveat legitimately contains
+    # "indicative only" while qualifying a REAL verdict, so the check looks at
+    # verdict-shaped phrasings and excludes that one known line.
+    scrubbed = body.replace(L2_UNDER_REVIEW, "")
+    for banned in ("provisional verdict", "indicative verdict", "estimated verdict",
+                   "likely bid", "probable bid", "estimated bid", "indicative bid"):
+        chk(f"no '{banned}' anywhere", banned.lower() not in scrubbed.lower())
+    chk("'indicative' appears ONLY inside the mandated L2 caveat",
+        "indicative" not in scrubbed.lower(),
+        scrubbed.lower()[max(0, scrubbed.lower().find("indicative") - 60):][:120])
+    chk("SME's PROVISIONAL label is a label, never attached to a verdict word",
+        "PROVISIONAL — SME model not validated" in body)
     chk("the single-source caveat is present",
         "verify on your broker app" in body.lower())
+
+    # Priority 1f: the warning appears under an L2 BID and nowhere else.
+    # The synthetic market's closing mainboard IPO is at 120x, which is above the shipped
+    # bundle's L2 firing point (98.53x) - so L2 DOES fire here and the caveat MUST appear.
+    # My first version of this check asserted the opposite and was simply wrong about the
+    # test fixture.
+    chk("the caveat appears in the body when L2 fires", L2_UNDER_REVIEW in body,
+        f"L2 verdict was {scored['Mainboard Closing']['L2']['verdict']!r}")
+    chk("it appears exactly once per firing IPO", body.count(L2_UNDER_REVIEW) == 1,
+        str(body.count(L2_UNDER_REVIEW)))
+    faked = {"L1": {"verdict": "BID", "required_hit_rate": 0.9, "threshold_met": "x"},
+             "L2": {"verdict": "BID", "required_hit_rate": 0.8, "threshold_met": "x"}}
+    chk("the warning appears under an L2 BID",
+        any(L2_UNDER_REVIEW in ln for ln in _verdict_block(faked)))
+    faked["L2"]["verdict"] = "no"
+    chk("and not under an L2 'no'",
+        not any(L2_UNDER_REVIEW in ln for ln in _verdict_block(faked)))
+    chk("L1 never gets a warning of its own",
+        not any("L1" in ln and "under review" in ln for ln in _verdict_block(faked)))
+    chk("the warning text is byte-exact and plain ASCII",
+        L2_UNDER_REVIEW == ("L2's 80% promise is under review - measured delivery is 77%. "
+                            "Treat L2 as indicative only.") and L2_UNDER_REVIEW.isascii(),
+        repr(L2_UNDER_REVIEW))
     # The footer says "no index history captured yet" until the 17:30 leg has run, so the
     # test asserts the footer EXISTS, not that it carries a number it cannot have yet.
     chk("a market-context footer is present", "Market context:" in body)
