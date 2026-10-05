@@ -29,3 +29,7 @@
 2026-10-03 03:57:51    [ 27/28] Fusion Finance Ltd                   RHP   done             ok= 11 amb= 4 drhp= 0 miss= 21   145s
 2026-10-03 04:00:01    [ 28/28] IKIO Technologies Limited (formerl   RHP   done             ok= 16 amb= 4 drhp= 0 miss= 16   129s
 2026-10-03 04:00:01  manual_rhp finished: {'done': 27, 'not_a_prospectus': 1}
+2026-10-05 15:22:34    pairing: 'AWL Agri Business Limited (formerly Adani Wilmar Limited)': file found under the name 'Adani Wilmar Limited'
+2026-10-05 15:22:34  manual_rhp: 28 paired, 27 already settled, 1 to do
+2026-10-05 15:25:01    [  1/1] Samhi Hotels Limited                 RHP   done             ok= 14 amb= 4 drhp= 0 miss= 18   147s
+2026-10-05 15:25:01  manual_rhp finished: {'done': 1}
