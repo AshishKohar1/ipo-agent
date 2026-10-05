@@ -57,8 +57,12 @@ CAGR is 0.218. Never merge them.
    (mainboard) and BSE SME only; if SEBI has no RHP, use the final prospectus and label it.
    No DRHPs. `NSE_DOWNLOADS_ALLOWED` stays `False` — never accept a disclaimer or
    click-through. Never ask the user to fetch a document.
-   **Never fetch from IPO Ji, InvestorGain, ipoindex.in or iporupee.com** (decision B1), and
-   never send a browser User-Agent to work around a robots.txt or terms restriction.
+   **Never fetch from IPO Ji, InvestorGain, ipoindex.in or iporupee.com** (decision B1).
+   **Rule 5 was relaxed by the user on 2026-10-05 (H18):** realistic browser headers MAY be
+   sent to **official** sources — NSE, BSE, NSE Indices, SEBI — because the earlier ban on
+   browser User-Agents was stricter than intended and was the only thing blocking us. Still
+   forbidden: bypassing a login, CAPTCHA, paywall or click-through agreement; ignoring an
+   explicit robots.txt disallow that applies to our client; and the B1 sources above.
    **Chittorgarh is permitted for personal use** at ≥3 s per request, re-reading its
    robots.txt at the start of every run (B2). (PLAN.md rule 5.)
 4. **Verify every PDF before use.** `_verify_is_prospectus()` checks prospectus marker,

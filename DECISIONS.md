@@ -561,3 +561,91 @@ L1 carries no such warning, **despite 1b being refuted**, because that is what w
 and because L1's firing band on the shipped bundle delivers 99.3% — so a live L1 BID today
 is conservative, not optimistic. The refutation matters for the *new* L1 threshold, not for
 what is currently shipped.
+
+## 2026-10-05 — H18: rule 5 relaxed, and what it unblocked
+
+**The user's decision, recorded verbatim in intent.** The earlier instruction "fetch only
+from official sites" had been implemented as "never send a browser User-Agent", which was
+stricter than intended. Realistic browser headers may now be sent **to official sources** —
+NSE, BSE, NSE Indices, SEBI. The purpose is unchanged: correct numbers from official
+channels, and keep trying.
+
+**Still forbidden, unchanged:** bypassing a login, CAPTCHA, paywall or click-through
+agreement; ignoring an explicit `robots.txt` disallow that applies to our client; and
+reaching any source whose terms prohibit scraping — `ipoindex.in`, `iporupee.com`, IPO Ji
+and InvestorGain remain off-limits (B1).
+
+### What was actually blocking us: a User-Agent filter, not a policy
+
+Every one of these was previously recorded as refusing this host. Re-read today with
+realistic headers:
+
+| Host | Before | With headers (H18) |
+|---|---|---|
+| `www.nseindia.com/robots.txt` | connection reset / timeout | **HTTP 200.** `User-agent: *` → `Allow: /`, only `/market-data-test` disallowed |
+| `www.bseindia.com/robots.txt` | **403** | HTTP 200 — serves the SPA homepage, i.e. no robots.txt exists, so nothing is disallowed |
+| `www.niftyindices.com/robots.txt` | read timeout on every path | **HTTP 200.** `Allow: /` with four specific disallows, **none** of them the historical-data endpoint |
+
+So NSE positively permits us and always did; the WAF was filtering on the User-Agent
+string. BSE publishes no robots.txt at all. niftyindices permits the path we need.
+
+### Endpoints, probed rather than assumed
+
+| Source | Endpoint | Result |
+|---|---|---|
+| BSE live | `api.bseindia.com/BseIndiaAPI/api/StockReachGraph/w` | **HTTP 200**, live JSON (SYNGENE 357.50) |
+| **BSE bhavcopy, old format** | `/download/BhavCopy/Equity/EQ<DDMMYY>_CSV.ZIP` | **HTTP 200.** 3,161 scrips for 11-Aug-2015 |
+| **BSE bhavcopy, new format** | `/download/BhavCopy/Equity/BhavCopy_BSE_CM_0_0_0_<YYYYMMDD>_F_0000.CSV` | **HTTP 200**, 863 KB, and it carries **ISIN** |
+| **NSE bhavcopy** | `nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_<YYYYMMDD>_F_0000.csv.zip` | **HTTP 200** |
+| NSE JSON APIs | `www.nseindia.com/api/quote-equity`, `/api/historical/cm/equity` | **403 / 503** — still WAF-blocked even with headers |
+
+**Bhavcopy is the right instrument, and better than anything previously considered.** It is
+the exchanges' own end-of-day file, unadjusted, one file per trading date covering every
+scrip — so a listing date is one request, not one request per company. And **NSE bhavcopy
+plus BSE bhavcopy are two genuinely independent official sources, so rule 2 applies
+properly.** No `single_source_unverified` compromise is needed for the label after all.
+
+### The as-reported gate (2c), run before collecting anything
+
+Syngene International: offer **₹250**, 1:1 bonus in 2017, as-reported list price **₹295**.
+yfinance returns **₹147.50** — exactly 295/2 — which is why it is banned. The test: ~295
+means as-reported and usable; ~147.50 means it carries the same adjustment disease and must
+be rejected outright.
+
+**Chittorgarh** `/ipo/x/481/`, "Listing Day Trading Information":
+
+| Price Details | BSE | NSE |
+|---|---|---|
+| Final Issue Price | ₹250.00 | ₹250.00 |
+| **Open** | **₹295.00** | **₹295.00** |
+| Low | ₹295.00 | ₹295.00 |
+| High | ₹318.20 | ₹318.50 |
+| Last Trade | ₹310.40 | ₹310.55 |
+
+**PASSES.** ₹295.00, not ₹147.50. As-reported, unadjusted.
+
+**BSE bhavcopy** for 11-Aug-2015, SC_CODE 539268:
+
+```
+OPEN 295.0  HIGH 318.2  LOW 295.0  CLOSE 310.4  LAST 310.4  PREVCLOSE 0.0
+```
+
+**Also passes, and agrees with Chittorgarh to the paisa.** The implied listing gain is
+**18.0%**, which is exactly the figure the master already carries — three independent
+confirmations of the same number.
+
+One incidental find worth keeping: **`PREVCLOSE = 0.0` marks a scrip's first trading day**
+in BSE bhavcopy. That is a source-side listing-day marker, which is more reliable than
+matching our own calendar.
+
+### Consequences
+
+* Chittorgarh's listing-day table is **cleared for use**, but is now the *corroborator*
+  rather than the primary, because the two exchanges' bhavcopies are independent of each
+  other and of it.
+* `NSE_DOWNLOADS_ALLOWED` no longer needs to gate bhavcopy: there is no click-through on
+  these files. The flag's original purpose — never accept a disclaimer or click-through —
+  is untouched and still binding.
+* Priority 4c (index closes) is unblocked: `market_context.py` can reach niftyindices.
+* `fetch_nifty_tri.py`'s browser User-Agent is, under H18, no longer a violation. The
+  existing `NIFTY50_TRI.csv` stays and is **not** to be re-derived.
