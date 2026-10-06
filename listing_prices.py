@@ -219,15 +219,24 @@ def bhavcopy(f: Fetcher, day, which: str, use_cache: bool = True):
             return pd.read_csv(cp, low_memory=False), "cache"
         except Exception as e:                              # noqa: BLE001
             log(f"  cache unreadable, refetching {cp.name}: {type(e).__name__}")
+    # Try the format that era actually used FIRST. Both exchanges moved to the unified
+    # BhavCopy_*_CM_* naming during 2024; before that BSE used EQ<ddmmyy>_CSV.ZIP and NSE
+    # used cm<DDMMMYYYY>bhav.csv.zip. Probing the modern name first on a 2010 date wasted a
+    # round trip plus the politeness gap on every one of ~450 historical dates - about half
+    # the job's requests, and half its load on the exchanges, for nothing. The other order
+    # is still tried as a fallback, so a wrong guess about the cutover costs only what the
+    # old behaviour cost.
+    modern = d >= pd.Timestamp("2024-07-01")
     if which == "bse":
         f.warm(BSE_HOME)
-        urls = [(BSE_NEW.format(ymd=f"{d:%Y%m%d}"), BSE_REFERER),
-                (BSE_OLD.format(ddmmyy=f"{d:%d%m%y}"), BSE_REFERER)]
+        new_u = (BSE_NEW.format(ymd=f"{d:%Y%m%d}"), BSE_REFERER)
+        old_u = (BSE_OLD.format(ddmmyy=f"{d:%d%m%y}"), BSE_REFERER)
     else:
         f.warm(NSE_HOME)
-        urls = [(NSE_NEW.format(ymd=f"{d:%Y%m%d}"), NSE_HOME),
-                (NSE_OLD.format(Y=f"{d:%Y}", MON=f"{d:%b}".upper(),
-                                ddMONyyyy=f"{d:%d}{d:%b}".upper() + f"{d:%Y}"), NSE_HOME)]
+        new_u = (NSE_NEW.format(ymd=f"{d:%Y%m%d}"), NSE_HOME)
+        old_u = (NSE_OLD.format(Y=f"{d:%Y}", MON=f"{d:%b}".upper(),
+                                ddMONyyyy=f"{d:%d}{d:%b}".upper() + f"{d:%Y}"), NSE_HOME)
+    urls = [new_u, old_u] if modern else [old_u, new_u]
     notes = []
     for u, ref in urls:
         raw, why = f.get(u, ref)
