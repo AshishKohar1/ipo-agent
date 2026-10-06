@@ -1,0 +1,114 @@
+date,company,total_subscription_x,offer_price,email_L1,email_L2,listing_gain_pct,label_source,label_reconciled,L1_target_met,L2_target_met,L1_verdict_right,L2_verdict_right,outcome
+2025-05-27,Borana Weaves Limited,148.78,216.0,BID,BID,12.5,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-05-28,Belrise Industries Limited,41.3,90.0,BID,no,11.11,exchange bhavcopy (H18),single_source_unverified,1,1,1,0,BID and it worked
+2025-06-02,Aegis Vopak Terminals Limited,2.09,235.0,no,no,-6.38,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-06-02,Schloss Bangalore Limited,4.5,435.0,no,no,-6.67,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-06-03,Prostarm Info Systems Limited,97.2,105.0,BID,BID,14.29,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-06-04,Scoda Tubes Limited,53.78,140.0,BID,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,0,1,BID and it fell
+2025-06-20,Oswal Pumps Limited,34.42,614.0,BID,no,3.26,exchange bhavcopy (H18),single_source_unverified,1,0,1,1,BID and it worked
+2025-06-25,Arisinfra Solutions Limited,2.65,222.0,no,no,-7.66,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-07-01,Ellenbarrie Industrial Gases Limited,22.19,400.0,no,no,21.5,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2025-07-01,Kalpataru Limited,2.26,414.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-07-01,Globe Civil Projects Limited,86.04,71.0,BID,BID,26.76,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-07-02,Sambhv Steel Tubes Limited,28.46,82.0,BID,no,34.15,exchange bhavcopy (H18),single_source_unverified,1,1,1,0,BID and it worked
+2025-07-02,HDB Financial Services Limited,16.69,740.0,no,no,12.84,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2025-07-03,Indogulf Cropsciences Limited,25.98,111.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-07-09,Crizac Limited,59.82,245.0,BID,BID,14.71,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-07-14,Travel Food Services Limited,2.88,1100.0,no,no,2.27,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-07-17,Smartworks Coworking Limited,13.45,407.0,no,no,6.88,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-07-21,Anthem Biosciences Limited,63.86,570.0,BID,BID,26.85,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-07-30,Indiqube Spaces Limited,12.41,237.0,no,no,-8.86,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-07-30,GNG Electronics Limited,147.93,237.0,BID,BID,49.79,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-07-31,Brigade Hotel Ventures Limited,4.48,90.0,no,no,-9.89,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-08-01,Shanti Gold International Ltd,81.17,199.0,BID,BID,14.35,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-08-05,Laxmi India Finance Ltd,1.87,158.0,no,no,-12.96,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-08-05,Aditya Infotech Ltd,100.69,675.0,BID,BID,50.37,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-08-06,National Securities Depository Ltd (NSDL),41.01,800.0,BID,no,10.0,master Listing Gain,,1,0,1,1,BID and it worked
+2025-08-06,Sri Lotus Developers & Realty Ltd,69.14,150.0,BID,BID,18.67,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-08-06,M & B Engineering Ltd,36.2,385.0,BID,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,0,1,BID and it fell
+2025-08-12,Highway Infrastructure Ltd.,300.61,70.0,BID,BID,64.29,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-08-14,JSW Cement Ltd,7.77,147.0,no,no,4.42,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-08-14,All Time Plastics Ltd.,8.34,275.0,no,no,13.2,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2025-08-19,BlueStone Jewellery & Lifestyle Ltd.,2.7,517.0,no,no,-1.35,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-08-20,Regaal Resources Ltd.,159.88,102.0,BID,BID,38.24,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-08-26,Vikram Solar Ltd,54.63,332.0,BID,BID,1.81,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-08-26,Patel Retail Ltd,95.7,255.0,BID,BID,17.65,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-08-26,Shreeji Shipping Global Ltd.,58.1,252.0,BID,BID,7.14,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-08-26,Gem Aromatics Ltd,30.27,325.0,BID,no,2.49,exchange bhavcopy (H18),single_source_unverified,1,0,1,1,BID and it worked
+2025-08-28,Mangal Electrical Industries Ltd.,9.46,561.0,no,no,-0.89,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-09-03,Vikran Engineering Ltd.,23.59,97.0,no,no,2.06,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-09-03,Anlon Healthcare Ltd.,7.12,91.0,no,no,1.1,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-09-09,Amanta Healthcare Ltd.,82.61,126.0,BID,BID,7.14,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-09-17,Urban Company Ltd,103.63,103.0,BID,BID,57.52,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-09-17,Shringar House of Mangalsutra Ltd.,60.29,165.0,BID,BID,14.24,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-09-17,Dev Accelerator Ltd.,63.97,61.0,BID,BID,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,0,0,BID and it fell
+2025-09-23,Euro Pratik Sales Ltd.,1.34,247.0,no,no,10.16,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2025-09-24,VMS TMT Ltd,102.26,99.0,BID,BID,5.96,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-09-25,Ivalue Infosolutions Ltd.,1.82,299.0,no,no,-4.7,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-09-26,Saatvik Green Energy Ltd.,6.57,465.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-09-26,GK Energy Ltd,89.62,153.0,BID,BID,11.76,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-09-29,Ganesh Consumer Products Ltd.,2.67,322.0,no,no,-8.06,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-09-29,Atlanta Electricals Ltd.,70.63,754.0,BID,BID,13.66,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-09-30,Jaro Institute of Technology Management & Research Ltd.,22.06,890.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-09-30,Solarworld Energy Solutions Ltd.,65.01,351.0,BID,BID,10.68,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-09-30,Seshaasai Technologies Ltd.,68.13,423.0,BID,BID,2.13,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-09-30,Anand Rathi Share & Stock Brokers Ltd.,20.66,414.0,no,no,4.35,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-10-01,BMW Ventures Ltd,1.5,99.0,no,no,-21.21,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-10-01,Epack Prefab Technologies Ltd.,3.07,204.0,no,no,-9.88,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-10-01,Jain Resource Recycling Ltd.,15.9,232.0,no,no,14.25,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2025-10-03,Jinkushal Industries Ltd.,65.1,121.0,BID,BID,3.31,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-10-03,Trualt Bioenergy Ltd.,71.92,496.0,BID,BID,9.96,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-10-06,Pace Digitek Ltd,1.59,219.0,no,no,2.74,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-10-07,Glottis Ltd,2.05,129.0,no,no,-34.88,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-10-07,Fabtech Technologies Ltd.,2.03,191.0,no,no,0.52,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-10-08,Om Freight Forwarders Ltd.,3.87,135.0,no,no,-39.63,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-10-08,Advance Agrolife Ltd.,56.85,100.0,BID,BID,14.0,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-10-10,WeWork India Management Ltd.,1.15,648.0,no,no,0.31,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-10-13,Tata Capital Ltd,1.95,326.0,no,no,1.23,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-10-14,LG Electronics India Ltd.,54.02,1140.0,BID,BID,50.01,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-10-16,Rubicon Research Ltd.,103.9,485.0,BID,BID,27.84,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-10-16,Canara Robeco Asset Management Co.Ltd.,9.74,266.0,no,no,5.36,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-10-17,Canara HSBC Life Insurance Co.Ltd.,2.29,106.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-10-24,Midwest Ltd,87.89,1065.0,BID,BID,9.39,exchange bhavcopy (H18),single_source_unverified,1,0,1,0,BID and it worked
+2025-11-06,Orkla India Ltd,48.73,730.0,BID,no,2.75,exchange bhavcopy (H18),single_source_unverified,1,0,1,1,BID and it worked
+2025-11-07,Studds Accessories Ltd.,73.25,585.0,BID,BID,-3.42,exchange bhavcopy (H18),single_source_unverified,0,0,0,0,BID and it fell
+2025-11-10,Lenskart Solutions Ltd.,28.26,402.0,no,no,-1.74,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-11-12,Billionbrains Garage Ventures Ltd.,17.6,100.0,no,no,12.0,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2025-11-14,Pine Labs Ltd,2.46,221.0,no,no,9.5,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-11-18,Emmvee Photovoltaic Power Ltd.,0.97,217.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-11-18,Physicswallah Ltd,1.81,109.0,no,no,33.03,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2025-11-19,Tenneco Clean Air India Ltd.,58.83,397.0,BID,BID,27.2,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-11-20,Fujiyama Power Systems Ltd.,2.14,228.0,no,no,-3.51,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-11-21,Capillary Technologies India Ltd.,52.95,577.0,BID,no,-0.88,exchange bhavcopy (H18),single_source_unverified,0,0,0,1,BID and it fell
+2025-11-26,Excelsoft Technologies Ltd.,43.19,120.0,BID,no,12.5,exchange bhavcopy (H18),single_source_unverified,1,1,1,0,BID and it worked
+2025-11-28,Sudeep Pharma Ltd,93.72,593.0,BID,BID,23.1,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-12-10,Aequs Ltd,101.63,124.0,BID,BID,12.9,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-12-10,Vidya Wires Ltd,26.59,52.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-12-10,Meesho Ltd,79.02,111.0,BID,BID,46.4,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-12-15,Corona Remedies Ltd.,137.04,1062.0,BID,BID,38.42,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2025-12-15,Wakefit Innovations Ltd.,2.52,195.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-12-17,Park Medi World Ltd.,8.1,162.0,no,no,-1.98,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-12-17,Nephrocare Health Services Ltd.,13.96,460.0,no,no,6.52,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2025-12-19,ICICI Prudential Asset Management Co.Ltd.,39.17,2165.0,BID,no,20.09,exchange bhavcopy (H18),single_source_unverified,1,1,1,0,BID and it worked
+2025-12-23,KSH International Ltd.,0.83,384.0,no,no,-3.65,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2025-12-30,Gujarat Kidney & Super Speciality Ltd.,5.21,114.0,no,no,5.26,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2026-01-19,Bharat Coking Coal Ltd.,146.8,23.0,BID,BID,95.65,exchange bhavcopy (H18),single_source_unverified,1,1,1,1,BID and it worked
+2026-01-21,Amagi Media Labs Ltd.,30.22,361.0,BID,no,-11.91,exchange bhavcopy (H18),single_source_unverified,0,0,0,1,BID and it fell
+2026-01-28,Shadowfax Technologies Ltd.,2.72,124.0,no,no,-9.19,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-02-16,Fractal Analytics Ltd.,2.66,900.0,no,no,-2.67,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-02-16,Aye Finance Ltd,0.97,129.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-02-27,Gaudium IVF and Wo...,7.25,79.0,no,no,5.06,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2026-03-02,Shree Ram Twistex Ltd.,43.66,104.0,BID,no,-34.62,exchange bhavcopy (H18),single_source_unverified,0,0,0,1,BID and it fell
+2026-03-02,Clean Max Enviro Energy Solutions Ltd.,0.94,1053.0,no,no,-8.83,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-03-04,PNGS Reva Diamond Jewellery Ltd.,1.23,386.0,no,no,-2.85,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-03-05,Omnitech Engineering Ltd.,1.14,227.0,no,no,-11.01,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-03-11,SEDEMAC Mechatronics Ltd.,2.68,1352.0,no,no,13.54,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
+2026-03-19,Rajputana Stainless Ltd.,1.12,122.0,no,no,0.0,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-03-23,Innovision Ltd,3.32,519.0,no,no,-9.88,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-03-24,GSP Crop Science Ltd.,1.61,320.0,no,no,2.5,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2026-03-30,Central Mine Planning & Design Institute Ltd.,1.05,172.0,no,no,-6.98,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-04-02,Amir Chand Jagdish Kumar (Exports) Ltd.,3.23,212.0,no,no,-5.66,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-04-02,Powerica Ltd,1.45,395.0,no,no,-7.34,exchange bhavcopy (H18),single_source_unverified,0,0,1,1,said no and it was right
+2026-04-02,Sai Parenteral's Ltd.,1.05,392.0,no,no,2.04,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2026-04-17,Om Power Transmission Ltd.,3.33,175.0,no,no,6.29,exchange bhavcopy (H18),single_source_unverified,1,0,0,1,"said no, small gain missed"
+2026-05-08,OnEMI Technology Solutions Ltd.,9.5,171.0,no,no,11.11,exchange bhavcopy (H18),single_source_unverified,1,1,0,0,said no and it soared
