@@ -649,3 +649,73 @@ matching our own calendar.
 * Priority 4c (index closes) is unblocked: `market_context.py` can reach niftyindices.
 * `fetch_nifty_tri.py`'s browser User-Agent is, under H18, no longer a violation. The
   existing `NIFTY50_TRI.csv` stays and is **not** to be re-derived.
+
+## 2026-10-06 — H17 RATIFIED and SHIPPED. H16 is void.
+
+The user ratified H17 on 2026-10-06. Model L's decision is now a plain subscription
+threshold. **There is no calibrated probability anywhere in the decision path.**
+
+> **L1 fires above Total ≥ 28.39x** (90% promise)
+> **L2 fires above Total ≥ 54.02x** (80% promise)
+
+### The standing definition, in the user's words
+
+> **the threshold at which 90% (L1) / 80% (L2) of IPOs the model has never seen met the
+> target. Walk-forward, never in-sample.**
+
+This is now the definition of a threshold in this project. The in-sample figure flatters by
+**3.8pp on L1 and 4.8pp on L2**, and that gap produced *both* earlier failures:
+
+* **H16's apparent shortfall** — `retrain_l.evaluate()` refits the calibrator on each
+  window, which places `p_cal >= 0.80` far lower on the subscription scale, so that window
+  fired on 49% of its test rows and under-delivered.
+* **The shipped bundle's over-conservatism** — its fixed probability cut sat at Total
+  ≥ 98.53x, firing on 11.9% of IPOs and delivering 98.6% against an 80% promise.
+
+One cause, two opposite symptoms. Removing the intermediary removes both.
+
+### What shipped (1b)
+
+| | Before | After |
+|---|---|---|
+| Decision input | calibrated probability `p_cal` | **Total subscription** |
+| L1 fires at | Total ≥ 64.86x (implied) | **Total ≥ 28.39x** (stated) |
+| L2 fires at | Total ≥ 98.53x (implied) | **Total ≥ 54.02x** (stated) |
+| Expected L2 bids | ~4.4 a year | **~9.8 a year** |
+| Artefact of record | `model_l_v1.0_*_coefficients.json` | `models/model_l_v1.1_thresholds.json` |
+
+* `models/model_l_v1.1_thresholds.json` is emitted by
+  `derive_subscription_thresholds.py` and carries its own provenance: the ratification, the
+  walk-forward definition, what it supersedes, the delivered out-of-sample rate, the fire
+  count and the in-sample flattery. **`score_l.py` reads it; no threshold is hardcoded
+  anywhere**, for the same reason no report hardcodes a promise.
+* `score_one()` is one comparison: `tot >= cut`. Asserted in the self-test that it contains
+  no `p_cal`, `p_raw`, `isotonic` or `_interp`, and that where H17 and the old probability
+  rule disagree **H17 wins**.
+* The probability is still *computed*, under `diagnostics`, labelled
+  `NOT in the decision path (H17)`, because a diverging probability is an early warning
+  that the threshold needs re-deriving. Its coefficient path is pinned to **v1.0** on
+  purpose: the drift series is only comparable over time if it keeps coming from the same
+  fit, so bumping it with `MODEL_ID` would silently change what is being measured.
+* **The L2 under-review caveat is deleted.** It warned that L2's 80% promise rested on a
+  cut-off whose measured delivery was 77%; H17 replaced that cut-off with a threshold
+  derived to deliver 80.8% out of sample. The caveat now described a rule that no longer
+  exists, and a stale warning is worse than none — it teaches the reader to discount a
+  verdict that is sound.
+* The email prints both firing levels on every send, including quiet days, and each verdict
+  line carries its own level. That is the practical gain over a probability: **the reader
+  can check the number against their own broker screen.**
+
+### The drift guard (1c)
+
+The monthly retrain re-derives both thresholds by the same walk-forward method as data
+grows. **A re-derivation that moves a threshold by more than 25% in either direction is not
+applied** — it is flagged in the retrain report for the user's review.
+
+The reason is on the record. The naively derived L2 threshold drifted **31.11x (2015) to
+17.20x (2025)**, chasing the hot 2021–24 market, and 2025 — the largest year in the dataset,
+102 IPOs — then delivered **60% on 60 fires**. A threshold that tracks recent conditions
+that closely is not learning, it is chasing, and the size of the move is the symptom that
+tells the two apart.
+
+`drift_check()` in `derive_subscription_thresholds.py`; `DRIFT_LIMIT = 0.25`.

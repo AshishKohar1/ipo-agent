@@ -139,13 +139,19 @@ def main(dry: bool = False) -> dict:
         # A promise missed in the recent window is the alert that matters most: the
         # threshold was chosen on older out-of-fold data, and a shortfall here means it no
         # longer delivers what the model card claims.
+        # NOTE: this measures the RETIRED calibrated-probability cut-off, which H17
+        # removed from the decision path. It is kept as a drift monitor -- a diverging
+        # probability is an early warning that the subscription threshold needs
+        # re-deriving -- but it is no longer a promise the system makes, and the alert says
+        # so explicitly. Reporting it as a live shortfall is exactly how H16 was produced.
         if ch.get("hit_rate") is not None and ch["hit_rate"] < REQUIRED[target]:
             alerts.append(
-                f"{target}: the champion's threshold delivered {ch['hit_rate']*100:.1f}% in "
-                f"the last 12 months against a {REQUIRED[target]*100:.0f}% promise "
-                f"({ch['hits']}/{ch['n_fire']} fires). The window is small, so this is a "
-                f"warning rather than a failure -- but if it persists the threshold must be "
-                f"re-derived, not explained away.")
+                f"{target}: MONITORING ONLY (not the live rule) -- the retired probability "
+                f"cut-off would have delivered {ch['hit_rate']*100:.1f}% in the last 12 "
+                f"months against a {REQUIRED[target]*100:.0f}% promise "
+                f"({ch['hits']}/{ch['n_fire']} fires). Since H17 the decision is a "
+                f"subscription threshold, so this is drift evidence rather than a failure. "
+                f"The live rule's own delivery is in the threshold table above.")
         if ch.get("psi_alert"):
             alerts.append(f"{target}: PSI {ch['psi_max']} exceeds {PSI_ALERT} — an input has "
                           "drifted, which invalidates the THRESHOLDS even if AUC looks fine, "
@@ -160,6 +166,51 @@ def main(dry: bool = False) -> dict:
                          "n_test_window": e["n_test_window"], "decision": decision,
                          "psi_max": e["psi_max"], "psi_alert": e["psi_alert"],
                          "note": f"window from {e['window_from']}"})
+    # ------------------------------------------------- 1c: re-derive the H17 thresholds
+    # The decision is a subscription threshold now, so the thing that must be re-derived
+    # monthly is the threshold itself, by the SAME walk-forward method that produced it --
+    # not the probability model's AUC. The candidate comparison above is kept because it
+    # still monitors the feature set; this block monitors the number that actually decides.
+    res["thresholds"] = {}
+    try:
+        import derive_subscription_thresholds as DT
+        cur = DT.current_production().get("targets", {})
+        for target in ("L1", "L2"):
+            a = DT.analyse(target)
+            sh = a.get("shipped") or {}
+            new_t = sh.get("threshold")
+            old_t = (cur.get(target) or {}).get("threshold_total_x")
+            if new_t is None:
+                res["thresholds"][target] = {
+                    "error": "no threshold qualified on current data"}
+                alerts.append(f"{target}: NO subscription threshold qualifies on current "
+                              f"data under the C5 gates. The shipped level is unchanged and "
+                              f"this needs review.")
+                continue
+            g = DT.drift_check(new_t, old_t)
+            res["thresholds"][target] = {
+                "shipped_total_x": old_t, "re_derived_total_x": round(new_t, 2),
+                "moved_pct": g["moved_pct"], "apply": g["apply"], "reason": g["reason"],
+                "internal_target": a["calibration"]["chosen_internal_target"],
+                "walk_forward_delivered": (a["walk_forward_calibrated"] or {}).get("pooled_hit_rate"),
+                "walk_forward_fires": (a["walk_forward_calibrated"] or {}).get("n_fire"),
+                "in_sample_delivered": a["in_sample"]["hit_rate"],
+            }
+            print(f"  {target} threshold: shipped {old_t}x -> re-derived {new_t:.2f}x "
+                  f"({g['moved_pct']}%) {'APPLY' if g['apply'] else 'HOLD FOR REVIEW'}")
+            if not g["apply"]:
+                alerts.append(f"{target}: THRESHOLD DRIFT HELD FOR REVIEW. {g['reason']} "
+                              f"Nothing was changed. The re-derived level would be "
+                              f"{new_t:.2f}x against the shipped {old_t}x.")
+            wf = (a["walk_forward_calibrated"] or {}).get("pooled_hit_rate")
+            if wf is not None and wf < REQUIRED[target] - 1e-9:
+                alerts.append(f"{target}: even after calibration the re-derived threshold "
+                              f"delivers only {wf*100:.1f}% out of sample against a "
+                              f"{REQUIRED[target]*100:.0f}% promise.")
+    except Exception as e:                                  # noqa: BLE001
+        res["thresholds"]["error"] = f"{type(e).__name__}: {e}"
+        alerts.append(f"the H17 threshold re-derivation did not run: {type(e).__name__}: {e}")
+
     res["alerts"] = alerts
     if alerts:
         print("\nALERTS:")
@@ -176,6 +227,27 @@ def main(dry: bool = False) -> dict:
     L = [f"# Model L retrain — {now.date()}", "",
          f"Champion: `{'+'.join(ML.FEATURES)}`, half-life `{ML.HALF_LIFE}` (H11).",
          f"Out-of-sample window: last 12 months.", ""]
+    if res.get("thresholds"):
+        L += ["## Ratified thresholds (H17) — re-derived walk-forward", "",
+              "| target | shipped | re-derived | moved | out-of-sample delivery | action |",
+              "|---|---|---|---|---|---|"]
+        for t, d in res["thresholds"].items():
+            if not isinstance(d, dict) or "error" in d:
+                L.append(f"| {t} | — | — | — | — | {d if not isinstance(d, dict) else d.get('error')} |")
+                continue
+            wf = d.get("walk_forward_delivered")
+            if wf is None:
+                delivery = "—"
+            else:
+                delivery = f"{wf * 100:.1f}% on {d.get('walk_forward_fires')} fires"
+            action = "apply" if d.get("apply") else "**HOLD FOR REVIEW**"
+            L.append(f"| {t} | {d.get('shipped_total_x')}x "
+                     f"| {d.get('re_derived_total_x')}x | {d.get('moved_pct')}% "
+                     f"| {delivery} | {action} |")
+        L += ["", "A move beyond 25% is held rather than applied: the naive L2 threshold "
+                  "drifted 31.11x to 17.20x chasing the hot 2021-24 market and 2025 then "
+                  "delivered 60%. A threshold that chases recent conditions is not learning.",
+              ""]
     for target, d in res["targets"].items():
         L += [f"## {target}", "", "| candidate | AUC | Brier | fires | hit rate | PSI max |",
               "|---|---|---|---|---|---|"]

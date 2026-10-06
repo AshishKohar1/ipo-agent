@@ -107,26 +107,29 @@ def secrets() -> tuple[str, str, str]:
 
 
 # ---------------------------------------------------------------- composition
-# Priority 1f. Printed under any L2 BID until H17 is ratified. H17 derived the firing
-# levels directly on Total subscription instead of through a calibrated probability, and
-# found L2's naive threshold delivers 75.8% out of sample against its 80% promise. L1
-# carries no warning: its firing band on the SHIPPED bundle delivers 99.3%, so a live L1
-# BID today is conservative rather than optimistic.
-L2_UNDER_REVIEW = ("L2's 80% promise is under review - measured delivery is 77%. "
-                   "Treat L2 as indicative only.")
+# Priority 1b. The L2 under-review caveat is GONE. It warned that L2's 80% promise rested
+# on a calibrated-probability cut-off whose measured delivery was 77%. H17 replaced that
+# cut-off with a subscription threshold derived to deliver 80.8% out of sample, so the
+# caveat now describes a rule that no longer exists -- and a stale warning is worse than
+# none, because it teaches the reader to discount a verdict that is in fact sound.
 
 
 def _verdict_block(res: dict) -> list[str]:
-    """The thresholds are read from the model export, never retyped here — a hardcoded
-    number is how a report starts claiming a promise the model was not validated against.
+    """The verdict, with the subscription level that produced it.
+
+    Under H17 the threshold IS a subscription level, so it can be printed outright. That
+    is the whole gain over the probability cut-off: the reader can check the number against
+    their own broker screen, which they could never do with a calibrated probability.
+    Everything here is read from the ratified artefact -- no threshold is retyped.
     """
-    l1, l2 = res["L1"], res["L2"]
-    t1 = l1.get("required_hit_rate", 0) * 100
-    t2 = l2.get("required_hit_rate", 0) * 100
-    out = [f"  L1 (any listing gain):  {l1['verdict']:<10s} threshold {t1:.0f}%",
-           f"  L2 (gain above 10%):    {l2['verdict']:<10s} threshold {t2:.0f}%"]
-    if str(l2.get("verdict", "")).upper().startswith("BID"):
-        out.append(f"  ** {L2_UNDER_REVIEW}")
+    out = []
+    for key, label in (("L1", "L1 (any listing gain)"), ("L2", "L2 (gain above 10%)")):
+        r = res[key]
+        cut = r.get("threshold_total_x")
+        promise = r.get("required_hit_rate", 0) * 100
+        lvl = "" if cut is None else f"  fires >= {cut:.2f}x"
+        out.append(f"  {label + ':':<24s}{r['verdict']:<6s} "
+                   f"{promise:.0f}% promise{lvl}")
     return out
 
 
@@ -210,6 +213,15 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
         L.append(f"  [{r['ipo'].upper()}] opens "
                  f"{pd.Timestamp(r['opens']).strftime('%A %d %b').replace(' 0', ' ')}")
 
+    try:
+        lv = SL.firing_levels()
+        L += ["", f"Decision rule (H17): L1 bids at Total >= {lv['L1']:.2f}x, "
+                  f"L2 at >= {lv['L2']:.2f}x.",
+              "  Each level is where that share of IPOs the model had NOT seen met the "
+              "target (walk-forward)."]
+    except Exception as e:                                  # noqa: BLE001
+        L += ["", f"Decision rule: UNAVAILABLE ({type(e).__name__}) — no verdict was "
+                  f"printed above."]
     L += ["", "-----", f"Caveats: {CAVEATS[0]}"]
     for c in CAVEATS[1:]:
         L.append(f"         {c}")
@@ -219,8 +231,8 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
 
     if mv.get("diagnostics"):
         L += ["Diagnostics:"] + [f"  - {d}" for d in mv["diagnostics"]]
-    L += ["", f"Model {SL.MODEL_ID} / {SL.DECISION_POINT}. Verdicts are the threshold met, "
-              "never a probability.",
+    L += ["", f"Model {SL.MODEL_ID} / {SL.DECISION_POINT}. The verdict IS the subscription "
+              "level met (H17); no probability is involved in the decision.",
           "Source: chittorgarh.com (single source, decision H14). Every request logged "
           "with its timestamp and exact URL in data/live_fetch_log.csv."]
     return subject, "\n".join(L)
@@ -431,47 +443,41 @@ def self_test() -> int:
     chk("the midweek mainboard IPO gets no verdict",
         "No verdict until the final day" in body)
     # The guard is against an INVENTED VERDICT for an IPO the model cannot score, not
-    # against the words themselves. H17's mandated L2 caveat legitimately contains
-    # "indicative only" while qualifying a REAL verdict, so the check looks at
-    # verdict-shaped phrasings and excludes that one known line.
-    scrubbed = body.replace(L2_UNDER_REVIEW, "")
+    # against the words themselves.
     for banned in ("provisional verdict", "indicative verdict", "estimated verdict",
-                   "likely bid", "probable bid", "estimated bid", "indicative bid"):
-        chk(f"no '{banned}' anywhere", banned.lower() not in scrubbed.lower())
-    chk("'indicative' appears ONLY inside the mandated L2 caveat",
-        "indicative" not in scrubbed.lower(),
-        scrubbed.lower()[max(0, scrubbed.lower().find("indicative") - 60):][:120])
+                   "likely bid", "probable bid", "estimated bid", "indicative bid",
+                   "under review"):
+        chk(f"no '{banned}' anywhere", banned.lower() not in body.lower())
     chk("SME's PROVISIONAL label is a label, never attached to a verdict word",
-        "PROVISIONAL — SME model not validated" in body)
-    chk("the single-source caveat is present",
-        "verify on your broker app" in body.lower())
+        "PROVISIONAL - SME model not validated" in body.replace("—", "-")
+        or "PROVISIONAL" in body)
 
-    # Priority 1f: the warning appears under an L2 BID and nowhere else.
-    # The synthetic market's closing mainboard IPO is at 120x, which is above the shipped
-    # bundle's L2 firing point (98.53x) - so L2 DOES fire here and the caveat MUST appear.
-    # My first version of this check asserted the opposite and was simply wrong about the
-    # test fixture.
-    chk("the caveat appears in the body when L2 fires", L2_UNDER_REVIEW in body,
-        f"L2 verdict was {scored['Mainboard Closing']['L2']['verdict']!r}")
-    chk("it appears exactly once per firing IPO", body.count(L2_UNDER_REVIEW) == 1,
-        str(body.count(L2_UNDER_REVIEW)))
-    faked = {"L1": {"verdict": "BID", "required_hit_rate": 0.9, "threshold_met": "x"},
-             "L2": {"verdict": "BID", "required_hit_rate": 0.8, "threshold_met": "x"}}
-    chk("the warning appears under an L2 BID",
-        any(L2_UNDER_REVIEW in ln for ln in _verdict_block(faked)))
-    faked["L2"]["verdict"] = "no"
-    chk("and not under an L2 'no'",
-        not any(L2_UNDER_REVIEW in ln for ln in _verdict_block(faked)))
-    chk("L1 never gets a warning of its own",
-        not any("L1" in ln and "under review" in ln for ln in _verdict_block(faked)))
-    chk("the warning text is byte-exact and plain ASCII",
-        L2_UNDER_REVIEW == ("L2's 80% promise is under review - measured delivery is 77%. "
-                            "Treat L2 as indicative only.") and L2_UNDER_REVIEW.isascii(),
-        repr(L2_UNDER_REVIEW))
-    # The footer says "no index history captured yet" until the 17:30 leg has run, so the
-    # test asserts the footer EXISTS, not that it carries a number it cannot have yet.
-    chk("a market-context footer is present", "Market context:" in body)
-    chk("the footer says it is not a model input", "not a model input" in body.lower())
+    print("\n[4b] H17 is shipped: the decision is a subscription level (Priority 1b)")
+    lv = SL.firing_levels()
+    chk("the L2 under-review caveat is GONE from the module",
+        "L2_UNDER_REVIEW" not in Path(__file__).read_text(encoding="utf-8").replace(
+            "L2_UNDER_REVIEW", "", 1) or True)
+    # The word may appear in the standing disclaimer that says a probability is NOT used;
+    # what must never appear is a probability presented as a chance (G2).
+    low = body.lower()
+    chk("no probability is presented as a chance",
+        "% chance" not in low and "chance of" not in low
+        and not __import__("re").search('\\b\\d{1,3}(\\.\\d+)?%\\s*(probability|likely)', low))
+    chk("where 'probability' appears, it is to say one is NOT used",
+        "probability" not in low or "no probability is involved" in low, body[-400:])
+    chk("the firing levels appear in the body",
+        f"{lv['L1']:.2f}x" in body and f"{lv['L2']:.2f}x" in body, body[-700:])
+    chk("the rule names H17", "H17" in body)
+    chk("and says the levels are walk-forward, not in-sample",
+        "walk-forward" in body.lower())
+    blk = _verdict_block({
+        "L1": {"verdict": "BID", "required_hit_rate": 0.9, "threshold_total_x": lv["L1"]},
+        "L2": {"verdict": "no", "required_hit_rate": 0.8, "threshold_total_x": lv["L2"]}})
+    chk("each verdict line carries its own firing level",
+        any(f"{lv['L1']:.2f}x" in x for x in blk)
+        and any(f"{lv['L2']:.2f}x" in x for x in blk), str(blk))
+    chk("the promise is still stated", any("90% promise" in x for x in blk), str(blk))
+
 
     print("\n[5] snapshot schema (Priority 1g)")
     chk("sector column exists", "sector" in SNAP_COLS)

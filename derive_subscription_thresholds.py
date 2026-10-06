@@ -60,6 +60,11 @@ import model_l as ML                                        # noqa: E402
 
 OUT_JSON = ROOT / "reports" / "subscription_thresholds.json"
 OUT_MD = ROOT / "reports" / "SUBSCRIPTION_THRESHOLDS.md"
+# The PRODUCTION artefact. score_l.py reads this; nothing hardcodes a threshold, for the
+# same reason no report hardcodes a promise -- a retyped number is how a system starts
+# claiming something it was never validated against.
+PROD = ROOT / "models" / "model_l_v1.1_thresholds.json"
+MODEL_ID = "model_l_v1.1"
 
 # The promises. Not the thresholds.
 REQUIRED = {"L1": 0.90, "L2": 0.80}
@@ -297,6 +302,85 @@ def md(a: dict, b: dict) -> str:
     return "\n".join(L)
 
 
+def write_production(res: dict) -> dict:
+    """Emit the artefact score_l.py decides on.
+
+    Ratified by the user on 2026-10-06 as H17. The standing definition, in their words:
+    **the threshold at which 90% (L1) / 80% (L2) of IPOs the model has never seen met the
+    target. Walk-forward, never in-sample.**
+    """
+    out = {"model_id": MODEL_ID, "decision_point": "L_final_3pm",
+           "decision_variable": "total_subscription_x",
+           "decision_rule": "BID iff Total subscription >= threshold_total_x",
+           "definition": ("the threshold at which the promised share of IPOs THE MODEL HAS "
+                          "NEVER SEEN met the target. Walk-forward, never in-sample."),
+           "ratified": "H17, by the user, 2026-10-06",
+           "supersedes": ["H16", "the calibrated-probability cut-off"],
+           "generated": str(pd.Timestamp.now()),
+           "targets": {}}
+    for t in ("L1", "L2"):
+        r = res[t]
+        sh, wc = r["shipped"], r["walk_forward_calibrated"]
+        out["targets"][t] = {
+            "promise": r["promise"],
+            "gain_above_pct": r["cut_pct"],
+            "threshold_total_x": None if not sh else round(sh["threshold"], 2),
+            "internal_derivation_target": r["calibration"]["chosen_internal_target"],
+            "walk_forward_delivered": None if not wc else wc["pooled_hit_rate"],
+            "walk_forward_fires": None if not wc else wc["n_fire"],
+            "in_sample_delivered": r["in_sample"]["hit_rate"],
+            "in_sample_threshold_total_x": r["in_sample"]["threshold"],
+            "flattery_pp": (None if (r["in_sample"]["hit_rate"] is None
+                                     or r["walk_forward_at_promise"]["pooled_hit_rate"] is None)
+                            else round(100 * (r["in_sample"]["hit_rate"]
+                                              - r["walk_forward_at_promise"]["pooled_hit_rate"]), 2)),
+            "fires_on_n_of_n": None if not sh else [sh["n_fire"], r["n_rows"]],
+            "n_rows": r["n_rows"],
+            "date_range": r["date_range"],
+        }
+    PROD.parent.mkdir(parents=True, exist_ok=True)
+    PROD.write_text(json.dumps(out, indent=2), encoding="utf-8")
+    return out
+
+
+# ---------------------------------------------------------------- drift guard (1c)
+DRIFT_LIMIT = 0.25
+
+
+def drift_check(new_threshold: float, current_threshold: float | None,
+                limit: float = DRIFT_LIMIT) -> dict:
+    """1c. A re-derivation that moves a threshold more than `limit` is NOT applied silently.
+
+    The reason is on the record: the naively derived L2 threshold drifted 31.11x (2015) to
+    17.20x (2025) chasing the hot 2021-24 market, and 2025 then delivered 60% on 60 fires.
+    A threshold that tracks recent conditions that closely is not learning, it is chasing,
+    and the drift is the symptom that distinguishes the two. So a large move is reported for
+    the user to approve rather than applied.
+    """
+    if current_threshold is None or not current_threshold:
+        return {"apply": True, "reason": "no current threshold to compare against",
+                "moved_pct": None}
+    moved = (new_threshold - current_threshold) / current_threshold
+    if abs(moved) > limit:
+        return {"apply": False, "moved_pct": round(100 * moved, 1),
+                "reason": (f"threshold moved {100*moved:+.1f}% "
+                           f"({current_threshold:.2f}x -> {new_threshold:.2f}x), beyond the "
+                           f"{100*limit:.0f}% drift limit. NOT applied - flagged for review. "
+                           f"A threshold that chases recent conditions is not learning.")}
+    return {"apply": True, "moved_pct": round(100 * moved, 1),
+            "reason": f"moved {100*moved:+.1f}%, within the {100*limit:.0f}% limit"}
+
+
+def current_production() -> dict:
+    """The thresholds currently shipped, or `{}` before the first write."""
+    if not PROD.exists():
+        return {}
+    try:
+        return json.loads(PROD.read_text(encoding="utf-8"))
+    except Exception:                                        # noqa: BLE001
+        return {}
+
+
 # ---------------------------------------------------------------- self-test
 def self_test() -> int:
     ok = fail = 0
@@ -384,6 +468,7 @@ if __name__ == "__main__":
         raise SystemExit(self_test())
 
     res = {t: analyse(t) for t in ("L1", "L2")}
+    prod = write_production(res)
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUT_JSON.write_text(json.dumps(res, indent=2, default=str), encoding="utf-8")
     OUT_MD.write_text(md(res["L1"], res["L2"]), encoding="utf-8")

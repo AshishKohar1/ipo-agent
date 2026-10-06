@@ -1,0 +1,55 @@
+{
+  "model_id": "model_l_v1.1",
+  "decision_point": "L_final_3pm",
+  "decision_variable": "total_subscription_x",
+  "decision_rule": "BID iff Total subscription >= threshold_total_x",
+  "definition": "the threshold at which the promised share of IPOs THE MODEL HAS NEVER SEEN met the target. Walk-forward, never in-sample.",
+  "ratified": "H17, by the user, 2026-10-06",
+  "supersedes": [
+    "H16",
+    "the calibrated-probability cut-off"
+  ],
+  "generated": "2026-10-06 16:53:34.094460",
+  "targets": {
+    "L1": {
+      "promise": 0.9,
+      "gain_above_pct": 0.0,
+      "threshold_total_x": 28.39,
+      "internal_derivation_target": 0.95,
+      "walk_forward_delivered": 0.9018691588785047,
+      "walk_forward_fires": 214,
+      "in_sample_delivered": 0.9014084507042254,
+      "in_sample_threshold_total_x": 16.860000000000003,
+      "flattery_pp": 3.81,
+      "fires_on_n_of_n": [
+        242,
+        620
+      ],
+      "n_rows": 620,
+      "date_range": [
+        "2010-01-04",
+        "2026-05-08"
+      ]
+    },
+    "L2": {
+      "promise": 0.8,
+      "gain_above_pct": 10.0,
+      "threshold_total_x": 54.02,
+      "internal_derivation_target": 0.87,
+      "walk_forward_delivered": 0.8076923076923077,
+      "walk_forward_fires": 156,
+      "in_sample_delivered": 0.8064516129032258,
+      "in_sample_threshold_total_x": 26.66,
+      "flattery_pp": 4.83,
+      "fires_on_n_of_n": [
+        167,
+        620
+      ],
+      "n_rows": 620,
+      "date_range": [
+        "2010-01-04",
+        "2026-05-08"
+      ]
+    }
+  }
+}

@@ -40,7 +40,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 COEF_DIR = ROOT / "models"
 
-MODEL_ID = "model_l_v1.0"
+MODEL_ID = "model_l_v1.1"
+# H17, ratified by the user 2026-10-06. The DECISION is a plain subscription threshold.
+# There is no calibrated probability anywhere in the decision path: `score_one` compares
+# Total subscription to a number and that is the whole of it.
+#
+# The user's standing definition of that number, recorded verbatim:
+#   "the threshold at which 90% (L1) / 80% (L2) of IPOs the model has never seen met the
+#    target. Walk-forward, never in-sample."
+# In-sample flatters by 3.8pp (L1) and 4.8pp (L2), and that gap produced BOTH earlier
+# failures -- H16's apparent shortfall and the shipped bundle's over-conservatism.
+#
+# The probability is still COMPUTED, because it is worth logging for calibration drift, but
+# it is confined to `diagnostics` and cannot reach a verdict.
+THRESHOLDS = ROOT / "models" / "model_l_v1.1_thresholds.json"
+# The fit whose coefficients feed the drift-monitoring probability (not the decision).
+COEF_MODEL_ID = "model_l_v1.0"
 DECISION_POINT = "L_final_3pm"
 TARGETS = ("L1", "L2")
 PROFILE_LABELS = ("institution-led", "balanced", "balanced", "retail-skewed")
@@ -60,7 +75,11 @@ def load(target: str) -> dict:
     """The portable coefficient JSON for L1 or L2."""
     if target in _CACHE:
         return _CACHE[target]
-    path = COEF_DIR / f"{MODEL_ID}_{target.lower()}_coefficients.json"
+    # Pinned to v1.0 on purpose. Under H17 the coefficients no longer make the decision --
+    # they only produce the drift-monitoring probability in `diagnostics` -- and that
+    # probability is only comparable over time if it keeps coming from the SAME fit. Bumping
+    # this with MODEL_ID would silently change what the drift series measures.
+    path = COEF_DIR / f"{COEF_MODEL_ID}_{target.lower()}_coefficients.json"
     if not path.exists():
         raise CoefficientsMissing(
             f"{path} is missing. Live scoring reads the portable JSON, not the joblib "
@@ -103,40 +122,90 @@ def _interp(x: float, xs: list[float], ys: list[float]) -> float:
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
 
 
-def score_one(target: str, total: float) -> dict:
-    """Steps 1–6 of the JSON's own `scoring` recipe, for one target."""
-    d = load(target)
-    feats = make_features(total)
-    missing = [f for f in d["features"] if f not in feats or feats[f] is None
-               or not math.isfinite(feats[f])]
-    if missing:
-        return {"model": f"{MODEL_ID}_{target.lower()}",
-                "verdict": f"NO CALL — missing input: {', '.join(missing)}"}
+_TH: dict | None = None
 
+
+def thresholds() -> dict:
+    """The ratified subscription thresholds. Read from the artefact, never hardcoded."""
+    global _TH
+    if _TH is not None:
+        return _TH
+    if not THRESHOLDS.exists():
+        raise CoefficientsMissing(
+            f"{THRESHOLDS} is missing. The decision is a subscription threshold (H17); "
+            f"re-derive it with `python derive_subscription_thresholds.py`.")
+    try:
+        d = json.loads(THRESHOLDS.read_text(encoding="utf-8"))
+    except Exception as e:                                   # noqa: BLE001
+        raise CoefficientsMissing(f"{THRESHOLDS} unreadable: {type(e).__name__}: {e}") from e
+    for t in TARGETS:
+        if t not in d.get("targets", {}) or not d["targets"][t].get("threshold_total_x"):
+            raise CoefficientsMissing(f"{THRESHOLDS} has no threshold for {t}.")
+    _TH = d
+    return _TH
+
+
+def score_one(target: str, total: float) -> dict:
+    """The decision. One comparison, in subscription units (H17).
+
+    `diagnostics` still carries the old calibrated probability for drift monitoring, and
+    `_probability_diagnostics` is explicitly NOT consulted for the verdict.
+    """
+    th = thresholds()["targets"][target]
+    cut = float(th["threshold_total_x"])
+    promise = float(th["promise"])
+    try:
+        tot = float(total)
+    except (TypeError, ValueError):
+        tot = float("nan")
+    if not math.isfinite(tot):
+        return {"model": f"{MODEL_ID}_{target.lower()}",
+                "verdict": "NO CALL — missing input: total subscription",
+                "required_hit_rate": promise, "threshold_total_x": cut}
+
+    fired = tot >= cut
+    return {"model": f"{MODEL_ID}_{target.lower()}",
+            "bundle": MODEL_ID,
+            "verdict": "BID" if fired else "no",
+            # G2: the threshold met, never a probability as a literal chance. Under H17 the
+            # threshold is a subscription level, so it can be stated outright.
+            "threshold_met": (f"Total {tot:.2f}x >= {cut:.2f}x, the level at which "
+                              f"{promise:.0%} of unseen IPOs met this target"
+                              if fired else
+                              f"Total {tot:.2f}x is below {cut:.2f}x"),
+            "threshold_total_x": cut,
+            "required_hit_rate": promise,
+            "walk_forward_delivered": th.get("walk_forward_delivered"),
+            "diagnostics": _probability_diagnostics(target, tot),
+            }
+
+
+def _probability_diagnostics(target: str, total: float) -> dict:
+    """The old calibrated probability, for drift monitoring only.
+
+    Kept because a diverging probability is an early warning that the subscription
+    threshold needs re-deriving. **Never consulted for a verdict** — `score_one` decides
+    before this is called and ignores what it returns.
+    """
+    out = {"note": "for predictions_log.csv only — NOT in the decision path (H17)"}
+    try:
+        d = load(target)
+    except CoefficientsMissing:
+        return {**out, "raw_p": None, "calibrated_p": None,
+                "why": "coefficient export absent; the decision does not need it"}
+    feats = make_features(total)
     logit = float(d["intercept"])
-    for f in d["features"]:                                  # steps 2 and 3
+    for f in d["features"]:
         z = (feats[f] - d["standardiser_mean"][f]) / d["standardiser_scale"][f]
         logit += d["standardised_coefficients"][f] * z
-    p_raw = 1.0 / (1.0 + math.exp(-logit))                   # step 4
-
-    xs, ys = d.get("isotonic_x"), d.get("isotonic_y")        # step 5
+    p_raw = 1.0 / (1.0 + math.exp(-logit))
+    xs, ys = d.get("isotonic_x"), d.get("isotonic_y")
     p_cal = min(1.0, max(0.0, _interp(p_raw, xs, ys))) if xs and ys else None
-
-    req = float(d["required_hit_rate"])
-    fired = p_cal is not None and p_cal >= req               # step 6
-    return {"model": f"{MODEL_ID}_{target.lower()}",
-            "bundle": d.get("model_id", MODEL_ID),
-            "verdict": "BID" if fired else "no",
-            # G2: the THRESHOLD MET, never the probability as a literal chance.
-            "threshold_met": (f"validated hit rate >= {req:.0%}" if fired
-                              else f"below the {req:.0%} threshold"),
-            "half_life": d.get("half_life"),
-            "required_hit_rate": req,
-            "diagnostics": {"raw_p": round(p_raw, 4),
-                            "calibrated_p": None if p_cal is None else round(p_cal, 4),
-                            "raw_equivalent_threshold": d.get("raw_equivalent_threshold"),
-                            "note": "for predictions_log.csv only — never shown as a "
-                                    "chance (G2)"}}
+    return {**out, "raw_p": round(p_raw, 4),
+            "calibrated_p": None if p_cal is None else round(p_cal, 4),
+            "superseded_probability_verdict": (
+                None if p_cal is None else
+                ("BID" if p_cal >= float(d["required_hit_rate"]) else "no"))}
 
 
 def demand_profile(qib: float | None, rii: float | None,
@@ -159,8 +228,13 @@ def demand_profile(qib: float | None, rii: float | None,
 
 
 def required() -> dict[str, float]:
-    """The promised hit rates, read from the exports rather than hardcoded twice."""
-    return {t: float(load(t)["required_hit_rate"]) for t in TARGETS}
+    """The promised hit rates, read from the artefact rather than hardcoded twice."""
+    return {t: float(thresholds()["targets"][t]["promise"]) for t in TARGETS}
+
+
+def firing_levels() -> dict[str, float]:
+    """`{"L1": 28.39, "L2": 54.02}` — the subscription levels the email prints."""
+    return {t: float(thresholds()["targets"][t]["threshold_total_x"]) for t in TARGETS}
 
 
 def predict_live(total: float, qib: float | None = None, rii: float | None = None,
@@ -176,7 +250,11 @@ def predict_live(total: float, qib: float | None = None, rii: float | None = Non
            "inputs": {"total": total, "qib": qib, "rii": rii}}
     for t in TARGETS:
         out[t] = score_one(t, total)
-    out["demand_profile"] = demand_profile(qib, rii, load("L1").get("profile_cutpoints"))
+    try:
+        cuts = load("L1").get("profile_cutpoints")
+    except CoefficientsMissing:
+        cuts = None
+    out["demand_profile"] = demand_profile(qib, rii, cuts)
     out["demand_profile_note"] = "display only — not a model input and never a verdict (H3)"
     if segment != "mainboard":
         out["shadow_mode"] = "SME runs in shadow mode; logged, never a bid decision"
@@ -206,50 +284,39 @@ def self_test() -> int:
         chk(f"{t} features == {FEATURES}", d["features"] == FEATURES, str(d["features"]))
         chk(f"{t} half_life is None (H11)", d["half_life"] is None, str(d["half_life"]))
 
-    print("\n[2] monotonicity: more subscription never lowers the verdict")
+    print("\n[2] the DECISION is a subscription threshold and nothing else (H17)")
+    lv = firing_levels()
+    chk("L1 fires at 28.39x", abs(lv["L1"] - 28.39) < 1e-9, str(lv))
+    chk("L2 fires at 54.02x", abs(lv["L2"] - 54.02) < 1e-9, str(lv))
     for t in TARGETS:
-        ps = [score_one(t, x)["diagnostics"]["calibrated_p"] for x in
-              (0.1, 0.5, 1, 2, 5, 10, 25, 50, 100, 200)]
-        chk(f"{t} calibrated p is non-decreasing in Total",
-            all(a <= b + 1e-12 for a, b in zip(ps, ps[1:])), str(ps))
+        cut = lv[t]
+        chk(f"{t}: exactly at the threshold FIRES", score_one(t, cut)["verdict"] == "BID")
+        chk(f"{t}: one paisa below does NOT fire",
+            score_one(t, cut - 0.01)["verdict"] == "no")
+        chk(f"{t}: the verdict is monotone in Total",
+            all(score_one(t, x)["verdict"] == "no" for x in (0.1, 1, 5))
+            and all(score_one(t, x)["verdict"] == "BID" for x in (cut, cut * 2, 500)))
+        chk(f"{t}: the threshold is STATED in the verdict text",
+            f"{cut:.2f}x" in score_one(t, cut)["threshold_met"])
 
-    print("\n[3] step 6's two forms pick the same firing point")
-    # Step 6 can be read two ways: isotonic (`p_cal >= required_hit_rate`) or its stated
-    # shortcut (`p_raw >= raw_equivalent_threshold`). They are not bit-identical, because
-    # `raw_equivalent_threshold` lands ON an isotonic knot while the step function jumps AT
-    # that knot. The band of Total values where they differ must be negligible, and
-    # production uses the isotonic route. This measures the band rather than assuming it.
-    def _raw_p(target, total):
-        d, feats = load(target), make_features(total)
-        logit = float(d["intercept"]) + sum(
-            d["standardised_coefficients"][f]
-            * (feats[f] - d["standardiser_mean"][f]) / d["standardiser_scale"][f]
-            for f in d["features"])
-        return 1.0 / (1.0 + math.exp(-logit))
-
-    def _boundary(fires):
-        lo, hi = 0.0, 5000.0
-        for _ in range(100):
-            mid = (lo + hi) / 2
-            if fires(mid):
-                hi = mid
-            else:
-                lo = mid
-        return hi
-
-    for t in TARGETS:
-        ret = load(t).get("raw_equivalent_threshold")
-        if ret is None:
-            continue
-        b_iso = _boundary(lambda x, t=t: score_one(t, x)["verdict"] == "BID")
-        b_raw = _boundary(lambda x, t=t, r=ret: _raw_p(t, x) >= r)
-        gap = abs(b_iso - b_raw) / max(b_iso, b_raw)
-        chk(f"{t} the two forms fire within 1% of the same Total",
-            gap < 0.01,
-            f"isotonic fires at {b_iso:.3f}x, shortcut at {b_raw:.3f}x "
-            f"({gap * 100:.2f}% apart)")
-        print(f"        {t}: BID from Total >= {b_iso:.2f}x "
-              f"(shortcut {b_raw:.2f}x, {gap * 100:.2f}% apart)")
+    print("\n[3] no probability can reach a verdict")
+    import inspect
+    body = inspect.getsource(score_one)
+    for banned in ("p_cal", "p_raw", "isotonic", "_interp"):
+        chk(f"score_one does not use {banned!r}", banned not in body)
+    chk("score_one compares Total to the threshold, and that is the decision",
+        "tot >= cut" in body)
+    d = predict_live(120.0)["L1"]["diagnostics"]
+    chk("the probability is still logged for drift monitoring", "calibrated_p" in d, str(d))
+    chk("and is labelled as outside the decision path",
+        "NOT in the decision path" in d.get("note", ""), str(d.get("note")))
+    mid = (lv["L2"] + 98.53) / 2
+    r = score_one("L2", mid)
+    chk("where H17 and the old probability rule disagree, H17 wins",
+        r["verdict"] == "BID"
+        and r["diagnostics"].get("superseded_probability_verdict") == "no",
+        f"total={mid:.2f} {r['verdict']} vs "
+        f"{r['diagnostics'].get('superseded_probability_verdict')}")
 
     print("\n[4] demand profile is a label, and missing legs stay unknown")
     cuts = load("L1").get("profile_cutpoints")
@@ -281,24 +348,22 @@ def self_test() -> int:
     if here:
         print(f"  note: {sorted(here)} were already in sys.modules from the test harness")
 
-    print("\n[6] agreement with the joblib bundle (laptop only)")
-    try:
-        sys.path.insert(0, str(ROOT / "models"))
-        import model_l as ML                                 # noqa: PLC0415
-        agree = True
-        detail = ""
-        for x in (0.3, 1.0, 2.5, 6.0, 12.0, 30.0, 80.0, 150.0):
-            mine = predict_live(x)
-            theirs = ML.predict_live(total=x, issue_size_cr=None)
-            for t in TARGETS:
-                if mine[t]["verdict"] != theirs[t]["verdict"]:
-                    agree = False
-                    detail = (f"Total={x}x {t}: JSON {mine[t]['verdict']} vs bundle "
-                              f"{theirs[t]['verdict']}")
-        chk("JSON reproduces the bundle's verdicts", agree, detail)
-    except Exception as e:                                   # noqa: BLE001
-        print(f"  SKIP  bundle unavailable ({type(e).__name__}: {e}) — expected in the "
-              f"cloud, which is exactly why this module exists")
+    print("\n[6] the artefact carries its own provenance")
+    th = thresholds()
+    chk("it names H17 as the ratification", "H17" in th.get("ratified", ""))
+    chk("it records the walk-forward definition",
+        "never in-sample" in th.get("definition", ""))
+    chk("it says what it supersedes",
+        any("probability" in x for x in th.get("supersedes", [])))
+    for t in TARGETS:
+        tt = th["targets"][t]
+        chk(f"{t} was calibrated to deliver its promise out of sample",
+            tt.get("walk_forward_delivered") is not None
+            and tt["walk_forward_delivered"] >= tt["promise"] - 1e-9,
+            f"{tt.get('walk_forward_delivered')} vs {tt.get('promise')}")
+        chk(f"{t} records the in-sample flattery",
+            tt.get("flattery_pp") is not None and tt["flattery_pp"] > 0,
+            str(tt.get("flattery_pp")))
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

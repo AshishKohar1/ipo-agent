@@ -1,6 +1,6 @@
 # Firing thresholds in subscription terms
 
-Derived by `derive_subscription_thresholds.py` on 2026-10-05. **No model, no calibrator** — a monotone threshold on Total subscription, scored against the realised listing gain.
+Derived by `derive_subscription_thresholds.py` on 2026-10-06. **No model, no calibrator** — a monotone threshold on Total subscription, scored against the realised listing gain.
 
 ## L1 — listing gain > 0%, promise 90%
 
