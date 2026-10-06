@@ -8,3 +8,4 @@ __pycache__/
 .venv/
 .env
 reports/~$*.xlsx
+data/bhavcopy_cache/
