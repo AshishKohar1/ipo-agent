@@ -54,7 +54,21 @@ HOST = "https://www.niftyindices.com"
 ROBOTS = f"{HOST}/robots.txt"
 # The page whose own XHR serves index closes. Not called unless robots.txt permits it.
 HIST_PAGE = f"{HOST}/reports/historical-data"
-UA = {"User-Agent": "ipo-agent/1.0 (personal research; contact ashishkohar4@gmail.com)"}
+# H18 (user decision, 2026-10-05): realistic browser headers to OFFICIAL sources. The
+# honest UA was read-timing-out on every niftyindices path INCLUDING /robots.txt, which
+# made permission unverifiable and forced every row to NULL. With these headers
+# robots.txt returns HTTP 200 with `Allow: /`, and the four paths it disallows are
+# specific index pages -- not /BackPage/, which is what this module calls.
+UA = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                   "(KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"),
+    "Accept": "application/json, text/javascript, */*; q=0.01",
+    "Accept-Language": "en-GB,en-US;q=0.9",
+    "X-Requested-With": "XMLHttpRequest",
+    "Origin": "https://www.niftyindices.com",
+    "Referer": "https://www.niftyindices.com/reports/historical-data",
+    "Connection": "keep-alive",
+}
 MIN_GAP_S = 3.0
 TIMEOUT_S = 45
 
@@ -67,7 +81,9 @@ INDICES: tuple[tuple[str, str], ...] = (
     ("Nifty Financial Services", "NIFTY FINANCIAL SERVICES"),
     ("Nifty IT",                "NIFTY IT"),
     ("Nifty Pharma",            "NIFTY PHARMA"),
-    ("Nifty Healthcare",        "NIFTY HEALTHCARE INDEX"),
+    # Probed: the API answers to "NIFTY HEALTHCARE" and returns ZERO rows for
+    # "NIFTY HEALTHCARE INDEX". Pharma was NOT substituted for it.
+    ("Nifty Healthcare",        "NIFTY HEALTHCARE"),
     ("Nifty FMCG",              "NIFTY FMCG"),
     ("Nifty Metal",             "NIFTY METAL"),
     ("Nifty Realty",            "NIFTY REALTY"),
@@ -163,31 +179,53 @@ def _append(rows: list[dict]) -> None:
 def _fetch_close(sess: requests.Session, official: str, day: pd.Timestamp):
     """One index's close for `day`, or `(None, reason)`.
 
-    Only reached when robots.txt has permitted it. The request shape is the one the
-    Historical Data page itself issues.
+    Only reached once robots.txt has permitted it. The endpoint and payload shape are the
+    ones the Historical Data page itself issues, confirmed by probe on 2026-10-05:
+
+        POST /BackPage/getHistoricaldatatabletoString
+        {"cinfo": "{'name':'NIFTY 50','startDate':'01-Oct-2026',
+                    'endDate':'01-Oct-2026','indexName':'NIFTY 50'}"}
+        -> [{"INDEX_NAME":"Nifty 50","HistoricalDate":"01 Oct 2026",
+             "OPEN":"22543.7","HIGH":"22610.6","LOW":"22217.3","CLOSE":"22421.95"}]
+
+    Note this is the PRICE index, not the Total Return Index. `fetch_nifty_tri.py` calls a
+    different endpoint (`getTotalReturnIndexString`) for the TRI, and the two must not be
+    mixed: a TRI value recorded as a close would be wrong by the whole dividend series.
     """
+    import json as _json
+    cinfo = ("{'name':'%s','startDate':'%s','endDate':'%s','indexName':'%s'}"
+             % (official, f"{day:%d-%b-%Y}", f"{day:%d-%b-%Y}", official))
     try:
         r = sess.post(f"{HOST}/BackPage/getHistoricaldatatabletoString",
-                      json={"cinfo": (f"{{'name':'{official}','startDate':'{day:%d-%b-%Y}',"
-                                      f"'endDate':'{day:%d-%b-%Y}','indexName':'{official}'}}")},
-                      timeout=TIMEOUT_S)
+                      data=_json.dumps({"cinfo": cinfo}), timeout=TIMEOUT_S,
+                      headers={**UA, "Content-Type": "application/json; charset=utf-8"})
     except Exception as e:                                   # noqa: BLE001
         return None, f"fetch_failed: {type(e).__name__}: {str(e)[:120]}"
     if r.status_code != 200:
         return None, f"fetch_failed: HTTP {r.status_code}"
     try:
-        import json as _json
         payload = r.json()
         recs = _json.loads(payload) if isinstance(payload, str) else payload
-        if not recs:
-            return None, "no_row_for_this_date: the index published nothing for this date"
-        row = recs[0]
-        for k in ("CLOSE_INDEX_VAL", "close", "CLOSE", "Closing Index Value"):
-            if k in row and str(row[k]).strip() not in ("", "-", "nan"):
-                return float(str(row[k]).replace(",", "")), ""
-        return None, f"unparsed: no close field in {sorted(row)[:6]}"
     except Exception as e:                                   # noqa: BLE001
         return None, f"unparsed: {type(e).__name__}: {str(e)[:120]}"
+    if not recs:
+        return None, "no_row_for_this_date: the index published nothing for this date"
+    row = recs[0]
+    # Guard against the API quietly answering for a DIFFERENT index than the one asked
+    # for, which would substitute one index's close for another -- the exact failure the
+    # no-substitution rule exists to prevent.
+    got = str(row.get("INDEX_NAME") or row.get("Index Name") or "").strip().lower()
+    want = official.strip().lower()
+    if got and got.replace(" index", "") != want.replace(" index", ""):
+        return None, (f"index_mismatch: asked for {official!r}, the API answered for "
+                      f"{row.get('INDEX_NAME')!r} - refusing to record it")
+    for k in ("CLOSE", "CLOSE_INDEX_VAL", "close", "Closing Index Value"):
+        if k in row and str(row[k]).strip() not in ("", "-", "nan", "None"):
+            try:
+                return float(str(row[k]).replace(",", "")), ""
+            except ValueError:
+                return None, f"unparsed: {k}={row[k]!r} is not a number"
+    return None, f"unparsed: no close field in {sorted(row)[:6]}"
 
 
 def capture(today: pd.Timestamp | None = None) -> dict:
@@ -377,9 +415,23 @@ def self_test() -> int:
     # mentions browser tokens in prose, and the first version of this test matched its own
     # assertion string.
     ua = UA["User-Agent"]
-    chk("the User-Agent sent is this project's own, not a browser's",
-        ua.startswith("ipo-agent/") and not any(
-            t in ua for t in ("Mozilla", "AppleWebKit", "Safari", "Gecko", "Edg")), ua)
+    # H18 superseded the old "never a browser User-Agent" rule. What must still hold is
+    # narrower and is what this now asserts: the host is an OFFICIAL one, robots.txt is
+    # honoured, and nothing bypasses a login, CAPTCHA, paywall or click-through.
+    chk("the host is an official source (NSE Indices)",
+        HOST == "https://www.niftyindices.com", HOST)
+    chk("no credential, token or cookie jar is shipped in the headers",
+        not any(k.lower() in ("authorization", "cookie") for k in UA))
+    chk("the endpoint called is the page's own XHR, not a gated download",
+        "/BackPage/getHistoricaldatatabletoString" in inspect.getsource(_fetch_close))
+    # Checked against the executable body, not the whole source: the docstring explains
+    # the TRI/close distinction by name, and the first version of this check matched its
+    # own explanation.
+    _body = inspect.getsource(_fetch_close).split('"""')[-1]
+    chk("the TRI endpoint is NOT called here (a TRI value is not a close)",
+        "getTotalReturnIndexString" not in _body)
+    chk("an index answering for a DIFFERENT index is refused, never recorded",
+        "index_mismatch" in inspect.getsource(_fetch_close))
     srcs = [ln.strip() for ln in Path(__file__).read_text(encoding="utf-8").splitlines()
             if ln.lstrip().startswith("UA = {")]
     chk("exactly one User-Agent is defined in this file", len(srcs) == 1, str(srcs))

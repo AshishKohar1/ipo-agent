@@ -1,0 +1,624 @@
+ipo,isin,symbol,bse_code,listing_date,offer_price,nse_open,nse_close,bse_open,bse_close,listing_open,listing_close,listing_gain_pct,sources,reconciled,first_day_marker,note,fetched_at
+Paras Defence and Space Technologies Limited,INE045601023,PARAS,,2021-10-01,175.0,469.0,492.45,475.0,498.75,472.0,495.6,169.7143,nse+bse,reconciled_2_sources,False,,2026-10-05 15:39:44.156363
+Aditya Birla Sun Life AMC Limited,INE404A01024,ABSLAMC,,2021-10-11,712.0,715.0,699.45,712.0,699.65,713.5,699.55,0.2107,nse+bse,reconciled_2_sources,False,,2026-10-05 15:39:56.022408
+FSN E Commerce Ventures Limited (Nykaa),INE388Y01029,NYKAA,,2021-11-10,1125.0,2018.0,2205.8,2001.0,2206.7,2009.5,2206.25,78.6222,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:08.150170
+Fino Payments Bank Limited,INE02NC01014,FINOPB,,2021-11-12,577.0,544.35,543.9,548.0,545.25,546.175,544.575,-5.3423,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:20.197743
+PB Fintech,INE417T01026,POLICYBZR,,2021-11-15,980.0,1150.0,1202.3,1150.0,1202.9,1150.0,1202.6,17.3469,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:31.990271
+S.J.S Enterprises Limited,INE284S01014,SJS,,2021-11-15,542.0,542.0,510.2,540.0,509.85,541.0,510.025,-0.1845,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:31.995438
+Sigachi Industries Limited,INE0D0K01022,SIGACHI,,2021-11-15,163.0,570.0,598.5,575.0,603.75,572.5,601.125,251.227,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:32.001637
+Sapphire Foods India,INE806T01020,SAPPHIRE,,2021-11-18,1180.0,1350.0,1211.55,1311.0,1216.05,1330.5,1213.8,12.7542,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:44.072251
+One97 Communications,INE982J01020,PAYTM,,2021-11-18,2150.0,1950.0,1560.8,1955.0,1564.15,1952.5,1562.475,-9.186,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:44.079484
+Latent View Analytics,INE0I7C01011,LATENTVIEW,,2021-11-23,197.0,512.2,488.75,530.0,488.6,521.1,488.675,164.5178,nse+bse,reconciled_2_sources,False,,2026-10-05 15:40:56.005514
+Tarsons Products,INE144Z01023,TARSONS,,2021-11-26,662.0,682.0,818.4,700.0,840.0,691.0,829.2,4.3807,nse+bse,reconciled_2_sources,False,,2026-10-05 15:41:07.994830
+Go Fashion (India) Limited,INE0BJS01011,GOCOLORS,,2021-11-30,690.0,1310.0,1253.7,1316.0,1252.6,1313.0,1253.15,90.2899,nse+bse,reconciled_2_sources,False,,2026-10-05 15:41:20.148278
+Star Health and Allied Insurance Company Limited,INE575P01011,STARHEALTH,,2021-12-10,900.0,845.0,906.85,848.8,906.85,846.9,906.85,-5.9,nse+bse,reconciled_2_sources,False,,2026-10-05 15:41:32.144184
+Tega Industries Limited,INE011K01018,TEGA,,2021-12-13,453.0,760.0,726.05,753.0,725.5,756.5,725.775,66.9978,nse+bse,reconciled_2_sources,False,,2026-10-05 15:41:44.207463
+Anand Rathi Wealth Limited,INE463V01026,ANANDRATHI,,2021-12-14,550.0,600.0,583.55,602.05,583.5,601.025,583.525,9.2773,nse+bse,reconciled_2_sources,False,,2026-10-05 15:41:56.139673
+Rategain Travel Technologies Limited,INE0CLI01024,RATEGAIN,,2021-12-17,425.0,360.0,340.05,364.8,340.5,362.4,340.275,-14.7294,nse+bse,reconciled_2_sources,False,,2026-10-05 15:42:08.307758
+Shriram Properties Limited,INE217L01019,SHRIRAMPPS,,2021-12-20,118.0,90.0,99.6,94.0,99.4,92.0,99.5,-22.0339,nse+bse,reconciled_2_sources,False,,2026-10-05 15:42:20.026777
+C.E. Info Systems Limited (MapmyIndia),INE0BV301023,MAPMYINDIA,,2021-12-21,1033.0,1565.0,1393.65,1581.0,1394.55,1573.0,1394.1,52.2749,nse+bse,reconciled_2_sources,False,,2026-10-05 15:42:32.563841
+MedPlus Health Services Limited,INE804L01022,MEDPLUS,,2021-12-23,796.0,1040.0,1121.15,1015.0,1120.85,1027.5,1121.0,29.0829,nse+bse,reconciled_2_sources,False,,2026-10-05 15:42:43.990951
+Data Patterns (India) Limited,INE0IX101010,DATAPATTNS,,2021-12-24,585.0,856.05,755.0,864.0,754.85,860.025,754.925,47.0128,nse+bse,reconciled_2_sources,False,,2026-10-05 15:42:56.026587
+HP Adhesives Limited,INE0GSL01024,HPAL,,2021-12-27,274.0,315.0,330.75,319.0,334.95,317.0,332.85,15.6934,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:08.028210
+Supriya Lifescience Limited,INE07RO01027,SUPRIYA,,2021-12-28,274.0,421.0,390.85,425.0,390.35,423.0,390.6,54.3796,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:20.037051
+JSW Energy Limited,INE121E01018,JSWENERGY,,2010-01-04,100.0,106.0,100.85,102.0,100.75,104.0,100.8,4.0,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:25.364107
+CMS Info Systems Limited,INE925R01014,CMSINFO,,2021-12-31,216.0,220.2,238.2,218.5,237.4,219.35,237.8,1.5509,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:32.040228
+Godrej Properties Limited,INE484J01027,GODREJPROP,,2010-01-05,490.0,511.0,537.25,510.0,534.55,510.5,535.9,4.1837,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:37.307255
+AGS Transact Technologies Limited,INE583L01014,AGSTRA,,2022-01-31,175.0,175.0,161.05,176.0,161.3,175.5,161.175,0.2857,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:44.023569
+D B Corp Limited,INE950I01011,DBCORP,,2010-01-06,212.0,254.0,265.9,250.0,265.9,252.0,265.9,18.8679,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:49.365226
+Vedant Fashions Limited,INE825V01034,MANYAVAR,,2022-02-16,866.0,935.0,933.55,936.0,934.85,935.5,934.2,8.0254,nse+bse,reconciled_2_sources,False,,2026-10-05 15:43:56.182932
+MBL Infrastructure Limited,INE912H01013,MBLINFRA,,2010-01-11,180.0,185.0,206.55,190.0,205.75,187.5,206.15,4.1667,nse+bse,reconciled_2_sources,False,,2026-10-05 15:44:01.354894
+Uma Exports Limited,INE0GIU01018,UMAEXPORTS,,2022-04-07,68.0,76.0,79.8,80.0,84.0,78.0,,14.7059,nse+bse,reconciled_2_sources,False,close: NSE 79.80 vs BSE 84.00 differ 5.0% -> NULL (rule 2),2026-10-05 15:44:08.027684
+Birla Shloka Edutech Limited,,,,2010-01-29,50.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:44:13.276104
+Veranda Learning Solutions Limited,INE0IQ001011,VERANDA,,2022-04-11,137.0,125.0,131.25,157.0,160.4,,,,nse+bse,reconciled_2_sources,False,open: NSE 125.00 vs BSE 157.00 differ 20.4% -> NULL (rule 2); close: NSE 131.25 vs BSE 160.40 differ 18.2% -> NULL (rule 2),2026-10-05 15:44:20.066643
+Infinite Computer Solutions Limited,,,,2010-02-03,165.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:44:25.302778
+Hariom Pipe Industries Limited,INE00EV01017,HARIOMPIPE,,2022-04-13,153.0,220.0,231.0,214.0,224.7,217.0,227.85,41.8301,nse+bse,reconciled_2_sources,False,,2026-10-05 15:44:32.079596
+Jubilant Foodworks Limited,INE797F01020,JUBLFOOD,,2010-02-08,145.0,160.0,229.1,161.6,229.0,160.8,229.05,10.8966,nse+bse,reconciled_2_sources,False,,2026-10-05 15:44:37.317505
+Syncom Healthcare Limited,,,,2010-02-15,75.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:45:25.278714
+Vascon Engineers Limited,INE893I01013,VASCONEQ,,2010-02-15,165.0,156.0,148.05,170.0,147.2,,147.625,,nse+bse,reconciled_2_sources,False,open: NSE 156.00 vs BSE 170.00 differ 8.2% -> NULL (rule 2),2026-10-05 15:45:25.300317
+Thangamayil Jewellery Limited,INE085J01014,THANGAMAYL,,2010-02-19,75.0,75.7,71.05,70.0,71.1,,71.075,,nse+bse,reconciled_2_sources,False,open: NSE 75.70 vs BSE 70.00 differ 7.5% -> NULL (rule 2),2026-10-05 15:45:37.335663
+Aqua Logistics Limited,,,,2010-02-23,220.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:45:49.684906
+Emmbi Industries Limited,INE753K01015,EMMBI,,2010-02-24,45.0,46.0,28.75,,,46.0,28.75,2.2222,nse,single_source_unverified,False,,2026-10-05 15:46:01.306063
+Valor Estates Limited,INE879I01012,DBREALTY,,2010-02-24,468.0,452.1,456.2,430.0,455.4,441.05,455.8,-5.7585,nse+bse,reconciled_2_sources,False,,2026-10-05 15:46:01.324501
+Hathway Cable & Datacom Limited,INE982F01036,HATHWAY,,2010-02-25,240.0,250.0,207.65,,,250.0,207.65,4.1667,nse,single_source_unverified,False,,2026-10-05 15:46:13.322202
+ARSS Infrastructure Projects Limited,,,,2010-03-03,450.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:46:25.452152
+Texmo Pipes and Products Limited,INE141K01013,TEXMOPIPES,,2010-03-10,90.0,92.8,137.15,101.5,137.25,,137.2,,nse+bse,reconciled_2_sources,False,open: NSE 92.80 vs BSE 101.50 differ 8.6% -> NULL (rule 2),2026-10-05 15:46:37.472489
+Man Infraconstruction Limited,INE949H01023,MANINFRA,,2010-03-11,252.0,318.0,349.85,335.0,348.25,,349.05,,nse+bse,reconciled_2_sources,False,open: NSE 318.00 vs BSE 335.00 differ 5.1% -> NULL (rule 2),2026-10-05 15:46:49.343270
+United Bank of India,,,,2010-03-18,66.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:47:01.312196
+DQ Entertainment (International) Limited,,,,2010-03-29,80.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:47:13.408342
+IL&FS Transportation Networks Limited,INE975G01012,IL&FSTRANS,,2010-03-30,258.0,266.6,274.65,287.0,273.75,,274.2,,nse+bse,reconciled_2_sources,False,open: NSE 266.60 vs BSE 287.00 differ 7.1% -> NULL (rule 2),2026-10-05 15:47:25.876878
+Pradip Overseas Limited,,,,2010-04-05,110.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:47:37.322026
+Persistent Systems Limited,INE262H01021,PERSISTENT,,2010-04-06,310.0,361.6,406.35,400.0,408.0,,407.175,,nse+bse,reconciled_2_sources,False,open: NSE 361.60 vs BSE 400.00 differ 9.6% -> NULL (rule 2),2026-10-05 15:47:49.483937
+Shree Ganesh Jewellery House (I) Limited,,,,2010-04-09,260.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:48:01.691379
+Intrasoft Technologies Limited,INE566K01011,ISFT,,2010-04-12,145.0,150.0,159.1,,,150.0,159.1,3.4483,nse,single_source_unverified,False,,2026-10-05 15:48:13.489144
+Goenka Diamond & Jewellery Limited,,,,2010-04-16,135.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:48:25.838741
+Talwalkars Better Value Fitness Limited,,,,2010-05-10,128.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:48:37.342765
+Satchmo Holdings Limited,,SATCH,,2010-05-13,54.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:48:49.334832
+Tarapur Transformers Limited,INE747K01017,TARAPUR,,2010-05-18,75.0,75.0,57.4,75.0,56.9,75.0,57.15,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 15:49:01.408927
+GB Global Limited,,,,2010-05-19,130.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:49:13.342800
+SJVN Limited,INE002L01015,SJVN,,2010-05-20,26.0,27.1,25.1,28.0,25.05,27.55,25.075,5.9615,nse+bse,reconciled_2_sources,False,,2026-10-05 15:49:25.491080
+Jaypee Infratech Limited,,,,2010-05-21,102.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:49:37.618352
+Parabolic Drugs Limited,,,,2010-07-01,75.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:49:49.718107
+Technofab Engineers Limited,,,,2010-07-16,240.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:50:01.816890
+Hindustan Media Ventures Limited,INE871K01015,HMVL,,2010-07-21,166.0,177.95,188.95,170.0,189.2,173.975,189.075,4.8042,nse+bse,reconciled_2_sources,False,,2026-10-05 15:50:13.367940
+Shri Aster Silicates Limited,,,,2010-07-28,118.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:50:26.109957
+Midfield Industries Limited,,,,2010-08-04,133.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:50:38.319241
+Bharat Financial Inclusion Limited,,,,2010-08-16,985.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:50:50.195446
+Bajaj Consumer Care Limited,INE933K01021,BAJAJCON,,2010-08-18,660.0,760.0,758.75,730.0,758.25,745.0,758.5,12.8788,nse+bse,reconciled_2_sources,False,,2026-10-05 15:51:01.711488
+Prakash Steelage Limited,INE696K01024,PRAKASHSTL,,2010-08-25,110.0,122.0,185.35,118.55,187.95,120.275,186.65,9.3409,nse+bse,reconciled_2_sources,False,,2026-10-05 15:51:13.569231
+Gujarat Pipavav Port Limited,INE517F01014,GPPL,,2010-09-09,46.0,56.1,54.05,56.25,54.05,56.175,54.05,22.1196,nse+bse,reconciled_2_sources,False,,2026-10-05 15:51:25.563105
+Indosolar Limited,INE866K01023,WAAREEINDO,,2010-09-29,29.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:51:38.317295
+Tirupati Inks Limited,,,,2010-10-01,43.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:51:49.391875
+Sastasundar Ventures Ltd,,,,2010-10-05,118.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:52:01.361574
+Eros International Media Ltd,,,,2010-10-06,175.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:52:13.451952
+CP Capital Ltd,INE521J01018,CPCAP,,2010-10-06,310.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:52:13.457386
+Orient Green Power Company Ltd,INE999K01014,GREENPOWER,,2010-10-08,47.0,45.7,44.7,45.7,44.9,45.7,44.8,-2.766,nse+bse,reconciled_2_sources,False,,2026-10-05 15:52:25.341566
+Ramky Infrastructure Ltd,INE874I01013,RAMKY,,2010-10-08,450.0,471.55,387.4,,,471.55,387.4,4.7889,nse,single_source_unverified,False,,2026-10-05 15:52:25.347136
+ESL Steel Ltd,,,,2010-10-08,11.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:52:25.350547
+Tecpro Systems Ltd,,,,2010-10-12,355.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:52:37.379038
+Cantabil Retail India Ltd,INE068L01024,CANTABIL,,2010-10-12,135.0,114.7,105.0,133.8,104.75,,104.875,,nse+bse,reconciled_2_sources,False,open: NSE 114.70 vs BSE 133.80 differ 14.3% -> NULL (rule 2),2026-10-05 15:52:37.387183
+Va Tech Wabag Ltd,INE956G01038,WABAG,,2010-10-13,1310.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:52:49.375988
+Bedmutha Industries Ltd,INE844K01012,BEDMUTHA,,2010-10-14,102.0,113.5,179.15,114.4,180.8,113.95,179.975,11.7157,nse+bse,reconciled_2_sources,False,,2026-10-05 15:53:01.403734
+Sea TV Network Ltd,,SEATV,,2010-10-14,100.0,,,120.0,106.0,120.0,106.0,20.0,bse,single_source_unverified,True,,2026-10-05 15:53:01.407646
+Ashoka Buildcon Ltd,INE442H01029,ASHOKA,,2010-10-14,324.0,342.0,330.75,333.55,333.35,337.775,332.05,4.2515,nse+bse,reconciled_2_sources,False,,2026-10-05 15:53:01.413361
+Jupiter Wagons Ltd,INE209L01016,JWL,,2010-10-18,127.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:53:13.441356
+Oberoi Realty Ltd,INE093I01010,OBEROIRLTY,,2010-10-20,260.0,271.1,282.9,280.0,282.95,275.55,282.925,5.9808,nse+bse,reconciled_2_sources,False,,2026-10-05 15:53:25.466266
+Shah Metacorp Ltd,INE482J01021,SHAH,,2010-10-27,71.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:53:37.678989
+Prestige Estates Projects Ltd,INE811K01011,PRESTIGE,,2010-10-27,183.0,190.0,193.15,190.0,192.55,190.0,192.85,3.8251,nse+bse,reconciled_2_sources,False,,2026-10-05 15:53:37.686748
+BS Ltd,,,,2010-10-27,248.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:53:37.691611
+Coal India Ltd,INE522F01014,COALINDIA,,2010-11-04,245.0,291.0,342.55,,,291.0,342.55,18.7755,nse,single_source_unverified,False,,2026-10-05 15:53:49.553560
+Gravita India Ltd,INE024L01027,GRAVITA,,2010-11-16,125.0,201.1,209.7,218.75,210.4,,210.05,,nse+bse,reconciled_2_sources,False,open: NSE 201.10 vs BSE 218.75 differ 8.1% -> NULL (rule 2),2026-10-05 15:54:01.662730
+RPP Infra Projects Ltd,INE324L01013,RPPINFRA,,2010-12-06,75.0,75.0,68.9,75.0,68.95,75.0,68.925,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 15:54:13.391287
+MOIL Ltd,INE490G01020,MOIL,,2010-12-15,375.0,565.0,465.05,,,565.0,465.05,50.6667,nse,single_source_unverified,False,,2026-10-05 15:54:25.518721
+Claris Lifescience Ltd,,,,2010-12-20,228.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:54:37.559721
+A2Z Infra Engineering Ltd,INE619I01012,A2ZINFRA,,2010-12-23,400.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:54:49.583353
+Ravikumar Distilleries Ltd,INE722J01012,RKDL,,2010-12-27,64.0,72.0,80.05,,,72.0,80.05,12.5,nse,single_source_unverified,False,,2026-10-05 15:55:01.422685
+Punjab & Sind Bank,INE608A01012,PSB,,2010-12-30,120.0,144.0,127.15,,,144.0,127.15,20.0,nse,single_source_unverified,False,,2026-10-05 15:55:13.611907
+C Mahendra Exports Ltd,,,,2011-01-20,110.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:55:25.529248
+Midvalley Entertainment & Hospitality Ltd,,,,2011-01-27,70.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:55:37.675901
+Omkar Speciality Chemicals Ltd,,,,2011-02-10,98.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:55:49.394955
+AcroPetal Technologies Ltd,,,,2011-03-10,90.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:56:01.644973
+Fineotex Chemical Ltd,INE045J01034,FCL,,2011-03-11,70.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:56:13.518458
+Sudar Industries Ltd,,,,2011-03-11,77.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:56:13.522293
+Lovable Lingerie Ltd,INE597L01014,LOVABLE,,2011-03-24,205.0,240.0,249.55,261.5,249.2,,249.375,,nse+bse,reconciled_2_sources,False,open: NSE 240.00 vs BSE 261.50 differ 8.2% -> NULL (rule 2),2026-10-05 15:56:25.655003
+PTC India Financial Services Ltd,INE560K01014,PFS,,2011-03-30,28.0,26.75,24.9,,,26.75,24.9,-4.4643,nse,single_source_unverified,False,,2026-10-05 15:56:37.447551
+Shilpi Cable Technologies Ltd,,,,2011-04-08,69.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:56:49.828928
+Muthoot Finance Ltd,INE414G01012,MUTHOOTFIN,,2011-05-06,175.0,196.6,175.9,,,196.6,175.9,12.3429,nse,single_source_unverified,False,,2026-10-05 15:57:01.744446
+Paramount Printpac Ltd,,,,2011-05-09,35.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:57:13.612198
+Future Consumer Ltd,,FCONSUMER,,2011-05-10,10.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:57:25.995507
+Servalakshmi Paper Ltd,,,,2011-05-12,29.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:57:37.565289
+Innoventive Industries Ltd,,,,2011-05-13,117.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:57:49.590544
+BF Industrial & Technologies Ltd,,,,2011-05-23,85.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:58:01.420811
+Dr. Datsons Labs Ltd,,,,2011-05-27,234.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:58:13.470053
+VMS Industries Ltd,,VMS,,2011-06-14,40.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:58:25.400859
+Timbor Home Ltd,,,,2011-06-22,63.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:58:37.424718
+Rushil Decor Ltd,INE573K01025,RUSHIL,,2011-07-07,72.0,74.5,119.5,81.25,119.65,,119.575,,nse+bse,reconciled_2_sources,False,open: NSE 74.50 vs BSE 81.25 differ 8.3% -> NULL (rule 2),2026-10-05 15:58:49.471917
+Birla Pacific Medspa Ltd,,,,2011-07-07,10.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:58:49.478473
+Kridhan Infra Ltd,INE524L01026,KRIDHANINF,,2011-07-13,108.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 15:59:01.476817
+Bharatiya Global Infomedia Ltd,INE224M01013,BGLOBAL,,2011-07-28,82.0,81.9,29.9,84.0,30.95,82.95,30.425,1.1585,nse+bse,reconciled_2_sources,False,,2026-10-05 15:59:13.445567
+Inventure Growth & Securities Ltd,INE878H01024,INVENTURE,,2011-08-04,117.0,117.0,206.75,119.0,207.95,118.0,207.35,0.8547,nse+bse,reconciled_2_sources,False,,2026-10-05 15:59:25.472785
+L&T Finance Holdings Ltd,INE498L01015,LTF,,2011-08-12,52.0,53.85,50.05,,,53.85,50.05,3.5577,nse,single_source_unverified,False,,2026-10-05 15:59:37.448726
+Tree House Education & Accessories Ltd,INE040M01013,TREEHOUSE,,2011-08-26,135.0,132.0,117.6,132.8,116.55,132.4,117.075,-1.9259,nse+bse,reconciled_2_sources,False,,2026-10-05 15:59:49.596545
+Brooks Laboratories Ltd,INE650L01011,BROOKS,,2011-09-05,100.0,100.0,61.5,110.0,60.2,,60.85,,nse+bse,reconciled_2_sources,False,open: NSE 100.00 vs BSE 110.00 differ 9.1% -> NULL (rule 2),2026-10-05 16:00:01.512020
+TD Power Systems Ltd,INE419M01035,TDPOWERSYS,,2011-09-08,256.0,260.0,275.25,251.6,274.8,255.8,275.025,-0.0781,nse+bse,reconciled_2_sources,False,,2026-10-05 16:00:14.012022
+SRS Ltd,,,,2011-09-16,58.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:00:25.679747
+PG Electroplast Ltd,INE457L01029,PGEL,,2011-09-26,210.0,215.0,415.3,,,215.0,415.3,2.381,nse,single_source_unverified,False,,2026-10-05 16:00:37.712301
+Setubandhan Infrastructure Ltd,INE023M01027,SETUINFRA,,2011-10-04,138.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:00:49.553186
+RDB Rasayans Ltd,,RDBRL,,2011-10-07,79.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:01:01.646108
+Onelife Capital Advisors Ltd,INE912L01015,ONELIFECAP,,2011-10-17,110.0,110.0,145.95,115.0,145.9,112.5,145.925,2.2727,nse+bse,reconciled_2_sources,False,,2026-10-05 16:01:13.674339
+Flexituff Ventures International Ltd,INE060J01017,FLEXITUFF,,2011-10-19,155.0,156.9,165.55,155.0,166.4,155.95,165.975,0.6129,nse+bse,reconciled_2_sources,False,,2026-10-05 16:01:25.531214
+Taksheel Solutions Ltd,,,,2011-10-19,150.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:01:25.535444
+Ujaas Energy Ltd,INE899L01030,UEL,,2011-10-20,186.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:01:37.737510
+Vaswani Industries Ltd,INE590L01019,VASWANI,,2011-10-24,49.0,33.7,17.8,33.45,17.75,33.575,17.775,-31.4796,nse+bse,reconciled_2_sources,False,,2026-10-05 16:01:49.610371
+Indo Thai Securities Ltd,INE337M01021,INDOTHAI,,2011-11-02,74.0,76.0,23.15,75.0,23.0,75.5,23.075,2.027,nse+bse,reconciled_2_sources,False,,2026-10-05 16:02:01.586861
+Multi Commodity Exchange of India Ltd,INE745G01043,MCX,,2012-03-09,1032.0,1408.0,1296.7,,,1408.0,1296.7,36.4341,nse,single_source_unverified,False,,2026-10-05 16:02:13.682340
+Olympic Cards Ltd,,OLPCL,,2012-03-28,30.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:02:25.512060
+MT Educare Ltd,INE472M01018,MTEDUCARE,,2012-04-12,80.0,86.05,90.35,86.05,90.35,86.05,90.35,7.5625,nse+bse,reconciled_2_sources,False,,2026-10-05 16:02:37.536691
+NBCC (India) Ltd,INE095N01031,NBCC,,2012-04-12,106.0,101.0,96.95,,,101.0,96.95,-4.717,nse,single_source_unverified,False,,2026-10-05 16:02:37.542668
+Tribhovandas Bhimji Zaveri Ltd,INE760L01018,TBZ,,2012-05-09,120.0,115.05,111.0,,,115.05,111.0,-4.125,nse,single_source_unverified,False,,2026-10-05 16:02:49.528933
+Speciality Restaurants Ltd,INE247M01014,SPECIALITY,,2012-05-30,150.0,152.0,159.6,,,152.0,159.6,1.3333,nse,single_source_unverified,False,,2026-10-05 16:03:01.566653
+VKS Projects Ltd,,,,2012-07-18,55.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:03:13.604021
+Tara Jewels Ltd,,,,2012-12-06,230.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:03:25.578717
+CARE Ratings Ltd,INE752H01013,CARERATING,,2012-12-26,750.0,940.0,922.55,949.0,923.95,944.5,923.25,25.9333,nse+bse,reconciled_2_sources,False,,2026-10-05 16:03:37.566091
+PC Jeweller Ltd,INE785M01021,PCJEWELLER,,2012-12-27,135.0,137.0,149.2,135.5,149.0,136.25,149.1,0.9259,nse+bse,reconciled_2_sources,False,,2026-10-05 16:03:49.665006
+Indus Towers Ltd,INE121J01017,INDUSTOWER,,2012-12-28,220.0,200.0,191.65,,,200.0,191.65,-9.0909,nse,single_source_unverified,False,,2026-10-05 16:04:01.730343
+V-Mart Retail Ltd,INE665J01013,VMART,,2013-02-20,210.0,214.0,203.3,216.0,205.25,215.0,204.275,2.381,nse+bse,reconciled_2_sources,False,,2026-10-05 16:04:13.772624
+Repco Home Finance Ltd,INE612J01015,REPCOHOME,,2013-04-01,172.0,159.95,161.8,165.0,160.85,162.475,161.325,-5.5378,nse+bse,reconciled_2_sources,False,,2026-10-05 16:04:26.133297
+Just Dial Ltd,INE599M01018,JUSTDIAL,,2013-06-05,530.0,590.0,612.35,590.0,611.45,590.0,611.9,11.3208,nse+bse,reconciled_2_sources,False,,2026-10-05 16:04:37.739283
+Wonderla Holidays Ltd,INE066O01014,WONDERLA,,2014-05-09,125.0,160.0,157.8,164.75,157.6,162.375,157.7,29.9,nse+bse,reconciled_2_sources,False,,2026-10-05 16:04:49.566890
+Snowman Logistics Ltd,INE734N01019,SNOWMAN,,2014-09-12,47.0,76.0,79.8,75.0,78.75,75.5,79.275,60.6383,nse+bse,reconciled_2_sources,False,,2026-10-05 16:05:01.547361
+Sharda Cropchem Ltd,INE221J01015,SHARDACROP,,2014-09-23,156.0,260.0,230.95,254.1,231.45,257.05,231.2,64.7756,nse+bse,reconciled_2_sources,False,,2026-10-05 16:05:13.564874
+Shemaroo Entertainment Ltd,INE363M01019,SHEMAROO,,2014-10-01,170.0,180.0,171.0,180.0,171.0,180.0,171.0,5.8824,nse+bse,reconciled_2_sources,False,,2026-10-05 16:05:25.570010
+Monte Carlo Fashions Ltd,INE950M01013,MONTECARLO,,2014-12-19,645.0,584.0,567.3,585.0,566.4,584.5,566.85,-9.3798,nse+bse,reconciled_2_sources,False,,2026-10-05 16:05:37.751648
+Ortel Communications Ltd,INE849L01019,ORTEL,,2015-03-19,181.0,160.05,162.25,181.0,171.95,,,,nse+bse,reconciled_2_sources,False,open: NSE 160.05 vs BSE 181.00 differ 11.6% -> NULL (rule 2); close: NSE 162.25 vs BSE 171.95 differ 5.6% -> NULL (rule 2),2026-10-05 16:05:49.588288
+Imagicaaworld Entertainment Ltd,INE172N01012,IMAGICAA,,2015-04-06,180.0,162.2,192.65,,,162.2,192.65,-9.8889,nse,single_source_unverified,False,,2026-10-05 16:06:01.961641
+Inox Wind Ltd,INE066P01011,INOXWIND,,2015-04-09,325.0,400.0,438.4,400.0,438.0,400.0,438.2,23.0769,nse+bse,reconciled_2_sources,False,,2026-10-05 16:06:13.880313
+VRL Logistics Ltd,INE366I01010,VRLLOG,,2015-04-30,205.0,288.0,294.1,288.0,293.3,288.0,293.7,40.4878,nse+bse,reconciled_2_sources,False,,2026-10-05 16:06:25.562669
+MEP Infrastructure Developers Ltd,INE776I01010,MEP,,2015-05-06,63.0,65.0,58.4,63.0,60.95,64.0,59.675,1.5873,nse+bse,reconciled_2_sources,False,,2026-10-05 16:06:37.717900
+UFO Moviez India Ltd,INE527H01019,UFO,,2015-05-14,625.0,600.0,597.3,600.0,598.8,600.0,598.05,-4.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:06:49.657641
+PNC Infratech Ltd,INE195J01029,PNCINFRA,,2015-05-26,378.0,387.0,360.5,381.0,360.2,384.0,360.35,1.5873,nse+bse,reconciled_2_sources,False,,2026-10-05 16:07:01.651062
+Manpasand Beverages Ltd,,,,2015-07-09,320.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:07:13.549285
+Syngene International Ltd,INE398R01022,SYNGENE,,2015-08-11,250.0,295.0,310.55,295.0,310.4,295.0,310.475,18.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:07:26.271284
+Power Mech Projects Ltd,INE211R01019,POWERMECH,,2015-08-26,640.0,600.0,586.55,600.0,585.75,600.0,586.15,-6.25,nse+bse,reconciled_2_sources,False,,2026-10-05 16:07:37.829513
+Navkar Corporation Ltd,INE278M01019,NAVKARCORP,,2015-09-09,155.0,152.0,167.95,152.0,166.4,152.0,167.175,-1.9355,nse+bse,reconciled_2_sources,False,,2026-10-05 16:07:49.739334
+Shree Pushkar Chemicals Ltd,INE712K01011,SHREEPUSHK,,2015-09-10,65.0,60.05,63.05,60.0,63.0,60.025,63.025,-7.6538,nse+bse,reconciled_2_sources,False,,2026-10-05 16:08:01.571795
+Pennar Engineered Building Systems Ltd,,,,2015-09-10,178.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:08:01.579200
+Sadbhav Infrastructure Project Ltd,INE764L01010,SADBHIN,,2015-09-16,103.0,111.0,106.2,110.75,106.15,110.875,106.175,7.6456,nse+bse,reconciled_2_sources,False,,2026-10-05 16:08:13.614817
+Madhyam Agrivet Industries Ltd,,,,2015-09-21,115.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:08:25.799376
+Coffee Day Enterprises Ltd,INE335K01011,COFFEEDAY,,2015-11-02,328.0,317.0,270.45,313.0,270.15,315.0,270.3,-3.9634,nse+bse,reconciled_2_sources,False,,2026-10-05 16:08:38.010962
+Interglobe Aviation Ltd,INE646L01027,INDIGO,,2015-11-10,765.0,855.8,877.25,856.0,878.45,855.9,877.85,11.8824,nse+bse,reconciled_2_sources,False,,2026-10-05 16:08:49.592809
+S H Kelkar & Company Ltd,INE500L01026,SHK,,2015-11-16,180.0,223.7,208.25,222.0,207.3,222.85,207.775,23.8056,nse+bse,reconciled_2_sources,False,,2026-10-05 16:09:01.588012
+Dr Lal Pathlabs Ltd,INE600L01024,LALPATHLAB,,2015-12-23,550.0,720.0,825.0,717.0,824.15,718.5,824.575,30.6364,nse+bse,reconciled_2_sources,False,,2026-10-05 16:09:13.746659
+Alkem Laboratories Ltd,INE540L01014,ALKEM,,2015-12-23,1050.0,1380.0,1381.7,1380.0,1381.45,1380.0,1381.575,31.4286,nse+bse,reconciled_2_sources,False,,2026-10-05 16:09:13.751342
+Narayana Hrudayalaya Ltd,INE410P01011,NH,,2016-01-06,250.0,291.0,336.95,291.0,336.7,291.0,336.825,16.4,nse+bse,reconciled_2_sources,False,,2026-10-05 16:09:25.747120
+Precision Camshafts Ltd,INE484I01029,PRECAM,,2016-02-08,186.0,165.0,177.45,163.1,177.25,164.05,177.35,-11.8011,nse+bse,reconciled_2_sources,False,,2026-10-05 16:09:38.008621
+Team Lease Services Ltd,INE985S01024,TEAMLEASE,,2016-02-12,850.0,860.0,1022.85,860.0,1021.95,860.0,1022.4,1.1765,nse+bse,reconciled_2_sources,False,,2026-10-05 16:09:49.618361
+Quick Heal Technologies Ltd,INE306L01010,QUICKHEAL,,2016-02-18,321.0,305.0,253.85,304.95,254.45,304.975,254.15,-4.9922,nse+bse,reconciled_2_sources,False,,2026-10-05 16:10:02.115986
+Healthcare Global Enterprises Ltd,INE075I01017,HCG,,2016-03-30,218.0,210.2,171.0,209.8,170.95,210.0,170.975,-3.6697,nse+bse,reconciled_2_sources,False,,2026-10-05 16:10:13.597030
+Bharat Wire Ropes Ltd,INE316L01019,BHARATWIRE,,2016-04-01,45.0,47.25,45.55,47.35,45.4,47.3,45.475,5.1111,nse+bse,reconciled_2_sources,False,,2026-10-05 16:10:25.598683
+Infibeam Avenues Ltd,,,,2016-04-04,432.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:10:37.554420
+Equitas Holdings Ltd,,,,2016-04-21,110.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:10:49.604063
+Thyrocare Technologies Ltd,INE594H01019,THYROCARE,,2016-05-09,446.0,665.0,618.8,662.0,618.1,663.5,618.45,48.7668,nse+bse,reconciled_2_sources,False,,2026-10-05 16:11:01.781285
+Ujjivan Financial Services Ltd,,,,2016-05-10,210.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:11:14.417897
+Parag Milk Foods Ltd,INE883N01014,PARAGMILK,,2016-05-19,215.0,217.5,247.0,215.7,247.8,216.6,247.4,0.7442,nse+bse,reconciled_2_sources,False,,2026-10-05 16:11:25.883791
+Mahanagar Gas Ltd,INE002S01010,MGL,,2016-07-01,421.0,540.0,520.3,540.0,519.9,540.0,520.1,28.266,nse+bse,reconciled_2_sources,False,,2026-10-05 16:11:37.802987
+Quess Corp Ltd,INE615P01015,QUESS,,2016-07-12,317.0,500.0,503.1,499.0,503.0,499.5,503.05,57.571,nse+bse,reconciled_2_sources,False,,2026-10-05 16:11:49.719427
+LTIMindtree Ltd,,,,2016-07-21,710.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:12:01.750777
+Advanced Enzyme Technologies Ltd,INE837H01020,ADVENZYMES,,2016-08-01,896.0,1210.0,1178.1,1210.0,1178.3,1210.0,1178.2,35.0446,nse+bse,reconciled_2_sources,False,,2026-10-05 16:12:13.683264
+Dilip Buildcon Ltd,INE917M01012,DBL,,2016-08-11,219.0,240.0,251.75,240.0,251.95,240.0,251.85,9.589,nse+bse,reconciled_2_sources,False,,2026-10-05 16:12:25.623761
+S P Apparels Ltd,INE212I01016,SPAL,,2016-08-12,268.0,275.0,288.75,305.0,295.0,,291.875,,nse+bse,reconciled_2_sources,False,open: NSE 275.00 vs BSE 305.00 differ 9.8% -> NULL (rule 2),2026-10-05 16:12:37.775626
+RBL Bank Ltd,INE976G01028,RBLBANK,,2016-08-31,225.0,274.2,299.4,273.7,299.3,273.95,299.35,21.7556,nse+bse,reconciled_2_sources,False,,2026-10-05 16:12:49.773297
+L&T Technology Services Ltd,INE010V01017,LTTS,,2016-09-23,860.0,920.0,869.0,900.0,865.1,910.0,867.05,5.814,nse+bse,reconciled_2_sources,False,,2026-10-05 16:13:01.641518
+GNA Axles Ltd,INE934S01014,GNA,,2016-09-26,207.0,252.0,245.05,248.5,245.15,250.25,245.1,20.8937,nse+bse,reconciled_2_sources,False,,2026-10-05 16:13:13.613469
+ICICI Prudential Life Insurance Company Ltd,INE726G01019,ICICIPRULI,,2016-09-29,334.0,330.0,297.55,329.0,297.65,329.5,297.6,-1.3473,nse+bse,reconciled_2_sources,False,,2026-10-05 16:13:25.631469
+HPL Electric & Power Ltd,INE495S01016,HPL,,2016-10-04,202.0,190.0,189.3,190.05,189.05,190.025,189.175,-5.9282,nse+bse,reconciled_2_sources,False,,2026-10-05 16:13:37.637152
+Endurance Technologies Ltd,INE913H01037,ENDURANCE,,2016-10-19,472.0,572.0,646.9,570.0,647.7,571.0,647.3,20.9746,nse+bse,reconciled_2_sources,False,,2026-10-05 16:13:49.643706
+PNB Housing Finance Ltd,INE572E01012,PNBHOUSING,,2016-11-07,775.0,860.0,891.15,863.0,890.6,861.5,890.875,11.1613,nse+bse,reconciled_2_sources,False,,2026-10-05 16:14:01.660578
+Varun Beverages Ltd,INE200M01039,VBL,,2016-11-08,445.0,430.0,459.5,430.0,461.9,430.0,460.7,-3.3708,nse+bse,reconciled_2_sources,False,,2026-10-05 16:14:13.702306
+Sheela Foam Ltd,INE916U01025,SFL,,2016-12-09,730.0,860.0,1032.0,860.0,1032.0,860.0,1032.0,17.8082,nse+bse,reconciled_2_sources,False,,2026-10-05 16:14:25.920831
+Laurus Labs Ltd,INE947Q01028,LAURUSLABS,,2016-12-19,428.0,489.9,480.4,490.0,480.5,489.95,480.45,14.4743,nse+bse,reconciled_2_sources,False,,2026-10-05 16:14:37.786223
+BSE Ltd (Bombay Stock Exchange),INE118H01025,BSE,,2017-02-03,806.0,1085.0,1069.2,,,1085.0,1069.2,34.6154,nse,single_source_unverified,False,,2026-10-05 16:14:49.673647
+Music Broadcast Ltd,INE919I01024,RADIOCITY,,2017-03-17,333.0,413.0,372.9,420.0,373.15,416.5,373.025,25.0751,nse+bse,reconciled_2_sources,False,,2026-10-05 16:15:01.809312
+Avenue Supermarts Ltd (DMart),INE192R01011,DMART,,2017-03-21,299.0,600.0,641.6,604.4,640.75,602.2,641.175,101.4047,nse+bse,reconciled_2_sources,False,,2026-10-05 16:15:13.797126
+CL Educate Ltd,INE201M01029,CLEDUCATE,,2017-03-31,502.0,402.0,422.1,398.0,417.9,400.0,420.0,-20.3187,nse+bse,reconciled_2_sources,False,,2026-10-05 16:15:25.889391
+Shankara Building Products Ltd,INE274V01019,SHANKARA,,2017-04-05,460.0,555.05,632.45,545.0,632.8,550.025,632.625,19.5707,nse+bse,reconciled_2_sources,False,,2026-10-05 16:15:37.800480
+S Chand & Company Ltd,INE807K01035,SCHAND,,2017-05-09,670.0,700.0,676.0,707.0,675.85,703.5,675.925,5.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:15:49.697527
+Housing & Urban Development Corporation Ltd,INE031A01017,HUDCO,,2017-05-19,60.0,73.0,72.55,73.45,72.5,73.225,72.525,22.0417,nse+bse,reconciled_2_sources,False,,2026-10-05 16:16:01.879569
+PSP Projects Ltd,INE488V01015,PSPPROJECT,,2017-05-29,210.0,190.0,199.5,199.0,208.95,194.5,204.225,-7.381,nse+bse,reconciled_2_sources,False,,2026-10-05 16:16:13.814013
+Tejas Networks Ltd,INE010J01012,TEJASNET,,2017-06-27,257.0,257.0,263.5,257.0,263.3,257.0,263.4,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:16:25.649253
+ERIS Lifesciences Ltd,INE406M01024,ERIS,,2017-06-29,603.0,611.0,601.5,612.0,601.05,611.5,601.275,1.4096,nse+bse,reconciled_2_sources,False,,2026-10-05 16:16:37.665965
+Central Depository Services Ltd,INE736A01011,CDSL,,2017-06-30,149.0,250.0,261.6,,,250.0,261.6,67.7852,nse,single_source_unverified,False,,2026-10-05 16:16:49.641344
+GTPL Hathway Ltd,INE869I01013,GTPL,,2017-07-04,170.0,170.0,171.65,170.0,171.65,170.0,171.65,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:17:01.646470
+AU Small Finance Bank Ltd,INE949L01017,AUBANK,,2017-07-10,358.0,530.0,541.65,525.0,541.2,527.5,541.425,47.3464,nse+bse,reconciled_2_sources,False,,2026-10-05 16:17:13.821528
+Salasar Techno Engineering Ltd,INE170V01027,SALASAR,,2017-07-25,108.0,250.0,262.5,259.15,272.1,254.575,267.3,135.7176,nse+bse,reconciled_2_sources,False,,2026-10-05 16:17:25.674444
+SIS Ltd,,,,2017-08-10,815.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:17:37.843953
+Cochin Shipyard Ltd,INE704P01025,COCHINSHIP,,2017-08-11,432.0,440.15,528.15,435.0,522.0,437.575,525.075,1.2905,nse+bse,reconciled_2_sources,False,,2026-10-05 16:17:49.823176
+Apex Frozen Foods Ltd,INE346W01013,APEX,,2017-09-04,175.0,202.0,212.1,199.9,209.85,200.95,210.975,14.8286,nse+bse,reconciled_2_sources,False,,2026-10-05 16:18:01.801106
+Bharat Road Network Ltd,INE727S01012,BRNL,,2017-09-18,205.0,205.0,208.45,204.9,208.15,204.95,208.3,-0.0244,nse+bse,reconciled_2_sources,False,,2026-10-05 16:18:13.842187
+Dixon Technologies (India) Ltd,INE935N01020,DIXON,,2017-09-18,1766.0,2725.0,2891.55,2725.0,2892.8,2725.0,2892.175,54.3035,nse+bse,reconciled_2_sources,False,,2026-10-05 16:18:13.850637
+Matrimony.com Ltd,INE866R01028,MATRIMONY,,2017-09-21,985.0,985.0,904.65,985.0,901.2,985.0,902.925,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:18:25.813881
+Capacit'e Infraprojects Ltd,INE264T01014,CAPACITE,,2017-09-25,250.0,399.0,342.55,399.0,342.4,399.0,342.475,59.6,nse+bse,reconciled_2_sources,False,,2026-10-05 16:18:37.843979
+ICICI Lombard General Insurance Company Ltd,INE765G01017,ICICIGI,,2017-09-27,661.0,651.1,681.2,650.0,681.55,650.55,681.375,-1.5809,nse+bse,reconciled_2_sources,False,,2026-10-05 16:18:49.823901
+SBI Life Insurance Company Ltd,INE123W01016,SBILIFE,,2017-10-03,700.0,735.0,707.55,733.3,708.0,734.15,707.775,4.8786,nse+bse,reconciled_2_sources,False,,2026-10-05 16:19:01.816897
+Prataap Snacks Ltd,INE393P01035,DIAMONDYD,,2017-10-05,938.0,1270.0,1180.65,1250.0,1178.3,1260.0,1179.475,34.3284,nse+bse,reconciled_2_sources,False,,2026-10-05 16:19:13.849559
+Godrej Agrovet Ltd,INE850D01014,GODREJAGRO,,2017-10-16,460.0,615.6,595.65,621.0,595.55,618.3,595.6,34.413,nse+bse,reconciled_2_sources,False,,2026-10-05 16:19:25.859952
+MAS Financial Services Ltd,INE348L01012,MASFIN,,2017-10-18,459.0,660.0,654.4,660.0,654.75,660.0,654.575,43.7908,nse+bse,reconciled_2_sources,False,,2026-10-05 16:19:39.105873
+Indian Energy Exchange Ltd,INE022Q01020,IEX,,2017-10-23,1650.0,1500.0,1629.15,1500.0,1626.45,1500.0,1627.8,-9.0909,nse+bse,reconciled_2_sources,False,,2026-10-05 16:19:49.842276
+General Insurance Corporation of India Ltd,INE481Y01014,GICRE,,2017-10-25,912.0,850.0,874.3,850.0,870.4,850.0,872.35,-6.7982,nse+bse,reconciled_2_sources,False,,2026-10-05 16:20:01.820120
+Nippon Life India Asset Management Ltd,INE298J01013,NAM-INDIA,,2017-11-06,252.0,295.9,284.4,,,295.9,284.4,17.4206,nse,single_source_unverified,False,,2026-10-05 16:20:13.835949
+Mahindra Logistics Ltd,INE766P01016,MAHLOG,,2017-11-10,429.0,429.0,429.5,432.0,429.15,430.5,429.325,0.3497,nse+bse,reconciled_2_sources,False,,2026-10-05 16:20:25.842286
+New India Assurance Company Ltd,INE470Y01017,NIACL,,2017-11-13,800.0,750.0,727.1,748.9,725.05,749.45,726.075,-6.3187,nse+bse,reconciled_2_sources,False,,2026-10-05 16:20:37.846397
+Khadim India Ltd,INE834I01025,KHADIM,,2017-11-14,750.0,730.0,688.85,727.0,688.5,728.5,688.675,-2.8667,nse+bse,reconciled_2_sources,False,,2026-10-05 16:20:49.824101
+HDFC Life Insurance Company Ltd,INE795G01014,HDFCLIFE,,2017-11-17,290.0,310.0,344.6,311.0,344.25,310.5,344.425,7.069,nse+bse,reconciled_2_sources,False,,2026-10-05 16:21:01.868628
+Shalby Ltd,INE597J01018,SHALBY,,2017-12-15,248.0,239.7,239.6,237.0,239.25,238.35,239.425,-3.8911,nse+bse,reconciled_2_sources,False,,2026-10-05 16:21:13.850159
+Future Supply Chain Solutions Ltd,,,,2017-12-18,664.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:21:26.165097
+Astron Paper & Board Mill Ltd,INE646X01014,ASTRON,,2017-12-29,50.0,115.0,120.75,114.0,119.7,114.5,120.225,129.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:21:37.871193
+Apollo Micro Systems Ltd,INE713T01028,APOLLO,,2018-01-22,275.0,465.0,441.75,478.0,454.1,471.5,447.925,71.4545,nse+bse,reconciled_2_sources,False,,2026-10-05 16:21:49.869347
+Newgen Software Technologies Ltd,INE619B01017,NEWGEN,,2018-01-29,245.0,254.1,252.4,253.0,253.0,253.55,252.7,3.4898,nse+bse,reconciled_2_sources,False,,2026-10-05 16:22:01.900372
+Amber Enterprises India Ltd,INE371P01015,AMBER,,2018-01-30,859.0,1175.0,1245.25,1180.0,1237.25,1177.5,1241.25,37.078,nse+bse,reconciled_2_sources,False,,2026-10-05 16:22:13.702817
+Galaxy Surfactants Ltd,INE600K01018,GALAXYSURF,,2018-02-08,1480.0,1525.0,1700.45,1520.0,1698.1,1522.5,1699.275,2.8716,nse+bse,reconciled_2_sources,False,,2026-10-05 16:22:25.968360
+Aster DM Healthcare Ltd,,,,2018-02-26,190.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:22:37.717163
+H.G. Infra Engineering Ltd,INE926X01010,HGINFRA,,2018-03-09,270.0,270.0,267.75,270.0,270.05,270.0,268.9,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:22:49.787240
+Bharat Dynamics Ltd,INE171Z01026,BDL,,2018-03-23,428.0,370.0,389.8,360.0,390.7,365.0,390.25,-14.7196,nse+bse,reconciled_2_sources,False,,2026-10-05 16:23:01.854971
+Bandhan Bank Ltd,INE545U01014,BANDHANBNK,,2018-03-27,375.0,499.0,476.85,485.0,477.2,492.0,477.025,31.2,nse+bse,reconciled_2_sources,False,,2026-10-05 16:23:15.649188
+Hindustan Aeronautics Ltd (HAL),INE066F01020,HAL,,2018-03-28,1215.0,1152.0,1132.85,1169.0,1128.35,1160.5,1130.6,-4.4856,nse+bse,reconciled_2_sources,False,,2026-10-05 16:23:26.019385
+Sandhar Technologies Ltd,INE278H01035,SANDHAR,,2018-04-02,332.0,346.1,322.15,345.0,322.55,345.55,322.35,4.0813,nse+bse,reconciled_2_sources,False,,2026-10-05 16:23:37.924803
+Dharan Infra EPC Ltd,INE278R01034,DHARAN,,2018-04-02,180.0,,,14.2,17.6,14.2,17.6,-92.1111,bse,single_source_unverified,False,,2026-10-05 16:23:37.980014
+ICICI Securities Ltd,,,,2018-04-04,520.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:23:49.742062
+Mishra Dhatu Nigam Ltd (MIDHANI),INE099Z01011,MIDHANI,,2018-04-04,90.0,87.0,90.05,87.0,90.0,87.0,90.025,-3.3333,nse+bse,reconciled_2_sources,False,,2026-10-05 16:23:49.746844
+Lemon Tree Hotels Ltd,INE970X01018,LEMONTREE,,2018-04-09,56.0,61.6,71.65,61.6,71.6,61.6,71.625,10.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:24:01.697440
+Indostar Capital Finance Ltd,INE896L01010,INDOSTAR,,2018-05-21,572.0,600.0,586.1,600.0,585.5,600.0,585.8,4.8951,nse+bse,reconciled_2_sources,False,,2026-10-05 16:24:13.721818
+Fine Organic Industries Ltd,INE686Y01026,FINEORG,,2018-07-02,783.0,815.0,822.8,815.0,822.8,815.0,822.8,4.0868,nse+bse,reconciled_2_sources,False,,2026-10-05 16:24:25.712179
+Rites Ltd,INE320J01015,RITES,,2018-07-02,185.0,190.0,213.3,190.0,212.7,190.0,213.0,2.7027,nse+bse,reconciled_2_sources,False,,2026-10-05 16:24:25.717248
+Varroc Engineering Ltd,INE665L01035,VARROC,,2018-07-06,967.0,1015.0,1037.35,1032.0,1040.55,1023.5,1038.95,5.8428,nse+bse,reconciled_2_sources,False,,2026-10-05 16:24:37.761398
+TCNS Clothing Co. Ltd,,,,2018-07-30,716.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:24:49.907234
+HDFC Asset Management Company Ltd,INE127D01025,HDFCAMC,,2018-08-06,1100.0,1726.25,1815.95,1739.0,1815.15,1732.625,1815.55,57.5114,nse+bse,reconciled_2_sources,False,,2026-10-05 16:25:01.747563
+CreditAccess Grameen Ltd,INE741K01010,CREDITACC,,2018-08-23,422.0,390.0,422.05,385.0,420.8,387.5,421.425,-8.1754,nse+bse,reconciled_2_sources,False,,2026-10-05 16:25:13.870636
+Ircon International Ltd,INE962Y01021,IRCON,,2018-09-28,475.0,412.0,415.3,410.3,416.65,411.15,415.975,-13.4421,nse+bse,reconciled_2_sources,False,,2026-10-05 16:25:25.856540
+AAVAS Financiers Ltd,INE216P01012,AAVAS,,2018-10-08,821.0,750.0,774.35,758.0,773.15,754.0,773.75,-8.1608,nse+bse,reconciled_2_sources,False,,2026-10-05 16:25:37.849586
+Garden Reach Shipbuilders & Engineers Ltd,INE382Z01011,GRSE,,2018-10-10,118.0,102.5,103.3,104.0,105.1,103.25,104.2,-12.5,nse+bse,reconciled_2_sources,False,,2026-10-05 16:25:49.716387
+Xelpmoc Design and Technologies Ltd,INE01P501012,XELPMOC,,2019-02-04,66.0,57.0,59.85,56.0,58.8,56.5,59.325,-14.3939,nse+bse,reconciled_2_sources,False,,2026-10-05 16:26:01.771322
+Chalet Hotels Ltd,INE427F01016,CHALET,,2019-02-07,280.0,294.0,291.7,291.0,290.4,292.5,291.05,4.4643,nse+bse,reconciled_2_sources,False,,2026-10-05 16:26:13.762876
+MSTC Ltd,INE255X01014,MSTCLTD,,2019-03-29,120.0,115.0,113.95,,,115.0,113.95,-4.1667,nse,single_source_unverified,False,,2026-10-05 16:26:25.853121
+Rail Vikas Nigam Ltd,INE415G01027,RVNL,,2019-04-11,19.0,19.0,19.05,19.0,19.05,19.0,19.05,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:26:37.945342
+Metropolis Healthcare Ltd,INE112L01020,METROPOLIS,,2019-04-15,880.0,958.0,959.85,960.0,959.55,959.0,959.7,8.9773,nse+bse,reconciled_2_sources,False,,2026-10-05 16:26:49.894986
+Polycab India Ltd,INE455K01017,POLYCAB,,2019-04-16,538.0,633.0,654.8,633.0,655.0,633.0,654.9,17.658,nse+bse,reconciled_2_sources,False,,2026-10-05 16:27:01.932245
+Neogen Chemicals Ltd,INE136S01016,NEOGEN,,2019-05-08,215.0,251.0,263.55,251.0,263.55,251.0,263.55,16.7442,nse+bse,reconciled_2_sources,False,,2026-10-05 16:27:13.892740
+Indiamart Intermesh Ltd,INE933S01016,INDIAMART,,2019-07-04,973.0,1180.0,1301.95,1180.0,1302.55,1180.0,1302.25,21.2744,nse+bse,reconciled_2_sources,False,,2026-10-05 16:27:25.869520
+Affle (India) Ltd,INE00WC01027,AFFLE,,2019-08-08,745.0,926.0,873.65,929.9,875.1,927.95,874.375,24.557,nse+bse,reconciled_2_sources,False,,2026-10-05 16:27:37.905782
+Spandana Sphoorty Financial Ltd,INE572J01011,SPANDANA,,2019-08-19,856.0,825.0,847.8,824.0,848.4,824.5,848.1,-3.6799,nse+bse,reconciled_2_sources,False,,2026-10-05 16:27:49.889638
+Sterling and Wilson Solar Ltd,,,,2019-08-20,780.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:28:02.568843
+Indian Railway Catering and Tourism Corporation Ltd,INE335Y01020,IRCTC,,2019-10-14,320.0,626.0,727.75,644.0,728.6,635.0,728.175,98.4375,nse+bse,reconciled_2_sources,False,,2026-10-05 16:28:13.918902
+Vishwaraj Sugar Industries Ltd,INE430N01022,VISHWARAJ,,2019-10-15,60.0,61.2,60.35,61.2,60.35,61.2,60.35,2.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:28:25.908929
+CSB Bank Ltd,INE679A01013,CSBBANK,,2019-12-04,195.0,275.0,300.05,275.0,300.1,275.0,300.075,41.0256,nse+bse,reconciled_2_sources,False,,2026-10-05 16:28:37.984966
+Ujjivan Small Finance Bank Ltd,INE551W01018,UJJIVANSFB,,2019-12-12,37.0,58.75,55.95,58.0,55.9,58.375,55.925,57.7703,nse+bse,reconciled_2_sources,False,,2026-10-05 16:28:49.910436
+Prince Pipes and Fittings Ltd,INE689W01016,PRINCEPIPE,,2019-12-30,178.0,160.0,166.9,160.0,166.6,160.0,166.75,-10.1124,nse+bse,reconciled_2_sources,False,,2026-10-05 16:29:01.911120
+SBI Cards & Payment Services Ltd,INE018E01016,SBICARD,,2020-03-16,755.0,661.0,681.4,658.0,683.2,659.5,682.3,-12.649,nse+bse,reconciled_2_sources,False,,2026-10-05 16:29:13.900457
+Rossari Biotech Ltd,INE02A801020,ROSSARI,,2020-07-23,425.0,669.25,741.65,670.0,742.35,669.625,742.0,57.5588,nse+bse,reconciled_2_sources,False,,2026-10-05 16:29:25.961338
+Happiest Minds Technologies Ltd,INE419U01012,HAPPSTMNDS,,2020-09-17,166.0,350.0,370.95,351.0,371.0,350.5,370.975,111.1446,nse+bse,reconciled_2_sources,False,,2026-10-05 16:29:37.827248
+Route Mobile Ltd,INE450U01017,ROUTE,,2020-09-21,350.0,717.0,651.3,708.0,651.1,712.5,651.2,103.5714,nse+bse,reconciled_2_sources,False,,2026-10-05 16:29:50.586134
+Computer Age Management Services Ltd,INE596I01020,CAMS,,2020-10-01,1230.0,,,1518.0,1401.6,1518.0,1401.6,23.4146,bse,single_source_unverified,True,,2026-10-05 16:30:01.784124
+Chemcon Speciality Chemicals Ltd,INE03YM01018,CHEMCON,,2020-10-01,340.0,731.0,584.8,730.95,584.8,730.975,584.8,114.9926,nse+bse,reconciled_2_sources,False,,2026-10-05 16:30:01.789301
+Angel One Ltd,INE732I01021,ANGELONE,,2020-10-05,306.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:30:13.968557
+UTI Asset Management Company Ltd,INE094J01016,UTIAMC,,2020-10-12,554.0,500.0,476.2,490.25,476.6,495.125,476.4,-10.6273,nse+bse,reconciled_2_sources,False,,2026-10-05 16:30:25.927563
+Mazagon Dock Shipbuilders Ltd,INE249Z01020,MAZDOCK,,2020-10-12,145.0,214.9,171.95,216.25,173.0,215.575,172.475,48.6724,nse+bse,reconciled_2_sources,False,,2026-10-05 16:30:25.937980
+Likhitha Infrastructure Ltd,INE060901027,LIKHITHA,,2020-10-15,120.0,130.0,136.5,130.1,136.6,130.05,136.55,8.375,nse+bse,reconciled_2_sources,False,,2026-10-05 16:30:37.961616
+Equitas Small Finance Bank Ltd,INE063P01018,EQUITASBNK,,2020-11-02,33.0,31.1,32.8,31.0,32.75,31.05,32.775,-5.9091,nse+bse,reconciled_2_sources,False,,2026-10-05 16:30:51.912882
+Gland Pharma Ltd,INE068V01023,GLAND,,2020-11-20,1500.0,1710.0,1819.55,1701.0,1820.45,1705.5,1820.0,13.7,nse+bse,reconciled_2_sources,False,,2026-10-05 16:31:01.920479
+Restaurant Brands Asia Ltd,INE07T201019,RBA,,2020-12-14,60.0,112.5,135.0,,,112.5,135.0,87.5,nse,single_source_unverified,False,,2026-10-05 16:31:14.349090
+Mrs Bectors Food Specialities Ltd,INE495P01020,BECTORFOOD,,2020-12-24,288.0,500.0,594.2,501.0,595.55,500.5,594.875,73.7847,nse+bse,reconciled_2_sources,False,,2026-10-05 16:31:25.948065
+Antony Waste Handling Cell Ltd,INE01BK01022,AWHCL,,2021-01-01,315.0,436.1,407.35,430.0,407.25,433.05,407.3,37.4762,nse+bse,reconciled_2_sources,False,,2026-10-05 16:31:37.965233
+Indian Railway Finance Corporation Limited,INE053F01010,IRFC,,2021-01-29,26.0,24.9,24.8,25.0,24.85,24.95,24.825,-4.0385,nse+bse,reconciled_2_sources,False,,2026-10-05 16:31:49.971630
+Indigo Paints Limited,INE09VQ01012,INDIGOPNTS,,2021-02-02,1490.0,2607.5,3117.15,2607.5,3118.65,2607.5,3117.9,75.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:32:01.990521
+Home First Finance Company India Limited,INE481N01025,HOMEFIRST,,2021-02-03,518.0,618.8,527.55,612.15,527.4,615.475,527.475,18.8176,nse+bse,reconciled_2_sources,False,,2026-10-05 16:32:14.670111
+Stove Kraft Limited,INE00IN01015,STOVEKRAFT,,2021-02-05,385.0,498.0,445.95,467.0,445.95,,445.95,,nse+bse,reconciled_2_sources,False,open: NSE 498.00 vs BSE 467.00 differ 6.2% -> NULL (rule 2),2026-10-05 16:32:26.335728
+Nureca Limited,INE0DSF01015,NURECA,,2021-02-25,400.0,615.0,645.75,634.95,666.65,624.975,656.2,56.2438,nse+bse,reconciled_2_sources,False,,2026-10-05 16:32:37.864058
+Railtel Corporation of India Limited,INE0DD101019,RAILTEL,,2021-02-26,94.0,109.0,121.35,104.6,121.4,106.8,121.375,13.617,nse+bse,reconciled_2_sources,False,,2026-10-05 16:32:49.909677
+Heranba Industries Limited,INE694N01015,HERANBA,,2021-03-05,627.0,900.0,812.6,900.0,812.25,900.0,812.425,43.5407,nse+bse,reconciled_2_sources,False,,2026-10-05 16:33:01.875120
+MTAR Technologies Limited,INE864I01014,MTARTECH,,2021-03-15,575.0,1050.0,1082.5,1063.9,1082.25,1056.95,1082.375,83.8174,nse+bse,reconciled_2_sources,False,,2026-10-05 16:33:14.721943
+Easy Trip Planners Limited,INE07O001026,EASEMYTRIP,,2021-03-19,187.0,212.25,208.45,206.0,208.3,209.125,208.375,11.8316,nse+bse,reconciled_2_sources,False,,2026-10-05 16:33:25.822775
+Anupam Rasayan India Limited,INE930P01018,ANURAS,,2021-03-24,555.0,520.0,526.8,534.7,525.9,527.35,526.35,-4.982,nse+bse,reconciled_2_sources,False,,2026-10-05 16:33:37.855562
+Craftsman Automation Limited,INE00LO01017,CRAFTSMAN,,2021-03-25,1490.0,1359.0,1435.6,1350.0,1433.0,1354.5,1434.3,-9.094,nse+bse,reconciled_2_sources,False,,2026-10-05 16:33:50.175875
+Laxmi Organic Industries Limited,INE576O01020,LXCHEM,,2021-03-25,130.0,155.5,164.45,156.2,164.6,155.85,164.525,19.8846,nse+bse,reconciled_2_sources,False,,2026-10-05 16:33:50.180902
+Suryoday Small Finance Bank Limited,INE428Q01011,SURYODAY,,2021-03-26,305.0,292.0,277.8,293.0,276.2,292.5,277.0,-4.0984,nse+bse,reconciled_2_sources,False,,2026-10-05 16:34:01.883657
+Kalyan Jewellers India Limited,INE303R01014,KALYANKJIL,,2021-03-26,87.0,73.95,75.2,73.9,75.3,73.925,75.25,-15.0287,nse+bse,reconciled_2_sources,False,,2026-10-05 16:34:01.888777
+Nazara Technologies Limited,INE418L01047,NAZARA,,2021-03-30,1101.0,1990.0,1592.0,1971.0,1576.8,1980.5,1584.4,79.8819,nse+bse,reconciled_2_sources,False,,2026-10-05 16:34:13.845710
+Barbeque Nation Hospitality Limited,,,,2021-04-07,500.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:34:25.838431
+Macrotech Developers Limited (Lodha Group),,,,2021-04-19,486.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:34:38.158106
+Sona BLW Precision Forgings Limited,INE073K01018,SONACOMS,,2021-06-24,291.0,301.0,361.2,302.4,362.85,301.7,362.025,3.677,nse+bse,reconciled_2_sources,False,,2026-10-05 16:34:49.850556
+Shyam Metalics and Energy Limited,INE810G01011,SHYAMMETL,,2021-06-24,306.0,380.0,376.15,367.0,375.85,373.5,376.0,22.0588,nse+bse,reconciled_2_sources,False,,2026-10-05 16:34:49.855931
+Dodla Dairy Limited,INE021O01019,DODLA,,2021-06-28,428.0,550.0,609.9,528.0,609.1,539.0,609.5,25.9346,nse+bse,reconciled_2_sources,False,,2026-10-05 16:35:01.832918
+Krishna Institute of Medical Sciences Limited,INE967H01025,KIMS,,2021-06-28,825.0,1009.0,996.95,1008.9,995.9,1008.95,996.425,22.297,nse+bse,reconciled_2_sources,False,,2026-10-05 16:35:01.841795
+India Pesticides Limited,INE0D6701023,IPL,,2021-07-05,296.0,350.0,343.15,360.0,343.15,355.0,343.15,19.9324,nse+bse,reconciled_2_sources,False,,2026-10-05 16:35:14.024748
+G R Infraprojects Limited,INE201P01022,GRINFRA,,2021-07-19,837.0,1715.85,1747.1,1700.0,1746.8,1707.925,1746.95,104.0532,nse+bse,reconciled_2_sources,False,,2026-10-05 16:35:25.853264
+Clean Science and Technology Limited,INE227W01023,CLEAN,,2021-07-19,900.0,1755.0,1585.25,1784.4,1585.2,1769.7,1585.225,96.6333,nse+bse,reconciled_2_sources,False,,2026-10-05 16:35:25.858744
+Eternal Limited,INE758T01015,ETERNAL,,2021-07-23,76.0,116.0,126.0,,,116.0,126.0,52.6316,nse,single_source_unverified,False,,2026-10-05 16:35:37.854292
+Tatva Chintan Pharma Chem Limited,INE0GK401011,TATVA,,2021-07-29,1083.0,2111.85,2312.2,2111.8,2310.25,2111.825,2311.225,94.9977,nse+bse,reconciled_2_sources,False,,2026-10-05 16:35:50.013381
+Alivus Life Sciences Limited,INE03Q201024,ALIVUS,,2021-08-06,720.0,750.0,748.5,,,750.0,748.5,4.1667,nse,single_source_unverified,False,,2026-10-05 16:36:01.884360
+Rolex Rings Limited,INE645S01024,ROLEXRINGS,,2021-08-09,900.0,1250.0,1167.0,1249.0,1166.55,1249.5,1166.775,38.8333,nse+bse,reconciled_2_sources,False,,2026-10-05 16:36:13.868646
+Devyani International Limited,INE872J01023,DEVYANI,,2021-08-16,90.0,140.9,123.5,141.0,123.35,140.95,123.425,56.6111,nse+bse,reconciled_2_sources,False,,2026-10-05 16:36:26.000457
+Windlas Biotech Limited,INE0H5O01029,WINDLAS,,2021-08-16,460.0,437.0,407.15,439.0,406.7,438.0,406.925,-4.7826,nse+bse,reconciled_2_sources,False,,2026-10-05 16:36:26.005975
+Exxaro Tiles Limited,INE0GFE01026,EXXARO,,2021-08-16,120.0,126.0,132.3,126.0,132.25,126.0,132.275,5.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:36:26.012826
+Krsnaa Diagnostics Limited,INE08LI01020,KRSNAA,,2021-08-16,954.0,1005.55,987.0,1025.0,990.75,1015.275,988.875,6.423,nse+bse,reconciled_2_sources,False,,2026-10-05 16:36:26.018150
+CarTrade Tech Limited,INE290S01011,CARTRADE,,2021-08-20,1618.0,1599.8,1501.05,1600.0,1500.1,1599.9,1500.575,-1.1187,nse+bse,reconciled_2_sources,False,,2026-10-05 16:36:38.043880
+Nuvoco Vistas Corporation Limited,INE118D01016,NUVOCO,,2021-08-23,570.0,485.0,531.7,471.0,531.3,478.0,531.5,-16.1404,nse+bse,reconciled_2_sources,False,,2026-10-05 16:36:50.180585
+Aptus Value Housing Finance India Limited,INE852O01025,APTUS,,2021-08-24,353.0,333.0,346.9,329.95,346.5,331.475,346.7,-6.0977,nse+bse,reconciled_2_sources,False,,2026-10-05 16:37:01.921333
+Chemplast Sanmar Limited,INE488A01050,CHEMPLASTS,,2021-08-24,541.0,550.0,535.6,525.0,534.9,537.5,535.25,-0.647,nse+bse,reconciled_2_sources,False,,2026-10-05 16:37:01.929208
+Vijaya Diagnostic Centre Limited,INE043W01024,VIJAYA,,2021-09-14,531.0,540.0,620.1,542.3,619.3,541.15,619.7,1.9115,nse+bse,reconciled_2_sources,False,,2026-10-05 16:37:13.881883
+Acutaas Chemicals Limited,INE00FF01025,ACUTAAS,,2021-09-14,610.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:37:13.910701
+Sansera Engineering Limited,INE953O01021,SANSERA,,2021-09-24,744.0,811.5,818.55,811.35,818.7,811.425,818.625,9.0625,nse+bse,reconciled_2_sources,False,,2026-10-05 16:37:25.889343
+AWL Agri Business Limited (formerly Adani Wilmar Limited),INE699H01024,AWL,,2022-02-08,230.0,227.0,268.25,221.0,265.2,224.0,266.725,-2.6087,nse+bse,reconciled_2_sources,False,,2026-10-05 16:37:37.903394
+Campus Activewear (India) Limited,INE278Y01022,CAMPUS,,2022-05-09,292.0,360.0,378.9,355.0,378.6,357.5,378.75,22.4315,nse+bse,reconciled_2_sources,False,,2026-10-05 16:37:49.895404
+Rainbow Children’s Medicare Limited,INE961O01016,RAINBOW,,2022-05-10,542.0,510.0,450.2,506.0,450.1,508.0,450.15,-6.2731,nse+bse,reconciled_2_sources,False,,2026-10-05 16:38:01.968977
+Life Insurance Corporation of India (LIC),INE0J1Y01017,LICI,,2022-05-17,949.0,872.0,875.25,867.2,875.45,869.6,875.35,-8.3667,nse+bse,reconciled_2_sources,False,,2026-10-05 16:38:13.856404
+Prudent Corporate Advisory Services Limited,INE00F201020,PRUDENT,,2022-05-20,630.0,650.0,561.75,660.0,562.7,655.0,562.225,3.9683,nse+bse,reconciled_2_sources,False,,2026-10-05 16:38:25.886803
+Venus Pipes & Tubes Limited,INE0JA001018,VENUSPIPES,,2022-05-24,326.0,337.5,354.35,335.0,351.75,336.25,353.05,3.1442,nse+bse,reconciled_2_sources,False,,2026-10-05 16:38:37.890337
+Delhivery Limited,INE148O01028,DELHIVERY,,2022-05-24,487.0,495.2,536.35,493.0,537.25,494.1,536.8,1.4579,nse+bse,reconciled_2_sources,False,,2026-10-05 16:38:37.896913
+Paradeep Phosphates Limited,INE088F01024,PARADEEP,,2022-05-27,42.0,44.0,43.9,43.55,43.95,43.775,43.925,4.2262,nse+bse,reconciled_2_sources,False,,2026-10-05 16:38:49.962548
+Ethos Limited,INE04TZ01018,ETHOSLTD,,2022-05-30,878.0,825.0,803.1,830.0,802.6,827.5,802.85,-5.7517,nse+bse,reconciled_2_sources,False,,2026-10-05 16:39:01.879614
+eMudhra Ltd,INE01QM01018,EMUDHRA,,2022-06-01,256.0,270.0,257.9,271.0,258.85,270.5,258.375,5.6641,nse+bse,reconciled_2_sources,False,,2026-10-05 16:39:14.060256
+Aether Industries,INE0BWX01014,AETHER,,2022-06-03,642.0,704.0,774.4,706.15,776.75,705.075,775.575,9.8248,nse+bse,reconciled_2_sources,False,,2026-10-05 16:39:26.102053
+Syrma SGS Technologies,INE0DYJ01015,SYRMA,,2022-08-26,220.0,260.0,310.5,262.0,313.05,261.0,311.775,18.6364,nse+bse,reconciled_2_sources,False,,2026-10-05 16:39:38.091973
+Dreamfolks Services,INE0JS101016,DREAMFOLKS,,2022-09-06,326.0,508.7,462.4,505.0,462.65,506.85,462.525,55.4755,nse+bse,reconciled_2_sources,False,,2026-10-05 16:39:50.022498
+Tamilnad Mercantile,INE668A01016,TMB,,2022-09-15,510.0,495.0,509.65,510.0,508.45,502.5,509.05,-1.4706,nse+bse,reconciled_2_sources,False,,2026-10-05 16:40:02.167134
+Harsha Engineers,INE0JUS01029,HARSHA,,2022-09-26,330.0,450.0,486.5,444.0,485.9,447.0,486.2,35.4545,nse+bse,reconciled_2_sources,False,,2026-10-05 16:40:14.037065
+Electronics Mart India,INE02YR01019,EMIL,,2022-10-17,59.0,90.0,84.5,89.4,84.45,89.7,84.475,52.0339,nse+bse,reconciled_2_sources,False,,2026-10-05 16:40:26.038182
+Tracxn Technologies,INE0HMF01019,TRACXN,,2022-10-20,80.0,84.5,93.25,83.0,93.35,83.75,93.3,4.6875,nse+bse,reconciled_2_sources,False,,2026-10-05 16:40:38.046701
+DCX Systems Ltd,INE0KL801015,DCXINDIA,,2022-11-11,207.0,287.0,308.45,286.25,308.8,286.625,308.625,38.4662,nse+bse,reconciled_2_sources,False,,2026-10-05 16:40:49.980503
+Fusion Finance Ltd,INE139R01012,FUSION,,2022-11-15,368.0,359.5,324.8,360.5,324.9,360.0,324.85,-2.1739,nse+bse,reconciled_2_sources,False,,2026-10-05 16:41:02.100115
+Bikaji Foods International Limited,INE00E101023,BIKAJI,,2022-11-16,300.0,322.8,317.45,321.15,317.45,321.975,317.45,7.325,nse+bse,reconciled_2_sources,False,,2026-10-05 16:41:14.254260
+Global Health Limited,INE474Q01031,MEDANTA,,2022-11-16,336.0,401.0,415.3,398.15,415.65,399.575,415.475,18.9211,nse+bse,reconciled_2_sources,False,,2026-10-05 16:41:14.259802
+Archean Chemical Industries Limited,INE128X01021,ACI,,2022-11-21,407.0,450.0,458.15,449.0,457.95,449.5,458.05,10.4423,nse+bse,reconciled_2_sources,False,,2026-10-05 16:41:26.112382
+Five Star Business Finance Limited,INE128S01021,FIVESTAR,,2022-11-21,474.0,468.8,490.0,449.95,489.5,459.375,489.75,-3.0854,nse+bse,reconciled_2_sources,False,,2026-10-05 16:41:26.118934
+Kaynes Technology India Limited,INE918Z01012,KAYNES,,2022-11-22,587.0,778.0,689.95,775.0,690.1,776.5,690.025,32.2828,nse+bse,reconciled_2_sources,False,,2026-10-05 16:41:37.910647
+Inox Green Energy Limited,INE510W01014,INOXGREEN,,2022-11-23,65.0,60.0,59.1,60.5,59.1,60.25,59.1,-7.3077,nse+bse,reconciled_2_sources,False,,2026-10-05 16:41:49.959679
+Keystone Realtors Limited,INE263M01029,RUSTOMJEE,,2022-11-24,541.0,555.0,556.85,555.0,557.8,555.0,557.325,2.5878,nse+bse,reconciled_2_sources,False,,2026-10-05 16:42:03.714243
+Dharmaj Crop Guard Limited,INE00OQ01016,DHARMAJ,,2022-12-08,237.0,266.05,266.3,266.0,266.4,266.025,266.35,12.2468,nse+bse,reconciled_2_sources,False,,2026-10-05 16:42:13.959784
+Uniparts India Limited,INE244O01017,UNIPARTS,,2022-12-12,577.0,575.0,539.65,575.0,539.55,575.0,539.6,-0.3466,nse+bse,reconciled_2_sources,False,,2026-10-05 16:42:25.909274
+Sula Vineyards Limited,INE142Q01026,SULA,,2022-12-22,357.0,361.0,331.2,358.0,331.15,359.5,331.175,0.7003,nse+bse,reconciled_2_sources,False,,2026-10-05 16:42:38.064630
+Landmark Cars Limited,INE559R01029,LANDMARK,,2022-12-23,506.0,471.0,458.4,471.3,460.05,471.15,459.225,-6.8874,nse+bse,reconciled_2_sources,False,,2026-10-05 16:42:50.001883
+Abans Financial Services Limited,INE00ZE01026,AFSL,,2022-12-23,270.0,273.0,218.4,,,273.0,218.4,1.1111,nse,single_source_unverified,False,,2026-10-05 16:42:50.007508
+KFin Technologies Limited,INE138Y01010,KFINTECH,,2022-12-29,366.0,367.0,363.85,369.0,364.0,368.0,363.925,0.5464,nse+bse,reconciled_2_sources,False,,2026-10-05 16:43:02.210852
+Elin Electronics Limited,INE050401020,ELIN,,2022-12-30,247.0,244.0,227.65,243.0,227.8,243.5,227.725,-1.417,nse+bse,reconciled_2_sources,False,,2026-10-05 16:43:13.989905
+Radiant Cash Management Services Limited,INE855R01021,RADIANTCMS,,2023-01-04,94.0,103.0,104.9,99.3,104.7,101.15,104.8,7.6064,nse+bse,reconciled_2_sources,False,,2026-10-05 16:43:25.988722
+Sah Polymers Limited,,SAH,,2023-01-12,65.0,85.0,89.25,85.0,89.25,85.0,89.25,30.7692,nse+bse,reconciled_2_sources,False,,2026-10-05 16:43:37.936387
+Divgi Torqtransfer Systems Limited,INE753U01022,DIVGIITTS,,2023-03-14,590.0,620.0,605.2,600.0,605.15,610.0,605.175,3.3898,nse+bse,reconciled_2_sources,False,,2026-10-05 16:43:49.937813
+Global Surfaces Limited,INE0JSX01015,GSLSU,,2023-03-23,140.0,164.0,171.05,163.0,170.9,163.5,170.975,16.7857,nse+bse,reconciled_2_sources,False,,2026-10-05 16:44:02.006544
+Udayshivakumar Infosolutions Limited,INE0N0Y01013,USK,,2023-04-03,35.0,30.0,31.5,35.0,33.39,,,,nse+bse,reconciled_2_sources,False,open: NSE 30.00 vs BSE 35.00 differ 14.3% -> NULL (rule 2); close: NSE 31.50 vs BSE 33.39 differ 5.7% -> NULL (rule 2),2026-10-05 16:44:13.938728
+Avalon Technologies Limited,INE0LCL01028,AVALON,,2023-04-18,436.0,436.0,398.0,431.0,397.45,433.5,397.725,-0.5734,nse+bse,reconciled_2_sources,False,,2026-10-05 16:44:25.942604
+Mankind Pharma Limited,INE634S01028,MANKIND,,2023-05-09,1080.0,1300.0,1422.3,1300.0,1424.05,1300.0,1423.175,20.3704,nse+bse,reconciled_2_sources,False,,2026-10-05 16:44:38.215038
+IKIO Technologies Limited (formerly IKIO Lighting Limited),INE0LOJ01019,IKIO,,2023-06-16,285.0,392.5,403.85,391.0,403.75,391.75,403.8,37.4561,nse+bse,reconciled_2_sources,False,,2026-10-05 16:44:50.087862
+HMA Agro Industries Limited,INE0ECP01024,HMAAGRO,,2023-07-04,585.0,625.0,585.65,615.0,584.75,620.0,585.2,5.9829,nse+bse,reconciled_2_sources,False,,2026-10-05 16:45:02.155116
+Ideaforge Technologies Limited,INE349Y01013,IDEAFORGE,,2023-07-07,672.0,1300.0,1294.95,1305.1,1295.5,1302.55,1295.225,93.8318,nse+bse,reconciled_2_sources,False,,2026-10-05 16:45:14.086094
+Cyient DLM Limited,INE055S01018,CYIENTDLM,,2023-07-10,265.0,403.0,420.6,401.0,420.75,402.0,420.675,51.6981,nse+bse,reconciled_2_sources,False,,2026-10-05 16:45:26.243723
+Senco Gold Limited,INE602W01027,SENCO,,2023-07-14,317.0,430.0,405.3,431.0,404.95,430.5,405.125,35.8044,nse+bse,reconciled_2_sources,False,,2026-10-05 16:45:38.080837
+Utkarsh Small Finance Bank Limited,INE735W01017,UTKARSHBNK,,2023-07-21,25.0,40.0,48.0,39.95,47.94,39.975,47.97,59.9,nse+bse,reconciled_2_sources,False,,2026-10-05 16:45:49.950837
+Netweb Technologies India Limited,INE0NT901020,NETWEB,,2023-07-27,500.0,947.0,910.4,942.5,910.5,944.75,910.45,88.95,nse+bse,reconciled_2_sources,False,,2026-10-05 16:46:02.105637
+Yatharth Hospital & Trauma Care Services Limited,INE0JO301016,YATHARTH,,2023-08-07,300.0,306.1,333.85,304.0,333.75,305.05,333.8,1.6833,nse+bse,reconciled_2_sources,False,,2026-10-05 16:46:13.929233
+SBFC Finance Limited,INE423Y01016,SBFC,,2023-08-16,57.0,82.0,92.2,81.99,92.21,81.995,92.205,43.8509,nse+bse,reconciled_2_sources,False,,2026-10-05 16:46:26.150947
+Concord Biotech Limited,INE338H01029,CONCORDBIO,,2023-08-18,741.0,900.05,942.8,900.05,941.85,900.05,942.325,21.4642,nse+bse,reconciled_2_sources,False,,2026-10-05 16:46:37.945754
+TVS Supply Chain Solutions Limited,INE395N01027,TVSSCS,,2023-08-23,197.0,207.05,201.0,206.3,200.95,206.675,200.975,4.9112,nse+bse,reconciled_2_sources,False,,2026-10-05 16:46:50.098214
+Pyramid Technoplast Limited,INE0MIS01010,PYRAMID,,2023-08-29,166.0,187.0,177.65,185.0,175.75,186.0,176.7,12.0482,nse+bse,reconciled_2_sources,False,,2026-10-05 16:47:01.936589
+Aeroflex Industries Limited,INE024001021,AEROFLEX,,2023-08-31,108.0,190.0,163.25,197.4,163.15,193.7,163.2,79.3519,nse+bse,reconciled_2_sources,False,,2026-10-05 16:47:14.120254
+Vishnu Prakash R P Limited,INE0AE001013,VPRPL,,2023-09-05,99.0,165.0,145.7,163.3,145.93,164.15,145.815,65.8081,nse+bse,reconciled_2_sources,False,,2026-10-05 16:47:25.991197
+Ratnaveer Precision Limited,INE05CZ01011,RATNAVEER,,2023-09-11,98.0,123.2,129.35,128.0,134.4,125.6,131.875,28.1633,nse+bse,reconciled_2_sources,False,,2026-10-05 16:47:37.968677
+Rishabh Instruments Limited,INE0N2P01017,RISHABH,,2023-09-11,441.0,460.05,443.15,460.0,442.75,460.025,442.95,4.3141,nse+bse,reconciled_2_sources,False,,2026-10-05 16:47:37.974277
+Jupiter Life Line Limited,INE682M01020,JLHL,,2023-09-18,735.0,973.0,1075.75,960.0,1075.25,966.5,1075.5,31.4966,nse+bse,reconciled_2_sources,False,,2026-10-05 16:47:50.142079
+R R Kabel Limited,INE777K01022,RRKABEL,,2023-09-20,1035.0,1180.0,1198.05,1179.0,1196.65,1179.5,1197.35,13.9614,nse+bse,reconciled_2_sources,False,,2026-10-05 16:48:02.093887
+EMS Limited,INE0OV601013,EMSLIMITED,,2023-09-21,211.0,282.05,279.9,281.55,279.75,281.8,279.825,33.5545,nse+bse,reconciled_2_sources,False,,2026-10-05 16:48:14.160634
+Samhi Hotels Limited,INE08U801020,SAMHI,,2023-09-22,126.0,134.5,143.4,130.55,143.55,132.525,143.475,5.1786,nse+bse,reconciled_2_sources,False,,2026-10-05 16:48:26.145689
+Zaggle Prepaid Ocean Limited,INE07K301024,ZAGGLE,,2023-09-22,164.0,164.0,158.35,162.0,158.3,163.0,158.325,-0.6098,nse+bse,reconciled_2_sources,False,,2026-10-05 16:48:26.151372
+Signature Global India Limited,INE903U01023,SIGNATURE,,2023-09-27,385.0,444.0,458.55,445.0,458.4,444.5,458.475,15.4545,nse+bse,reconciled_2_sources,False,,2026-10-05 16:48:38.001404
+Sai Silks (Kalamandir) Limited,INE438K01021,KALAMANDIR,,2023-09-27,222.0,231.0,244.9,230.1,244.85,230.55,244.875,3.8514,nse+bse,reconciled_2_sources,False,,2026-10-05 16:48:38.009977
+Yatra Online Limited,INE0JR601024,YATRA,,2023-09-28,142.0,127.5,135.9,130.0,135.95,128.75,135.925,-9.331,nse+bse,reconciled_2_sources,False,,2026-10-05 16:48:50.106837
+JSW Infrastructure Limited,INE880J01026,JSWINFRA,,2023-10-03,119.0,143.0,157.3,143.0,157.3,143.0,157.3,20.1681,nse+bse,reconciled_2_sources,False,,2026-10-05 16:49:01.982298
+Manoj Vaibhav Gems,INE0KNT01012,MVGJL,,2023-10-03,215.0,215.0,215.5,215.0,215.65,215.0,215.575,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:49:01.988008
+Updater Services Limited,INE851I01011,UDS,,2023-10-04,300.0,285.0,283.9,299.9,283.85,292.45,283.875,-2.5167,nse+bse,reconciled_2_sources,False,,2026-10-05 16:49:13.987527
+Valiant Laboratories Limited,INE0JWS01017,VALIANTLAB,,2023-10-06,140.0,162.15,170.25,161.0,169.05,161.575,169.65,15.4107,nse+bse,reconciled_2_sources,False,,2026-10-05 16:49:26.220822
+Plaza Wires Limited,INE0INJ01017,PLAZACABLE,,2023-10-12,54.0,76.0,80.2,84.0,80.23,,80.215,,nse+bse,reconciled_2_sources,False,open: NSE 76.00 vs BSE 84.00 differ 9.5% -> NULL (rule 2),2026-10-05 16:49:39.866949
+IRM Energy Limited,INE07U701015,IRMENERGY,,2023-10-26,505.0,477.25,473.15,479.0,472.95,478.125,473.05,-5.3218,nse+bse,reconciled_2_sources,False,,2026-10-05 16:49:50.177472
+Blue Jet Healthcare Limited,INE0KBH01020,BLUEJET,,2023-11-01,346.0,380.0,413.4,359.9,395.85,,404.625,,nse+bse,reconciled_2_sources,False,open: NSE 380.00 vs BSE 359.90 differ 5.3% -> NULL (rule 2),2026-10-05 16:50:02.107190
+Cello World Limited,INE0LMW01024,CELLO,,2023-11-06,648.0,829.0,791.7,831.0,791.9,830.0,791.8,28.0864,nse+bse,reconciled_2_sources,False,,2026-10-05 16:50:14.130270
+Honasa Consumer Limited (Mamaearth),INE0J5401028,HONASA,,2023-11-07,324.0,330.0,337.1,324.0,337.15,327.0,337.125,0.9259,nse+bse,reconciled_2_sources,False,,2026-10-05 16:50:26.388848
+ESAF Small Finance Bank Limited,INE818W01011,ESAFSFB,,2023-11-10,60.0,71.0,69.05,71.9,69.05,71.45,69.05,19.0833,nse+bse,reconciled_2_sources,False,,2026-10-05 16:50:38.096559
+ASK Automotive Limited,INE491J01022,ASKAUTOLTD,,2023-11-15,282.0,303.3,310.1,304.9,310.2,304.1,310.15,7.8369,nse+bse,reconciled_2_sources,False,,2026-10-05 16:50:49.982426
+Indian Renewable Energy Development Agency Limited (IREDA),INE202E01016,IREDA,,2023-11-29,32.0,50.0,60.0,50.0,59.99,50.0,59.995,56.25,nse+bse,reconciled_2_sources,False,,2026-10-05 16:51:01.982465
+Tata Technologies Limited,INE142M01025,TATATECH,,2023-11-30,500.0,1200.0,1313.0,1199.95,1314.25,1199.975,1313.625,139.995,nse+bse,reconciled_2_sources,False,,2026-10-05 16:51:14.138080
+Gandhar Oil Refineries Limited,INE717W01049,GANDHAR,,2023-11-30,169.0,298.0,301.4,295.4,301.5,296.7,301.45,75.5621,nse+bse,reconciled_2_sources,False,,2026-10-05 16:51:14.143636
+Fedbank Financial Services Limited,INE007N01010,FEDFINA,,2023-11-30,140.0,138.0,140.25,137.75,140.0,137.875,140.125,-1.5179,nse+bse,reconciled_2_sources,False,,2026-10-05 16:51:14.149647
+Flair Writing Instruments Limited,,,,2023-12-01,304.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:51:25.991299
+Doms Industries Limited,INE321T01012,DOMS,,2023-12-20,790.0,1400.0,1326.05,1400.0,1330.85,1400.0,1328.45,77.2152,nse+bse,reconciled_2_sources,False,,2026-10-05 16:51:38.139521
+India Shelter Finance Limited,INE922K01024,INDIASHLTR,,2023-12-20,493.0,620.0,544.7,612.7,543.5,616.35,544.1,25.0203,nse+bse,reconciled_2_sources,False,,2026-10-05 16:51:38.145135
+Inox India Limited,INE616N01034,INOXINDIA,,2023-12-21,660.0,949.65,939.95,933.15,939.9,941.4,939.925,42.6364,nse+bse,reconciled_2_sources,False,,2026-10-05 16:51:50.150868
+Muthoot Microfin Limited,INE046W01019,MUTHOOTMF,,2023-12-26,291.0,275.3,266.15,278.0,266.2,276.65,266.175,-4.9313,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:02.048603
+Motisons Jewellers Limited,INE0FRK01020,MOTISONS,,2023-12-26,55.0,109.0,103.55,103.9,101.18,106.45,102.365,93.5455,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:02.057772
+Suraj Estate Developers Limited,INE843S01025,SURAJEST,,2023-12-26,360.0,340.0,334.5,343.8,334.3,341.9,334.4,-5.0278,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:02.063447
+Happy Forgings Limited,INE330T01021,HAPPYFORGE,,2023-12-27,850.0,1000.0,1030.8,1001.25,1029.8,1000.625,1030.3,17.7206,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:14.021499
+Credo Brands Marketing Limited,INE220Q01020,MUFTI,,2023-12-27,280.0,282.35,312.2,282.0,312.5,282.175,312.35,0.7768,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:14.027539
+RBZ Jewellers Limited,INE0PEQ01016,RBZJEWEL,,2023-12-27,100.0,100.0,105.0,100.0,104.99,100.0,104.995,0.0,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:14.033182
+Azad Engineering Limited,INE02IJ01035,AZAD,,2023-12-28,524.0,720.0,677.5,710.0,677.1,715.0,677.3,36.4504,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:26.102934
+Innova Captab Limited,INE0DUT01020,INNOVACAP,,2023-12-29,448.0,452.1,541.4,456.1,545.15,454.1,543.275,1.3616,nse+bse,reconciled_2_sources,False,,2026-10-05 16:52:38.596430
+Jyoti CNC Automation Limited,INE980O01024,JYOTICNC,,2024-01-16,331.0,370.0,434.2,,,370.0,434.2,11.7825,nse,single_source_unverified,False,,2026-10-05 16:52:44.053125
+Medi Assist Healthcare Services Limited,INE456Z01021,MEDIASSIST,,2024-01-23,418.0,460.0,464.1,,,460.0,464.1,10.0478,nse,single_source_unverified,False,,2026-10-05 16:52:50.017619
+Epack Durable Limited,INE0G5901015,EPACK,,2024-01-30,230.0,221.0,207.6,,,221.0,207.6,-3.913,nse,single_source_unverified,False,,2026-10-05 16:52:56.747142
+Nova Agritech Limited,INE02H701025,NOVAAGRI,,2024-01-31,41.0,55.0,57.75,,,55.0,57.75,34.1463,nse,single_source_unverified,False,,2026-10-05 16:53:04.324446
+BLS E-Services Limited,INE0NLT01010,BLSE,,2024-02-06,135.0,305.0,366.0,,,305.0,366.0,125.9259,nse,single_source_unverified,False,,2026-10-05 16:53:08.074361
+Apeejay Surrendra Group (conglomerate),,,,2024-02-12,155.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:53:14.021814
+Jana Small Finance Bank Limited,INE953L01027,JSFB,,2024-02-14,414.0,396.0,368.15,,,396.0,368.15,-4.3478,nse,single_source_unverified,False,,2026-10-05 16:53:20.193210
+Capital Small Finance Bank Limited,INE646H01017,CAPITALSFB,,2024-02-14,468.0,430.25,435.0,,,430.25,435.0,-8.0662,nse,single_source_unverified,False,,2026-10-05 16:53:20.195625
+Rashi Peripherals Limited,INE0J1F01024,RPTECH,,2024-02-14,311.0,339.5,321.5,,,339.5,321.5,9.164,nse,single_source_unverified,False,,2026-10-05 16:53:20.197667
+Entero Healthcare Solutions Limited,INE010601016,ENTERO,,2024-02-16,1258.0,1228.7,1149.55,,,1228.7,1149.55,-2.3291,nse,single_source_unverified,False,,2026-10-05 16:53:26.315520
+Vibhor Steel Tubes Limited,INE0QTF01015,VSTL,,2024-02-20,151.0,425.0,446.25,,,425.0,446.25,181.457,nse,single_source_unverified,False,,2026-10-05 16:53:32.016708
+Juniper Hotels Ltd ,INE696F01016,JUNIPER,,2024-02-28,360.0,365.0,401.5,,,365.0,401.5,1.3889,nse,single_source_unverified,False,,2026-10-05 16:53:38.045099
+GPT Healthcare Ltd ,INE486R01017,GPTHEALTH,,2024-02-29,186.0,215.0,200.7,,,215.0,200.7,15.5914,nse,single_source_unverified,False,,2026-10-05 16:53:44.035239
+Exicom Tele-Systems Ltd ,INE777F01014,EXICOM,,2024-03-05,142.0,265.0,224.95,,,265.0,224.95,86.6197,nse,single_source_unverified,False,,2026-10-05 16:53:50.205473
+Platinum Industries Ltd ,INE0PT501018,PLATIND,,2024-03-05,171.0,225.0,221.2,,,225.0,221.2,31.5789,nse,single_source_unverified,False,,2026-10-05 16:53:50.207420
+Mukka Proteins Ltd ,INE0CG401037,MUKKA,,2024-03-07,28.0,40.0,42.25,,,40.0,42.25,42.8571,nse,single_source_unverified,False,,2026-10-05 16:53:56.038066
+R K Swamy Ltd ,INE0NQ801033,RKSWAMY,,2024-03-12,288.0,250.0,262.6,,,250.0,262.6,-13.1944,nse,single_source_unverified,False,,2026-10-05 16:54:02.063147
+J.G.Chemicals Ltd ,INE0MB501011,JGCHEM,,2024-03-13,221.0,209.0,184.8,,,209.0,184.8,-5.4299,nse,single_source_unverified,False,,2026-10-05 16:54:08.036705
+Gopal Snacks Ltd,INE0L9R01028,GOPAL,,2024-03-14,401.0,351.0,362.7,,,351.0,362.7,-12.4688,nse,single_source_unverified,False,,2026-10-05 16:54:14.038545
+Popular Vehicles & Services Ltd ,INE772T01024,PVSL,,2024-03-19,295.0,289.2,276.15,,,289.2,276.15,-1.9661,nse,single_source_unverified,False,,2026-10-05 16:54:20.033642
+Krystal Integrated Services Ltd ,INE0QN801017,KRYSTAL,,2024-03-21,715.0,785.0,712.85,,,785.0,712.85,9.7902,nse,single_source_unverified,False,,2026-10-05 16:54:26.078861
+SRM Contractors Ltd ,INE0R6Z01013,SRM,,2024-04-03,210.0,215.25,226.0,,,215.25,226.0,2.5,nse,single_source_unverified,False,,2026-10-05 16:54:32.148742
+Bharti Hexacom Ltd ,INE343G01021,BHARTIHEXA,,2024-04-12,570.0,755.0,813.3,,,755.0,813.3,32.4561,nse,single_source_unverified,False,,2026-10-05 16:54:38.030992
+Stanley Lifestyles Limited,INE01A001028,STANLEY,,2024-06-28,369.0,494.95,474.75,,,494.95,474.75,34.1328,nse,single_source_unverified,False,,2026-10-05 16:54:44.045483
+Allied Blenders and Distillers Limited,INE552Z01027,ABDL,,2024-07-02,281.0,320.0,317.9,,,320.0,317.9,13.879,nse,single_source_unverified,False,,2026-10-05 16:54:50.117592
+Vraj Iron & Steel Limited,INE0S2V01010,VRAJ,,2024-07-03,207.0,240.0,252.0,,,240.0,252.0,15.942,nse,single_source_unverified,False,,2026-10-05 16:54:56.051416
+Emcure Pharmaceuticals Limited,INE168P01015,EMCURE,,2024-07-10,1008.0,1325.05,1359.15,,,1325.05,1359.15,31.4534,nse,single_source_unverified,False,,2026-10-05 16:55:02.082650
+Bansal Wire Industries Limited,INE0B9K01025,BANSALWIRE,,2024-07-10,256.0,356.0,350.35,,,356.0,350.35,39.0625,nse,single_source_unverified,False,,2026-10-05 16:55:02.085134
+Sanstar Limited,INE08NE01025,SANSTAR,,2024-07-26,95.0,109.0,115.07,,,109.0,115.07,14.7368,nse,single_source_unverified,False,,2026-10-05 16:55:08.074681
+Akums Drugs and Pharmaceuticals Limited,INE09XN01023,AKUMS,,2024-08-06,679.0,725.0,796.25,,,725.0,796.25,6.7747,nse,single_source_unverified,False,,2026-10-05 16:55:14.062480
+Ceigall India Limited,INE0AG901020,CEIGALL,,2024-08-08,401.0,419.0,386.75,,,419.0,386.75,4.4888,nse,single_source_unverified,False,,2026-10-05 16:55:21.209300
+Ola Electric Mobility Limited,INE0LXG01040,OLAELEC,,2024-08-09,76.0,76.0,91.2,,,76.0,91.2,0.0,nse,single_source_unverified,False,,2026-10-05 16:55:26.068503
+Brainbees Solutions Limited,INE02RE01045,FIRSTCRY,,2024-08-13,465.0,651.0,679.1,,,651.0,679.1,40.0,nse,single_source_unverified,False,,2026-10-05 16:55:32.074500
+Unicommerce eSolutions Limited,INE00U401027,UNIECOM,,2024-08-13,108.0,235.0,210.08,,,235.0,210.08,117.5926,nse,single_source_unverified,False,,2026-10-05 16:55:32.076549
+Saraswati Saree Depot Limited,INE0PQ101010,SSDL,,2024-08-20,160.0,194.0,203.7,,,194.0,203.7,21.25,nse,single_source_unverified,False,,2026-10-05 16:55:38.028604
+Interarch Building Products Limited,INE00M901018,INTERARCH,,2024-08-26,900.0,1299.0,1195.7,,,1299.0,1195.7,44.3333,nse,single_source_unverified,False,,2026-10-05 16:55:44.054559
+Orient Technologies Limited,INE0PPK01015,ORIENTTECH,,2024-08-28,206.0,288.0,302.4,,,288.0,302.4,39.8058,nse,single_source_unverified,False,,2026-10-05 16:55:50.204460
+Premier Energies Limited,INE0BS701011,PREMIERENE,,2024-09-03,450.0,990.0,839.9,,,990.0,839.9,120.0,nse,single_source_unverified,False,,2026-10-05 16:55:56.068298
+Ecos (India) Mobility & Hospitality Limited,INE06HJ01020,ECOSMOBLTY,,2024-09-04,334.0,390.0,443.15,,,390.0,443.15,16.7665,nse,single_source_unverified,False,,2026-10-05 16:56:02.047343
+Baazar Style Retail Limited,INE01FR01028,STYLEBAAZA,,2024-09-06,389.0,389.0,400.0,,,389.0,400.0,0.0,nse,single_source_unverified,False,,2026-10-05 16:56:08.065609
+Gala Precision Engineering Limited,INE0RE001014,GALAPREC,,2024-09-09,529.0,721.1,757.15,,,721.1,757.15,36.3138,nse,single_source_unverified,False,,2026-10-05 16:56:14.903598
+Shree Tirupati Balajee Agro Trading Company Limited,INE0S2G01011,BALAJEE,,2024-09-12,83.0,90.0,94.5,,,90.0,94.5,8.4337,nse,single_source_unverified,False,,2026-10-05 16:56:20.273244
+Tolins Tyres Limited,INE0RWQ01014,TOLINS,,2024-09-16,226.0,228.0,239.4,,,228.0,239.4,0.885,nse,single_source_unverified,False,,2026-10-05 16:56:26.105660
+Bajaj Housing Finance Limited,INE377Y01014,BAJAJHFL,,2024-09-16,70.0,150.0,165.0,,,150.0,165.0,114.2857,nse,single_source_unverified,False,,2026-10-05 16:56:26.107714
+Kross Limited,INE0O6601022,KROSS,,2024-09-16,240.0,240.0,259.81,,,240.0,259.81,0.0,nse,single_source_unverified,False,,2026-10-05 16:56:26.109848
+P N Gadgil Jewellers Limited,INE953R01016,PNGJL,,2024-09-17,480.0,830.0,793.3,,,830.0,793.3,72.9167,nse,single_source_unverified,False,,2026-10-05 16:56:32.074452
+Arkade Developers Limited,INE0QRL01017,ARKADE,,2024-09-24,128.0,175.0,165.86,,,175.0,165.86,36.7188,nse,single_source_unverified,False,,2026-10-05 16:56:38.048270
+Northern ARC Capital Limited,INE850M01015,NORTHARC,,2024-09-24,263.0,350.0,323.4,,,350.0,323.4,33.0798,nse,single_source_unverified,False,,2026-10-05 16:56:38.050355
+Western Carriers Limited,INE0CJF01024,WCIL,,2024-09-24,172.0,171.0,159.44,,,171.0,159.44,-0.5814,nse,single_source_unverified,False,,2026-10-05 16:56:38.052755
+Manba Finance Limited,INE939X01013,MANBA,,2024-09-30,120.0,145.0,152.25,,,145.0,152.25,20.8333,nse,single_source_unverified,False,,2026-10-05 16:56:44.066501
+KRN Heat Exchanger and Refrigeration Limited,INE0Q3J01015,KRN,,2024-10-03,220.0,480.0,478.79,,,480.0,478.79,118.1818,nse,single_source_unverified,False,,2026-10-05 16:56:50.057198
+Diffusion Engineers Limited,INE184O01015,DIFFNKG,,2024-10-04,168.0,193.5,203.17,,,193.5,203.17,15.1786,nse,single_source_unverified,False,,2026-10-05 16:56:56.197223
+Garuda Construction and Engineering Limited,INE0JVO01026,GARUDA,,2024-10-15,95.0,105.0,106.36,,,105.0,106.36,10.5263,nse,single_source_unverified,False,,2026-10-05 16:57:02.212682
+Hyundai Motor India Limited,INE0V6F01027,HYUNDAI,,2024-10-22,1960.0,1934.0,1819.6,,,1934.0,1819.6,-1.3265,nse,single_source_unverified,False,,2026-10-05 16:57:08.492361
+Deepak Builders & Engineers India Limited,INE0OPA01027,DBEIL,,2024-10-28,203.0,200.0,161.95,,,200.0,161.95,-1.4778,nse,single_source_unverified,False,,2026-10-05 16:57:14.110562
+Waaree Energies Limited,INE377N01017,WAAREEENER,,2024-10-28,1503.0,2500.0,2338.9,,,2500.0,2338.9,66.334,nse,single_source_unverified,False,,2026-10-05 16:57:14.112628
+Godavari Biorefineries Limited,INE497S01012,GODAVARIB,,2024-10-30,352.0,308.0,343.2,,,308.0,343.2,-12.5,nse,single_source_unverified,False,,2026-10-05 16:57:20.053374
+Afcons Infrastructure Limited,INE101I01011,AFCONS,,2024-11-04,463.0,426.0,474.2,,,426.0,474.2,-7.9914,nse,single_source_unverified,False,,2026-10-05 16:57:26.139315
+Sagility India Limited,INE0W2G01015,SAGILITY,,2024-11-12,30.0,31.06,29.32,,,31.06,29.32,3.5333,nse,single_source_unverified,False,,2026-10-05 16:57:32.268124
+Swiggy Limited,INE00H001014,SWIGGY,,2024-11-13,390.0,420.0,456.0,,,420.0,456.0,7.6923,nse,single_source_unverified,False,,2026-10-05 16:57:38.216241
+ACME Solar Holdings Limited,INE622W01025,ACMESOLAR,,2024-11-13,289.0,251.0,253.15,,,251.0,253.15,-13.1488,nse,single_source_unverified,False,,2026-10-05 16:57:38.218299
+Niva Bupa Health Insurance Company Limited,INE995S01015,NIVABUPA,,2024-11-14,74.0,78.14,74.02,,,78.14,74.02,5.5946,nse,single_source_unverified,False,,2026-10-05 16:57:44.256320
+Zinka Logistics Solution Limited (BlackBuck),INE0UIZ01018,BLACKBUCK,,2024-11-22,273.0,280.9,260.05,,,280.9,260.05,2.8938,nse,single_source_unverified,False,,2026-10-05 16:57:50.309040
+NTPC Green Energy Limited,INE0ONG01011,NTPCGREEN,,2024-11-27,108.0,111.5,121.65,,,111.5,121.65,3.2407,nse,single_source_unverified,False,,2026-10-05 16:57:56.230535
+Enviro Infra Engineers Limited,INE0LLY01014,EIEL,,2024-11-29,148.0,220.0,207.07,,,220.0,207.07,48.6486,nse,single_source_unverified,False,,2026-10-05 16:58:02.065718
+Suraksha Diagnostic Limited,INE877V01027,SURAKSHA,,2024-12-06,441.0,438.0,417.25,,,438.0,417.25,-0.6803,nse,single_source_unverified,False,,2026-10-05 16:58:08.076602
+Vishal Mega Mart Limited,INE01EA01019,VMM,,2024-12-18,78.0,104.0,111.93,,,104.0,111.93,33.3333,nse,single_source_unverified,False,,2026-10-05 16:58:14.092683
+One Mobikwik Systems Limited,INE0HLU01028,MOBIKWIK,,2024-12-18,279.0,440.0,528.0,,,440.0,528.0,57.7061,nse,single_source_unverified,False,,2026-10-05 16:58:14.095100
+Sai Life Sciences Limited,INE570L01029,SAILIFE,,2024-12-18,549.0,650.0,764.65,,,650.0,764.65,18.3971,nse,single_source_unverified,False,,2026-10-05 16:58:14.097160
+Inventurus Knowledge Solutions Limited,INE115Q01022,IKS,,2024-12-19,1329.0,1900.0,1960.85,,,1900.0,1960.85,42.9646,nse,single_source_unverified,False,,2026-10-05 16:58:20.102480
+International Gemmological Institute (India) Limited,INE0Q9301021,IGIL,,2024-12-20,417.0,510.0,471.15,,,510.0,471.15,22.3022,nse,single_source_unverified,False,,2026-10-05 16:58:26.266326
+Transrail Lighting Limited,INE454P01035,TRANSRAILL,,2024-12-27,432.0,590.0,553.55,,,590.0,553.55,36.5741,nse,single_source_unverified,False,,2026-10-05 16:58:32.240629
+Dam Capital Advisors Limited,INE284H01025,DAMCAPITAL,,2024-12-27,283.0,393.0,415.1,,,393.0,415.1,38.8693,nse,single_source_unverified,False,,2026-10-05 16:58:32.242627
+Mamata Machinery Limited,INE0TO701015,MAMATA,,2024-12-27,243.0,600.0,630.0,,,600.0,630.0,146.9136,nse,single_source_unverified,False,,2026-10-05 16:58:32.244654
+Sanathan Textiles Limited,INE0JPD01013,SANATHAN,,2024-12-27,321.0,422.3,388.35,,,422.3,388.35,31.5576,nse,single_source_unverified,False,,2026-10-05 16:58:32.246690
+Concord Enviro Systems Limited,INE037Z01029,CEWATER,,2024-12-27,701.0,826.0,827.1,,,826.0,827.1,17.8317,nse,single_source_unverified,False,,2026-10-05 16:58:32.248659
+Ventive Hospitality Limited,INE781S01027,VENTIVE,,2024-12-30,643.0,716.0,704.35,,,716.0,704.35,11.353,nse,single_source_unverified,False,,2026-10-05 16:58:38.076805
+Carraro India Limited,INE0V7W01012,CARRARO,,2024-12-30,704.0,651.0,636.2,,,651.0,636.2,-7.5284,nse,single_source_unverified,False,,2026-10-05 16:58:38.078804
+Senores Pharmaceuticals Limited,INE0RB801010,SENORES,,2024-12-30,391.0,600.0,557.05,,,600.0,557.05,53.4527,nse,single_source_unverified,False,,2026-10-05 16:58:38.080816
+Unimech Aerospace and Manufacturing Limited,INE0U3I01011,UNIMECH,,2024-12-31,785.0,1460.0,1376.25,,,1460.0,1376.25,85.9873,nse,single_source_unverified,False,,2026-10-05 16:58:44.150705
+Indo Farm Equipment Limited,INE622H01018,INDOFARM,,2025-01-07,215.0,256.0,273.69,,,256.0,273.69,19.0698,nse,single_source_unverified,False,,2026-10-05 16:58:50.254071
+Standard Glass Lining Technology Limited,INE0M4D01010,SGLTL,544333.0,2025-01-13,140.0,172.0,163.28,,,172.0,163.28,22.8571,nse,single_source_unverified,False,,2026-10-05 16:58:56.213954
+Quadrant Future Tek Limited,INE0LRY01011,QUADFUTURE,544336.0,2025-01-14,290.0,370.0,444.0,,,370.0,444.0,27.5862,nse,single_source_unverified,False,,2026-10-05 16:59:02.205683
+Laxmi Dental Limited,INE0WO601020,LAXMIDENTL,544339.0,2025-01-20,428.0,542.0,550.55,,,542.0,550.55,26.6355,nse,single_source_unverified,False,,2026-10-05 16:59:08.223033
+Stallion India Fluorochem Limited,INE0RYC01010,STALLION,544342.0,2025-01-23,90.0,120.0,126.0,,,120.0,126.0,33.3333,nse,single_source_unverified,False,,2026-10-05 16:59:14.089735
+Denta Water & Infrastructure Limited,,,,2025-01-29,294.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 16:59:20.215643
+Dr Agarwal's Healthcare Limited,INE943P01029,AGARWALEYE,544350.0,2025-02-04,402.0,402.0,401.65,,,402.0,401.65,0.0,nse,single_source_unverified,False,,2026-10-05 16:59:26.204965
+Ajax Engineering Limited,INE274Y01021,AJAXENGG,544356.0,2025-02-17,629.0,576.0,595.4,,,576.0,595.4,-8.4261,nse,single_source_unverified,False,,2026-10-05 16:59:32.077390
+Hexaware Technologies Limited,INE093A01041,HEXT,544362.0,2025-02-19,708.0,745.5,762.55,,,745.5,762.55,5.2966,nse,single_source_unverified,False,,2026-10-05 16:59:38.256473
+Quality Power Electronics Limited,INE0SII01026,QPOWER,544367.0,2025-02-24,425.0,430.0,387.9,,,430.0,387.9,1.1765,nse,single_source_unverified,False,,2026-10-05 16:59:44.092362
+Ather Energy Limited,INE0LEZ01016,ATHERENERG,544397.0,2025-05-06,321.0,328.0,302.3,,,328.0,302.3,2.1807,nse,single_source_unverified,False,,2026-10-05 16:59:50.207548
+Borana Weaves Limited,INE16SF01016,BORANA,544404.0,2025-05-27,216.0,243.0,255.15,,,243.0,255.15,12.5,nse,single_source_unverified,False,,2026-10-05 16:59:56.540655
+Belrise Industries Limited,INE894V01022,BELRISE,544405.0,2025-05-28,90.0,100.0,97.41,,,100.0,97.41,11.1111,nse,single_source_unverified,False,,2026-10-05 17:00:02.132084
+Aegis Vopak Terminals Limited,INE0INX01018,AEGISVOPAK,544407.0,2025-06-02,235.0,220.0,242.0,,,220.0,242.0,-6.383,nse,single_source_unverified,False,,2026-10-05 17:00:08.149426
+Schloss Bangalore Limited,INE0AQ201015,THELEELA,544408.0,2025-06-02,435.0,406.0,435.55,,,406.0,435.55,-6.6667,nse,single_source_unverified,False,,2026-10-05 17:00:08.151666
+Prostarm Info Systems Limited,INE0BX301013,PROSTARM,544410.0,2025-06-03,105.0,120.0,126.0,,,120.0,126.0,14.2857,nse,single_source_unverified,False,,2026-10-05 17:00:14.147988
+Scoda Tubes Limited,INE090501011,SCODATUBES,544411.0,2025-06-04,140.0,140.0,147.0,,,140.0,147.0,0.0,nse,single_source_unverified,False,,2026-10-05 17:00:20.135201
+Oswal Pumps Limited,INE0BYP01024,OSWALPUMPS,544418.0,2025-06-20,614.0,634.0,625.35,,,634.0,625.35,3.2573,nse,single_source_unverified,False,,2026-10-05 17:00:26.087309
+Arisinfra Solutions Limited,INE0H9P01028,ARISINFRA,544419.0,2025-06-25,222.0,205.0,174.38,,,205.0,174.38,-7.6577,nse,single_source_unverified,False,,2026-10-05 17:00:32.349395
+Globe Civil Projects Limited,INE0V3U01015,GLOBECIVIL,544424.0,2025-07-01,71.0,90.0,94.46,,,90.0,94.46,26.7606,nse,single_source_unverified,False,,2026-10-05 17:00:38.154948
+Kalpataru Limited,INE227J01012,KALPATARU,544423.0,2025-07-01,414.0,414.0,432.95,,,414.0,432.95,0.0,nse,single_source_unverified,False,,2026-10-05 17:00:38.157463
+Ellenbarrie Industrial Gases Limited,INE236E01022,ELLEN,544421.0,2025-07-01,400.0,486.0,534.6,,,486.0,534.6,21.5,nse,single_source_unverified,False,,2026-10-05 17:00:38.159605
+HDB Financial Services Limited,INE756I01012,HDBFS,544429.0,2025-07-02,740.0,835.0,840.95,,,835.0,840.95,12.8378,nse,single_source_unverified,False,,2026-10-05 17:00:44.262311
+Sambhv Steel Tubes Limited,INE12NJ01018,SAMBHV,544430.0,2025-07-02,82.0,110.0,97.59,,,110.0,97.59,34.1463,nse,single_source_unverified,False,,2026-10-05 17:00:44.264407
+Indogulf Cropsciences Limited,INE05J901018,IGCL,544432.0,2025-07-03,111.0,111.0,110.35,,,111.0,110.35,0.0,nse,single_source_unverified,False,,2026-10-05 17:00:50.274319
+Crizac Limited,INE0S4R01014,CRIZAC,544439.0,2025-07-09,245.0,281.05,307.63,,,281.05,307.63,14.7143,nse,single_source_unverified,False,,2026-10-05 17:00:56.121739
+Travel Food Services Limited,INE103V01028,TRAVELFOOD,544443.0,2025-07-14,1100.0,1125.0,1074.8,,,1125.0,1074.8,2.2727,nse,single_source_unverified,False,,2026-10-05 17:01:02.136912
+Smartworks Coworking Limited,INE0NAZ01010,SMARTWORKS,544447.0,2025-07-17,407.0,435.0,445.05,,,435.0,445.05,6.8796,nse,single_source_unverified,False,,2026-10-05 17:01:08.113707
+Anthem Biosciences Limited,INE0CZ201020,ANTHEM,544449.0,2025-07-21,570.0,723.05,730.35,,,723.05,730.35,26.8509,nse,single_source_unverified,False,,2026-10-05 17:01:14.270981
+GNG Electronics Limited,INE18JU01028,EBGNG,544455.0,2025-07-30,237.0,355.0,333.39,,,355.0,333.39,49.789,nse,single_source_unverified,False,,2026-10-05 17:01:20.787264
+Indiqube Spaces Limited,INE06ST01018,INDIQUBE,544454.0,2025-07-30,237.0,216.0,217.97,,,216.0,217.97,-8.8608,nse,single_source_unverified,False,,2026-10-05 17:01:20.789284
+Brigade Hotel Ventures Limited,INE03NU01014,BRIGHOTEL,544457.0,2025-07-31,90.0,81.1,85.32,,,81.1,85.32,-9.8889,nse,single_source_unverified,False,,2026-10-05 17:01:26.259109
+Shanti Gold International Ltd,INE06ZD01017,SHANTIGOLD,544459.0,2025-08-01,199.0,227.55,229.38,,,227.55,229.38,14.3467,nse,single_source_unverified,False,,2026-10-05 17:01:32.108234
+Aditya Infotech Ltd,INE819V01029,CPPLUS,544466.0,2025-08-05,675.0,1015.0,1082.65,,,1015.0,1082.65,50.3704,nse,single_source_unverified,False,,2026-10-05 17:01:38.411148
+Laxmi India Finance Ltd,INE06WU01026,LAXMIINDIA,544465.0,2025-08-05,158.0,137.52,134.11,,,137.52,134.11,-12.962,nse,single_source_unverified,False,,2026-10-05 17:01:38.413172
+M & B Engineering Ltd,INE08N601015,MBEL,544470.0,2025-08-06,385.0,385.0,408.65,,,385.0,408.65,0.0,nse,single_source_unverified,False,,2026-10-05 17:01:44.257429
+Sri Lotus Developers & Realty Ltd,INE0V9Q01010,LOTUSDEV,544469.0,2025-08-06,150.0,178.0,195.67,,,178.0,195.67,18.6667,nse,single_source_unverified,False,,2026-10-05 17:01:44.259480
+National Securities Depository Ltd (NSDL),INE301O01023,NSDL,544467.0,2025-08-06,800.0,,,,,,,,,no_source,False,nse: fetched; bse: fetched,2026-10-05 17:01:44.263474
+Highway Infrastructure Ltd.,INE00RL01028,HILINFRA,544477.0,2025-08-12,70.0,115.0,120.75,,,115.0,120.75,64.2857,nse,single_source_unverified,False,,2026-10-05 17:01:50.266560
+JSW Cement Ltd,INE718I01012,JSWCEMENT,544480.0,2025-08-14,147.0,153.5,146.07,,,153.5,146.07,4.4218,nse,single_source_unverified,False,,2026-10-05 17:01:56.690152
+All Time Plastics Ltd.,INE0GV601021,ALLTIME,544479.0,2025-08-14,275.0,311.3,283.3,,,311.3,283.3,13.2,nse,single_source_unverified,False,,2026-10-05 17:01:56.693760
+BlueStone Jewellery & Lifestyle Ltd.,INE304W01038,BLUESTONE,544484.0,2025-08-19,517.0,510.0,546.0,,,510.0,546.0,-1.354,nse,single_source_unverified,False,,2026-10-05 17:02:02.304387
+Regaal Resources Ltd.,INE0MHO01029,REGAAL,544485.0,2025-08-20,102.0,141.0,131.58,,,141.0,131.58,38.2353,nse,single_source_unverified,False,,2026-10-05 17:02:08.126301
+Gem Aromatics Ltd,INE06XZ01023,GEMAROMA,544491.0,2025-08-26,325.0,333.1,319.05,,,333.1,319.05,2.4923,nse,single_source_unverified,False,,2026-10-05 17:02:14.129359
+Shreeji Shipping Global Ltd.,INE1B6101010,SHREEJISPG,544490.0,2025-08-26,252.0,270.0,255.1,,,270.0,255.1,7.1429,nse,single_source_unverified,False,,2026-10-05 17:02:14.131514
+Patel Retail Ltd,INE0R8B01010,PATELRMART,544487.0,2025-08-26,255.0,300.0,287.7,,,300.0,287.7,17.6471,nse,single_source_unverified,False,,2026-10-05 17:02:14.133598
+Vikram Solar Ltd,INE078V01014,VIKRAMSOLR,544488.0,2025-08-26,332.0,338.0,356.4,,,338.0,356.4,1.8072,nse,single_source_unverified,False,,2026-10-05 17:02:14.135820
+Mangal Electrical Industries Ltd.,INE0PKD01011,MEIL,544492.0,2025-08-28,561.0,556.0,535.35,,,556.0,535.35,-0.8913,nse,single_source_unverified,False,,2026-10-05 17:02:21.964951
+Anlon Healthcare Ltd.,INE0Y8W01025,AHCL,544497.0,2025-09-03,91.0,92.0,91.73,,,92.0,91.73,1.0989,nse,single_source_unverified,False,,2026-10-05 17:02:26.163099
+Vikran Engineering Ltd.,INE01R501028,VIKRAN,544496.0,2025-09-03,97.0,99.0,95.71,,,99.0,95.71,2.0619,nse,single_source_unverified,False,,2026-10-05 17:02:26.165396
+Amanta Healthcare Ltd.,INE084K01015,AMANTA,544502.0,2025-09-09,126.0,135.0,141.75,,,135.0,141.75,7.1429,nse,single_source_unverified,False,,2026-10-05 17:02:32.287387
+Dev Accelerator Ltd.,INE0VOV01021,DEVX,544513.0,2025-09-17,61.0,61.0,64.05,,,61.0,64.05,0.0,nse,single_source_unverified,False,,2026-10-05 17:02:38.311339
+Shringar House of Mangalsutra Ltd.,INE1B3L01017,SHRINGARMS,544512.0,2025-09-17,165.0,188.5,184.88,,,188.5,184.88,14.2424,nse,single_source_unverified,False,,2026-10-05 17:02:38.313512
+Urban Company Ltd,INE0CAZ01013,URBANCO,,2025-09-17,103.0,162.25,166.83,,,162.25,166.83,57.5243,nse,single_source_unverified,False,,2026-10-05 17:02:38.315952
+Euro Pratik Sales Ltd.,INE198501012,EUROPRATIK,544519.0,2025-09-23,247.0,272.1,248.38,,,272.1,248.38,10.1619,nse,single_source_unverified,False,,2026-10-05 17:02:44.303111
+VMS TMT Ltd,INE0SJA01013,VMSTMT,544521.0,2025-09-24,99.0,104.9,99.65,,,104.9,99.65,5.9596,nse,single_source_unverified,False,,2026-10-05 17:02:50.275761
+Ivalue Infosolutions Ltd.,INE056801025,IVALUE,544523.0,2025-09-25,299.0,284.95,281.85,,,284.95,281.85,-4.699,nse,single_source_unverified,False,,2026-10-05 17:02:56.256157
+GK Energy Ltd,INE1AG301022,GKENERGY,544525.0,2025-09-26,153.0,171.0,167.74,,,171.0,167.74,11.7647,nse,single_source_unverified,False,,2026-10-05 17:03:02.255260
+Saatvik Green Energy Ltd.,INE13B501022,SAATVIKGL,544526.0,2025-09-26,465.0,465.0,440.7,,,465.0,440.7,0.0,nse,single_source_unverified,False,,2026-10-05 17:03:02.257411
+Atlanta Electricals Ltd.,INE0Z4F01028,ATLANTAELE,544527.0,2025-09-29,754.0,857.0,823.35,,,857.0,823.35,13.6605,nse,single_source_unverified,False,,2026-10-05 17:03:08.305676
+Ganesh Consumer Products Ltd.,INE652V01016,GANESHCP,544528.0,2025-09-29,322.0,296.05,294.3,,,296.05,294.3,-8.059,nse,single_source_unverified,False,,2026-10-05 17:03:08.307895
+Anand Rathi Share & Stock Brokers Ltd.,INE549H01021,ARSSBL,544530.0,2025-09-30,414.0,432.0,445.55,,,432.0,445.55,4.3478,nse,single_source_unverified,False,,2026-10-05 17:03:14.332205
+Seshaasai Technologies Ltd.,INE04VU01023,STYL,544533.0,2025-09-30,423.0,432.0,411.45,,,432.0,411.45,2.1277,nse,single_source_unverified,False,,2026-10-05 17:03:14.334313
+Solarworld Energy Solutions Ltd.,INE0TY101024,SOLARWORLD,544532.0,2025-09-30,351.0,388.5,323.5,,,388.5,323.5,10.6838,nse,single_source_unverified,False,,2026-10-05 17:03:14.336368
+Jaro Institute of Technology Management & Research Ltd.,INE00YJ01010,JARO,544534.0,2025-09-30,890.0,890.0,744.25,,,890.0,744.25,0.0,nse,single_source_unverified,False,,2026-10-05 17:03:14.338389
+Jain Resource Recycling Ltd.,INE0YD401026,JAINREC,544537.0,2025-10-01,232.0,265.05,318.06,,,265.05,318.06,14.2457,nse,single_source_unverified,False,,2026-10-05 17:03:20.286767
+Epack Prefab Technologies Ltd.,INE0MLS01022,EPACKPEB,544540.0,2025-10-01,204.0,183.85,190.66,,,183.85,190.66,-9.8775,nse,single_source_unverified,False,,2026-10-05 17:03:20.288840
+BMW Ventures Ltd,INE965W01036,BMWVENTLTD,544543.0,2025-10-01,99.0,78.0,74.1,,,78.0,74.1,-21.2121,nse,single_source_unverified,False,,2026-10-05 17:03:20.290846
+Jinkushal Industries Ltd.,INE1FF001016,JKIPL,544547.0,2025-10-03,121.0,125.0,121.66,,,125.0,121.66,3.3058,nse,single_source_unverified,False,,2026-10-05 17:03:26.257984
+Trualt Bioenergy Ltd.,INE0MWH01014,TRUALT,544545.0,2025-10-03,496.0,545.4,530.95,,,545.4,530.95,9.9597,nse,single_source_unverified,False,,2026-10-05 17:03:26.260114
+Pace Digitek Ltd,INE0S3G01027,PACEDIGITK,544550.0,2025-10-06,219.0,225.0,217.99,,,225.0,217.99,2.7397,nse,single_source_unverified,False,,2026-10-05 17:03:32.273688
+Fabtech Technologies Ltd.,INE0HF201011,FABTECH,544558.0,2025-10-07,191.0,192.0,182.4,,,192.0,182.4,0.5236,nse,single_source_unverified,False,,2026-10-05 17:03:38.132626
+Glottis Ltd,INE0TQE01026,GLOTTIS,544557.0,2025-10-07,129.0,84.0,83.7,,,84.0,83.7,-34.8837,nse,single_source_unverified,False,,2026-10-05 17:03:38.134794
+Advance Agrolife Ltd.,INE1B0W01010,ADVANCE,544562.0,2025-10-08,100.0,114.0,108.3,,,114.0,108.3,14.0,nse,single_source_unverified,False,,2026-10-05 17:03:44.136199
+Om Freight Forwarders Ltd.,INE1BZC01019,OMFREIGHT,544564.0,2025-10-08,135.0,81.5,85.57,,,81.5,85.57,-39.6296,nse,single_source_unverified,False,,2026-10-05 17:03:44.138366
+WeWork India Management Ltd.,INE085001019,WEWORK,544570.0,2025-10-10,648.0,650.0,628.65,,,650.0,628.65,0.3086,nse,single_source_unverified,False,,2026-10-05 17:03:50.114788
+Tata Capital Ltd,INE976I01016,TATACAP,544574.0,2025-10-13,326.0,330.0,330.5,,,330.0,330.5,1.227,nse,single_source_unverified,False,,2026-10-05 17:03:56.204749
+LG Electronics India Ltd.,INE324D01010,LGEINDIA,544576.0,2025-10-14,1140.0,1710.1,1689.9,,,1710.1,1689.9,50.0088,nse,single_source_unverified,False,,2026-10-05 17:04:02.213961
+Canara Robeco Asset Management Co.Ltd.,INE218I01013,CRAMC,544580.0,2025-10-16,266.0,280.25,300.45,,,280.25,300.45,5.3571,nse,single_source_unverified,False,,2026-10-05 17:04:08.145728
+Rubicon Research Ltd.,INE506V01022,RUBICON,544578.0,2025-10-16,485.0,620.0,628.2,,,620.0,628.2,27.8351,nse,single_source_unverified,False,,2026-10-05 17:04:08.147859
+Canara HSBC Life Insurance Co.Ltd.,INE01TY01017,CANHLIFE,544583.0,2025-10-17,106.0,106.0,111.42,,,106.0,111.42,0.0,nse,single_source_unverified,False,,2026-10-05 17:04:14.116888
+Midwest Ltd,INE0XAD01024,MIDWESTLTD,544587.0,2025-10-24,1065.0,1165.0,1140.5,,,1165.0,1140.5,9.3897,nse,single_source_unverified,False,,2026-10-05 17:04:20.148643
+Orkla India Ltd,INE16NZ01023,ORKLAINDIA,544595.0,2025-11-06,730.0,750.1,713.65,,,750.1,713.65,2.7534,nse,single_source_unverified,False,,2026-10-05 17:04:26.254786
+Studds Accessories Ltd.,INE00Q601028,STUDDS,544599.0,2025-11-07,585.0,565.0,560.3,,,565.0,560.3,-3.4188,nse,single_source_unverified,False,,2026-10-05 17:04:32.203901
+Lenskart Solutions Ltd.,INE956O01016,LENSKART,544600.0,2025-11-10,402.0,395.0,403.1,,,395.0,403.1,-1.7413,nse,single_source_unverified,False,,2026-10-05 17:04:38.273061
+Billionbrains Garage Ventures Ltd.,INE0HOQ01053,GROWW,544603.0,2025-11-12,100.0,112.0,131.33,,,112.0,131.33,12.0,nse,single_source_unverified,False,,2026-10-05 17:04:44.254049
+Pine Labs Ltd,INE15B701018,PINELABS,544606.0,2025-11-14,221.0,242.0,250.89,,,242.0,250.89,9.5023,nse,single_source_unverified,False,,2026-10-05 17:04:50.303623
+Physicswallah Ltd,INE0LP301011,PWL,544609.0,2025-11-18,109.0,145.0,155.24,,,145.0,155.24,33.0275,nse,single_source_unverified,False,,2026-10-05 17:04:56.231808
+Emmvee Photovoltaic Power Ltd.,INE1C6T01020,EMMVEE,544608.0,2025-11-18,217.0,217.0,219.4,,,217.0,219.4,0.0,nse,single_source_unverified,False,,2026-10-05 17:04:56.233931
+Tenneco Clean Air India Ltd.,INE19RI01016,TENNIND,544612.0,2025-11-19,397.0,505.0,490.8,,,505.0,490.8,27.204,nse,single_source_unverified,False,,2026-10-05 17:05:02.232319
+Fujiyama Power Systems Ltd.,INE12UR01024,UTLSOLAR,544613.0,2025-11-20,228.0,220.0,208.44,,,220.0,208.44,-3.5088,nse,single_source_unverified,False,,2026-10-05 17:05:10.837874
+Capillary Technologies India Ltd.,INE0ILV01024,CAPILLARY,544614.0,2025-11-21,577.0,571.9,606.5,,,571.9,606.5,-0.8839,nse,single_source_unverified,False,,2026-10-05 17:05:14.157333
+Excelsoft Technologies Ltd.,INE606N01019,EXCELSOFT,544617.0,2025-11-26,120.0,135.0,125.97,,,135.0,125.97,12.5,nse,single_source_unverified,False,,2026-10-05 17:05:20.264576
+Sudeep Pharma Ltd,INE0QPI01025,SUDEEPPHRM,544619.0,2025-11-28,593.0,730.0,774.15,,,730.0,774.15,23.1029,nse,single_source_unverified,False,,2026-10-05 17:05:26.547323
+Aequs Ltd,INE947N01017,AEQUS,544634.0,2025-12-10,124.0,140.0,151.29,,,140.0,151.29,12.9032,nse,single_source_unverified,False,,2026-10-05 17:05:32.312530
+Meesho Ltd,INE0VDM01015,MEESHO,544632.0,2025-12-10,111.0,162.5,170.09,,,162.5,170.09,46.3964,nse,single_source_unverified,False,,2026-10-05 17:05:32.314738
+Vidya Wires Ltd,INE14UN01029,VIDYAWIRES,544633.0,2025-12-10,52.0,52.0,53.17,,,52.0,53.17,0.0,nse,single_source_unverified,False,,2026-10-05 17:05:32.316869
+Wakefit Innovations Ltd.,INE0E7301029,WAKEFIT,544642.0,2025-12-15,195.0,195.0,192.29,,,195.0,192.29,0.0,nse,single_source_unverified,False,,2026-10-05 17:05:38.309610
+Corona Remedies Ltd.,INE02ZQ01018,CORONA,544644.0,2025-12-15,1062.0,1470.0,1438.4,,,1470.0,1438.4,38.4181,nse,single_source_unverified,False,,2026-10-05 17:05:38.311889
+Nephrocare Health Services Ltd.,INE428V01029,NEPHROPLUS,544647.0,2025-12-17,460.0,490.0,471.25,,,490.0,471.25,6.5217,nse,single_source_unverified,False,,2026-10-05 17:05:45.926581
+Park Medi World Ltd.,INE119201023,PARKHOSPS,544645.0,2025-12-17,162.0,158.8,147.95,,,158.8,147.95,-1.9753,nse,single_source_unverified,False,,2026-10-05 17:05:45.928748
+ICICI Prudential Asset Management Co.Ltd.,INE346A01027,ICICIAMC,544658.0,2025-12-19,2165.0,2600.0,2585.9,,,2600.0,2585.9,20.0924,nse,single_source_unverified,False,,2026-10-05 17:05:50.335681
+KSH International Ltd.,INE987S01020,KSHINTL,544664.0,2025-12-23,384.0,370.0,355.0,,,370.0,355.0,-3.6458,nse,single_source_unverified,False,,2026-10-05 17:05:56.313782
+Gujarat Kidney & Super Speciality Ltd.,INE0V0W01025,GKSL,544666.0,2025-12-30,114.0,120.0,104.54,,,120.0,104.54,5.2632,nse,single_source_unverified,False,,2026-10-05 17:06:02.326970
+Bharat Coking Coal Ltd.,INE05XR01022,BHARATCOAL,544678.0,2026-01-19,23.0,45.0,40.58,,,45.0,40.58,95.6522,nse,single_source_unverified,False,,2026-10-05 17:06:08.321273
+Amagi Media Labs Ltd.,INE121R01077,AMAGI,544679.0,2026-01-21,361.0,318.0,348.25,,,318.0,348.25,-11.9114,nse,single_source_unverified,False,,2026-10-05 17:06:14.289053
+Shadowfax Technologies Ltd.,INE12UN01015,SHADOWFAX,544685.0,2026-01-28,124.0,112.6,109.98,,,112.6,109.98,-9.1935,nse,single_source_unverified,False,,2026-10-05 17:06:20.175750
+Aye Finance Ltd,INE501X01029,AYE,544699.0,2026-02-16,129.0,129.0,128.91,,,129.0,128.91,0.0,nse,single_source_unverified,False,,2026-10-05 17:06:28.707279
+Fractal Analytics Ltd.,INE212S01015,FRACTAL,544700.0,2026-02-16,900.0,876.0,847.15,,,876.0,847.15,-2.6667,nse,single_source_unverified,False,,2026-10-05 17:06:28.709438
+Gaudium IVF and Wo...,INE0P8B01020,GAUDIUMIVF,,2026-02-27,79.0,83.0,80.26,,,83.0,80.26,5.0633,nse,single_source_unverified,False,,2026-10-05 17:06:32.131027
+Clean Max Enviro Energy Solutions Ltd.,INE647U01026,CLEANMAX,544717.0,2026-03-02,1053.0,960.0,867.5,,,960.0,867.5,-8.8319,nse,single_source_unverified,False,,2026-10-05 17:06:38.186462
+Shree Ram Twistex Ltd.,INE19GK01015,SRTL,544716.0,2026-03-02,104.0,68.0,71.4,,,68.0,71.4,-34.6154,nse,single_source_unverified,False,,2026-10-05 17:06:38.188687
+PNGS Reva Diamond Jewellery Ltd.,INE1RDG01013,PNGSREVA,544718.0,2026-03-04,386.0,375.0,411.7,,,375.0,411.7,-2.8497,nse,single_source_unverified,False,,2026-10-05 17:06:44.348682
+Omnitech Engineering Ltd.,INE0UH301010,OMNI,544720.0,2026-03-05,227.0,202.0,204.93,,,202.0,204.93,-11.0132,nse,single_source_unverified,False,,2026-10-05 17:06:50.488487
+SEDEMAC Mechatronics Ltd.,INE00XB01019,SEDEMAC,544723.0,2026-03-11,1352.0,1535.0,1451.1,,,1535.0,1451.1,13.5355,nse,single_source_unverified,False,,2026-10-05 17:06:56.426569
+Rajputana Stainless Ltd.,INE313L01016,RSL,544731.0,2026-03-19,122.0,122.0,113.03,,,122.0,113.03,0.0,nse,single_source_unverified,False,,2026-10-05 17:07:02.358053
+Innovision Ltd,INE0ADB01012,INNOVISION,544732.0,2026-03-23,519.0,467.7,374.2,,,467.7,374.2,-9.8844,nse,single_source_unverified,False,,2026-10-05 17:07:08.363470
+GSP Crop Science Ltd.,INE713R01022,GSPCROP,544733.0,2026-03-24,320.0,328.0,356.25,,,328.0,356.25,2.5,nse,single_source_unverified,False,,2026-10-05 17:07:14.572013
+Central Mine Planning & Design Institute Ltd.,INE05HV01027,CMPDI,544739.0,2026-03-30,172.0,160.0,154.06,,,160.0,154.06,-6.9767,nse,single_source_unverified,False,,2026-10-05 17:07:20.178110
+Sai Parenteral's Ltd.,INE0H9F01037,SAIPARENT,544742.0,2026-04-02,392.0,400.0,405.7,,,400.0,405.7,2.0408,nse,single_source_unverified,False,,2026-10-05 17:07:26.446745
+Powerica Ltd,INE921L01032,POWERICA,544744.0,2026-04-02,395.0,366.0,390.0,,,366.0,390.0,-7.3418,nse,single_source_unverified,False,,2026-10-05 17:07:26.448928
+Amir Chand Jagdish Kumar (Exports) Ltd.,INE05TO01019,AMIRCHAND,544743.0,2026-04-02,212.0,200.0,180.0,,,200.0,180.0,-5.6604,nse,single_source_unverified,False,,2026-10-05 17:07:26.451171
+Om Power Transmission Ltd.,INE25E901019,OMPOWER,544750.0,2026-04-17,175.0,186.0,193.38,,,186.0,193.38,6.2857,nse,single_source_unverified,False,,2026-10-05 17:07:32.464844
+OnEMI Technology Solutions Ltd.,INE12F801023,KISSHT,544754.0,2026-05-08,171.0,190.0,208.63,,,190.0,208.63,11.1111,nse,single_source_unverified,False,,2026-10-05 17:07:38.483030
