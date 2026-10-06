@@ -46,7 +46,7 @@ on:
         required: true
         default: "email"
         type: choice
-        options: [email, final, dry-run, probe, rehearse]
+        options: [email, final, listing, dry-run, probe, rehearse]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -91,6 +91,7 @@ jobs:
           python live_markers.py --self-test
           python market_context.py --self-test
           python send_daily_email.py --self-test
+          python listing_prices.py --self-test
 
       - name: Decide which job this run is
         id: which
@@ -117,7 +118,15 @@ jobs:
         run: |
           case "${{ steps.which.outputs.mode }}" in
             email)    python send_daily_email.py ;;
-            final)    python send_daily_email.py --final ;;
+            listing)  python listing_prices.py --capture-listing-day ;;
+            final)    python send_daily_email.py --final
+                      # 2d STANDING RULE: a newly listed IPO's price is captured ON ITS
+                      # LISTING DATE, never later. A price read afterwards has been
+                      # retroactively restated for any split or bonus since, silently --
+                      # Syngene's real Rs 295 open reads Rs 147.50 once its 2017 bonus is
+                      # applied. Run at 17:30 because the bhavcopy is published after the
+                      # close. This also scores (2e) any prediction the label settles.
+                      python listing_prices.py --capture-listing-day ;;
             dry-run)  python send_daily_email.py --dry-run ;;
             probe)    python run_live_l.py --probe ;;
             rehearse) python run_live_l.py --rehearse ;;
@@ -136,7 +145,7 @@ jobs:
           # produced", exited 0 and looked GREEN while leaving no record in the repo that
           # it had run at all. Staging each path on its own means one absent file can no
           # longer suppress the others.
-          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv reports/live; do
+          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv data/listing_prices.csv data/listing_prices_progress.csv reports/live; do
             if [ -e "$f" ]; then
               git add -A -- "$f" || echo "could not stage $f"
             else

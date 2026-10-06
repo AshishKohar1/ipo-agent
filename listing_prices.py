@@ -84,6 +84,7 @@ NSE_OLD = ("https://nsearchives.nseindia.com/content/historical/EQUITIES/"
 
 OUT_COLS = ["ipo", "isin", "symbol", "bse_code", "listing_date", "offer_price",
             "nse_open", "nse_close", "bse_open", "bse_close",
+            "nse_match_by", "bse_match_by",
             "listing_open", "listing_close", "listing_gain_pct",
             "sources", "reconciled", "first_day_marker", "note", "fetched_at"]
 
@@ -207,12 +208,17 @@ def bhavcopy(f: Fetcher, day, which: str, use_cache: bool = True):
     """One exchange's bhavcopy for one date, cached on disk. `(DataFrame|None, note)`."""
     d = pd.Timestamp(day)
     CACHE.mkdir(parents=True, exist_ok=True)
-    cp = CACHE / f"{which}_{d:%Y%m%d}.parquet"
+    # CSV.gz, not parquet: parquet needs pyarrow, which is not in requirements.txt, and
+    # the first version swallowed the resulting ImportError in a bare `except: pass`. The
+    # cache was therefore EMPTY on every run and each re-run refetched all 519 dates from
+    # the exchanges - slow, and a worse citizen than intended. A cache that silently does
+    # not cache is worse than no cache, because nothing tells you.
+    cp = CACHE / f"{which}_{d:%Y%m%d}.csv.gz"
     if use_cache and cp.exists():
         try:
-            return pd.read_parquet(cp), "cache"
-        except Exception:                                   # noqa: BLE001
-            pass
+            return pd.read_csv(cp, low_memory=False), "cache"
+        except Exception as e:                              # noqa: BLE001
+            log(f"  cache unreadable, refetching {cp.name}: {type(e).__name__}")
     if which == "bse":
         f.warm(BSE_HOME)
         urls = [(BSE_NEW.format(ymd=f"{d:%Y%m%d}"), BSE_REFERER),
@@ -234,48 +240,57 @@ def bhavcopy(f: Fetcher, day, which: str, use_cache: bool = True):
             notes.append(f"{u.rsplit('/', 1)[-1]}: parse {type(e).__name__}: {e}")
             continue
         try:
-            df.to_parquet(cp, index=False)
-        except Exception:                                   # noqa: BLE001
-            pass
+            df.to_csv(cp, index=False, compression="gzip", encoding="utf-8")
+        except Exception as e:                              # noqa: BLE001
+            # Reported, never swallowed: a broken cache must be visible.
+            log(f"  WARNING could not cache {cp.name}: {type(e).__name__}: {e}")
         return df, "fetched"
     return None, "; ".join(notes)
 
 
 # ---------------------------------------------------------------- matching
-def find(df: pd.DataFrame, isin=None, symbol=None, code=None) -> pd.DataFrame:
-    """ISIN first, then exchange code, then symbol. ISIN first because it is the only key
-    immune to renaming (H18/H3 lesson) — a renamed company's symbol may have changed too.
+def find(df: pd.DataFrame, isin=None, symbol=None, code=None) -> tuple[pd.DataFrame, str]:
+    """`(rows, how)` where `how` records WHICH key matched.
+
+    ISIN first because it is the only key immune to renaming. The `how` value is kept and
+    written to the output because the keys are not equally trustworthy, and the first run
+    proved it: Dharan Infra EPC (offer Rs 180) matched a BSE row opening at Rs 14.20, a
+    -92% "gain", because BSE's old-format bhavcopy pads and TRUNCATES scrip names
+    ("AEGIS LOGIS") so a 7-character prefix can land on an unrelated company. A value whose
+    only support is a truncated-name prefix match must be distinguishable from one keyed on
+    an ISIN, or that row silently corrupts every threshold derived from it (hard rule 1).
     """
     if df is None or df.empty:
-        return pd.DataFrame()
+        return pd.DataFrame(), "none"
     if isin and "isin" in df and str(isin).lower() != "nan":
         h = df[df["isin"].astype(str).str.upper() == str(isin).strip().upper()]
         if len(h):
-            return h
+            return h, "isin"
     if code and "code" in df and str(code).lower() not in ("nan", "none", ""):
         c = str(code).strip().split(".")[0]
         h = df[df["code"].astype(str).str.strip().str.split(".").str[0] == c]
         if len(h):
-            return h
+            return h, "code"
     if symbol and "symbol" in df:
         sy = str(symbol).strip().upper()
         h = df[df["symbol"].astype(str).str.upper() == sy]
         if len(h):
-            return h
-        # BSE old-format names are truncated and padded ("SYNGENE", "AEGIS LOGIS"), so a
-        # prefix match is the only way in. Unique match only — never the first of several.
+            return h, "symbol"
         nm = dataio.norm_name(sy)
         if len(nm) >= 6:
             h = df[df["symbol"].astype(str).map(dataio.norm_name).str.startswith(nm[:7])]
             if len(h) == 1:
-                return h
-    return pd.DataFrame()
+                return h, "symbol_prefix"
+            if len(h) > 1:
+                return pd.DataFrame(), "ambiguous_prefix"
+    return pd.DataFrame(), "none"
 
 
 def reconcile(nse: dict, bse: dict, offer: float | None) -> dict:
     """Rule 2 on the listing price. Max pairwise relative difference > 5% -> NULL."""
     out = {"nse_open": nse.get("open"), "nse_close": nse.get("close"),
-           "bse_open": bse.get("open"), "bse_close": bse.get("close")}
+           "bse_open": bse.get("open"), "bse_close": bse.get("close"),
+           "nse_match_by": nse.get("match_by"), "bse_match_by": bse.get("match_by")}
     srcs = [s for s, d in (("nse", nse), ("bse", bse)) if d.get("open") is not None]
     out["sources"] = "+".join(srcs)
     notes = []
@@ -295,9 +310,18 @@ def reconcile(nse: dict, bse: dict, offer: float | None) -> dict:
             out[f"listing_{leg}"] = round(sum(vals) / 2, 4)
         else:
             out[f"listing_{leg}"] = round(vals[0], 4)
-    out["reconciled"] = ("reconciled_2_sources" if len(srcs) == 2
-                         else "single_source_unverified" if len(srcs) == 1
-                         else "no_source")
+    if len(srcs) == 2:
+        out["reconciled"] = "reconciled_2_sources"
+    elif len(srcs) == 1:
+        # A lone source matched only by a truncated-name prefix is the weakest evidence
+        # there is and gets its own status, so it can be excluded without excluding every
+        # single-source row. This is match PROVENANCE, not a judgement about whether the
+        # number looks plausible -- plausibility inference is forbidden (H8).
+        how = (nse if nse.get("open") is not None else bse).get("match_by")
+        out["reconciled"] = ("single_source_prefix_match_unverified"
+                             if how == "symbol_prefix" else "single_source_unverified")
+    else:
+        out["reconciled"] = "no_source"
     lo = out.get("listing_open")
     out["listing_gain_pct"] = (round(100 * (lo / offer - 1), 4)
                                if lo and offer and offer > 0 else None)
@@ -312,8 +336,8 @@ def verify_as_reported(f: Fetcher | None = None) -> dict:
     res = {"gate": GATE, "checks": []}
     for which in ("bse", "nse"):
         df, note = bhavcopy(f, GATE["date"], which)
-        h = find(df, isin=GATE["isin"], symbol=GATE["name"],
-                 code=GATE["bse_code"] if which == "bse" else None)
+        h, how = find(df, isin=GATE["isin"], symbol=GATE["name"],
+                      code=GATE["bse_code"] if which == "bse" else None)
         if not len(h):
             res["checks"].append({"source": which, "ok": None,
                                   "why": f"not found ({note})"})
@@ -322,7 +346,7 @@ def verify_as_reported(f: Fetcher | None = None) -> dict:
         as_rep = abs(o - GATE["as_reported_open"]) < 3.0
         adj = abs(o - GATE["adjusted_trap"]) < 3.0
         res["checks"].append({
-            "source": which, "open": o,
+            "source": which, "open": o, "matched_by": how,
             "ok": bool(as_rep), "looks_adjusted": bool(adj),
             "implied_gain_pct": round(100 * (o / GATE["offer"] - 1), 2),
             "first_day_marker": bool(pd.isna(h["prev"].iloc[0])
@@ -384,16 +408,16 @@ def backfill(limit: int | None = None) -> dict:
         bse_df, bnote = bhavcopy(f, day, "bse")
         got = []
         for r in rows.itertuples():
-            n = find(nse_df, r.isin, r.symbol, None)
-            b = find(bse_df, r.isin, r.symbol, r.bse_code)
+            n, nhow = find(nse_df, r.isin, r.symbol, None)
+            b, bhow = find(bse_df, r.isin, r.symbol, r.bse_code)
 
-            def one(h):
+            def one(h, how):
                 if not len(h):
-                    return {}
+                    return {"match_by": how}
                 return {"open": float(h["open"].iloc[0]) if pd.notna(h["open"].iloc[0]) else None,
                         "close": float(h["close"].iloc[0]) if pd.notna(h["close"].iloc[0]) else None,
-                        "prev": h["prev"].iloc[0]}
-            nd, bd = one(n), one(b)
+                        "prev": h["prev"].iloc[0], "match_by": how}
+            nd, bd = one(n, nhow), one(b, bhow)
             offer = pd.to_numeric(pd.Series([r.offer_price]), errors="coerce").iloc[0]
             rec = reconcile(nd, bd, None if pd.isna(offer) else float(offer))
             prev = [p for p in (nd.get("prev"), bd.get("prev")) if p is not None]
@@ -422,6 +446,132 @@ def backfill(limit: int | None = None) -> dict:
             f"nse={nnote[:26]} bse={bnote[:26]}")
     log(f"backfill finished: {counts}")
     return counts
+
+
+# ------------------------------------------------- forward capture (2d) + scoring (2e)
+#
+# STANDING RULE, decided by the user on 2026-10-05 and recorded with H18:
+#
+#   A newly listed IPO's price is captured ON ITS LISTING DATE. Never earlier, and never
+#   later.
+#
+# Not a preference -- it is the difference between a correct label and a corrupted one. A
+# price read weeks later has been retroactively restated for any split or bonus since, and
+# the restatement is silent: Syngene's genuine Rs 295 open reads Rs 147.50 once its 2017
+# bonus is applied, turning a +18% listing gain into -41%. A bhavcopy for the listing DATE
+# is frozen at what traded that day and can never be restated, so capturing on the day is
+# the only way the label stays true however long it is kept.
+#
+# `catch_up` exists for a missed day and is safe for exactly the same reason: it reads the
+# ARCHIVED bhavcopy for that date, not a current quote.
+
+def _pending_predictions() -> pd.DataFrame:
+    """Prediction rows in predictions_log.csv with no outcome row yet."""
+    import predictions_log as PL
+    d = PL.load()
+    if d.empty:
+        return d
+    pred = d[d["row_type"] == "prediction"].copy()
+    done = set(d.loc[d["row_type"] == "outcome", "prediction_id"].astype(str))
+    pred = pred[~pred["prediction_id"].astype(str).isin(done)]
+    # Rehearsal rows were scored on historical data and are not live predictions.
+    src = pred.get("subscription_source", pd.Series("", index=pred.index)).astype(str)
+    return pred[~src.str.contains("REHEARSAL", case=False, na=False)]
+
+
+def capture_listing_day(day=None, catch_up: bool = False) -> dict:
+    """Capture the listing-day price for anything listing on `day`, and score (2e) any
+    prediction it settles.
+
+    Idempotent: an IPO already present in listing_prices.csv for that date is skipped, and
+    an outcome row is only appended for a prediction that has none.
+    """
+    import predictions_log as PL
+    day = pd.Timestamp(day or pd.Timestamp.now()).normalize()
+    today = pd.Timestamp.now().normalize()
+    if day > today:
+        return {"date": str(day.date()), "error": "refusing to capture a future date"}
+    if day < today and not catch_up:
+        return {"date": str(day.date()),
+                "error": ("refusing to capture a past date without catch_up=True. The "
+                          "standing rule is capture ON the listing date; pass --catch-up "
+                          "to read that date's ARCHIVED bhavcopy deliberately.")}
+
+    pend = _pending_predictions()
+    if pend.empty:
+        return {"date": str(day.date()), "n_pending": 0,
+                "note": "no live prediction is awaiting an outcome"}
+
+    f = Fetcher()
+    nse_df, nnote = bhavcopy(f, day, "nse")
+    bse_df, bnote = bhavcopy(f, day, "bse")
+
+    already = set()
+    if OUT.exists():
+        try:
+            e = pd.read_csv(OUT)
+            already = {(str(a), str(b)) for a, b in zip(e["ipo"], e["listing_date"])}
+        except Exception:                                    # noqa: BLE001
+            pass
+
+    m = dataio.load_master_with_symbols()
+    by_isin = {str(r.isin).upper(): r for r in m.itertuples() if pd.notna(r.isin)}
+
+    out = {"date": str(day.date()), "n_pending": int(len(pend)), "scored": [], "missed": []}
+    rows = []
+    for r in pend.itertuples():
+        isin = str(getattr(r, "isin", "") or "").upper()
+        mr = by_isin.get(isin)
+        symbol = getattr(mr, "symbol", None) if mr is not None else None
+        code = getattr(mr, "bse_code", None) if mr is not None else None
+        offer = pd.to_numeric(pd.Series([getattr(mr, "Offer Price", None)
+                                         if mr is not None else None]),
+                              errors="coerce").iloc[0]
+
+        n, nhow = find(nse_df, isin or None, symbol, None)
+        b, bhow = find(bse_df, isin or None, symbol, code)
+
+        def one(h, how):
+            if not len(h):
+                return {"match_by": how}
+            return {"open": float(h["open"].iloc[0]) if pd.notna(h["open"].iloc[0]) else None,
+                    "close": float(h["close"].iloc[0]) if pd.notna(h["close"].iloc[0]) else None,
+                    "prev": h["prev"].iloc[0], "match_by": how}
+        nd, bd = one(n, nhow), one(b, bhow)
+        if nd.get("open") is None and bd.get("open") is None:
+            out["missed"].append({"ipo": r.ipo, "why": f"not in either bhavcopy for "
+                                                       f"{day.date()} (nse: {nnote}, bse: {bnote})"})
+            continue
+
+        rec = reconcile(nd, bd, None if pd.isna(offer) else float(offer))
+        rec.update({"ipo": r.ipo, "isin": isin or None, "symbol": symbol, "bse_code": code,
+                    "listing_date": str(day.date()),
+                    "offer_price": None if pd.isna(offer) else float(offer),
+                    "first_day_marker": any(
+                        pd.isna(x.get("prev")) or float(x.get("prev") or 0) == 0.0
+                        for x in (nd, bd) if "prev" in x),
+                    "fetched_at": str(pd.Timestamp.now())})
+        if (str(rec["ipo"]), str(rec["listing_date"])) not in already:
+            rows.append(rec)
+
+        # 2e: the label settles the prediction. Append an OUTCOME row - the prediction row
+        # is never edited (the log is append-only by design).
+        PL.log_outcome(str(r.prediction_id), str(r.ipo), str(day.date()),
+                       rec.get("listing_gain_pct"),
+                       note=(f"listing-day capture on the listing date; "
+                             f"sources={rec.get('sources')} {rec.get('reconciled')}"
+                             + (f"; {rec['note']}" if rec.get("note") else "")))
+        out["scored"].append({"ipo": r.ipo, "prediction_id": str(r.prediction_id),
+                              "listing_gain_pct": rec.get("listing_gain_pct"),
+                              "reconciled": rec.get("reconciled")})
+
+    if rows:
+        pd.DataFrame([{c: x.get(c) for c in OUT_COLS} for x in rows],
+                     columns=OUT_COLS).to_csv(
+            OUT, mode="a", header=not OUT.exists(), index=False, encoding="utf-8")
+    log(f"listing-day capture {day.date()}: {len(out['scored'])} scored, "
+        f"{len(out['missed'])} not yet listed")
+    return out
 
 
 # ---------------------------------------------------------------- self-test
@@ -471,19 +621,21 @@ def self_test() -> int:
                        "code": ["111111", "539268"],
                        "open": [295.0, 1.0], "close": [310.4, 2.0], "prev": [0.0, 5.0]})
     chk("ISIN wins over a matching symbol on another row",
-        float(find(df, isin="INE398R01022", symbol="SYNGENE")["open"].iloc[0]) == 295.0)
+        float(find(df, isin="INE398R01022", symbol="SYNGENE")[0]["open"].iloc[0]) == 295.0)
     chk("code is used when ISIN is absent",
-        float(find(df, isin=None, symbol=None, code="539268")["open"].iloc[0]) == 1.0)
+        float(find(df, isin=None, symbol=None, code="539268")[0]["open"].iloc[0]) == 1.0)
     chk("symbol is the last resort",
-        float(find(df, isin=None, symbol="SYNGENE")["open"].iloc[0]) == 1.0)
+        float(find(df, isin=None, symbol="SYNGENE")[0]["open"].iloc[0]) == 1.0)
     chk("nothing matches -> empty, never a guess",
-        find(df, isin="INE000000000", symbol="NOSUCHCO", code="9").empty)
+        find(df, isin="INE000000000", symbol="NOSUCHCO", code="9")[0].empty)
 
     print("\n[4] an ambiguous prefix match is refused")
     df2 = pd.DataFrame({"isin": [None, None], "symbol": ["RELIANCE IND", "RELIANCE POW"],
                         "code": ["1", "2"], "open": [1.0, 2.0], "close": [1.0, 2.0],
                         "prev": [1.0, 1.0]})
-    chk("two prefix candidates yield nothing", find(df2, symbol="RELIANCE").empty)
+    chk("two prefix candidates yield nothing", find(df2, symbol="RELIANCE")[0].empty)
+    chk("and are reported as ambiguous_prefix, not silently dropped",
+        find(df2, symbol="RELIANCE")[1] == "ambiguous_prefix")
 
     print("\n[5] HTML served with HTTP 200 is not treated as data")
     import inspect
@@ -503,7 +655,26 @@ def self_test() -> int:
     except Exception as e:
         chk("targets() runs", False, f"{type(e).__name__}: {e}")
 
-    print("\n[7] column mapping for all four bhavcopy formats")
+    print("\n[7] the listing-day standing rule (2d)")
+    fut = (pd.Timestamp.now() + pd.Timedelta(days=5)).normalize()
+    r = capture_listing_day(fut)
+    chk("a FUTURE date is refused", "error" in r and "future" in r["error"], str(r))
+    past = (pd.Timestamp.now() - pd.Timedelta(days=5)).normalize()
+    r = capture_listing_day(past)
+    chk("a PAST date is refused without catch_up",
+        "error" in r and "catch_up" in r["error"], str(r))
+    chk("and the refusal explains WHY the rule exists",
+        "error" in r and "ON the listing date" in r["error"], str(r))
+    import inspect
+    _src = inspect.getsource(capture_listing_day)
+    chk("catch_up reads an ARCHIVED bhavcopy, never a current quote",
+        "bhavcopy(f, day" in _src and "StockReachGraph" not in _src)
+    chk("rehearsal rows are never treated as live predictions",
+        "REHEARSAL" in inspect.getsource(_pending_predictions))
+    chk("an outcome is APPENDED, never written over the prediction",
+        "log_outcome" in _src and "log_prediction" not in _src)
+
+    print("\n[8] column mapping for all four bhavcopy formats")
     bse_old = pd.DataFrame({"SC_CODE": [1], "SC_NAME": ["X "], "OPEN": [1.0],
                             "CLOSE": [2.0], "PREVCLOSE": [0.0]})
     chk("BSE old maps", _norm(bse_old, "bse")["open"].iloc[0] == 1.0)
@@ -530,6 +701,10 @@ if __name__ == "__main__":
     ap.add_argument("--date")
     ap.add_argument("--backfill", action="store_true")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--capture-listing-day", action="store_true",
+                    help="2d: capture today's listing-day prices and score predictions")
+    ap.add_argument("--catch-up", action="store_true",
+                    help="allow --date with --capture-listing-day for a MISSED day")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -540,6 +715,10 @@ if __name__ == "__main__":
         print(json.dumps(r, indent=2, default=str))
         print(f"\n{r['verdict']}")
         raise SystemExit(0 if r["passed"] else 1)
+    if a.capture_listing_day:
+        import json
+        print(json.dumps(capture_listing_day(a.date, a.catch_up), indent=2, default=str))
+        raise SystemExit(0)
     if a.date:
         f = Fetcher()
         for w in ("nse", "bse"):
