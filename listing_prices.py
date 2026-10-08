@@ -17,9 +17,14 @@ three properties nothing else here has:
 3. **NSE's and BSE's bhavcopies are genuinely independent of each other**, so the label can
    be reconciled under rule 2 instead of carrying `single_source_unverified`.
 
-`PREVCLOSE == 0` (BSE) and a zero/absent previous close (NSE) mark a scrip's **first
-trading day**. That is a source-side listing marker and is checked rather than trusting our
-own calendar.
+There was once a `first_day_marker` here, on the theory that `PREVCLOSE == 0` identifies a
+scrip's first trading day from the source side rather than from our own calendar. It was
+**removed on 2026-10-08**: measured against the finished backfill it read False on **621 of
+623** rows, including rows that were demonstrably correct. Both exchanges populate the
+previous-close field on a listing day (BSE with the issue price, NSE with the discovery
+price), so the premise was simply wrong. A guard that is False on 99.7% of correct rows
+teaches the reader to ignore it, which is worse than having no guard at all. Listing dates
+come from the master and are asserted by `capture_listing_day()` instead.
 
 Access (H18)
 ------------
@@ -44,6 +49,7 @@ import io
 import sys
 import time
 import zipfile
+import pathlib
 from pathlib import Path
 import pandas as pd
 import requests
@@ -86,7 +92,7 @@ OUT_COLS = ["ipo", "isin", "symbol", "bse_code", "listing_date", "offer_price",
             "nse_open", "nse_close", "bse_open", "bse_close",
             "nse_match_by", "bse_match_by",
             "listing_open", "listing_close", "listing_gain_pct",
-            "sources", "reconciled", "first_day_marker", "note", "fetched_at"]
+            "sources", "reconciled", "note", "fetched_at"]
 
 # The Syngene gate. Kept as a constant so the check is re-runnable and so the expected
 # value is stated in one place rather than retyped in prose.
@@ -170,7 +176,7 @@ def _unzip_csv(raw: bytes) -> pd.DataFrame:
 
 
 def _norm(df: pd.DataFrame, which: str) -> pd.DataFrame:
-    """Map either bhavcopy format onto one schema: isin, symbol, code, open, close, prev."""
+    """Map either bhavcopy format onto one schema: isin, symbol, code, open, close."""
     df.columns = [str(c).strip() for c in df.columns]
     c = set(df.columns)
     if {"SC_CODE", "OPEN", "CLOSE"} <= c:                   # BSE old
@@ -178,15 +184,13 @@ def _norm(df: pd.DataFrame, which: str) -> pd.DataFrame:
                             "symbol": df.get("SC_NAME", pd.Series(dtype=str)).astype(str).str.strip(),
                             "isin": None,
                             "open": pd.to_numeric(df["OPEN"], errors="coerce"),
-                            "close": pd.to_numeric(df["CLOSE"], errors="coerce"),
-                            "prev": pd.to_numeric(df.get("PREVCLOSE"), errors="coerce")})
+                            "close": pd.to_numeric(df["CLOSE"], errors="coerce")})
     elif {"OpnPric", "ClsPric"} <= c:                       # BSE/NSE new unified format
         out = pd.DataFrame({"code": df.get("FinInstrmId", pd.Series(dtype=str)).astype(str).str.strip(),
                             "symbol": df.get("TckrSymb", pd.Series(dtype=str)).astype(str).str.strip(),
                             "isin": df.get("ISIN", pd.Series(dtype=str)).astype(str).str.strip(),
                             "open": pd.to_numeric(df["OpnPric"], errors="coerce"),
-                            "close": pd.to_numeric(df["ClsPric"], errors="coerce"),
-                            "prev": pd.to_numeric(df.get("PrvsClsgPric"), errors="coerce")})
+                            "close": pd.to_numeric(df["ClsPric"], errors="coerce")})
         if "SctySrs" in c:
             out = out[df["SctySrs"].astype(str).str.strip().isin(["EQ", "BE", "", "nan"])]
     elif {"SYMBOL", "OPEN", "CLOSE"} <= c:                  # NSE old
@@ -194,8 +198,7 @@ def _norm(df: pd.DataFrame, which: str) -> pd.DataFrame:
                             "symbol": df["SYMBOL"].astype(str).str.strip(),
                             "isin": df.get("ISIN", pd.Series(dtype=str)).astype(str).str.strip(),
                             "open": pd.to_numeric(df["OPEN"], errors="coerce"),
-                            "close": pd.to_numeric(df["CLOSE"], errors="coerce"),
-                            "prev": pd.to_numeric(df.get("PREVCLOSE"), errors="coerce")})
+                            "close": pd.to_numeric(df["CLOSE"], errors="coerce")})
         if "SERIES" in c:
             out = out[df["SERIES"].astype(str).str.strip().isin(["EQ", "BE"])]
     else:
@@ -357,9 +360,7 @@ def verify_as_reported(f: Fetcher | None = None) -> dict:
         res["checks"].append({
             "source": which, "open": o, "matched_by": how,
             "ok": bool(as_rep), "looks_adjusted": bool(adj),
-            "implied_gain_pct": round(100 * (o / GATE["offer"] - 1), 2),
-            "first_day_marker": bool(pd.isna(h["prev"].iloc[0])
-                                     or float(h["prev"].iloc[0] or 0) == 0.0)})
+            "implied_gain_pct": round(100 * (o / GATE["offer"] - 1), 2)})
     good = [c for c in res["checks"] if c.get("ok")]
     bad = [c for c in res["checks"] if c.get("looks_adjusted")]
     res["verdict"] = ("REJECT — a source returned the split/bonus-adjusted price"
@@ -425,17 +426,14 @@ def backfill(limit: int | None = None) -> dict:
                     return {"match_by": how}
                 return {"open": float(h["open"].iloc[0]) if pd.notna(h["open"].iloc[0]) else None,
                         "close": float(h["close"].iloc[0]) if pd.notna(h["close"].iloc[0]) else None,
-                        "prev": h["prev"].iloc[0], "match_by": how}
+                        "match_by": how}
             nd, bd = one(n, nhow), one(b, bhow)
             offer = pd.to_numeric(pd.Series([r.offer_price]), errors="coerce").iloc[0]
             rec = reconcile(nd, bd, None if pd.isna(offer) else float(offer))
-            prev = [p for p in (nd.get("prev"), bd.get("prev")) if p is not None]
             rec.update({
                 "ipo": r.ipo, "isin": r.isin, "symbol": r.symbol, "bse_code": r.bse_code,
                 "listing_date": day,
                 "offer_price": None if pd.isna(offer) else float(offer),
-                "first_day_marker": bool(prev) and all(
-                    pd.isna(p) or float(p or 0) == 0.0 for p in prev),
                 "fetched_at": str(pd.Timestamp.now())})
             if rec["reconciled"] == "no_source":
                 rec["note"] = "; ".join(x for x in (rec["note"],
@@ -545,7 +543,7 @@ def capture_listing_day(day=None, catch_up: bool = False) -> dict:
                 return {"match_by": how}
             return {"open": float(h["open"].iloc[0]) if pd.notna(h["open"].iloc[0]) else None,
                     "close": float(h["close"].iloc[0]) if pd.notna(h["close"].iloc[0]) else None,
-                    "prev": h["prev"].iloc[0], "match_by": how}
+                    "match_by": how}
         nd, bd = one(n, nhow), one(b, bhow)
         if nd.get("open") is None and bd.get("open") is None:
             out["missed"].append({"ipo": r.ipo, "why": f"not in either bhavcopy for "
@@ -556,9 +554,6 @@ def capture_listing_day(day=None, catch_up: bool = False) -> dict:
         rec.update({"ipo": r.ipo, "isin": isin or None, "symbol": symbol, "bse_code": code,
                     "listing_date": str(day.date()),
                     "offer_price": None if pd.isna(offer) else float(offer),
-                    "first_day_marker": any(
-                        pd.isna(x.get("prev")) or float(x.get("prev") or 0) == 0.0
-                        for x in (nd, bd) if "prev" in x),
                     "fetched_at": str(pd.Timestamp.now())})
         if (str(rec["ipo"]), str(rec["listing_date"])) not in already:
             rows.append(rec)
@@ -628,7 +623,7 @@ def self_test() -> int:
     df = pd.DataFrame({"isin": ["INE398R01022", "INE999X01010"],
                        "symbol": ["WRONGNAME", "SYNGENE"],
                        "code": ["111111", "539268"],
-                       "open": [295.0, 1.0], "close": [310.4, 2.0], "prev": [0.0, 5.0]})
+                       "open": [295.0, 1.0], "close": [310.4, 2.0]})
     chk("ISIN wins over a matching symbol on another row",
         float(find(df, isin="INE398R01022", symbol="SYNGENE")[0]["open"].iloc[0]) == 295.0)
     chk("code is used when ISIN is absent",
@@ -640,8 +635,7 @@ def self_test() -> int:
 
     print("\n[4] an ambiguous prefix match is refused")
     df2 = pd.DataFrame({"isin": [None, None], "symbol": ["RELIANCE IND", "RELIANCE POW"],
-                        "code": ["1", "2"], "open": [1.0, 2.0], "close": [1.0, 2.0],
-                        "prev": [1.0, 1.0]})
+                        "code": ["1", "2"], "open": [1.0, 2.0], "close": [1.0, 2.0]})
     chk("two prefix candidates yield nothing", find(df2, symbol="RELIANCE")[0].empty)
     chk("and are reported as ambiguous_prefix, not silently dropped",
         find(df2, symbol="RELIANCE")[1] == "ambiguous_prefix")
@@ -699,6 +693,15 @@ def self_test() -> int:
         chk("an unknown format raises rather than guessing", False)
     except ValueError:
         chk("an unknown format raises rather than guessing", True)
+
+    print('\n[9] the removed guard stays removed')
+    # The needle is assembled at runtime so this assertion cannot match itself -
+    # three earlier self-tests in this project passed only by finding their own text.
+    needle = "first" + "_day_marker"
+    bodies = "".join(inspect.getsource(fn) for fn in
+                     (verify_as_reported, backfill, capture_listing_day, _norm))
+    chk("no surviving code computes it", needle not in bodies)
+    chk("and is not an output column", "first_day_marker" not in OUT_COLS)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

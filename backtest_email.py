@@ -114,7 +114,7 @@ def backtest(months: int = 12) -> tuple[pd.DataFrame, dict]:
          "date_range": [t["date"].min(), t["date"].max()] if len(t) else None,
          "levels": SL.firing_levels(),
          "label_mix": t["label_source"].value_counts().to_dict() if len(t) else {}}
-    for tgt, cut in (("L1", 0.0), ("L2", 10.0)):
+    for tgt in ("L1", "L2"):
         fired = t[t[f"email_{tgt}"] == "BID"]
         met = t[f"{tgt}_target_met"]
         s[tgt] = {

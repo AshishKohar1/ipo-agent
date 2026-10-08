@@ -414,7 +414,6 @@ def self_test() -> int:
     # Checked against the UA actually sent, not against the file's own source: the source
     # mentions browser tokens in prose, and the first version of this test matched its own
     # assertion string.
-    ua = UA["User-Agent"]
     # H18 superseded the old "never a browser User-Agent" rule. What must still hold is
     # narrower and is what this now asserts: the host is an OFFICIAL one, robots.txt is
     # honoured, and nothing bypasses a login, CAPTCHA, paywall or click-through.

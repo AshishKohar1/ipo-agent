@@ -43,6 +43,7 @@ import sys as _sys
 if hasattr(_sys.stdout, "reconfigure"):
     _sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import argparse
+import inspect
 import os
 import smtplib
 import sys
@@ -454,9 +455,14 @@ def self_test() -> int:
 
     print("\n[4b] H17 is shipped: the decision is a subscription level (Priority 1b)")
     lv = SL.firing_levels()
-    chk("the L2 under-review caveat is GONE from the module",
-        "L2_UNDER_REVIEW" not in Path(__file__).read_text(encoding="utf-8").replace(
-            "L2_UNDER_REVIEW", "", 1) or True)
+    # `... or True` used to sit on the end of this assertion, to stop it matching its
+    # own text. That made it vacuous: it could not fail. The needle is now assembled
+    # at runtime and only the report-building functions are inspected.
+    needle = "L2_UNDER" + "_REVIEW"
+    built = "".join(inspect.getsource(fn) for fn in
+                    (_verdict_block, _numbers, compose))
+    chk("the L2 under-review caveat is GONE from the report builders",
+        needle not in built)
     # The word may appear in the standing disclaimer that says a probability is NOT used;
     # what must never appear is a probability presented as a chance (G2).
     low = body.lower()
