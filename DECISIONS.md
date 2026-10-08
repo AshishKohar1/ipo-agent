@@ -719,3 +719,127 @@ that closely is not learning, it is chasing, and the size of the move is the sym
 tells the two apart.
 
 `drift_check()` in `derive_subscription_thresholds.py`; `DRIFT_LIMIT = 0.25`.
+
+---
+
+## 2026-10-08 — H19 to H21
+
+### A numbering collision, recorded before anything is added to it
+
+`H17` and `H18` were each used twice in this file, for unrelated decisions:
+
+| ID | First use (2026-10-03) | Second use (2026-10-05/06) |
+|---|---|---|
+| H17 | a failed run no longer locks out its own retry | thresholds derived on subscription, superseding H16 |
+| H18 | name similarity cannot identify a company rename | rule 5 relaxed: realistic headers to official sources |
+
+Both second uses are the ones referred to everywhere else in the project — in code
+comments, report prose and the live email footer — so **they keep the numbers**, and the
+2026-10-03 pair is cited by date rather than by ID from here on. Nothing is renumbered,
+because renumbering would invalidate a ratified rule's identifier in a shipped artefact
+(`models/model_l_v1.1_thresholds.json` records `ratified: "H17"`). Today's decisions start
+at **H19** so the collision does not grow.
+
+---
+
+### H19 — the under-delivery tripwire: two windows, not one
+
+The 12-month email backtest under-delivers both promises: **L1 85.7% against 90%, L2 72.2%
+against 80%** (`reports/EMAIL_BACKTEST_12M.md`). The user's decision is to **change
+nothing now** and to fix the trigger in advance:
+
+> **If the next monthly retrain also shows the trailing 12 months under-delivering on the
+> same target, re-derive that threshold. Two consecutive under-delivering windows is the
+> trigger; one is not.**
+
+Deciding this before seeing the next window is the whole point. The alternative — looking
+at one weak window and adjusting — is exactly the mechanism that produced the two failures
+already on the record:
+
+* the naive L2 threshold drifted **31.11x (2015) → 17.20x (2025)** by chasing the hot
+  2021–24 market, and 2025 then delivered **60% on 60 fires**;
+* H16 read a single refitted window as a live shortfall and had the direction backwards.
+
+A threshold that moves on one window is not learning, it is tracking noise. And the
+under-delivery is not a contradiction of H17: H17's promise is the **pooled walk-forward**
+rate across every test year, and its own per-year table already showed 2025 at 76%. One
+weak year inside a pooled promise is the expected shape of the thing, not a breach of it.
+
+**What makes the second window independent enough to act on:** it adds roughly a month of
+genuinely unseen IPOs and re-derives on data the first window did not include. Two
+consecutive windows failing the same target is evidence about the rule; one is evidence
+about the year.
+
+The 25% drift guard still sits on top. A re-derivation triggered by this tripwire that
+*also* moves a threshold by more than 25% is still held for review rather than applied —
+the tripwire licenses re-deriving, not applying unexamined.
+
+Implemented in `retrain_l.py`; the consecutive count is persisted so the retrain can tell
+a first failure from a second.
+
+---
+
+### H20 — the 15:00 email has a send window, and is never caught up
+
+**The defect.** Not one 15:00 email had ever been sent at 15:00. The `ran_at` column of
+`data/live_run_markers.csv` records every 15:00 leg to date:
+
+| date | stamped at | past the 16:00 cutoff? |
+|---|---|---|
+| 2026-10-02 | 21:49 | yes |
+| 2026-10-03 | 16:53 | yes |
+| 2026-10-05 | 00:39 | — too early, see below |
+| 2026-10-06 | 00:06 | — too early |
+| 2026-10-07 | 22:11 | yes |
+
+Nothing in the leg checked the clock. GitHub queues a delayed job, or a manual run lands at
+any hour, and the email went out regardless.
+
+**The rule.** `send_window()` in `send_daily_email.py` refuses to send outside
+**14:00–16:00 IST**, on both sides and for two different reasons:
+
+* **At or after 16:00** — the broker cutoff (E1). A bid signal then is not late
+  information, it is *wrong* information: it invites a bid that can no longer be placed.
+* **Before 14:00** — the model is `L_final_3pm` (H1), fitted on the final-day
+  late-afternoon subscription figure. A morning figure is a **different distribution**, not
+  an early look at the same one, so scoring it would be a leakage-discipline breach in the
+  opposite direction from the usual one.
+
+The report is still written in both cases, so the day keeps a record of what the verdict
+would have been. Then the run **exits non-zero**: a refused send must make the run red,
+because silence that looks like success is the failure mode this whole priority exists to
+remove.
+
+**There is no flag that re-sends a missed email**, and the self-test asserts there is none.
+`--dry-run` composes and prints; nothing sends.
+
+---
+
+### H21 — a guard that lies is worse than no guard
+
+`first_day_marker` is **removed entirely** — from `listing_prices.py`, from `OUT_COLS` and
+from `data/listing_prices.csv`.
+
+It claimed to identify a scrip's first trading day from the source side rather than from
+our own calendar, on the premise that `PREVCLOSE == 0`. Measured against the finished
+backfill it read **False on 621 of 623 rows**, including rows that are demonstrably
+correct, because both exchanges populate the previous-close field on a listing day — BSE
+with the issue price, NSE with the discovery price. The premise was simply wrong.
+
+The user's reasoning, which is now the standing rule for guards in this project:
+
+> A guard that lies is worse than no guard.
+
+A check that is False on 99.7% of correct rows does not fail safe. It teaches the reader to
+ignore it, and an ignored check is indistinguishable from an absent one right up to the
+moment it would have mattered. Listing dates come from the master and are asserted by
+`capture_listing_day()` instead.
+
+The `prev` column existed only to feed it, so it is gone from the normalised bhavcopy
+schema too. `listing_prices.py` self-test section [9] asserts the guard stays removed, with
+the needle assembled at runtime — three earlier self-tests in this project passed only
+because they found their own assertion string in the file they were checking.
+
+The same sweep found a worse instance of the same class: the assertion that the L2
+under-review caveat had been deleted ended in `... or True`, which I had added to stop it
+matching its own text. **It could not fail.** Fixed the same way.
