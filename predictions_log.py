@@ -39,7 +39,25 @@ COLS = [
     "veto_flags", "gmp_user_supplied",
     # outcome rows only
     "listing_date", "listing_gain_pct", "l1_actual", "l2_actual", "outcome_note",
+    # Task 6: the 15:00 figures the DECISION was taken on, named for the capture point so
+    # they can never be confused with the final figures. `total_x` above is whatever was
+    # scored at whatever capture point; these four are specifically the 15:00 reading, and
+    # they are written at send so the row records what the user was actually told.
+    "sub_total_1500", "sub_qib_1500", "sub_hni_1500", "sub_rii_1500",
 ]
+
+# Task 6: final subscription lands in its OWN file, keyed to the prediction, because rule
+# 10 makes the prediction row immutable. Rewriting `total_x` with the final figure would
+# destroy the only record of what the decision was actually taken on - which is the one
+# number the whole backtest depends on.
+FINALS = ROOT / "data" / "final_subscription.csv"
+FINAL_COLS = ["prediction_id", "ipo", "isin", "date", "captured_at_ist", "capture_point",
+              "sub_total_1500", "sub_total_final", "growth_x", "growth_pct",
+              "sub_qib_final", "sub_hni_final", "sub_rii_final",
+              "l1_threshold_total_x", "l2_threshold_total_x",
+              "would_L1_fire_on_final", "would_L2_fire_on_final",
+              "L1_fired_at_1500", "L2_fired_at_1500",
+              "verdict_would_have_changed", "source", "note"]
 
 
 def prediction_id(ipo: str, isin: str | None, capture_point, when) -> str:
@@ -75,8 +93,92 @@ def log_prediction(ipo: str, isin: str | None, result: dict, capture_point: int 
         "l1_p_raw": d1.get("raw_p"), "l1_p_cal": d1.get("calibrated_p"),
         "l2_p_raw": d2.get("raw_p"), "l2_p_cal": d2.get("calibrated_p"),
         "veto_flags": veto_flags, "gmp_user_supplied": gmp,
+        # Task 6. Only populated when this IS the 15:00 capture: labelling a 19:30 reading
+        # as a 1500 figure would be worse than leaving it blank.
+        "sub_total_1500": i.get("total") if capture_point == 1500 else None,
+        "sub_qib_1500": i.get("qib") if capture_point == 1500 else None,
+        "sub_hni_1500": i.get("hni") if capture_point == 1500 else None,
+        "sub_rii_1500": i.get("rii") if capture_point == 1500 else None,
     })
     return pid
+
+
+def predictions_for(date, capture_point: int = 1500) -> dict:
+    """`{ipo: row}` for the prediction rows logged on `date` at `capture_point`.
+
+    Used by the day-end leg to find the 15:00 prediction a final figure belongs to. Keyed
+    on the IPO name as logged, so a renamed company is a miss rather than a wrong match.
+    """
+    if not LOG.exists():
+        return {}
+    try:
+        d = pd.read_csv(LOG)
+    except Exception:                                        # noqa: BLE001
+        return {}
+    if d.empty or "row_type" not in d:
+        return {}
+    d = d[(d["row_type"] == "prediction")
+          & (pd.to_numeric(d["capture_point"], errors="coerce") == capture_point)]
+    day = str(pd.Timestamp(date).date())
+    d = d[pd.to_datetime(d["logged_at_ist"], errors="coerce").dt.date.astype(str) == day]
+    return {str(r["ipo"]): r.to_dict() for _, r in d.iterrows()}
+
+
+def log_final_subscription(prediction_id: str, ipo: str, isin: str | None, date,
+                           final: dict, at_1500: dict, levels: dict,
+                           source: str = "", note: str = "",
+                           when=None, capture_point: int = 1930) -> dict:
+    """Task 6. Append the FINAL subscription beside the 15:00 figure the decision used.
+
+    Appends to `data/final_subscription.csv`. **The prediction row is never touched**
+    (rule 10) - this is a second record keyed to `prediction_id`, exactly like an outcome
+    row.
+
+    `would_L*_fire_on_final` is the counterfactual the whole 3pm-understatement question
+    turns on: the same ratified threshold, applied to the final figure instead of the
+    15:00 one. If it fires on final but not at 15:00, the email was conservative and the
+    user missed a qualifying IPO - and that is now a counted quantity rather than a caveat.
+    """
+    when = pd.Timestamp(when) if when is not None else pd.Timestamp.now()
+    t15 = _f(at_1500.get("total"))
+    tf = _f(final.get("total"))
+    l1c, l2c = _f(levels.get("L1")), _f(levels.get("L2"))
+    f1 = None if (tf is None or l1c is None) else bool(tf >= l1c)
+    f2 = None if (tf is None or l2c is None) else bool(tf >= l2c)
+    s1 = None if (t15 is None or l1c is None) else bool(t15 >= l1c)
+    s2 = None if (t15 is None or l2c is None) else bool(t15 >= l2c)
+    row = {
+        "prediction_id": prediction_id, "ipo": ipo, "isin": isin,
+        "date": str(pd.Timestamp(date).date()), "captured_at_ist": str(when),
+        "capture_point": capture_point,
+        "sub_total_1500": t15, "sub_total_final": tf,
+        "growth_x": None if (t15 is None or tf is None or t15 <= 0) else round(tf / t15, 4),
+        "growth_pct": None if (t15 is None or tf is None or t15 <= 0)
+        else round(100 * (tf / t15 - 1), 2),
+        "sub_qib_final": _f(final.get("qib")), "sub_hni_final": _f(final.get("hni")),
+        "sub_rii_final": _f(final.get("rii")),
+        "l1_threshold_total_x": l1c, "l2_threshold_total_x": l2c,
+        "would_L1_fire_on_final": f1, "would_L2_fire_on_final": f2,
+        "L1_fired_at_1500": s1, "L2_fired_at_1500": s2,
+        "verdict_would_have_changed": None if (f1 is None or s1 is None or f2 is None
+                                               or s2 is None) else bool(f1 != s1 or f2 != s2),
+        "source": source, "note": note,
+    }
+    FINALS.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame([{c: row.get(c) for c in FINAL_COLS}], columns=FINAL_COLS).to_csv(
+        FINALS, mode="a", header=not FINALS.exists(), index=False, encoding="utf-8")
+    return row
+
+
+def _f(v):
+    """Numeric or None. Never a string that looks like a number in a numeric column."""
+    if v is None:
+        return None
+    try:
+        x = float(v)
+    except (TypeError, ValueError):
+        return None
+    return None if pd.isna(x) else x
 
 
 def log_outcome(prediction_id: str, ipo: str, listing_date, listing_gain_pct: float | None,

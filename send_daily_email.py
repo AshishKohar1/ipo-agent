@@ -59,6 +59,7 @@ import predictions_log as PL       # noqa: E402
 import live_markers as LM          # noqa: E402
 import market_context as MC        # noqa: E402
 import trading_day as TD           # noqa: E402  - one date per run (Task 1)
+import sent_markers as SM          # noqa: E402  - idempotent send (Task 4)
 
 LIVE_DIR = ROOT / "reports" / "live"
 SNAPSHOTS = ROOT / "data" / "subscription_snapshots.csv"
@@ -82,6 +83,11 @@ SUBJECT_PREFIX = "IPO decision - "
 BROKER_CUTOFF_HHMM = 1600
 # The other end of the same window. See send_window() for why.
 EARLIEST_SEND_HHMM = 1400
+# Task 4 dead-man. Past this time an undelivered decision is REPORTED as
+# undelivered rather than left as silence.
+DEAD_MAN_AFTER_HHMM = 1530
+
+GMP_PLACEHOLDER = "______%"
 
 SNAP_COLS = ["ipo", "isin", "ipo_id", "segment", "date", "timestamp_ist", "capture_point",
              "qib_x", "hni_x", "rii_x", "emp_x", "total_x", "sector",
@@ -155,35 +161,53 @@ def secrets() -> tuple[str, str, str]:
 
 
 def _verdict_block(res: dict) -> list[str]:
-    """The verdict, with the subscription level that produced it.
+    """`BID` / `NO BID`, each with the subscription threshold and whether it was met.
 
-    Under H17 the threshold IS a subscription level, so it can be printed outright. That
-    is the whole gain over the probability cut-off: the reader can check the number against
-    their own broker screen, which they could never do with a calibrated probability.
-    Everything here is read from the ratified artefact -- no threshold is retyped.
+    Under H17 the threshold IS a subscription level, so it is printed outright. That is the
+    whole gain over the retired probability cut-off: the reader can check the number
+    against their own broker screen, which a calibrated probability never allowed.
+
+    `score_l` returns "BID" / "no"; "NO BID" is a DISPLAY mapping only. The stored verdict
+    keeps its own spelling, because `predictions_log.csv` and `backtest_email.py` both key
+    on it and silently changing a logged value would break the comparison to every row
+    already written.
+
+    Every number here is read from the ratified artefact. Nothing is retyped (Task 10).
     """
     out = []
-    for key, label in (("L1", "L1 (any listing gain)"), ("L2", "L2 (gain above 10%)")):
+    for key, label in (("L1", "L1  any listing gain"), ("L2", "L2  gain above 10%")):
         r = res[key]
+        fired = r.get("verdict") == "BID"
+        shown = "BID" if fired else "NO BID"
         cut = r.get("threshold_total_x")
         promise = r.get("required_hit_rate", 0) * 100
-        lvl = "" if cut is None else f"  fires >= {cut:.2f}x"
-        out.append(f"  {label + ':':<24s}{r['verdict']:<6s} "
-                   f"{promise:.0f}% promise{lvl}")
+        if cut is None:
+            tail = "threshold unavailable"
+        else:
+            tail = (f"threshold {cut:.2f}x {'met' if fired else 'NOT met'}"
+                    f"  ({promise:.0f}% promise)")
+        out.append(f"  {label + ':':<24s}{shown:<7s} {tail}")
     return out
 
 
-def _numbers(r: dict, as_of: str) -> list[str]:
-    s = r.get("sub", {})
+def _numbers(r: dict, as_of: str, source: str = "") -> list[str]:
+    """The 15:00 reading, with the exact time it was fetched and where from.
+
+    "as of 15:00" alone is not enough: the run can land at 14:17 or 15:58 and the figure
+    is different at each. The timestamp is the real fetch time, not the nominal slot.
+    """
+    sub = r.get("sub", {})
 
     def x(k):
-        v = s.get(k)
+        v = sub.get(k)
         return "   -  " if v is None else f"{v:.2f}x"
     day = (f"   (Day {r['day_of']} of {r['days_total']})"
            if r.get("day_of") and r.get("days_total") else "")
-    return [f"  Total subscription:     {x('total_x'):<7s} @ {as_of}{day}",
+    src = source or sub.get("source") or "chittorgarh (single source, H14)"
+    return [f"  Total subscription:     {x('total_x'):<7s} fetched {as_of} IST{day}",
             f"  QIB {x('qib_x'):>7s} | HNI {x('hni_x'):>7s} | "
-            f"Retail {x('rii_x'):>7s}        (display only)"]
+            f"Retail {x('rii_x'):>7s}        (display only)",
+            f"  Source:                 {src}"]
 
 
 def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[str, str]:
@@ -214,7 +238,10 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
         L += ["  Nothing closes today.", ""]
     for r in closing:
         seg = "Mainboard" if r["segment"] == "mainboard" else "SME"
-        L.append(f"[{r['ipo'].upper()}]  ({seg})")
+        closes_on = r.get("closes")
+        when = ("" if not closes_on else
+                f"  closes {pd.Timestamp(closes_on).strftime('%d %b %Y')}")
+        L.append(f"[{r['ipo'].upper()}]  ({seg}){when}")
         res = scored.get(r["ipo"])
         if r["segment"] != "mainboard":
             # SME is shadow mode: display, never decide.
@@ -226,11 +253,16 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
             L += ["  NO VERDICT — subscription did not arrive, so the model's only input "
                   "is missing.", "  Verify on your broker app before the cutoff.", ""]
             continue
-        L += _verdict_block(res)
+        # Task 5 order: figures first, then each verdict with its threshold, then the
+        # 15:00 caveat, then GMP. The figures come first on purpose - the verdict is a
+        # comparison against them, and a reader who sees the verdict first has nothing to
+        # check it against.
         L += _numbers(r, as_of)
-        L += [f"  Demand profile:         {res['demand_profile']}",
-              "  Veto flags:             none",
-              "  GMP: ______%            (not in model — your judgement)", ""]
+        L += _verdict_block(res)
+        L += [f"  Figures as of {as_of} IST — final subscription is usually higher (H23).",
+              f"  Demand profile:         {res['demand_profile']}",
+              "  Veto flags:             none"]
+        L += [f"  GMP: {GMP_PLACEHOLDER}            (not in model — your judgement, D1)", ""]
 
     L += ["===== OPEN, NOT CLOSING TODAY =====", ""]
     if not open_not:
@@ -329,6 +361,42 @@ def send(subject: str, body: str, dry: bool) -> dict:
     return {"sent": True, "subject": subject, "to": to, "from": addr}
 
 
+def dead_man(undelivered: list[str], today, why: str, report: str) -> dict:
+    """Task 4. Tell the user that NO decision is coming today, and why.
+
+    This is the opposite of the bid email and must never be mistaken for one: the subject
+    is `IPO decision - NOT SENT`, the body carries no verdict, and the marker it writes is
+    `not_sent_notice`, which `sent_markers.already_sent()` deliberately does not count as
+    delivery. If it did, the next attempt would see a marker, believe the decision had
+    gone out, and the silence would become permanent.
+
+    Sent at most once per IPO per day.
+    """
+    todo = [i for i in undelivered if not SM.notice_sent(today, i)]
+    if not todo:
+        return {"sent": False, "reason": "notice already sent", "undelivered": undelivered}
+    subject = f"{SUBJECT_PREFIX}NOT SENT"
+    body = chr(10).join([
+        f"NO BID DECISION WAS DELIVERED FOR {today.strftime('%A %d %B %Y')}.", "",
+        f"Closing today and undelivered: {', '.join(todo)}", "",
+        f"Reason: {why}", "",
+        "This is not a verdict. The bid email is never sent after the 16:00 IST broker",
+        "cutoff, because a signal arriving then invites a bid that can no longer be",
+        "placed. The run failed deliberately rather than send one late.",
+        "",
+        f"What the verdict would have been is in reports/live/{today.date()}.md, written",
+        "before this notice. Read it for the record, not as advice to act on.",
+        "", "-" * 68, "", report[:2000],
+    ])
+    out = send(subject, body, dry=False)
+    if out.get("sent"):
+        for i in todo:
+            SM.mark(today, i, None, subject, today, kind=SM.DEAD_MAN,
+                    capture_point=1500, note=f"dead-man: {why[:120]}")
+    out["undelivered"] = todo
+    return out
+
+
 # ---------------------------------------------------------------- entry points
 def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     """The 15:00 leg (`final=False`) scores, logs, snapshots, reports and emails.
@@ -362,12 +430,41 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     ctx = MC.capture(today) if (final and not dry) else {"skipped": "not the day-end leg"}
 
     if final:
+        # Task 6. The final figure goes to its OWN file, keyed to the 15:00 prediction.
+        # The prediction row is never rewritten (rule 10) - overwriting `total_x` with the
+        # final figure would destroy the only record of what the decision was taken on,
+        # which is the one number the email backtest depends on.
+        finals = []
         if not dry:
+            at15 = PL.predictions_for(today, 1500)
+            lv = SL.firing_levels()
+            for r in mv["closing_today"]:
+                sub = r.get("sub", {})
+                prior = at15.get(r["ipo"])
+                if prior is None or not sub.get("ok") or sub.get("total_x") is None:
+                    continue
+                finals.append(PL.log_final_subscription(
+                    str(prior.get("prediction_id")), r["ipo"], r.get("isin"), today,
+                    final={"total": sub.get("total_x"), "qib": sub.get("qib_x"),
+                           "hni": sub.get("hni_x"), "rii": sub.get("rii_x")},
+                    at_1500={"total": prior.get("sub_total_1500")
+                             if prior.get("sub_total_1500") is not None
+                             else prior.get("total_x")},
+                    levels=lv, source="chittorgarh single_source_unverified (H14)",
+                    when=today, capture_point=capture_point))
+            changed = [f["ipo"] for f in finals if f.get("verdict_would_have_changed")]
+            if changed:
+                print(f"  3pm-vs-final: the verdict WOULD have changed for "
+                      f"{', '.join(changed)} on the final figure. Recorded, not acted on "
+                      f"(H23 accepts the conservative bias).")
             LM.mark_ran(capture_point, today, n_snap)
         print(f"19:30 final capture {today.date()}: {n_snap} snapshot rows, "
               f"{ctx.get('n_ok', 0)} index closes. No email at this capture point.")
         return {"sent": False, "mode": "final", "n_snapshots": n_snap,
-                "capture_point": capture_point, "market_context": ctx}
+                "capture_point": capture_point, "market_context": ctx,
+                "finals_written": len(finals),
+                "verdict_would_have_changed": [f["ipo"] for f in finals
+                                               if f.get("verdict_would_have_changed")]}
 
     scored = {}
     for r in mv["closing_today"]:
@@ -384,29 +481,67 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
             PL.log_prediction(r["ipo"], r.get("isin"), res, capture_point=capture_point,
                               source="chittorgarh single_source_unverified (H14)")
 
+    # ---- Task 4: who is owed a decision today, and has it already been delivered?
+    # Keyed by IPO and date, not by run: four scheduled attempts plus dispatch plus an
+    # external trigger would otherwise mean up to six identical emails.
+    owed = sorted(scored.keys())
+    undelivered = SM.undelivered(today, owed)
+    if owed and not undelivered and not dry and not force:
+        LM.mark_ran(capture_point, today, n_snap)
+        print(f"{today.date()}: the decision for {', '.join(owed)} already went out. "
+              f"No-op, exiting green.")
+        return {"sent": False, "reason": "already_sent", "owed": owed,
+                "n_verdicts": len(scored), "n_snapshots": n_snap,
+                "capture_point": capture_point}
+
     subject, body = compose(mv, scored, today)
     LIVE_DIR.mkdir(parents=True, exist_ok=True)
     (LIVE_DIR / f"{today.date()}.md").write_text(body, encoding="utf-8")
-    # Priority 1d: fail loudly rather than send a dead signal. The report is still
-    # written, so the day leaves a record of what the verdict WOULD have been.
+
     may_send, why_not = send_window(today)
+    hhmm = today.hour * 100 + today.minute
+
     if not dry and not may_send:
         LM.mark_ran(capture_point, today, n_snap)
+        # Task 4: a refusal is RED only if a decision was owed and never delivered. A
+        # refusal on a day with nothing closing, or after the email already went out, is
+        # the guard doing its job - and a red run that means "working correctly" is how a
+        # real red stops being noticed.
+        red = bool(undelivered)
+        out = {"sent": False, "reason": "outside_send_window", "fail_loudly": red,
+               "owed": owed, "undelivered": undelivered,
+               "n_verdicts": len(scored), "n_snapshots": n_snap,
+               "capture_point": capture_point}
         msg = (f"REFUSING TO SEND: {why_not}. The report was still written to "
                f"reports/live/{today.date()}.md, so the day leaves a record of "
                f"what the verdict would have been. This leg is NEVER caught up "
                f"- see capture_audit.py.")
-        print(msg, file=sys.stderr)
-        return {"sent": False, "reason": "outside_send_window", "fail_loudly": True,
-                "message": msg, "n_verdicts": len(scored), "n_snapshots": n_snap,
-                "capture_point": capture_point}
+        print(msg, file=sys.stderr if red else sys.stdout)
+        out["message"] = msg
+        if not red:
+            print("  Nothing was owed, or it was already delivered - exiting green.")
+        # Task 4 dead-man: past 15:30 IST with a decision still undelivered, the user is
+        # told that NO decision is coming. Silence must never be the outcome.
+        if undelivered and hhmm >= DEAD_MAN_AFTER_HHMM:
+            out["dead_man"] = dead_man(undelivered, today, why_not, body)
+        return out
 
     out = send(subject, body, dry)
+    if out.get("sent") and not dry:
+        for ipo in owed:
+            SM.mark(today, ipo, (scored.get(ipo, {}).get("inputs") or {}).get("isin"),
+                    subject, today, kind=SM.DECISION, capture_point=capture_point,
+                    note="decision delivered")
     if not dry:
         LM.mark_ran(capture_point, today, n_snap)
     out.update({"n_open": mv["n_open"], "n_closing": len(mv["closing_today"]),
                 "n_verdicts": len(scored), "n_snapshots": n_snap,
-                "capture_point": capture_point})
+                "owed": owed, "capture_point": capture_point})
+    # A send that was attempted and failed still owes the user a dead-man notice.
+    if not dry and not out.get("sent") and undelivered and hhmm >= DEAD_MAN_AFTER_HHMM:
+        out["dead_man"] = dead_man(undelivered, today,
+                                   out.get("error") or "the send failed", body)
+        out["fail_loudly"] = True
     return out
 
 
@@ -498,7 +633,29 @@ def self_test() -> int:
     subject, body = compose(mv, scored)
     chk("subject starts with the exact prefix", subject.startswith(SUBJECT_PREFIX), subject)
     chk("the closing mainboard IPO gets L1 and L2 verdict lines",
-        "L1 (any listing gain)" in body and "L2 (gain above 10%)" in body)
+        "L1  any listing gain" in body and "L2  gain above 10%" in body)
+    # Checked on _verdict_block directly rather than by sniffing the whole body:
+    # whether a NO BID appears there depends on the fixture's subscription, which
+    # is not what this assertion is about.
+    fire = {"verdict": "BID", "threshold_total_x": 28.39, "required_hit_rate": 0.9}
+    miss = {"verdict": "no", "threshold_total_x": 54.02, "required_hit_rate": 0.8}
+    vb = _verdict_block({"L1": fire, "L2": miss})
+    chk("a firing target prints BID and `met`",
+        "BID" in vb[0] and "28.39x met" in vb[0], vb[0])
+    chk("a non-firing target prints NO BID and `NOT met`",
+        "NO BID" in vb[1] and "54.02x NOT met" in vb[1], vb[1])
+    chk("and `no` is never shown to the reader as the verdict word",
+        not any(x.split()[-4:][0:1] == ["no"] for x in vb), vb)
+    chk("and states the threshold and whether it was met (Task 5)",
+        "threshold " in body and (" met" in body or " NOT met" in body))
+    chk("figures come BEFORE the verdicts for a closing IPO",
+        body.index("Total subscription:") < body.index("L1  any listing gain"))
+    chk("the fetch time and source are both stated",
+        "fetched " in body and "Source:" in body)
+    chk("the 15:00 caveat is present and cites H23",
+        "final subscription is usually higher (H23)" in body)
+    chk("GMP is a blank for the user, never a fetched value (D1)",
+        GMP_PLACEHOLDER in body and "gmp" not in body.lower().replace("gmp:", ""))
     chk("the no-data IPO gets NO VERDICT, not a guess", "NO VERDICT" in body)
     chk("SME is PROVISIONAL", "PROVISIONAL" in body)
     chk("the midweek mainboard IPO gets no verdict",
@@ -577,6 +734,39 @@ def self_test() -> int:
     chk("there is no flag that re-sends a missed email",
         "catch_up" not in msrc and "catch-up" not in msrc)
     chk("the day-end capture point is 19:30 (1c)", "1930" in msrc)
+
+    print('\n[7] Task 4: idempotent send, conditional red, dead-man')
+    msrc = inspect.getsource(main)
+    chk("the send is keyed by IPO and date, not by run",
+        "SM.undelivered(today, owed)" in msrc)
+    chk("an already-delivered day exits WITHOUT sending",
+        msrc.index("already_sent") < msrc.index("out = send("))
+    chk("a marker is written only when a send actually succeeded",
+        "out.get(\"sent\") and not dry" in msrc and "SM.mark(" in msrc)
+    chk("a refusal is red ONLY when something is undelivered",
+        "red = bool(undelivered)" in msrc)
+    chk("and fail_loudly follows that, not the refusal itself",
+        '"fail_loudly": red' in msrc)
+    chk("the dead-man fires after 15:30 IST", DEAD_MAN_AFTER_HHMM == 1530)
+    dsrc = inspect.getsource(dead_man)
+    chk("its subject is the NOT SENT one", 'f"{SUBJECT_PREFIX}NOT SENT"' in dsrc)
+    chk("it records a NOTICE, never a delivered decision",
+        "SM.DEAD_MAN" in dsrc and "SM.DECISION" not in dsrc)
+    chk("and a notice is sent at most once per IPO per day",
+        "SM.notice_sent(today, i)" in dsrc)
+    chk("the dead-man body carries no verdict word",
+        "This is not a verdict" in dsrc)
+
+    print('\n[8] Task 6: both figures recorded, prediction row never rewritten')
+    import predictions_log as _PL
+    for c in ("sub_total_1500", "sub_qib_1500", "sub_hni_1500", "sub_rii_1500"):
+        chk(f"{c} is a prediction column", c in _PL.COLS)
+    chk("finals go to their OWN file", "final_subscription" in str(_PL.FINALS))
+    for c in ("would_L1_fire_on_final", "would_L2_fire_on_final", "sub_total_final"):
+        chk(f"{c} is a finals column", c in _PL.FINAL_COLS)
+    fsrc = inspect.getsource(_PL.log_final_subscription)
+    chk("the finals writer only ever APPENDS (rule 10)",
+        'mode="a"' in fsrc and "_append(" not in fsrc)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
