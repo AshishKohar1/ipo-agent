@@ -83,7 +83,7 @@ on:
         required: true
         default: "email"
         type: choice
-        options: [email, final, listing, audit, catch-up, dry-run, probe, rehearse]
+        options: [email, final, listing, audit, catch-up, test-email, dry-run, probe, rehearse]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -198,6 +198,11 @@ jobs:
                       # gap is visible without anybody reading a report.
                       python capture_audit.py --audit --days 7 ;;
             catch-up) python capture_audit.py --catch-up --days 7 ;;
+            test-email) # Task 5. Real SMTP, real composition, subject
+                      # `IPO decision - TEST`, built from the last closed
+                      # IPO on record. Writes no sent marker and logs no
+                      # prediction - a test is not a decision.
+                      python send_daily_email.py --test-email ;;
           esac
 
       - name: Commit whatever was produced

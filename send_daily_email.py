@@ -397,6 +397,79 @@ def dead_man(undelivered: list[str], today, why: str, report: str) -> dict:
     return out
 
 
+def test_email(dry: bool = False) -> dict:
+    """Task 5. One test email, subject `IPO decision - TEST`, from the LAST CLOSED IPO.
+
+    Real recorded data, not invented numbers: the most recent row of
+    `data/subscription_snapshots.csv`, scored through the live `score_l.predict_live()`.
+    So this exercises the real composition path and the real SMTP path, and the only thing
+    that differs from a live send is the subject and the TEST banner.
+
+    It deliberately does NOT write a sent marker and does NOT log a prediction. A test is
+    not a decision, and a marker here would make a later real run believe the day's email
+    had already gone out.
+    """
+    snap = ROOT / "data" / "subscription_snapshots.csv"
+    if not snap.exists():
+        return {"sent": False, "error": f"{snap.name} does not exist, so there is no "
+                                        f"recorded IPO to build a test from"}
+    d = pd.read_csv(snap)
+    d["t"] = pd.to_datetime(d["timestamp_ist"], errors="coerce")
+    d = d.dropna(subset=["t"]).sort_values("t")
+    if d.empty:
+        return {"sent": False, "error": "no dated snapshot rows"}
+    r = d.iloc[-1]
+    total = pd.to_numeric(pd.Series([r.get("total_x")]), errors="coerce").iloc[0]
+    if pd.isna(total):
+        return {"sent": False, "error": f"the latest snapshot ({r.get('ipo')}) has no "
+                                        f"total subscription, so there is nothing to score"}
+
+    def num(k):
+        v = pd.to_numeric(pd.Series([r.get(k)]), errors="coerce").iloc[0]
+        return None if pd.isna(v) else float(v)
+
+    res = SL.predict_live(total=float(total), qib=num("qib_x"), rii=num("rii_x"),
+                          segment=str(r.get("segment") or "mainboard"))
+    res["inputs"]["hni"] = num("hni_x")
+    lv = SL.firing_levels()
+
+    def x(k):
+        v = num(k)
+        return "   -  " if v is None else f"{v:.2f}x"
+    qib_s, hni_s, rii_s = x("qib_x"), x("hni_x"), x("rii_x")
+    subject = f"{SUBJECT_PREFIX}TEST"
+    body = chr(10).join([
+        "*** TEST EMAIL - THIS IS NOT A BID DECISION. DO NOT ACT ON IT. ***", "",
+        "Sent deliberately to check delivery, the subject prefix and the body layout.",
+        "It is built from the LAST CLOSED IPO already on record, so every number below is",
+        "real recorded data rather than an invented example - but it is historical, and",
+        "the issue it describes has already closed.", "",
+        "=" * 68, "",
+        f"[{str(r.get('ipo')).upper()}]  ({'Mainboard' if r.get('segment') == 'mainboard' else 'SME'})"
+        f"   snapshot {r['t']:%d %b %Y %H:%M} IST, capture point {r.get('capture_point')}",
+        "",
+        f"  Total subscription:     {float(total):.2f}x  fetched {r['t']:%H:%M} IST",
+        f"  QIB {qib_s:>7s} | HNI {hni_s:>7s} | Retail {rii_s:>7s}        (display only)",
+        f"  Source:                 {r.get('source')} ({r.get('reconciled')})",
+    ] + _verdict_block(res) + [
+        "  Figures as of the snapshot time - final subscription is usually higher (H23).",
+        f"  Demand profile:         {res.get('demand_profile')}",
+        f"  GMP: {GMP_PLACEHOLDER}            (not in model - your judgement, D1)", "",
+        "=" * 68, "",
+        f"Decision rule (H17): L1 bids at Total >= {lv['L1']:.2f}x, L2 at >= {lv['L2']:.2f}x.",
+        "  Each level is where that share of IPOs the model had NOT seen met the target",
+        "  (walk-forward, never in-sample).", "",
+        "The verdict IS the subscription level met (H17); no probability is involved in",
+        "the decision.", "",
+        "*** TEST EMAIL - THIS IS NOT A BID DECISION. ***",
+    ])
+    out = send(subject, body, dry)
+    out.update({"mode": "test", "ipo": r.get("ipo"), "total_x": float(total),
+                "subject": subject, "marker_written": False})
+    print(body if dry else f"test email -> {out}")
+    return out
+
+
 # ---------------------------------------------------------------- entry points
 def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     """The 15:00 leg (`final=False`) scores, logs, snapshots, reports and emails.
@@ -780,10 +853,16 @@ if __name__ == "__main__":
                     help="19:30 day-end leg: snapshot after close, no email")
     ap.add_argument("--force", action="store_true",
                     help="ignore the idempotency marker for this slot")
+    ap.add_argument("--test-email", action="store_true",
+                    help="Task 5: one TEST email from the last closed IPO")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         raise SystemExit(self_test())
+    if a.test_email:
+        r = test_email(a.dry_run)
+        print(f"{chr(10)}{r}")
+        raise SystemExit(0 if r.get("sent") or a.dry_run else 1)
     try:
         r = main(a.dry_run, a.final, a.force)
     except Exception as e:
