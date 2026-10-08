@@ -1,37 +1,35 @@
 """
-ingest_outcomes.py — PLAN Stage 6 step 5. Runs Mon & Thu 08:00 IST.
+ingest_outcomes.py — the HARVEST half. Runs Mon & Thu 08:00 IST.
 
-Finds every IPO listed since the last run — mainboard and SME, bid or not — gets its listing
-price from two sources, reconciles them under rule 2, appends the row to the dataset, and
-scores the matching rows in `predictions_log.csv`.
+Finds every IPO that has listed since the last run — mainboard and SME, bid on or not —
+resolves its identity (symbol, ISIN, segment) and appends a row to `data/new_listings.csv`.
+That is how the training set grows: it is the only job that notices an IPO the user never
+bid on, and the retrain needs those rows as much as the ones with predictions attached.
 
-**Two sources, always.** A listing gain from one source is not ingested, because the whole
-target depends on it: `listing_gain` is what L1 and L2 are measured against, so a single bad
-value corrupts the label and every threshold derived from it. Sources:
+**It no longer prices anything** (Task 7, 2026-10-08). Prices come from exactly one place:
+`listing_prices.py` reading the exchange bhavcopy **for the listing date itself**, run by
+the 19:30 day-end leg. Rows are written with the price columns NULL and
+`reconciled = pending_dayend_capture`.
 
-  1. the NSE official historical-quote API
-  2. the BSE official historical API
+Why the pricing was removed rather than fixed in place
+------------------------------------------------------
+Every one of the 15 rows this job had ever written carried `listing_gain_pct = NULL` and
+`reconciled = no_source`. Its two sources were the NSE and BSE historical-**quote** APIs,
+which refuse this host, rather than the bhavcopy archive, which does not.
 
-**yfinance is NOT one of them, and must not be.** Its stored series for Indian tickers is
-adjusted for later splits and bonuses, and `auto_adjust=False` does not undo it: Syngene's
-2015 listing comes back at Rs 147.50 against a Rs 250 offer price, because of its 2017 1:1
-bonus. Comparing an adjusted price to an unadjusted offer price produces a listing gain of
--38% where the true figure is positive, and the error grows with the age of the issue. It is
-kept below only as a corroboration channel, clearly labelled, and never enters the gain.
+And it ran Mon & Thu, so it priced listings up to three days after they listed. **A price
+read later has been silently restated for any split or bonus since** — Syngene's real
+Rs 295 open reads Rs 147.50 once its 2017 bonus is applied, turning +18% into −41%. That
+is precisely what the Stage 27 standing rule exists to forbid, so a job that prices days
+late cannot be made correct by fixing its endpoints. yfinance was in here as a
+"corroboration" channel and is the worst offender for exactly that restatement; it is gone
+with the rest.
 
-(The existing `Listing Gain` column in the master dataset is unaffected — it does not come
-from yfinance. Model H's `excess_1y` is also unaffected, because it is a ratio of two points
-on the same adjusted series.)
-
-Max pairwise relative difference above 5% → the row is written with `listing_gain = NULL`
-and **both** values logged (rule 2). Nothing is estimated or filled.
-
-Outcomes are appended as *separate* rows keyed to `prediction_id`; a prediction row is never
-rewritten (`predictions_log.py`).
-
-    python ingest_outcomes.py                 # since the last run
+    python ingest_outcomes.py                 # harvest since the last run
     python ingest_outcomes.py --since 2026-09-01
     python ingest_outcomes.py --dry-run
+    python ingest_outcomes.py --backfill-prices    # fill NULL rows from their OWN
+                                                   # archived bhavcopy date
 """
 from __future__ import annotations
 import sys as _sys
@@ -135,127 +133,298 @@ def newly_listed(since: pd.Timestamp) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------- prices, two sources
-def price_yfinance(symbol: str, listing_date) -> dict:
+# ---------------------------------------------------------------- pricing: REMOVED
+# Task 7, 2026-10-08. `price_yfinance`, `price_official`, `price_bse` and `reconcile_gain`
+# lived here and are deleted, not disabled.
+#
+# They never worked. Every one of the 15 rows this job has ever written carries
+# `listing_gain_pct = NULL` and `reconciled = no_source`, because its two sources were the
+# NSE and BSE historical-QUOTE APIs rather than the bhavcopy archive.
+#
+# Worse than not working: the job runs Mon & Thu, so it priced listings up to three days
+# AFTER they listed. A price read later has been silently restated for any split or bonus
+# since - Syngene's real Rs 295 open reads Rs 147.50 once its 2017 bonus is applied - which
+# is exactly what the Stage 27 standing rule forbids. The yfinance channel was kept here as
+# "corroboration"; it is the single worst offender for that restatement and is gone too.
+#
+# Prices now come from ONE place: `listing_prices.py`, reading the exchange bhavcopy for
+# the listing date itself, run by the 19:30 day-end leg. This job keeps its harvest half -
+# finding IPOs that listed, including ones never bid on, which is how the training set
+# grows - and writes its rows with the price columns NULL and
+# `reconciled = pending_dayend_capture`.
+#
+# `--backfill-prices` fills historical rows from each row's OWN archived bhavcopy, which is
+# the as-reported figure for that date rather than a later restatement.
+
+
+def _norm_name(x) -> str:
+    """Lowercase alphanumerics only, with the usual suffixes stripped. Deterministic."""
+    t = "".join(ch for ch in str(x).lower() if ch.isalnum() or ch == " ")
+    for suf in (" limited", " ltd", " private", " pvt", " india", " indias"):
+        if t.endswith(suf):
+            t = t[: -len(suf)]
+    return "".join(ch for ch in t if ch.isalnum())
+
+
+def nse_past_issues() -> pd.DataFrame:
+    """Company -> symbol -> listing date, from NSE's own past-issues endpoint.
+
+    `api/public-past-issues` returns ~1,474 historical issues carrying `symbol`,
+    `company`, `ipoStartDate`, `ipoEndDate`, `listingDate` and `securityType`. It is the
+    lookup this harvest has always been missing: all 15 rows it had written carried `isin`
+    and `symbol` NULL, so the first backfill attempt fetched both bhavcopies for every
+    date successfully and then searched them for an unnamed company.
+
+    Permitted under H18: official host, robots.txt re-read and required to say `Allow: /`,
+    no login or click-through. Returns an EMPTY frame on any failure, never a partial
+    guess.
+    """
+    import time as _t
+
+    import requests
+
+    home = "https://www.nseindia.com/"
+    ref = home + "market-data/all-upcoming-issues-ipo"
+    ua = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+          "(KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36")
+    sess = requests.Session()
+    sess.headers.update({"User-Agent": ua, "Accept-Language": "en-GB,en;q=0.9",
+                         "Accept-Encoding": "gzip, deflate"})
     try:
-        import yfinance as yf
-        t = yf.Ticker(f"{symbol}.NS")
-        # auto_adjust=False is NOT optional here. yfinance adjusts for later splits and
-        # bonuses by default, so Syngene's 2015 listing comes back at Rs 152 against a Rs 250
-        # offer price -- a listing gain of -39% where the real figure is positive, because of
-        # its 2017 bonus. Every ingested label would have been wrong for any company that has
-        # since split or issued a bonus, and the error grows with age.
-        h = t.history(start=pd.Timestamp(listing_date) - pd.Timedelta(days=2),
-                      end=pd.Timestamp(listing_date) + pd.Timedelta(days=5),
-                      auto_adjust=False)
-        if h is None or not len(h):
-            return {"ok": False, "why": "no bars returned"}
-        first = h.iloc[0]
-        return {"ok": True, "open": float(first["Open"]), "close": float(first["Close"]),
-                "bar_date": str(h.index[0].date()), "source": "yfinance_unadjusted"}
-    except Exception as e:
-        return {"ok": False, "why": f"{type(e).__name__}: {e}"}
+        r = sess.get(home + "robots.txt", timeout=30)
+        if r.status_code != 200 or "Allow: /" not in r.text:
+            print("  NSE robots.txt did not confirm Allow: / "
+                  "(HTTP %s) - not fetching" % r.status_code)
+            return pd.DataFrame()
+        _t.sleep(3)
+        sess.get(home, timeout=30)
+        _t.sleep(3)
+        sess.get(ref, timeout=30)
+        _t.sleep(3)
+        r = sess.get(home + "api/public-past-issues",
+                     headers={"Referer": ref, "Accept": "application/json"}, timeout=30)
+        if "json" not in r.headers.get("Content-Type", ""):
+            print("  public-past-issues returned %s (HTTP %s) - not usable"
+                  % (r.headers.get("Content-Type"), r.status_code))
+            return pd.DataFrame()
+        rows = r.json()
+    except Exception as e:                                   # noqa: BLE001
+        print("  public-past-issues failed: %s: %s" % (type(e).__name__, str(e)[:90]))
+        return pd.DataFrame()
+
+    d = pd.DataFrame(rows)
+    if "symbol" not in d:
+        print("  public-past-issues had no symbol column")
+        return pd.DataFrame()
+    name = d["company"] if "company" in d else None
+    alt = d["companyName"] if "companyName" in d else None
+    if name is None and alt is None:
+        print("  public-past-issues had no company column")
+        return pd.DataFrame()
+    if name is None:
+        name = alt
+    elif alt is not None:
+        name = name.fillna(alt)
+    out = pd.DataFrame({
+        "nse_company": name.astype(str),
+        "nse_symbol": d["symbol"].astype(str).str.strip(),
+        "nse_listing": pd.to_datetime(d.get("listingDate"), errors="coerce",
+                                      format="mixed"),
+        "nse_type": (d["securityType"].astype(str) if "securityType" in d
+                     else pd.Series([""] * len(d))),
+    })
+    out["norm"] = out["nse_company"].map(_norm_name)
+    print("  NSE past issues: %d rows, %d distinct symbols"
+          % (len(out), out["nse_symbol"].nunique()))
+    return out
 
 
-def price_official(symbol: str, listing_date) -> dict:
-    """NSE's official quote endpoint. NSE_DOWNLOADS_ALLOWED does not apply — this is the
-    quote API, not a gated offer document."""
-    try:
-        import requests
-        s = requests.Session()
-        s.headers.update({"User-Agent": "ipo-agent/1.0 (personal research)",
-                          "Accept": "application/json"})
-        s.headers.update({"Referer": "https://www.nseindia.com/report-detail/eq_security",
-                          "Accept-Language": "en-US,en;q=0.9"})
-        s.get("https://www.nseindia.com/", timeout=20)
-        time.sleep(1.0)
-        s.get("https://www.nseindia.com/get-quotes/equity", params={"symbol": symbol},
-              timeout=20)                    # second hop: the API needs this cookie
-        time.sleep(1.0)
-        r = s.get("https://www.nseindia.com/api/historical/cm/equity",
-                  params={"symbol": symbol,
-                          "from": (pd.Timestamp(listing_date)).strftime("%d-%m-%Y"),
-                          "to": (pd.Timestamp(listing_date) +
-                                 pd.Timedelta(days=5)).strftime("%d-%m-%Y")},
-                  timeout=30)
-        if r.status_code != 200:
-            return {"ok": False, "why": f"HTTP {r.status_code}"}
-        rows = (r.json() or {}).get("data") or []
-        if not rows:
-            return {"ok": False, "why": "no rows"}
-        rows = sorted(rows, key=lambda x: x.get("CH_TIMESTAMP", ""))
-        f = rows[0]
-        return {"ok": True, "open": float(f["CH_OPENING_PRICE"]),
-                "close": float(f["CH_CLOSING_PRICE"]),
-                "bar_date": f.get("CH_TIMESTAMP"), "source": "nse_official"}
-    except Exception as e:
-        return {"ok": False, "why": f"{type(e).__name__}: {e}"}
+def resolve_from_nse(ipo: str, listing_date, past: pd.DataFrame) -> dict:
+    """`{symbol, how, ...}` for one harvested row, or `{}`.
+
+    TWO keys must agree, never one: the normalised company name AND the listing date
+    (within a day, because the sources can differ by a calendar day on a late-evening
+    listing notice). Name alone is exactly how the Priority 2 probe silently returned a
+    different company's subscription for the guessed symbol `PARAMOUNT`.
+    """
+    if past is None or past.empty:
+        return {}
+    n = _norm_name(ipo)
+    if len(n) < 5:
+        return {}
+    day = pd.Timestamp(listing_date).normalize()
+    cand = past[past["norm"] == n]
+    how = "name+date"
+    if cand.empty:
+        # A prefix match is allowed ONLY when it is unique, and the date must still agree.
+        pref = past[past["norm"].str.startswith(n[:12])]
+        if len(pref) != 1:
+            return {}
+        cand, how = pref, "name_prefix+date"
+    cand = cand[(cand["nse_listing"] - day).abs() <= pd.Timedelta(days=1)]
+    if len(cand) != 1:
+        return {}
+    r = cand.iloc[0]
+    return {"symbol": r["nse_symbol"], "how": how, "nse_type": r["nse_type"],
+            "nse_company": r["nse_company"]}
 
 
-def price_bse(bse_code: str | int | None, listing_date) -> dict:
-    """BSE's official historical endpoint. Unadjusted, which is what a listing gain needs."""
-    if not bse_code:
-        return {"ok": False, "why": "no BSE code"}
-    try:
-        import requests
-        s = requests.Session()
-        s.headers.update({"User-Agent": "ipo-agent/1.0 (personal research)",
-                          "Accept": "application/json",
-                          "Referer": "https://www.bseindia.com/"})
-        d = pd.Timestamp(listing_date)
-        r = s.get("https://api.bseindia.com/BseIndiaAPI/api/StockPriceCSVDownload/w",
-                  params={"pageType": "0", "scripcode": str(int(bse_code)),
-                          "fromdate": d.strftime("%d/%m/%Y"),
-                          "todate": (d + pd.Timedelta(days=5)).strftime("%d/%m/%Y")},
-                  timeout=30)
-        if r.status_code != 200 or not r.text.strip():
-            return {"ok": False, "why": f"HTTP {r.status_code}"}
-        import io as _io
-        df = pd.read_csv(_io.StringIO(r.text))
-        df.columns = [c.strip().lower() for c in df.columns]
-        if not len(df):
-            return {"ok": False, "why": "no rows"}
-        f = df.iloc[0]
-        return {"ok": True, "open": float(f.get("open price", f.get("open"))),
-                "close": float(f.get("close price", f.get("close"))),
-                "bar_date": str(f.get("date")), "source": "bse_official"}
-    except Exception as e:
-        return {"ok": False, "why": f"{type(e).__name__}: {e}"}
+def backfill_prices(dry: bool = False) -> pd.DataFrame:
+    """Task 7. Fill every NULL-gain row in `new_listings.csv` from its OWN listing date's
+    archived bhavcopy.
+
+    One request per distinct listing date, not per company: a bhavcopy covers every scrip
+    that traded that day, so companies sharing a date share a fetch.
+
+    The figure is the as-reported one for that date. That is the whole point of going back
+    to the archive rather than asking for a current quote: the archive cannot have been
+    restated, because it is a file published that evening and never rewritten.
+    """
+    import listing_prices as LP
+    if not NEW_LISTINGS.exists():
+        print(f"{NEW_LISTINGS} does not exist")
+        return pd.DataFrame()
+    d = pd.read_csv(NEW_LISTINGS)
+    before = d.copy()
+    # An all-NULL column reads back as float64, so assigning a symbol string into it
+    # raises `Invalid value 'ARMEE' for dtype 'float64'`. Cast the text columns up front.
+    for c in ("isin", "symbol", "reconciled", "note", "gain_source_a", "gain_source_b"):
+        if c in d:
+            d[c] = d[c].astype(object)
+    todo = d[pd.to_numeric(d["listing_gain_pct"], errors="coerce").isna()].copy()
+    print(f"{len(d)} rows in new_listings.csv; {len(todo)} with no gain")
+    if todo.empty:
+        return d
+
+    # Resolve the identities FIRST. The bhavcopies were always being fetched;
+    # what was missing was a symbol to look them up by.
+    past = nse_past_issues()
+
+    f = LP.Fetcher()
+    cache: dict[str, tuple] = {}
+    filled = 0
+    resolved = 0
+    for i, r in todo.iterrows():
+        day = str(r["listing_date"])
+        if day not in cache:
+            cache[day] = (LP.bhavcopy(f, day, "nse"), LP.bhavcopy(f, day, "bse"))
+        (ndf, nnote), (bdf, bnote) = cache[day]
+        isin = str(r.get("isin") or "")
+        isin = isin.upper() if isin and isin.lower() != "nan" else None
+        symbol = str(r.get("symbol") or "")
+        symbol = symbol.strip() if symbol and symbol.lower() != "nan" else None
+        how_sym = "already on the row"
+        if not symbol:
+            got = resolve_from_nse(str(r["ipo"]), day, past)
+            if got:
+                symbol = got["symbol"]
+                how_sym = ("NSE public-past-issues (%s, %s)"
+                           % (got["how"], got["nse_type"]))
+                d.loc[i, "symbol"] = symbol
+                resolved += 1
+            else:
+                how_sym = "UNRESOLVED"
+        # new_listings.csv has never carried a bse_code column, so there is no
+        # BSE scrip code to match on. Stated rather than left as a silent None.
+        code = None
+
+        n, nhow = LP.find(ndf, isin, symbol, None)
+        b, bhow = LP.find(bdf, isin, symbol, code)
+
+        def one(h, how):
+            if h is None or not len(h):
+                return {"match_by": how}
+            return {"open": float(h["open"].iloc[0]) if pd.notna(h["open"].iloc[0]) else None,
+                    "close": float(h["close"].iloc[0]) if pd.notna(h["close"].iloc[0]) else None,
+                    "match_by": how}
+
+        nd, bd = one(n, nhow), one(b, bhow)
+        offer = pd.to_numeric(pd.Series([r.get("offer_price")]), errors="coerce").iloc[0]
+        rec = LP.reconcile(nd, bd, None if pd.isna(offer) else float(offer))
+        if rec.get("listing_gain_pct") is None:
+            d.loc[i, "reconciled"] = rec.get("reconciled") or "no_source"
+            d.loc[i, "note"] = (f"{r.get('note','')} | backfill {day}: symbol "
+                                f"{symbol or 'NONE'} via {how_sym}; "
+                                f"nse {nnote}; bse {bnote}")[:600]
+            print(f"  {str(r['ipo'])[:30]:32s} {day}  sym={str(symbol):12s} "
+                  f"NOT FOUND  {how_sym[:36]}")
+            continue
+        d.loc[i, "listing_open"] = rec.get("listing_open")
+        d.loc[i, "listing_close"] = rec.get("listing_close")
+        d.loc[i, "listing_gain_pct"] = rec.get("listing_gain_pct")
+        d.loc[i, "gain_source_a"] = nd.get("open")
+        d.loc[i, "gain_source_b"] = bd.get("open")
+        d.loc[i, "reconciled"] = rec.get("reconciled")
+        d.loc[i, "note"] = (f"{r.get('note','')} | backfilled from the {day} archived "
+                            f"bhavcopy (as-reported); symbol via {how_sym}; "
+                            f"nse match {nhow}, bse match {bhow}")[:600]
+        filled += 1
+        print(f"  {str(r['ipo'])[:30]:32s} {day}  sym={str(symbol):12s} "
+              f"open={rec.get('listing_open')} gain={rec.get('listing_gain_pct')}%  "
+              f"{rec.get('reconciled')}")
+
+    print(f"{chr(10)}resolved {resolved} missing symbol(s); "
+          f"filled {filled} of {len(todo)}")
+    if dry:
+        print("--dry-run: nothing written")
+        return d
+    d.to_csv(NEW_LISTINGS, index=False, encoding="utf-8")
+    cols = ["ipo", "listing_date", "offer_price", "listing_open", "listing_gain_pct",
+            "reconciled"]
+    rep = before[cols].merge(d[cols], on=["ipo", "listing_date"], suffixes=("_before", "_after"))
+    rep.to_csv(ROOT / "reports" / "NEW_LISTINGS_BACKFILL.csv", index=False, encoding="utf-8")
+    print(f"written {NEW_LISTINGS} and reports/NEW_LISTINGS_BACKFILL.csv")
+    return d
 
 
-def reconcile_gain(offer: float | None, a: dict, b: dict) -> dict:
-    """Listing gain from two independent sources, under rule 2."""
-    if not offer or offer <= 0:
-        return {"listing_gain_pct": None, "reconciled": "no_offer_price",
-                "note": "offer price unknown, so no gain can be computed"}
-    gains, srcs = [], []
-    for r in (a, b):
-        if r.get("ok"):
-            gains.append((r["close"] - offer) / offer * 100.0)
-            srcs.append(r["source"])
-    if not gains:
-        return {"listing_gain_pct": None, "reconciled": "no_source",
-                "note": f"both sources failed: {a.get('why')} | {b.get('why')}"}
-    if len(gains) == 1:
-        return {"listing_gain_pct": None, "gain_source_a": gains[0],
-                "reconciled": "single_source_REJECTED",
-                "note": f"only {srcs[0]} returned a price. A single source is NOT ingested: "
-                        "listing_gain is the label L1 and L2 are measured against, so one "
-                        "bad value corrupts every threshold derived from it (rule 2)."}
-    hi = max(abs(g) for g in gains) or 1.0
-    diff = abs(gains[0] - gains[1]) / hi
-    if diff > TOL:
-        return {"listing_gain_pct": None, "gain_source_a": gains[0],
-                "gain_source_b": gains[1], "rel_diff_pct": round(diff * 100, 3),
-                "reconciled": "MISMATCH -> NULL",
-                "note": f"{srcs[0]} {gains[0]:.2f}% vs {srcs[1]} {gains[1]:.2f}% differ by "
-                        f"{diff*100:.1f}% (> 5%); both logged, value NULL (rule 2)"}
-    return {"listing_gain_pct": round(sum(gains) / len(gains), 4),
-            "gain_source_a": gains[0], "gain_source_b": gains[1],
-            "rel_diff_pct": round(diff * 100, 3), "reconciled": "PASS",
-            "note": f"{srcs[0]} and {srcs[1]} agree within {diff*100:.2f}%"}
+def fix_segments_from_nse(dry: bool = False) -> pd.DataFrame:
+    """Set `segment` from NSE's own `securityType`, for every row that resolves.
+
+    Rule 6 keeps SME and mainboard in separate models, so a wrong segment label is not
+    cosmetic - it pools two populations whose coefficients differ in sign. Every one of
+    the 15 legacy harvest rows says `mainboard`, because the rows were written before the
+    segment default was removed (Priority 5b), and at least two of them are SME.
+
+    The label comes from the exchange's own field. Nothing is inferred from the company
+    name, the offer size or the listing venue.
+    """
+    if not NEW_LISTINGS.exists():
+        return pd.DataFrame()
+    d = pd.read_csv(NEW_LISTINGS)
+    for c in ("segment", "symbol", "note"):
+        if c in d:
+            d[c] = d[c].astype(object)
+    past = nse_past_issues()
+    if past.empty:
+        print("  no NSE past-issues data; segments left exactly as they are")
+        return d
+    changed = []
+    for i, r in d.iterrows():
+        got = resolve_from_nse(str(r["ipo"]), r["listing_date"], past)
+        if not got:
+            continue
+        t = str(got.get("nse_type") or "").strip().upper()
+        if t in ("EQ", "BE"):
+            seg = "mainboard"
+        elif t in ("SME", "ST", "SM"):
+            seg = "sme"
+        else:
+            continue                      # unknown code: leave it alone, never guess
+        if str(r.get("segment") or "") != seg:
+            changed.append((r["ipo"], r.get("segment"), seg, t))
+            d.loc[i, "segment"] = seg
+            d.loc[i, "note"] = (f"{r.get('note','')} | segment set to {seg} from NSE "
+                                f"securityType={t}")[:900]
+    for ipo, old, new, t in changed:
+        print(f"  {str(ipo)[:30]:32s} segment {old} -> {new}  (NSE securityType {t})")
+    print(f"{chr(10)}{len(changed)} segment label(s) corrected")
+    if dry:
+        print("--dry-run: nothing written")
+        return d
+    d.to_csv(NEW_LISTINGS, index=False, encoding="utf-8")
+    return d
 
 
-# ---------------------------------------------------------------- main
 def main(since: str | None = None, dry: bool = False) -> pd.DataFrame:
     start = pd.Timestamp(since) if since else last_run()
     now = pd.Timestamp.now()
@@ -301,32 +470,23 @@ def main(since: str | None = None, dry: bool = False) -> pd.DataFrame:
 
         bse_code = res.get("bse_code") or (
             m["bse_code"].iloc[0] if len(m) and "bse_code" in m else None)
-        a = b = {"ok": False, "why": "no symbol resolved"}
-        corroboration = {"ok": False}
-        if symbol:
-            gap = MIN_GAP_S - (time.time() - last)
-            if gap > 0:
-                time.sleep(gap)
-            last = time.time()
-            a = price_official(symbol, r.listing_date)
-            b = price_bse(bse_code, r.listing_date)
-            corroboration = price_yfinance(symbol, r.listing_date)
-        rec = reconcile_gain(offer, a, b)
+        # Task 7: NO pricing here. The harvest records that the IPO listed and resolves
+        # its identity; the price comes from the bhavcopy captured ON the listing date.
         row = {"ipo": r.ipo, "isin": isin, "symbol": symbol, "segment": seg["segment"],
                "listing_date": str(pd.Timestamp(r.listing_date).date()),
                "offer_price": offer,
-               "listing_open": a.get("open") if a.get("ok") else b.get("open"),
-               "listing_close": a.get("close") if a.get("ok") else b.get("close"),
-               "ingested_at": str(now), **rec}
-        row["note"] = (f"{row.get('note','')} | symbol via {res['source']}"
+               "listing_open": None, "listing_close": None, "listing_gain_pct": None,
+               "gain_source_a": None, "gain_source_b": None, "rel_diff_pct": None,
+               "reconciled": "pending_dayend_capture",
+               "ingested_at": str(now)}
+        row["note"] = (f"harvest only; price from the day-end bhavcopy capture on the "
+                       f"listing date (Task 7) | symbol via {res['source']}"
                        f" | segment: {seg['source']}"
-                       f" | offer price from {offer_src}"
-                       + (f" | yfinance corroboration close "
-                          f"{corroboration['close']:.2f} (ADJUSTED series - not used in the "
-                          f"gain)" if corroboration.get("ok") else ""))
+                       f" | bse_code {bse_code}"
+                       f" | offer price from {offer_src}")
         rows.append(row)
-        print(f"  {str(r.ipo)[:34]:36s} {str(symbol):12s} "
-              f"gain={rec.get('listing_gain_pct')} {rec['reconciled']}")
+        print(f"  {str(r.ipo)[:34]:36s} {str(symbol):12s} harvested "
+              f"(price pending day-end capture)")
 
     out = pd.DataFrame([{c: r.get(c) for c in NEW_COLS} for r in rows], columns=NEW_COLS)
     if dry:
@@ -360,5 +520,15 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--since", default=None)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--fix-segments", action="store_true",
+                    help="rule 6: set segment from NSE securityType")
+    ap.add_argument("--backfill-prices", action="store_true",
+                    help="Task 7: fill NULL-gain rows from their own "
+                         "archived bhavcopy date")
     a = ap.parse_args()
-    main(a.since, a.dry_run)
+    if a.fix_segments:
+        fix_segments_from_nse(a.dry_run)
+    elif a.backfill_prices:
+        backfill_prices(a.dry_run)
+    else:
+        main(a.since, a.dry_run)
