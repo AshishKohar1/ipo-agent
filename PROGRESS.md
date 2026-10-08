@@ -17,6 +17,31 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 - **Gate C2:** AWAITING_USER since 2026-10-01
 - **Caveat:** Stage 1's Linux/`pip install` half is still unverified on a real cloud session
 
+## FIRST STEP OF THE NEXT SESSION (Task 3 handover, written 2026-10-08 ~23:5x IST)
+
+The 9 October scheduled email runs had **not** fired when this session ended. Do this
+before anything else:
+
+```bash
+gh run list --workflow=live-model-l.yml --limit 12 --json workflowName,number,event,conclusion,createdAt,runStartedAt
+```
+
+`gh` is at `C:\Program Files\GitHub CLI\gh.exe` and is **not on PATH** in a fresh shell —
+add it or call it by full path.
+
+For each 9 Oct run report: **scheduled time vs actual IST start**, and the result. The four
+email crons are due at 08:45, 09:00, 09:15 and 09:30 UTC (14:15–15:00 IST). Measured delay
+across 2–8 Oct was **5h31m to 9h06m**, so expect them late; the question is whether any
+landed inside the 14:00–16:00 window.
+
+Then read the log of any red run and classify it as one of exactly four things:
+**old schedule / send-window refusal / runner fault / code**. A send-window refusal with
+nothing owed now exits GREEN, so a red run means something real.
+
+Pre-push state recorded for comparison: **no run had fired between 22:20 IST on 8 Oct and
+the end of this session**, other than the two `workflow_dispatch` runs this session
+triggered (#13 refusal test, #14 test email).
+
 ## Stages
 
 | Stage | Title | Depends on | Status | Started (IST) | Finished (IST) | Notes |

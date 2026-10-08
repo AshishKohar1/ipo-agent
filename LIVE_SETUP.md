@@ -10,18 +10,32 @@ advice you act on manually, before your broker's 4:00 PM cutoff.
 
 ---
 
-## 1. The schedule — exactly three jobs, all on GitHub Actions
+## 1. The schedule — all on GitHub Actions, all cron in UTC
 
 Everything runs from `.github/workflows/live-model-l.yml`. There are **no app routines and
 no Task Scheduler tasks** for the live path any more; `ipo-score-1500`, `ipo-notify-1530`
 and `ipo-final-capture-1730` were deleted on 2026-10-08 because all three called the retired
 `run_live_l.py` and duplicated what Actions already does.
 
+**All cron is UTC.** GitHub reads cron as UTC and nothing else; IST is UTC + 5:30.
+
 | When (IST) | Cron (UTC) | What runs | What it does |
 |---|---|---|---|
-| **15:00**, weekdays | `30 9 * * 1-5` | `send_daily_email.py` | Scores every mainboard IPO closing today, logs the predictions, appends the 1500 snapshot, writes `reports/live/<date>.md`, **sends the bid/no-bid email** |
-| **19:30**, weekdays | `0 14 * * 1-5` | `capture_audit.py --catch-up`<br>`send_daily_email.py --final`<br>`listing_prices.py --capture-listing-day` | Recovers any missed day, then captures final subscription, the 15 index closes, and listing-day prices for anything that listed today |
-| **10:30**, Saturdays | `0 5 * * 6` | `capture_audit.py --audit --days 7` | Checks every weekday that week left an attempt. **Fails the run if one did not** |
+| **14:15** | `45 8 * * 1-5` | `send_daily_email.py` | Email attempt 1 |
+| **14:30** | `0 9 * * 1-5` | `send_daily_email.py` | Email attempt 2 |
+| **14:45** | `15 9 * * 1-5` | `send_daily_email.py` | Email attempt 3 |
+| **15:00** | `30 9 * * 1-5` | `send_daily_email.py` | Email attempt 4. Scores every mainboard IPO closing today, logs the predictions, appends the 1500 snapshot, writes `reports/live/<date>.md`, **sends the bid/no-bid email** |
+| **19:30** | `0 14 * * 1-5` | `capture_audit.py --catch-up`<br>`send_daily_email.py --final`<br>`listing_prices.py --capture-listing-day` | Day-end: recovers any missed day, then final subscription, the 15 index closes, and listing-day prices for anything that listed today |
+| **10:30 Sat** | `0 5 * * 6` | `capture_audit.py --audit --days 7` | Checks every weekday that week left an attempt. **Fails the run if one did not** |
+| **11:00 / 13:00 / 15:01 / 17:31** | `30 5` / `30 7` / `31 9` / `1 12`, Mon–Fri | `hdfire_poll.py` | Task 9 only, 13–15 Oct. Exits immediately on any other date |
+
+Four email attempts, not one, because **the first that succeeds sends and the rest exit
+green** on the sent marker (`data/sent_markers.csv`, keyed by IPO and date). All four sit
+inside the 14:00–16:00 send window.
+
+The `0 12 * * 1-5` cron — the retired 17:30 day-end leg — is **gone and deliberately not
+reused**, even for a poll. A cron string that looks like the old schedule is a trap for
+whoever reads this next.
 
 Plus `.github/workflows/retry-infra-failure.yml`, which is not scheduled — it fires when a
 live run finishes and re-runs it if GitHub dropped it (section 4).
@@ -43,6 +57,98 @@ GitHub's scheduler drifts 5–15 minutes under load. 15:00 absorbs that and stil
 NSE Indices publishes the day's index closes after its settlement run. At 17:30 the table
 was incomplete, so index closes were being captured half-formed. 19:30 is after publication
 and still the same evening.
+
+---
+
+## 1b. The external trigger — and why it is not optional
+
+**GitHub's scheduler cannot be relied on here.** Measured from the Actions API across
+every scheduled run between 2 and 8 October:
+
+| run | mode | cron (UTC) | due (UTC) | actually started (UTC) | late by |
+|---|---|---|---|---|---|
+| 1 | email | `30 9` | 02 Oct 09:30 | 15:53 | **6h 23m** |
+| 2 | final | `0 12` | 02 Oct 12:00 | 17:31 | **5h 31m** |
+| 6 | email | `30 9` | 05 Oct 09:30 | 18:36 | **9h 06m** |
+| 7 | final | `0 12` | 05 Oct 12:00 | 20:15 | **8h 15m** |
+| 8 | email | `30 9` | 06 Oct 09:30 | 16:02 | **6h 32m** |
+| 9 | final | `0 12` | 06 Oct 12:00 | 17:59 | **5h 59m** |
+| 10 | email | `30 9` | 07 Oct 09:30 | 16:41 | **7h 11m** |
+| 11 | final | `0 12` | 07 Oct 12:00 | 18:29 | **6h 29m** |
+| 12 | email | `30 9` | 08 Oct 09:30 | 16:38 | **7h 08m** |
+
+Nine for nine, between 5h31m and 9h06m late. The cron strings were correct UTC from the
+first commit — `git log` on the workflow confirms it — so this is not a timezone error on
+our side. It is GitHub deprioritising scheduled runs in a low-activity repository.
+
+By contrast, both `workflow_dispatch` runs on 8 October started **within one second** of
+being triggered. The API path is prompt; the cron path is not.
+
+**So the four scheduled email crons are a backstop. The external trigger is the plan.**
+
+### Setting up cron-job.org
+
+1. **Create the token.** GitHub → *Settings → Developer settings → Personal access tokens
+   → Fine-grained tokens → Generate new token*.
+   * **Repository access:** *Only select repositories* → `AshishKohar1/ipo-agent`.
+   * **Permissions:** *Repository permissions → Actions → **Read and write***. Nothing
+     else — no `contents`, no `metadata` beyond the mandatory read, no account
+     permissions.
+   * **Expiry:** 90 days, with a calendar reminder to rotate it.
+
+   **I have not created this token and cannot** — it is an account credential. Create it
+   yourself and paste it only into cron-job.org's header field.
+
+2. **Create the job** at cron-job.org → *Create cronjob*:
+
+   | field | value |
+   |---|---|
+   | URL | `https://api.github.com/repos/AshishKohar1/ipo-agent/actions/workflows/live-model-l.yml/dispatches` |
+   | Schedule | custom: **09:10 UTC**, Mon–Fri |
+   | Time zone | **UTC** (set this explicitly; the default is the browser's) |
+   | Method | `POST` |
+
+3. **Headers** (*Advanced → Headers*):
+
+   ```
+   Accept: application/vnd.github+json
+   Authorization: Bearer <your fine-grained token>
+   X-GitHub-Api-Version: 2022-11-28
+   Content-Type: application/json
+   ```
+
+4. **Body** (*Advanced → Request body*):
+
+   ```json
+   {"ref":"main","inputs":{"mode":"email"}}
+   ```
+
+5. **Expect HTTP 204** with an empty body. That is success for this endpoint — not 200.
+   A `401` means the token is wrong or expired; a `403` means it lacks
+   *Actions: read and write*; a `404` usually means the token cannot see the repository.
+
+6. **Check it worked:** the run appears in Actions as `workflow_dispatch`, and
+   `data/sent_markers.csv` gains a row.
+
+**09:10 UTC is 14:40 IST**, which sits inside the 14:00–16:00 send window with 80 minutes
+to spare before the cutoff. It is deliberately *before* the four GitHub crons' nominal
+times, so on a normal day the external trigger sends and the GitHub crons — whenever they
+eventually arrive — find the sent marker and exit green.
+
+### Also worth pointing at the poll (13–15 October only)
+
+For the HDFIRE intraday test, add four more cron-job.org jobs with the same URL, headers
+and token, changing only the body and the time:
+
+| time (UTC) | IST | body |
+|---|---|---|
+| 05:30 | 11:00 | `{"ref":"main","inputs":{"mode":"poll"}}` |
+| 07:30 | 13:00 | same |
+| 09:31 | 15:01 | same |
+| 12:01 | 17:31 | same |
+
+`hdfire_poll.py` exits immediately outside 13–15 October, so these are harmless if left
+in place afterwards — but they are worth deleting once the test is reported.
 
 ---
 

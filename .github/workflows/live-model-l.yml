@@ -76,6 +76,20 @@ on:
                                 #   catch-up, final subscription, 15 index closes,
                                 #   listing-day prices
     - cron: "0 5 * * 6"         # 05:00 UTC = 10:30 IST Saturdays — weekly capture audit
+    #
+    # Task 9, the HDFIRE intraday test, 13-15 Oct only. Four polls a day.
+    # A BACKSTOP, NOT THE PLAN: measured over nine scheduled runs 2-8 Oct, GitHub's
+    # scheduler was 5h31m to 9h06m late, so a poll meant for 11:00 IST may arrive in the
+    # evening. The real trigger is cron-job.org or a manual dispatch; the poller records
+    # its REAL time either way, so a drifted poll is still usable data. The script exits
+    # immediately outside 13-15 Oct.
+    - cron: "30 5 * * 1-5"      # 05:30 UTC = 11:00 IST — HDFIRE poll 1
+    - cron: "30 7 * * 1-5"      # 07:30 UTC = 13:00 IST — HDFIRE poll 2
+    - cron: "31 9 * * 1-5"      # 09:31 UTC = 15:01 IST — HDFIRE poll 3
+    - cron: "1 12 * * 1-5"      # 12:01 UTC = 17:31 IST — HDFIRE poll 4
+                                #   NOT "0 12", which was the retired 17:30
+                                #   day-end cron - reusing that exact string
+                                #   would look like 17:30 had come back
   workflow_dispatch:
     inputs:
       mode:
@@ -83,7 +97,7 @@ on:
         required: true
         default: "email"
         type: choice
-        options: [email, final, listing, audit, catch-up, test-email, dry-run, probe, rehearse]
+        options: [email, final, listing, audit, catch-up, test-email, poll, dry-run, probe, rehearse]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -123,13 +137,17 @@ jobs:
       # breakage on 1 Oct instead of three silent days later.
       - name: Verify the live path imports in this environment
         run: |
-          python -c "import send_daily_email, chittorgarh_live, score_l, predictions_log, live_markers, market_context, capture_audit; print('live path imports OK')"
+          python -c "import send_daily_email, chittorgarh_live, score_l, predictions_log, live_markers, market_context, capture_audit, trading_day, sent_markers, nse_subscription; print('live path imports OK')"
           python score_l.py --self-test
           python live_markers.py --self-test
           python market_context.py --self-test
           python send_daily_email.py --self-test
           python listing_prices.py --self-test
           python capture_audit.py --self-test
+          python trading_day.py --self-test
+          python sent_markers.py --self-test
+          python nse_subscription.py --self-test
+          python hdfire_poll.py --self-test
 
       # Task 1. ONE trading date per run, computed in Asia/Kolkata and frozen here.
       # Run #11 started at 23:59:30 IST on 7 October, crossed midnight mid-job, and
@@ -155,6 +173,10 @@ jobs:
             workflow_dispatch:*)          mode="${{ inputs.mode }}" ;;
             schedule:"0 14 * * 1-5")      mode=final ;;
             schedule:"0 5 * * 6")         mode=audit ;;
+            schedule:"30 5 * * 1-5")      mode=poll ;;
+            schedule:"30 7 * * 1-5")      mode=poll ;;
+            schedule:"31 9 * * 1-5")      mode=poll ;;
+            schedule:"1 12 * * 1-5")      mode=poll ;;
             schedule:"45 8 * * 1-5")      mode=email ;;
             schedule:"0 9 * * 1-5")       mode=email ;;
             schedule:"15 9 * * 1-5")      mode=email ;;
@@ -198,6 +220,8 @@ jobs:
                       # gap is visible without anybody reading a report.
                       python capture_audit.py --audit --days 7 ;;
             catch-up) python capture_audit.py --catch-up --days 7 ;;
+            poll)     # Task 9. Exits immediately outside 13-15 Oct.
+                      python hdfire_poll.py --label "$(TZ=Asia/Kolkata date +%H%M)" ;;
             test-email) # Task 5. Real SMTP, real composition, subject
                       # `IPO decision - TEST`, built from the last closed
                       # IPO on record. Writes no sent marker and logs no
@@ -218,7 +242,7 @@ jobs:
           # produced", exited 0 and looked GREEN while leaving no record in the repo that
           # it had run at all. Staging each path on its own means one absent file can no
           # longer suppress the others.
-          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv data/listing_prices.csv data/listing_prices_progress.csv reports/live reports/CAPTURE_AUDIT.md; do
+          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv data/listing_prices.csv data/listing_prices_progress.csv reports/live reports/CAPTURE_AUDIT.md data/sent_markers.csv data/final_subscription.csv data/hdfire_poll.csv data/new_listings.csv reports/HDFIRE_INTRADAY.md; do
             if [ -e "$f" ]; then
               git add -A -- "$f" || echo "could not stage $f"
             else
