@@ -69,10 +69,44 @@ def last_run() -> pd.Timestamp:
     return pd.Timestamp.today().normalize() - pd.Timedelta(days=7)
 
 
+def harvest_coverage() -> pd.Timestamp | None:
+    """The latest listing date the Chittorgarh harvest actually covers.
+
+    The watermark may never advance past this. `newly_listed()` reads its calendar from the
+    harvest, so a harvest that stops at date D has examined nothing after D -- and a run that
+    finds no candidates because the night sweep has not refreshed has not established that
+    nothing listed, only that it could not look. Advancing `last_run` to `now` in that case
+    skips the unexamined window *permanently*: those listings are never candidates again, and
+    `listing_gain` is the label L1 and L2 are measured against, so the loss is silent and
+    uncorrectable by inspection. Clamping is also duplicate-safe, because `newly_listed()`
+    filters on `listed > since` strictly, so rows dated exactly D stay excluded.
+    """
+    p = ROOT / "data" / "chittorgarh_backfill.csv"
+    if not p.exists():
+        return None
+    try:
+        d = pd.read_csv(p, usecols=["listed_on"], keep_default_na=False, na_values=[""])
+        m = pd.to_datetime(d["listed_on"], errors="coerce", format="mixed").max()
+        return None if pd.isna(m) else m
+    except Exception:
+        return None
+
+
 def save_state(when: pd.Timestamp, n: int) -> None:
     STATE.parent.mkdir(parents=True, exist_ok=True)
-    STATE.write_text(json.dumps({"last_run": str(when), "ingested": n}, indent=2),
-                     encoding="utf-8")
+    cover = harvest_coverage()
+    saved, note = when, None
+    if cover is not None and cover < when:
+        saved = cover
+        note = (f"watermark held at the harvest's last covered listing date {cover.date()} "
+                f"rather than advanced to {when.date()}: the harvest calendar is stale, so "
+                f"{cover.date()}..{when.date()} was never examined and must stay open")
+        print(f"  NOTE: {note}")
+    rec = {"last_run": str(saved), "ingested": n, "run_at": str(when),
+           "harvest_covers_to": None if cover is None else str(cover.date())}
+    if note:
+        rec["watermark_note"] = note
+    STATE.write_text(json.dumps(rec, indent=2), encoding="utf-8")
 
 
 # ---------------------------------------------------------------- calendar
