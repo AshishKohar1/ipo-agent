@@ -32,6 +32,12 @@
 # next day-end run recovers the archived parts, and the Saturday audit fails the week if
 # anything is still open.
 
+# SCHEDULE: none. This workflow has no cron. It is triggered by `workflow_run` when
+# "Model L live" completes, so it fires whenever that one does - which under the UTC crons
+# means around 14:15/14:30/14:45/15:00 IST (08:45/09:00/09:15/09:30 UTC) on weekdays for
+# the email legs, 19:30 IST (14:00 UTC) for the day-end leg, and 10:30 IST (05:00 UTC) on
+# Saturdays for the audit. It inherits those times rather than declaring its own.
+
 name: Retry a dropped live run
 
 on:

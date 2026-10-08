@@ -148,7 +148,7 @@ NOTES = [
     "the figure the model was trained on. The probability it returns is therefore too low, "
     "not too high: **the model will miss good IPOs rather than recommend bad ones.** A "
     "near-threshold `no` should be read as uncertain, not as a negative verdict. "
-    "**The size of this bias is unmeasured** until the 15:00/17:30 paired capture "
+    "**The size of this bias is unmeasured** until the 15:00/19:30 paired capture "
     "accumulates data (`data/subscription_snapshots.csv`); it cannot be estimated from any "
     "existing source.",
     "**Feature set is `log1p(Total)` alone (H11), superseding Set A.** Issue size was "

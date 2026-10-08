@@ -61,6 +61,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import live_markers as LM                                    # noqa: E402
+import trading_day as TD                                     # noqa: E402
 
 REPORT = ROOT / "reports" / "CAPTURE_AUDIT.md"
 
@@ -89,10 +90,10 @@ def weekdays(upto=None, days: int = 7) -> list[pd.Timestamp]:
     Excludes `upto` itself when it is today and the day-end slot has not come round yet,
     because a job that is not due is not missing.
     """
-    upto = pd.Timestamp(upto or pd.Timestamp.now()).normalize()
+    upto = pd.Timestamp(upto).normalize() if upto is not None else TD.trading_date()
     start = upto - pd.Timedelta(days=days - 1)
     out = [d for d in pd.date_range(start, upto, freq="D") if d.weekday() < 5]
-    now = pd.Timestamp.now()
+    now = TD.ist_now()
     if out and out[-1].normalize() == now.normalize() and (now.hour * 100 + now.minute) < DAYEND_POINT:
         out = out[:-1]
     return out

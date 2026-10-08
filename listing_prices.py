@@ -57,6 +57,7 @@ import requests
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import dataio                                               # noqa: E402
+import trading_day as TD                                    # noqa: E402
 
 CACHE = ROOT / "data" / "bhavcopy_cache"
 OUT = ROOT / "data" / "listing_prices.csv"
@@ -494,15 +495,20 @@ def capture_listing_day(day=None, catch_up: bool = False) -> dict:
     an outcome row is only appended for a prediction that has none.
     """
     import predictions_log as PL
-    day = pd.Timestamp(day or pd.Timestamp.now()).normalize()
-    today = pd.Timestamp.now().normalize()
-    if day > today:
+    # Task 1: the run has ONE trading date, fixed in IST at the start of the job.
+    # "Is this today?" is answered against THAT date, not against whatever the
+    # clock says when this function happens to be reached - which is how run #11
+    # came to ask for 2026-10-08 while working on 7 October.
+    day = pd.Timestamp(day).normalize() if day is not None else TD.trading_date()
+    trading = TD.trading_date()
+    if day > TD.ist_now().normalize():
         return {"date": str(day.date()), "error": "refusing to capture a future date"}
-    if day < today and not catch_up:
+    if day != trading and not catch_up:
         return {"date": str(day.date()),
-                "error": ("refusing to capture a past date without catch_up=True. The "
-                          "standing rule is capture ON the listing date; pass --catch-up "
-                          "to read that date's ARCHIVED bhavcopy deliberately.")}
+                "error": (f"refusing to capture {day.date()} without catch_up=True: "
+                          f"this run's trading date is {trading.date()}. The standing "
+                          f"rule is capture ON the listing date; pass --catch-up to read "
+                          f"that date's ARCHIVED bhavcopy deliberately.")}
 
     pend = _pending_predictions()
     if pend.empty:

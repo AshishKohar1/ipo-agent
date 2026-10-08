@@ -111,7 +111,7 @@ corroborator, at which point the caveat can go.
 | Job | Time IST | What |
 |---|---|---|
 | score + capture + **email** | 15:00 weekdays | resolve open IPOs, read subscription, score the ones closing today, send |
-| final capture | 17:30 weekdays | re-read the same IPOs after close — builds the 3pm-vs-close dataset |
+| day-end capture | 19:30 weekdays | re-read the same IPOs after close — builds the 3pm-vs-close dataset |
 
 15:00 rather than 15:30 because GitHub's scheduler drifts 5–15 minutes; even a 15-minute
 drift lands 45 minutes before the 4:00 PM cutoff. The jobs are idempotent, so a drifted

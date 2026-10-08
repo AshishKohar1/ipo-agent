@@ -22,7 +22,7 @@ One honest limitation, stated in the output: the email scores the **~15:00** sub
 figure, and what is on record historically is the **final** figure. Final subscription is
 higher, so this backtest is **optimistic about how often the email would have fired** — it
 is a test of the decision rule, not of the 3pm-versus-close gap, which only the paired
-15:00/17:30 capture can measure.
+15:00/19:30 capture can measure.
 
     python backtest_email.py
     python backtest_email.py --months 24

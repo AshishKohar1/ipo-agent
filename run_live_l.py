@@ -17,7 +17,7 @@ earlier. A pipeline that cannot fetch anything was destroying the output of one 
 Two things changed:
   * its reports now go to `reports/live/exchange_probe/<date>.md`, which nothing else
     writes and no email reads;
-  * the 15:00 and 17:30 schedules both call `send_daily_email.py` instead. See
+  * the 15:00 and 19:30 schedules both call `send_daily_email.py` instead. See
     LIVE_SETUP.md for the mapping of schedule to script.
 
 `--notify` is gone with the schedule: the email IS the notification now, sent by
@@ -66,7 +66,7 @@ STANDING_CAVEAT = (
     "3pm figures understate final demand — institutional bids concentrate in the last hours, "
     "and this model is trained on final-day subscription. A near-threshold \"no\" should be "
     "treated as UNCERTAIN, not as a negative verdict. The size of the gap is not yet "
-    "measured; the 17:30 capture is accumulating the data that will measure it.")
+    "measured; the 19:30 day-end capture is accumulating the data that will measure it.")
 
 
 # ---------------------------------------------------------------- official APIs
@@ -368,7 +368,7 @@ def main():
     if a.rehearse:
         return rehearse(dry=a.dry_run)
     if a.final:
-        return capture(1730, score=False, dry=a.dry_run)
+        return capture(1930, score=False, dry=a.dry_run)
     return capture(1500, score=True, dry=a.dry_run)
 
 

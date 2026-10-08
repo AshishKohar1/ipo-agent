@@ -61,10 +61,21 @@ name: Model L live
 
 on:
   schedule:
-    - cron: "30 9 * * 1-5"      # 15:00 IST, weekdays — score, snapshot, report, EMAIL
-    - cron: "0 14 * * 1-5"      # 19:30 IST, weekdays — catch-up, final snapshot, index
-                                #   closes, listing-day prices
-    - cron: "0 5 * * 6"         # 10:30 IST Saturdays — weekly capture audit (1e)
+    # ALL CRON BELOW IS UTC. GitHub reads cron as UTC and nothing else.
+    # IST = UTC + 5:30. Each line states the IST time it fires at.
+    #
+    # Four attempts at the bid email, 15 minutes apart, all inside the 14:00-16:00 IST
+    # send window. The first one that succeeds sends; the rest find the sent marker and
+    # exit green (Task 4). Four lines rather than one because GitHub drops and delays
+    # scheduled runs - see the delay table in LIVE_SETUP.md.
+    - cron: "45 8 * * 1-5"      # 08:45 UTC = 14:15 IST, weekdays — EMAIL attempt 1
+    - cron: "0 9 * * 1-5"       # 09:00 UTC = 14:30 IST, weekdays — EMAIL attempt 2
+    - cron: "15 9 * * 1-5"      # 09:15 UTC = 14:45 IST, weekdays — EMAIL attempt 3
+    - cron: "30 9 * * 1-5"      # 09:30 UTC = 15:00 IST, weekdays — EMAIL attempt 4
+    - cron: "0 14 * * 1-5"      # 14:00 UTC = 19:30 IST, weekdays — day-end capture:
+                                #   catch-up, final subscription, 15 index closes,
+                                #   listing-day prices
+    - cron: "0 5 * * 6"         # 05:00 UTC = 10:30 IST Saturdays — weekly capture audit
   workflow_dispatch:
     inputs:
       mode:
@@ -120,18 +131,39 @@ jobs:
           python listing_prices.py --self-test
           python capture_audit.py --self-test
 
+      # Task 1. ONE trading date per run, computed in Asia/Kolkata and frozen here.
+      # Run #11 started at 23:59:30 IST on 7 October, crossed midnight mid-job, and
+      # stamped itself 2026-10-08 - so it asked NSE Indices for a date that had not
+      # happened and logged 15 NULLs instead of 7 October's closes. TZ was already
+      # Asia/Kolkata; the bug was that each step asked the clock again.
+      - name: Fix this run's trading date (IST)
+        run: |
+          TD=$(TZ=Asia/Kolkata date +%F)
+          echo "TRADING_DATE=$TD" >> "$GITHUB_ENV"
+          echo "trading date (IST): $TD"
+          echo "wall clock  (IST): $(TZ=Asia/Kolkata date '+%F %H:%M:%S %Z')"
+          echo "wall clock  (UTC): $(date -u '+%F %H:%M:%S')"
+          echo "cron that fired  : '${{ github.event.schedule }}' (UTC)"
+
       - name: Decide which job this run is
         id: which
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.event.schedule }}" = "0 14 * * 1-5" ]; then
-            echo "mode=final" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.event.schedule }}" = "0 5 * * 6" ]; then
-            echo "mode=audit" >> "$GITHUB_OUTPUT"
-          else
-            echo "mode=email" >> "$GITHUB_OUTPUT"
-          fi
+          # Mapped from the cron string, which is UTC. The four email crons all map to
+          # `email`; only an exact match on the day-end or audit cron selects those, so a
+          # new cron line cannot silently inherit `email` by falling through.
+          case "${{ github.event_name }}:${{ github.event.schedule }}" in
+            workflow_dispatch:*)          mode="${{ inputs.mode }}" ;;
+            schedule:"0 14 * * 1-5")      mode=final ;;
+            schedule:"0 5 * * 6")         mode=audit ;;
+            schedule:"45 8 * * 1-5")      mode=email ;;
+            schedule:"0 9 * * 1-5")       mode=email ;;
+            schedule:"15 9 * * 1-5")      mode=email ;;
+            schedule:"30 9 * * 1-5")      mode=email ;;
+            *) echo "unrecognised trigger: ${{ github.event_name }} / ${{ github.event.schedule }}" >&2
+               exit 1 ;;
+          esac
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "resolved mode=$mode from ${{ github.event_name }} / cron '${{ github.event.schedule }}' (UTC)"
 
       - name: Run
         env:
@@ -227,5 +259,5 @@ jobs:
             cat "reports/live/$(TZ=Asia/Kolkata date +%F).md" >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "No report written. The 17:30 leg writes no report by design; for the 15:00 leg, check the diagnostics above." >> "$GITHUB_STEP_SUMMARY"
+            echo "No report written. The 19:30 day-end leg writes no report by design; for an email leg, check the diagnostics above." >> "$GITHUB_STEP_SUMMARY"
           fi

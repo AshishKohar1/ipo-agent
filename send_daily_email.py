@@ -4,7 +4,7 @@ send_daily_email.py — the single live pipeline for Model L (Priorities 1b–1g
 This is now **the only script the scheduled jobs call**:
 
     python send_daily_email.py            15:00 IST  fetch, score, snapshot, report, EMAIL
-    python send_daily_email.py --final    17:30 IST  fetch, snapshot after close, NO email
+    python send_daily_email.py --final    19:30 IST  fetch, snapshot after close, NO email
     python send_daily_email.py --dry-run             compose and print, send nothing
 
 `run_live_l.py` is no longer scheduled. It reads NSE and BSE, both of which refuse this
@@ -58,6 +58,7 @@ import score_l as SL               # noqa: E402  — portable JSON, no joblib (P
 import predictions_log as PL       # noqa: E402
 import live_markers as LM          # noqa: E402
 import market_context as MC        # noqa: E402
+import trading_day as TD           # noqa: E402  - one date per run (Task 1)
 
 LIVE_DIR = ROOT / "reports" / "live"
 SNAPSHOTS = ROOT / "data" / "subscription_snapshots.csv"
@@ -333,7 +334,11 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     """The 15:00 leg (`final=False`) scores, logs, snapshots, reports and emails.
     The 19:30 leg (`final=True`) snapshots only — the bid window has closed, so there is
     nothing left to decide and nothing to email."""
-    today = pd.Timestamp.now()
+    # ONE trading date per run, fixed in Asia/Kolkata (Task 1). The date comes from
+    # TRADING_DATE, the clock time from the real clock: run #11 started at 23:59:30
+    # IST and stamped itself 2026-10-08 because every step asked `now()` separately.
+    today = TD.now()
+    print(TD.banner())
     # The clock time the leg actually runs at. The day-end leg moved 17:30 -> 19:30 on
     # 2026-10-08 (1c): 17:30 is before the index closes are published. The older 1730
     # markers stay truthful - they were captured at 17:30.
@@ -352,7 +357,7 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     mv = CL.market_view(today)
     n_snap = 0 if dry else append_snapshots(mv, capture_point, today)
 
-    # Priority 6: the 17:30 leg is where the index closes are captured — after the market
+    # Priority 6: the 19:30 day-end leg is where the index closes are captured — after
     # has actually closed. The 15:00 leg only reads back whatever is already on disk.
     ctx = MC.capture(today) if (final and not dry) else {"skipped": "not the day-end leg"}
 
@@ -582,7 +587,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="compose and print, send nothing")
     ap.add_argument("--final", action="store_true",
-                    help="17:30 leg: snapshot after close, no email")
+                    help="19:30 day-end leg: snapshot after close, no email")
     ap.add_argument("--force", action="store_true",
                     help="ignore the idempotency marker for this slot")
     ap.add_argument("--self-test", action="store_true")

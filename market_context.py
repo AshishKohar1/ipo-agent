@@ -1,7 +1,7 @@
 """
 market_context.py — daily index closes, display only (Priority 6).
 
-Captured by the **17:30 leg**, after the market has actually closed, and shown as a
+Captured by the **19:30 day-end leg**, after the closes are published, and shown as a
 one-line footer in the daily email. **It is not a model input.** Per H2 and H12, Model L
 remains `log1p(Total subscription)` alone; nothing in this file may ever reach a feature
 vector. The footer exists so the reader can see what kind of day it was, not so the model

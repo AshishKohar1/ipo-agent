@@ -29,7 +29,7 @@ COLS = [
     "model_id", "decision_point", "model_version_sha",
     # inputs, exactly as scored
     "total_x", "qib_x", "hni_x", "rii_x", "issue_size_cr",
-    "capture_point",         # 1500 | 1730 — which snapshot was scored
+    "capture_point",         # 1500 | 1930 — which snapshot was scored
     "subscription_source",
     # outputs, per G2: the verdict and the threshold met
     "l1_verdict", "l1_threshold_met", "l2_verdict", "l2_threshold_met",

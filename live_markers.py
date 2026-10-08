@@ -135,7 +135,7 @@ def self_test() -> int:
         chk("and the slot is no longer stuck", len(stuck(p)) == 0)
         chk("every attempt is retained (append-only)", attempts(1500, when, p) == 3)
 
-        chk("the other capture point is independent", already_ran(1730, when, p) is False)
+        chk("the other capture point is independent", already_ran(1930, when, p) is False)
         chk("the next day is independent",
             already_ran(1500, pd.Timestamp("2026-10-06 15:00"), p) is False)
 
