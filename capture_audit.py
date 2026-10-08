@@ -84,17 +84,28 @@ UNRECOVERABLE = {
 }
 
 
-def weekdays(upto=None, days: int = 7) -> list[pd.Timestamp]:
+def weekdays(upto=None, days: int = 7, now=None) -> list[pd.Timestamp]:
     """The weekdays in the `days`-day window ending at `upto` (inclusive), oldest first.
 
-    Excludes `upto` itself when it is today and the day-end slot has not come round yet,
-    because a job that is not due is not missing.
+    Drops the final day when it is **the current trading date** and the day-end slot has
+    not come round yet, because a job that is not due is not missing.
+
+    `now` is injectable, and the drop is keyed on `upto` matching the current trading
+    date rather than on the wall clock alone. An earlier version compared `out[-1]`
+    against the real clock, which made the result depend on the time of day even when the
+    caller had specified the window explicitly: the self-test asked for the 7 days to
+    2026-10-11 and got 5 weekdays on this laptop at 23:40 IST and 4 on a runner forty
+    minutes later, because the clock had crossed into 9 October. A window the caller
+    states in full must not move underneath them.
     """
-    upto = pd.Timestamp(upto).normalize() if upto is not None else TD.trading_date()
+    explicit = upto is not None
+    upto = pd.Timestamp(upto).normalize() if explicit else TD.trading_date()
     start = upto - pd.Timedelta(days=days - 1)
     out = [d for d in pd.date_range(start, upto, freq="D") if d.weekday() < 5]
-    now = TD.ist_now()
-    if out and out[-1].normalize() == now.normalize() and (now.hour * 100 + now.minute) < DAYEND_POINT:
+    if explicit:
+        return out
+    t = pd.Timestamp(now) if now is not None else TD.ist_now()
+    if out and out[-1].normalize() == upto and (t.hour * 100 + t.minute) < DAYEND_POINT:
         out = out[:-1]
     return out
 
@@ -248,10 +259,27 @@ def self_test() -> int:
         chk("already_ran does NOT (1f: a failure must not lock its retry)",
             LM.already_ran(DAYEND_POINT, "2026-10-05", p) is False)
 
-    print("\n[2] the window is weekdays only")
-    w = weekdays("2026-10-11", days=7)                       # Sun 11 Oct back to Mon 5
+    print('\n[2] the window is weekdays only, and an explicit window does not move')
+    w = weekdays("2026-10-11", days=7)            # Sun 11 Oct back to Mon 5 Oct
     chk("no weekend days", all(d.weekday() < 5 for d in w))
     chk("5 weekdays in a 7-day window", len(w) == 5, [str(d.date()) for d in w])
+    chk("an explicit window is time-of-day independent",
+        weekdays("2026-10-11", days=7) == weekdays("2026-10-11", days=7))
+    # The drop only applies to a window that ENDS on the current trading date.
+    import os as _os
+    _saved = _os.environ.get("TRADING_DATE")
+    try:
+        _os.environ["TRADING_DATE"] = "2026-10-09"       # a Friday
+        early = weekdays(days=7, now=pd.Timestamp("2026-10-09 09:00"))
+        late = weekdays(days=7, now=pd.Timestamp("2026-10-09 20:00"))
+        chk("before the day-end slot, today is not yet missing",
+            pd.Timestamp("2026-10-09") not in early, [str(d.date()) for d in early])
+        chk("after it, today IS in scope",
+            pd.Timestamp("2026-10-09") in late, [str(d.date()) for d in late])
+    finally:
+        _os.environ.pop("TRADING_DATE", None)
+        if _saved is not None:
+            _os.environ["TRADING_DATE"] = _saved
 
     print("\n[3] the legacy 17:30 clock time counts as the same day-end leg")
     chk("17:30 is recognised", 1730 in DAYEND_LEGACY)
