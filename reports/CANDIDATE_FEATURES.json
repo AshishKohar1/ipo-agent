@@ -1,0 +1,299 @@
+{
+  "n_master_rows": 623,
+  "coverage": {
+    "offer_pct_of_cap": 329,
+    "non_promoter_post_pct": 456,
+    "nifty_close_to_listing_pct": 471
+  },
+  "results": [
+    {
+      "target": "L1",
+      "candidate": "offer_pct_of_cap",
+      "n_rows": 326,
+      "champion": {
+        "pooled_auc": 0.8054,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 234,
+        "qualifies": true,
+        "fires": 130,
+        "delivered": 0.9154,
+        "threshold_p": 0.74,
+        "lo95": 0.8548,
+        "from_near_miss": false
+      },
+      "with_candidate": {
+        "pooled_auc": 0.8344,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 234,
+        "qualifies": true,
+        "fires": 137,
+        "delivered": 0.9124,
+        "threshold_p": 0.73,
+        "lo95": 0.8531,
+        "from_near_miss": false
+      },
+      "d_auc": 0.029,
+      "d_delivered_pp": -0.3,
+      "d_fires": 7,
+      "one_hit_pp": 0.73,
+      "material": false,
+      "improves_delivery": false,
+      "label": "Free float - issue size as % of market cap at offer",
+      "is_feature_candidate": true
+    },
+    {
+      "target": "L1",
+      "candidate": "non_promoter_post_pct",
+      "n_rows": 453,
+      "champion": {
+        "pooled_auc": 0.8246,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 296,
+        "qualifies": true,
+        "fires": 160,
+        "delivered": 0.9062,
+        "threshold_p": 0.73,
+        "lo95": 0.8511,
+        "from_near_miss": false
+      },
+      "with_candidate": {
+        "pooled_auc": 0.8174,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 296,
+        "qualifies": true,
+        "fires": 160,
+        "delivered": 0.9062,
+        "threshold_p": 0.73,
+        "lo95": 0.8511,
+        "from_near_miss": false
+      },
+      "d_auc": -0.0072,
+      "d_delivered_pp": 0.0,
+      "d_fires": 0,
+      "one_hit_pp": 0.62,
+      "material": false,
+      "improves_delivery": false,
+      "label": "Free float - 100 minus post-issue promoter %",
+      "is_feature_candidate": true
+    },
+    {
+      "target": "L1",
+      "candidate": "nifty_close_to_listing_pct",
+      "n_rows": 468,
+      "champion": {
+        "pooled_auc": 0.8109,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 305,
+        "qualifies": true,
+        "fires": 157,
+        "delivered": 0.9108,
+        "threshold_p": 0.76,
+        "lo95": 0.8559,
+        "from_near_miss": false
+      },
+      "with_candidate": {
+        "pooled_auc": 0.8172,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 305,
+        "qualifies": true,
+        "fires": 162,
+        "delivered": 0.9074,
+        "threshold_p": 0.72,
+        "lo95": 0.8529,
+        "from_near_miss": false
+      },
+      "d_auc": 0.0063,
+      "d_delivered_pp": -0.34,
+      "d_fires": 5,
+      "one_hit_pp": 0.62,
+      "material": false,
+      "improves_delivery": false,
+      "label": "Nifty move, issue close to listing (DIAGNOSTIC - unknowable at the bid)",
+      "is_feature_candidate": false
+    },
+    {
+      "target": "L2",
+      "candidate": "offer_pct_of_cap",
+      "n_rows": 326,
+      "champion": {
+        "pooled_auc": 0.8688,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 234,
+        "qualifies": true,
+        "fires": 94,
+        "delivered": 0.8404,
+        "threshold_p": 0.86,
+        "lo95": 0.7533,
+        "from_near_miss": false
+      },
+      "with_candidate": {
+        "pooled_auc": 0.8864,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 234,
+        "qualifies": true,
+        "fires": 101,
+        "delivered": 0.8416,
+        "threshold_p": 0.83,
+        "lo95": 0.7581,
+        "from_near_miss": false
+      },
+      "d_auc": 0.0176,
+      "d_delivered_pp": 0.12,
+      "d_fires": 7,
+      "one_hit_pp": 0.99,
+      "material": false,
+      "improves_delivery": false,
+      "label": "Free float - issue size as % of market cap at offer",
+      "is_feature_candidate": true
+    },
+    {
+      "target": "L2",
+      "candidate": "non_promoter_post_pct",
+      "n_rows": 453,
+      "champion": {
+        "pooled_auc": 0.8793,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 296,
+        "qualifies": true,
+        "fires": 114,
+        "delivered": 0.8421,
+        "threshold_p": 0.85,
+        "lo95": 0.7642,
+        "from_near_miss": false
+      },
+      "with_candidate": {
+        "pooled_auc": 0.8772,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 296,
+        "qualifies": true,
+        "fires": 115,
+        "delivered": 0.8435,
+        "threshold_p": 0.85,
+        "lo95": 0.7661,
+        "from_near_miss": false
+      },
+      "d_auc": -0.0021,
+      "d_delivered_pp": 0.14,
+      "d_fires": 1,
+      "one_hit_pp": 0.87,
+      "material": false,
+      "improves_delivery": false,
+      "label": "Free float - 100 minus post-issue promoter %",
+      "is_feature_candidate": true
+    },
+    {
+      "target": "L2",
+      "candidate": "nifty_close_to_listing_pct",
+      "n_rows": 468,
+      "champion": {
+        "pooled_auc": 0.8721,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 305,
+        "qualifies": true,
+        "fires": 115,
+        "delivered": 0.8435,
+        "threshold_p": 0.85,
+        "lo95": 0.7661,
+        "from_near_miss": false
+      },
+      "with_candidate": {
+        "pooled_auc": 0.8722,
+        "years": [
+          2018,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "n_oof": 305,
+        "qualifies": true,
+        "fires": 122,
+        "delivered": 0.8361,
+        "threshold_p": 0.82,
+        "lo95": 0.7603,
+        "from_near_miss": false
+      },
+      "d_auc": 0.0001,
+      "d_delivered_pp": -0.74,
+      "d_fires": 7,
+      "one_hit_pp": 0.82,
+      "material": false,
+      "improves_delivery": false,
+      "label": "Nifty move, issue close to listing (DIAGNOSTIC - unknowable at the bid)",
+      "is_feature_candidate": false
+    }
+  ],
+  "not_tested": {
+    "anchor_mf_share": "NOT TESTED - no data. data/chittorgarh_anchor_lockin.csv is the pre-issue LOCK-IN table, not the anchor book: 3,127 rows across 674 IPOs, zero names containing 'mutual fund' or 'MF', categories of Promoter/Other/Corporate/SME/Mainboard, and names that are overwhelmingly individuals. Deriving an MF share from name patterns over individual shareholders would be the plausibility inference H8 forbids. To test it, the anchor allocation table has to be collected first - it is a different block on the same Chittorgarh page."
+  }
+}
