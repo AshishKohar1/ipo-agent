@@ -1,0 +1,120 @@
+# Priority 1e — retry a live run that GitHub's own infrastructure dropped.
+#
+# On 2026-10-07 the day-end run was cancelled before a single step executed:
+#
+#     The job was not acquired by Runner of type hosted
+#     Correlation ID d42e69c9-c697-45bc-90e6-cc8129f18f5c
+#
+# Nothing inside that job could retry it, because the job never started: there was no
+# process to run a retry step, and `continue-on-error` and step-level retries all live
+# inside a job that has to be acquired first. So the retry has to live in a second
+# workflow, triggered by the first one finishing.
+#
+# WHAT THIS DOES AND DOES NOT RETRY
+#
+# It re-runs the failed jobs of a "Model L live" run **only when the run looks like an
+# infrastructure drop** — the job reached a terminal state having executed no steps. A run
+# that failed inside our own code (a bad fetch, a missing secret, a self-test failure) is
+# left red on purpose: retrying it would just fail again more slowly and hide the cause.
+#
+# It is bounded at 3 attempts. GitHub re-dispatches this workflow when the re-run finishes,
+# so an unbounded version would retry forever on a persistent fault.
+#
+# WHY RETRYING THE 15:00 EMAIL LEG IS SAFE
+#
+# Because the leg can no longer send a dead signal. `send_window()` in
+# send_daily_email.py refuses to send outside 14:00–16:00 IST and exits non-zero, so a
+# retry that lands at 17:00 writes its report, refuses, and stays red. The retry can
+# recover a run that GitHub dropped at 15:02; it cannot turn a missed day into a late
+# email. That separation is the whole point of Priority 1d.
+#
+# The day-end leg has a second safety net regardless: capture_audit.py --catch-up on the
+# next day-end run recovers the archived parts, and the Saturday audit fails the week if
+# anything is still open.
+
+name: Retry a dropped live run
+
+on:
+  workflow_run:
+    workflows: ["Model L live"]
+    types: [completed]
+
+permissions:
+  actions: write               # to re-run the jobs of the triggering run
+  contents: read
+
+jobs:
+  retry:
+    # `cancelled` is what a runner-acquisition failure reports. `failure` is included
+    # because the same fault is sometimes surfaced that way, and the no-steps check below
+    # is what actually decides.
+    if: >-
+      github.event.workflow_run.conclusion == 'cancelled' ||
+      github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Decide whether this was infrastructure or our own code
+        id: triage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+        run: |
+          set -euo pipefail
+
+          if [ "$ATTEMPT" -ge 3 ]; then
+            echo "attempt $ATTEMPT — already retried twice. Leaving it red."
+            echo "retry=no" >> "$GITHUB_OUTPUT"
+            echo "why=exhausted after $ATTEMPT attempts" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          jobs_json=$(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs" --paginate)
+
+          # A job that executed no steps at all never started: that is the infrastructure
+          # signature. A job that ran steps and then failed is our code's problem.
+          ran_steps=$(echo "$jobs_json" | jq '[.jobs[].steps[]?
+                        | select(.conclusion != null and .conclusion != "skipped")] | length')
+          echo "steps with a real conclusion across all jobs: $ran_steps"
+
+          if [ "$ran_steps" -eq 0 ]; then
+            echo "retry=yes" >> "$GITHUB_OUTPUT"
+            echo "why=no step executed — the job was never acquired" >> "$GITHUB_OUTPUT"
+          else
+            echo "retry=no" >> "$GITHUB_OUTPUT"
+            echo "why=$ran_steps step(s) executed, so this failed in our own code" \
+              >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Re-run the dropped jobs
+        if: steps.triage.outputs.retry == 'yes'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          gh api --method POST "repos/$REPO/actions/runs/$RUN_ID/rerun-failed-jobs"
+          echo "re-dispatched run $RUN_ID"
+
+      - name: Say what was decided
+        if: always()
+        env:
+          ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+        run: |
+          {
+            echo "### Retry triage"
+            echo ""
+            echo "- triggering run: ${{ github.event.workflow_run.html_url }}"
+            echo "- conclusion: \`${{ github.event.workflow_run.conclusion }}\`"
+            echo "- attempt: $ATTEMPT"
+            echo "- retried: \`${{ steps.triage.outputs.retry }}\`"
+            echo "- reason: ${{ steps.triage.outputs.why }}"
+            echo ""
+            if [ "${{ steps.triage.outputs.retry }}" != "yes" ]; then
+              echo "Not retried. If this was the 15:00 leg, the bid email for that day is"
+              echo "gone and is **not** caught up — see Priority 1d."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

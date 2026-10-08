@@ -1,185 +1,186 @@
 # LIVE_SETUP — Model L in production
 
-Written 2026-10-01. Model `model_l_v1.0` / `L_final_3pm`, frozen at Gate B.
+Rewritten **2026-10-08**. Model `model_l_v1.1` / `L_final_3pm`, decision rule **H17,
+ratified**. The previous version of this file described `model_l_v1.0`, a calibrated-probability
+cut-off, five app routines and `run_live_l.py`. **None of that is how the system runs any
+more**, which is why this is a rewrite rather than an edit.
 
-**Nothing here is live until you ratify Gate B.** The schedules below exist and will fire,
-but they only score, log and report — no order is ever placed, and the verdict is advice you
-act on manually before your broker's 4:00 PM cutoff.
-
----
-
-## 1. The five schedules — created in this session
-
-All five exist in this app's **Scheduled** sidebar section. The app fires them with a few
-minutes' jitter, shown below as "actual".
-
-| Job | Requested | Actual | Command | Purpose |
-|---|---|---|---|---|
-| `ipo-score-1500` | 15:00 daily | **15:01** | `python run_live_l.py --score` | Fetch NSE + BSE, reconcile, score, snapshot, write the report |
-| `ipo-notify-1530` | 15:30 daily | **15:34** | `python run_live_l.py --notify` | Deliver the report — 26 min before the cutoff |
-| `ipo-final-capture-1730` | 17:30 daily | **17:40** | `python run_live_l.py --final` | Re-capture the same IPOs after close |
-| `ipo-ingest-outcomes` | Mon & Thu 08:00 | 08:00 | `python ingest_outcomes.py` | Add new listings, score past predictions |
-| `ipo-retrain-monthly` | 1st, 08:00 | 08:00 | `python retrain_l.py` | Champion/challenger + PSI |
-
-### ⚠️ Two things about these schedules you need to know
-
-**1. They only run while this app is open.** If the app is closed when a job is due, it runs
-on next launch — which for a 15:00 job against a 4:00 PM cutoff can mean it runs *after* the
-decision was needed, or not that day at all. For a job whose entire value is being 26 minutes
-early, that is a material weakness. **Use Windows Task Scheduler instead or as well** —
-section 3 has the exact commands. Task Scheduler runs whether or not the app is open and can
-wake the machine.
-
-**2. The 15:30 notify drifted to 15:34.** That still leaves 26 minutes before the 4:00 PM
-cutoff, so it is acceptable, but it is less margin than the 30 minutes decision E1 specified.
-If you want the full 30 back, set the cron to `25 15 * * *` and it will land near 15:29.
+The system scores, logs, reports and emails. **No order is ever placed.** The verdict is
+advice you act on manually, before your broker's 4:00 PM cutoff.
 
 ---
 
-## 2. What the 15:30 report contains
+## 1. The schedule — exactly three jobs, all on GitHub Actions
 
-Per decisions D1, D2, G2 and H3 — all of it is in `reports/live/<date>.md`:
+Everything runs from `.github/workflows/live-model-l.yml`. There are **no app routines and
+no Task Scheduler tasks** for the live path any more; `ipo-score-1500`, `ipo-notify-1530`
+and `ipo-final-capture-1730` were deleted on 2026-10-08 because all three called the retired
+`run_live_l.py` and duplicated what Actions already does.
 
-```
-# IPO report — 2026-10-01 (scored 15:01 IST)
+| When (IST) | Cron (UTC) | What runs | What it does |
+|---|---|---|---|
+| **15:00**, weekdays | `30 9 * * 1-5` | `send_daily_email.py` | Scores every mainboard IPO closing today, logs the predictions, appends the 1500 snapshot, writes `reports/live/<date>.md`, **sends the bid/no-bid email** |
+| **19:30**, weekdays | `0 14 * * 1-5` | `capture_audit.py --catch-up`<br>`send_daily_email.py --final`<br>`listing_prices.py --capture-listing-day` | Recovers any missed day, then captures final subscription, the 15 index closes, and listing-day prices for anything that listed today |
+| **10:30**, Saturdays | `0 5 * * 6` | `capture_audit.py --audit --days 7` | Checks every weekday that week left an attempt. **Fails the run if one did not** |
 
-**Decide before your broker's 4:00 PM cutoff.**
+Plus `.github/workflows/retry-infra-failure.yml`, which is not scheduled — it fires when a
+live run finishes and re-runs it if GitHub dropped it (section 4).
 
-> 3pm figures understate final demand — institutional bids concentrate in the last
-> hours, and this model is trained on final-day subscription. A near-threshold "no"
-> should be treated as UNCERTAIN, not as a negative verdict. The size of the gap is
-> not yet measured; the 17:30 capture is accumulating the data that will measure it.
+Two app routines remain, and they are the only two that should:
 
-## <Company> — closing today
-
-L_final_3pm  L1: BID   (validated hit rate >= 90%)
-             L2: no    (below the 80% threshold)
-
-- Subscription [1500]: Total 8.77x | QIB 3.1x | HNI 14.2x | Retail 6.4x
-- Source: nse_official+bse_official — reconciliation `total_x=PASS;qib_x=PASS;...`
-- Demand profile: institution-led   [NOT IN MODEL — context only, per H3]
-- Veto flags: none (no RHP data for this issue)
-- GMP: ____%   [NOT IN MODEL — your judgement only, per D1]
-```
-
-**Verdicts are the threshold met, never a probability (G2).** Isotonic overclaims in the top
-tail — it claims ~98.5% and delivers 94.0% on L1 — so a number presented as "your chance"
-would be wrong by several points. The raw and calibrated probabilities go to
-`predictions_log.csv` under `diagnostics` for later calibration measurement, and nowhere else.
-
-**GMP is never fetched** (D1). You fill it in. Whatever you write is logged so its
-incremental value over subscription can be measured after ~12 months (D2). Until then no
-GMP-based rule may influence a verdict.
-
----
-
-## 3. Windows Task Scheduler — the reliable path
-
-Run each line in an **elevated** PowerShell. Replace `IST_OFFSET` handling by setting the
-machine's timezone to IST first (`tzutil /s "India Standard Time"`), because Task Scheduler
-uses local time.
-
-```powershell
-$py = "C:\Users\HP\AppData\Local\Python\pythoncore-3.14-64\python.exe"
-$dir = "C:\Projects\ipo-agent"
-
-schtasks /Create /TN "IPO\score-1500"  /SC DAILY /ST 15:00 /F /RL LIMITED `
-  /TR "cmd /c cd /d $dir && set PYTHONIOENCODING=utf-8 && `"$py`" run_live_l.py --score"
-
-schtasks /Create /TN "IPO\notify-1530" /SC DAILY /ST 15:30 /F /RL LIMITED `
-  /TR "cmd /c cd /d $dir && set PYTHONIOENCODING=utf-8 && `"$py`" run_live_l.py --notify"
-
-schtasks /Create /TN "IPO\final-1730"  /SC DAILY /ST 17:30 /F /RL LIMITED `
-  /TR "cmd /c cd /d $dir && set PYTHONIOENCODING=utf-8 && `"$py`" run_live_l.py --final"
-
-schtasks /Create /TN "IPO\ingest"      /SC WEEKLY /D MON,THU /ST 08:00 /F /RL LIMITED `
-  /TR "cmd /c cd /d $dir && set PYTHONIOENCODING=utf-8 && `"$py`" ingest_outcomes.py"
-
-schtasks /Create /TN "IPO\retrain"     /SC MONTHLY /D 1 /ST 08:00 /F /RL LIMITED `
-  /TR "cmd /c cd /d $dir && set PYTHONIOENCODING=utf-8 && `"$py`" retrain_l.py"
-```
-
-Then, so a sleeping laptop still scores before the cutoff:
-
-```powershell
-schtasks /Change /TN "IPO\score-1500"  /ENABLE
-powercfg /waketimers
-```
-
-In Task Scheduler's GUI, open each task → **Conditions** → tick *Wake the computer to run
-this task*, and untick *Start the task only if the computer is on AC power* if you want it on
-battery.
-
-These tasks do **not** commit to git. Add a commit step yourself, or let the app-based
-schedules (section 1) handle committing when the app happens to be open.
-
----
-
-## 4. ⚠️ Open blocker: the official APIs are refusing this host
-
-This is the one thing standing between the schedules and real output.
-
-| Endpoint | Purpose | Result from this machine, 2026-10-01 |
+| Routine | When | Why it is still a routine |
 |---|---|---|
-| `nseindia.com/api/ipo-current-issue` | which IPOs are open | **connection reset** with our User-Agent; **HTTP 200** with a browser one |
-| `nseindia.com/api/historical/cm/equity` | listing-day price | **HTTP 503** |
-| `api.bseindia.com/.../GetIPODemandSchedule` | subscription, 2nd source | **HTTP 404** on the probed scrip |
-| `api.bseindia.com/.../StockPriceCSVDownload` | listing-day price | **HTTP 403** |
+| `ipo-retrain-monthly` | 1st, 08:00 | Its output is a **judgement**, not a file. It re-derives both thresholds walk-forward, holds any move beyond 25% for review, and reports drift. Worth having read rather than merely run |
+| `ipo-ingest-outcomes` | Mon & Thu, 08:00 | It is the only job that **harvests IPOs you did not bid on** into `data/new_listings.csv`, which is how the training set grows. It is **not** redundant with the day-end capture — but see the warning in section 5 |
 
-**NSE's `robots.txt` says `Allow: /`** and disallows only `/market-data-test`, so these paths
-are explicitly permitted. The block is infrastructure filtering keyed to the User-Agent
-string, not a robots or terms restriction.
+### Why 15:00 and not 15:30
 
-**I have not spoofed a browser User-Agent, and I will not without you saying so.** Project
-rule 3 forbids sending a browser User-Agent to work around an access restriction, and
-although robots.txt permits the path here, substituting a browser identity to defeat a block
-is the exact pattern that rule exists to prevent. This is your call, and there are three
-honest options:
+GitHub's scheduler drifts 5–15 minutes under load. 15:00 absorbs that and still lands
+45 minutes before the 16:00 cutoff (E1). 15:30 would not.
 
-1. **Ask NSE/BSE for API access** with a declared client identity. Slow, but it is the only
-   option that makes the pipeline durable.
-2. **Decide that a truthful non-browser User-Agent on a robots-permitted path is acceptable
-   to present differently** — e.g. `Mozilla/5.0 (compatible; ipo-agent/1.0; +contact)`, which
-   is a recognised convention for a bot that must satisfy a WAF while still identifying
-   itself. Tell me explicitly and I will change one line.
-3. **Fill the two captures manually** on the ~2–4 days a month an IPO actually closes. The
-   snapshot file takes a hand-entered row and the pairing still works.
+### Why 19:30 and not 17:30
 
-Until one is chosen, the jobs run, log honestly and write a report saying no subscription
-could be fetched. **They will not invent a number.**
+NSE Indices publishes the day's index closes after its settlement run. At 17:30 the table
+was incomplete, so index closes were being captured half-formed. 19:30 is after publication
+and still the same evening.
 
 ---
 
-## 5. What is genuinely verified, and what is not
+## 2. The one rule that governs the email
 
-**Verified end to end:**
-- Scoring, calibration, thresholds, demand-profile label, report contract, append-only log —
-  rehearsed on the 5 most recently listed IPOs (`python run_live_l.py --rehearse`).
-- The portable coefficients: scoring from `models/model_l_v1.0_l1_coefficients.json` alone,
-  with no joblib and no repo imports, reproduced `predict_live`'s verdict on all 16 test
-  cases by both the calibrated route and the raw-threshold route.
-- The monthly retrain, dry-run: it independently reconfirms H11 (champion 0.8131 vs
-  challenger Set A 0.7948 on L1 out-of-sample) and flags Set A's PSI at **1.322**.
+**The 15:00 leg will not send outside 14:00–16:00 IST, and is never caught up.**
 
-**Not verified, and why:**
-- **The two official fetches** — see section 4.
-- **The 3pm understatement's size.** Unmeasurable until the paired captures accumulate. The
-  model card states the direction (it understates, so it is conservative) and explicitly
-  says the magnitude is unknown.
-- **Symbol resolution for brand-new listings.** `ingest_outcomes.py` resolves symbols from
-  `master_with_symbols.csv`, which does not yet contain an IPO that listed this week — so
-  those rows report `no_symbol_resolved` rather than guessing. Refreshing
-  `data/NSE_EQUITY_L.csv` fixes it.
+`send_window()` in `send_daily_email.py` refuses on both sides, for two different reasons:
+
+* **At or after 16:00** — past the broker cutoff. A bid signal then is not late
+  information, it is *wrong* information: it invites a bid that can no longer be placed.
+  The leg writes its report, prints `REFUSING TO SEND`, and **exits non-zero** so the run
+  goes red.
+* **Before 14:00** — the model is `L_final_3pm`. It was fitted on the final-day
+  late-afternoon subscription figure, and a morning figure is a different distribution, not
+  an early look at the same one.
+
+This is not theoretical. Every 15:00 marker on record before 2026-10-08 was stamped **after**
+the cutoff — 16:53, 21:49, 22:11, 00:06, 00:39 — because GitHub queued a delayed job and
+the leg sent anyway. The window is what closes that.
+
+There is deliberately **no flag that re-sends a missed email.** `--dry-run` composes and
+prints for inspection; nothing sends.
 
 ---
 
-## 6. Daily routine, once the blocker clears
+## 3. What the email says
 
-1. **15:34** — read the report on your phone. Verdicts are BID / no, with the threshold met.
-2. Form your own view on GMP and write it into the report's blank field, or reply with it.
-3. **Decide before 4:00 PM.** Remember the standing caveat: a near-threshold `no` at 3pm is
-   uncertain, not a negative — the model understates at that hour by an amount not yet known.
-4. **17:40** — nothing to do. The final capture runs itself and builds the dataset that will
-   eventually remove caveat 3.
-5. **Mon & Thu** — outcomes get ingested and past predictions scored, so the model's claims
-   stay auditable against what actually happened.
+`SUBJECT_PREFIX` is exactly `IPO decision - ` — plain ASCII hyphen, lowercase `d`, no em
+dash. It is asserted byte-exact in the self-test, because mail filters match literally.
+
+The decision is **one comparison** (H17, ratified 2026-10-06):
+
+```
+  L1 (any listing gain):  BID    90% promise  fires >= 28.39x
+  L2 (gain above 10%):    no     80% promise  fires >= 54.02x
+```
+
+Each level is **the threshold at which that share of IPOs the model had never seen met the
+target — walk-forward, never in-sample.** The thresholds live in
+`models/model_l_v1.1_thresholds.json`; nothing hardcodes them.
+
+**No probability appears anywhere in the decision.** The calibrated probability is still
+computed into `predictions_log.csv` under `diagnostics`, labelled *not in the decision
+path*, purely as a drift monitor — a probability that starts disagreeing with the threshold
+is early warning that the threshold needs re-deriving. G2 still holds: the report prints the
+verdict and the level met, never a number presented as your chance.
+
+**GMP is never fetched** (D1). You fill it in; whatever you write is logged so its
+incremental value over subscription can be measured later (D2). No GMP rule influences a
+verdict.
+
+---
+
+## 4. When GitHub itself drops a run
+
+On 2026-10-07 the day-end run was cancelled before a single step executed:
+
+```
+The job was not acquired by Runner of type hosted
+Correlation ID d42e69c9-c697-45bc-90e6-cc8129f18f5c
+```
+
+Nothing inside that job could retry it, because the job never started. Three layers now
+cover it:
+
+1. **`retry-infra-failure.yml`** re-runs the failed jobs — but only when the run executed
+   **no steps at all**, which is the infrastructure signature. A run that failed inside our
+   own code is left red on purpose. Bounded at 3 attempts.
+2. **`capture_audit.py --catch-up`** at the start of each day-end run recovers the
+   recoverable part of the previous few days.
+3. **The Saturday audit** fails the week if any weekday still has no attempt.
+
+### What a missed day can and cannot recover
+
+| | Recoverable? | Why |
+|---|---|---|
+| Listing-day prices | **Yes** | Both exchanges keep a per-date bhavcopy archive, read back exactly as reported |
+| The 15 index closes | **Yes** | NSE Indices' endpoint is a historical endpoint; a past date is an ordinary query |
+| Final subscription | **No, ever** | Chittorgarh publishes the table only while an IPO is open and replaces it at allotment (H1). The figure does not exist anywhere we may fetch from |
+| The 15:00 bid email | **No, by design** | See section 2 |
+
+`capture_audit.py` records the last two as permanent rather than leaving a hole that looks
+like a fetch somebody could retry.
+
+A gap is measured by `live_markers.attempts()`, **not** `already_ran()`. The distinction
+matters: a job that ran and captured nothing is a quiet market, and counting that as a gap
+would cry wolf every holiday-adjacent week.
+
+---
+
+## 5. Open items you should know about
+
+**`ipo-ingest-outcomes` runs but has never produced a usable label.** All 15 rows in
+`data/new_listings.csv` carry `listing_gain_pct = NULL` and `reconciled = no_source`. Its two
+price sources are the NSE and BSE *historical-quote APIs*, and it also prices up to three
+days after listing — which the Stage 27 standing rule exists to forbid, because a price read
+later has been silently restated for any split or bonus since. It should be rewired to take
+its prices from `listing_prices.py`'s bhavcopy path. Until then its harvest half works and
+its pricing half does not.
+
+**Subscription is single-source** (H14): Chittorgarh only. Rule 2 cannot be applied to it,
+so every snapshot row is flagged `single_source_unverified` and the email says so. Priority 2
+is testing whether NSE's Basket 1 primary-market data can become the second source.
+
+**The 12-month email backtest under-delivers both promises** — L1 85.7% against 90%, L2
+72.2% against 80%. A tripwire is recorded (H19) rather than an adjustment: two consecutive
+under-delivering windows re-derive the threshold; one does not.
+
+---
+
+## 6. Secrets
+
+Three repository secrets, set at **Settings → Secrets and variables → Actions**. They exist
+nowhere else — not in a file, not in a routine, not in this document.
+
+| Secret | Used for |
+|---|---|
+| `GMAIL_ADDRESS` | the sending account |
+| `GMAIL_APP_PASSWORD` | a Gmail **app password**, not the account password |
+| `EMAIL_TO` | the recipient; falls back to `GMAIL_ADDRESS` when unset |
+
+**A missing secret fails the run.** It never silently skips the email, because a skipped
+email looks identical to a quiet market, and silence must always mean something broke.
+
+---
+
+## 7. Your daily routine
+
+1. **~15:00** — the email arrives. Verdicts are `BID` / `no`, each with the subscription
+   level that fired it. You can check that number against your own broker screen, which is
+   the practical gain over a probability.
+2. Form your own view on GMP.
+3. **Decide before 4:00 PM.** The standing caveat holds: a near-threshold `no` at 3pm is
+   uncertain rather than negative, because the 3pm figure understates final demand. The size
+   of that understatement is still being measured by the paired 15:00/19:30 captures.
+4. **If no email arrives on a day an IPO was closing, the decision was not delivered** —
+   and it will not arrive late. Check the Actions run; the report for the day still exists
+   at `reports/live/<date>.md` and says what the verdict would have been.
+5. **Saturday** — if the audit went red, a weekday lost a capture. The report is
+   `reports/CAPTURE_AUDIT.md`.

@@ -1,44 +1,70 @@
 # Model L live jobs on GitHub Actions.
 #
-# WHICH JOB CALLS WHICH SCRIPT (Priority 1c) — there is now exactly ONE live pipeline:
+# WHICH JOB CALLS WHICH SCRIPT (Priority 1c) — there is exactly ONE live pipeline, and
+# exactly THREE schedules: two daily legs and one weekly audit.
 #
-#   15:00 IST (cron "30 9 * * 1-5")  ->  python send_daily_email.py
+#   15:00 IST, weekdays  (cron "30 9 * * 1-5")   ->  python send_daily_email.py
 #       Chittorgarh market view, scores every mainboard IPO closing today, logs the
 #       predictions, appends the 1500 snapshot, writes reports/live/<date>.md, SENDS THE
-#       EMAIL.
-#   17:30 IST (cron "0 12 * * 1-5")  ->  python send_daily_email.py --final
-#       Chittorgarh again after the close, appends the 1730 snapshot and the day's index
-#       closes. NO email: the bid window has shut, so there is nothing left to decide.
+#       BID/NO-BID EMAIL.
 #
-# `run_live_l.py` is NOT scheduled any more. It reads NSE (connection reset) and BSE (403)
-# and has never captured a row, yet it wrote to the same report path as the working
-# pipeline — so on 2 Oct its failing 21:49 run overwrote the good Chittorgarh report. It is
-# kept as a manually-run exchange-access probe writing to reports/live/exchange_probe/,
-# ready for the day NSE answers the access request.
+#       15:00 and not 15:30: GitHub's scheduler drifts 5-15 minutes under load and the
+#       broker cutoff is 16:00 IST (E1), so 15:00 still lands 45 minutes clear.
 #
-# Why Actions as well as the laptop: app-based schedules only fire while the desktop app is
-# open and Task Scheduler only while the laptop is awake. Neither is reliable for a job
-# whose whole value is landing before a 16:00 IST broker cutoff. GitHub's scheduler drifts
-# 5-15 minutes under load, which is why the scoring job is set for 15:00 rather than 15:30:
-# even a 15-minute drift still lands 45 minutes before the cutoff.
+#       THIS LEG IS NEVER CAUGHT UP (Priority 1d). A bid signal after 16:00 invites a bid
+#       that cannot be placed, so `send_window()` refuses to send outside 14:00-16:00 IST
+#       and the run exits non-zero. Every 15:00 marker on record before 2026-10-08 was
+#       stamped after the cutoff - 16:53, 21:49, 22:11, 00:06, 00:39 - and sent anyway.
+#       That is the defect the window closes, and it is what makes the retry below safe:
+#       a retried email leg cannot deliver a dead signal, it can only fail again.
 #
-# Cron here is UTC. IST is UTC+5:30.  15:00 IST = 09:30 UTC   17:30 IST = 12:00 UTC
+#   19:30 IST, weekdays  (cron "0 14 * * 1-5")   ->  send_daily_email.py --final
+#                                                    capture_audit.py --catch-up
+#                                                    listing_prices.py --capture-listing-day
+#       The day-end capture: final subscription, the 15 index closes, and listing-day
+#       prices for anything that listed today.
 #
-# The jobs are idempotent: each writes a run marker and a second run on the same date and
-# capture point exits as a no-op. Since Priority 1f, a marker only counts when the run
-# actually captured something — a failed attempt no longer locks out its own retry.
+#       19:30 and not 17:30: NSE Indices publishes the day's index closes after the
+#       settlement run, and 17:30 was reading an incomplete table. The catch-up step runs
+#       FIRST so a day lost to an infrastructure fault is recovered before today's work.
 #
-# NETWORK: NSE resets or times out this project's User-Agent, BSE returns 403 even on
-# robots.txt, and niftyindices.com read-times-out on every path including /robots.txt. The
-# jobs log each block and write nothing invented. They do NOT fall back to a browser
-# User-Agent (project rule 3).
+#   10:30 IST, Saturdays (cron "0 5 * * 6")      ->  capture_audit.py --audit --days 7
+#       Priority 1e. Checks that every weekday in the week left an attempt, and FAILS the
+#       run if one did not. Evidence is `live_markers.attempts()`, not `already_ran()`: a
+#       job that ran and captured nothing is a quiet market, not a gap.
+#
+# `run_live_l.py` is NOT scheduled. It reads NSE and BSE directly and has never captured a
+# row, yet it used to write to the same report path as the working pipeline - so on 2 Oct
+# its failing 21:49 run overwrote the good report produced minutes earlier. It is kept as a
+# manually-dispatched exchange-access probe writing to reports/live/exchange_probe/, which
+# is exactly what Priority 2 re-tests now that NSE has answered the access request.
+#
+# Why Actions rather than the desktop app or Task Scheduler: app routines only fire while
+# the app is open and Task Scheduler only while the laptop is awake. Neither is acceptable
+# for a job whose whole value is landing before a 16:00 cutoff.
+#
+# Cron here is UTC. IST is UTC+5:30.
+#   15:00 IST = 09:30 UTC    19:30 IST = 14:00 UTC    Sat 10:30 IST = Sat 05:00 UTC
+#
+# The jobs are idempotent: each writes a run marker, and a second run on the same date and
+# capture point is a no-op. Since Priority 1f a marker only counts when the run actually
+# captured something, so a failed attempt no longer locks out its own retry.
+#
+# NETWORK (updated for H18): NSE, BSE and NSE Indices are all reachable. The earlier
+# "every official host refuses this project" note was wrong in its diagnosis - the block
+# was a User-Agent filter, not a policy, and all three return robots.txt 200 with
+# `Allow: /` under realistic browser headers. Realistic headers to OFFICIAL hosts are
+# permitted by H18. Still forbidden: any login, CAPTCHA, paywall or click-through, an
+# explicit robots.txt disallow, and the B1 blacklist.
 
 name: Model L live
 
 on:
   schedule:
     - cron: "30 9 * * 1-5"      # 15:00 IST, weekdays — score, snapshot, report, EMAIL
-    - cron: "0 12 * * 1-5"      # 17:30 IST, weekdays — final snapshot + index closes
+    - cron: "0 14 * * 1-5"      # 19:30 IST, weekdays — catch-up, final snapshot, index
+                                #   closes, listing-day prices
+    - cron: "0 5 * * 6"         # 10:30 IST Saturdays — weekly capture audit (1e)
   workflow_dispatch:
     inputs:
       mode:
@@ -46,7 +72,7 @@ on:
         required: true
         default: "email"
         type: choice
-        options: [email, final, listing, dry-run, probe, rehearse]
+        options: [email, final, listing, audit, catch-up, dry-run, probe, rehearse]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -86,20 +112,23 @@ jobs:
       # breakage on 1 Oct instead of three silent days later.
       - name: Verify the live path imports in this environment
         run: |
-          python -c "import send_daily_email, chittorgarh_live, score_l, predictions_log, live_markers, market_context; print('live path imports OK')"
+          python -c "import send_daily_email, chittorgarh_live, score_l, predictions_log, live_markers, market_context, capture_audit; print('live path imports OK')"
           python score_l.py --self-test
           python live_markers.py --self-test
           python market_context.py --self-test
           python send_daily_email.py --self-test
           python listing_prices.py --self-test
+          python capture_audit.py --self-test
 
       - name: Decide which job this run is
         id: which
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.event.schedule }}" = "0 12 * * 1-5" ]; then
+          elif [ "${{ github.event.schedule }}" = "0 14 * * 1-5" ]; then
             echo "mode=final" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "0 5 * * 6" ]; then
+            echo "mode=audit" >> "$GITHUB_OUTPUT"
           else
             echo "mode=email" >> "$GITHUB_OUTPUT"
           fi
@@ -119,17 +148,24 @@ jobs:
           case "${{ steps.which.outputs.mode }}" in
             email)    python send_daily_email.py ;;
             listing)  python listing_prices.py --capture-listing-day ;;
-            final)    python send_daily_email.py --final
+            final)    # Priority 1d: recover a day lost to an infrastructure fault
+                      # BEFORE today's capture, so a gap does not compound. Listing
+                      # prices and index closes are both readable from an archive; final
+                      # subscription is NOT (Chittorgarh removes the table at allotment),
+                      # and capture_audit.py says so instead of leaving a silent hole.
+                      python capture_audit.py --catch-up --days 4
+                      python send_daily_email.py --final
                       # 2d STANDING RULE: a newly listed IPO's price is captured ON ITS
                       # LISTING DATE, never later. A price read afterwards has been
                       # retroactively restated for any split or bonus since, silently --
                       # Syngene's real Rs 295 open reads Rs 147.50 once its 2017 bonus is
-                      # applied. Run at 17:30 because the bhavcopy is published after the
+                      # applied. Run at 19:30 because the bhavcopy is published after the
                       # close. This also scores (2e) any prediction the label settles.
                       python listing_prices.py --capture-listing-day ;;
-            dry-run)  python send_daily_email.py --dry-run ;;
-            probe)    python run_live_l.py --probe ;;
-            rehearse) python run_live_l.py --rehearse ;;
+            audit)    # Priority 1e. Exits 1 on an open gap, so the run goes red and the
+                      # gap is visible without anybody reading a report.
+                      python capture_audit.py --audit --days 7 ;;
+            catch-up) python capture_audit.py --catch-up --days 7 ;;
           esac
 
       - name: Commit whatever was produced
@@ -145,7 +181,7 @@ jobs:
           # produced", exited 0 and looked GREEN while leaving no record in the repo that
           # it had run at all. Staging each path on its own means one absent file can no
           # longer suppress the others.
-          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv data/listing_prices.csv data/listing_prices_progress.csv reports/live; do
+          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv data/listing_prices.csv data/listing_prices_progress.csv reports/live reports/CAPTURE_AUDIT.md; do
             if [ -e "$f" ]; then
               git add -A -- "$f" || echo "could not stage $f"
             else
@@ -163,6 +199,24 @@ jobs:
           # Another run may have pushed between checkout and here.
           git pull --rebase --autostash origin main
           git push origin HEAD:main
+
+      # Priority 1d: the 15:00 leg must FAIL LOUDLY. A failed run that says nothing is
+      # indistinguishable from a quiet market, and silence must always mean something
+      # broke. This fires only for the email leg, and only when it failed.
+      - name: The bid email did not go out
+        if: failure() && steps.which.outputs.mode == 'email'
+        run: |
+          {
+            echo "## THE 15:00 BID EMAIL DID NOT GO OUT"
+            echo ""
+            echo "This leg is **never caught up**. A bid signal after the 16:00 IST broker"
+            echo "cutoff invites a bid that can no longer be placed, so re-running this"
+            echo "later will refuse to send by design (send_window in send_daily_email.py)."
+            echo ""
+            echo "If today had an IPO closing, the decision was NOT delivered."
+            echo "Check reports/live/$(TZ=Asia/Kolkata date +%F).md for what it would have said."
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 1
 
       - name: Summarise for the run log
         if: always()

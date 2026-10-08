@@ -72,6 +72,16 @@ SUBJECT_PREFIX = "IPO decision - "
 # file had never been created, because the only leg that wrote it was the NSE/BSE one that
 # always failed. `sector` is Priority 6 and is populated ONLY where the source page states
 # it — never guessed.
+# The broker cutoff (decision E1). A bid signal that arrives after this is not late
+# information, it is wrong information: it invites a bid that can no longer be placed.
+# Every 15:00 marker on record so far was stamped AFTER it - 16:53, 21:49, 22:11, two
+# past midnight - because GitHub queues a delayed job and the leg sent anyway. The 15:00
+# leg now refuses to send past this time and exits non-zero (Priority 1d). It is never
+# caught up: there is no flag that re-sends it, only --dry-run for inspection.
+BROKER_CUTOFF_HHMM = 1600
+# The other end of the same window. See send_window() for why.
+EARLIEST_SEND_HHMM = 1400
+
 SNAP_COLS = ["ipo", "isin", "ipo_id", "segment", "date", "timestamp_ist", "capture_point",
              "qib_x", "hni_x", "rii_x", "emp_x", "total_x", "sector",
              "source", "reconciled", "note"]
@@ -85,6 +95,34 @@ CAVEATS = [
 
 class MissingSecret(RuntimeError):
     pass
+
+
+def send_window(when) -> tuple[bool, str]:
+    """`(may_send, why_not)` for a wall-clock time. Pure, so it is testable.
+
+    Two refusals, for two different reasons:
+
+    * **At or after 16:00** - the broker cutoff (E1). The signal is dead on
+      arrival. This is Priority 1d, and it is why five of the five 15:00 markers
+      on record (16:53, 21:49, 22:11, 00:06, 00:39) should never have sent.
+    * **Before 14:00** - the model is `L_final_3pm` (H1). It was fitted on the
+      final-day late-afternoon subscription figure, and a morning figure is a
+      different distribution, not an early look at the same one. Scoring one
+      would be a quiet leakage-discipline breach in the opposite direction.
+    """
+    w = pd.Timestamp(when)
+    hhmm = w.hour * 100 + w.minute
+    if hhmm >= BROKER_CUTOFF_HHMM:
+        return False, (f"it is {w:%H:%M} IST, at or past the "
+                       f"{BROKER_CUTOFF_HHMM // 100}:{BROKER_CUTOFF_HHMM % 100:02d}"
+                       f" broker cutoff (E1). A bid signal now invites a bid that"
+                       f" cannot be placed")
+    if hhmm < EARLIEST_SEND_HHMM:
+        return False, (f"it is {w:%H:%M} IST, before "
+                       f"{EARLIEST_SEND_HHMM // 100}:{EARLIEST_SEND_HHMM % 100:02d}"
+                       f". L_final_3pm scores the final-day late-afternoon figure;"
+                       f" a morning figure is a different distribution")
+    return True, ""
 
 
 def secrets() -> tuple[str, str, str]:
@@ -293,10 +331,13 @@ def send(subject: str, body: str, dry: bool) -> dict:
 # ---------------------------------------------------------------- entry points
 def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     """The 15:00 leg (`final=False`) scores, logs, snapshots, reports and emails.
-    The 17:30 leg (`final=True`) snapshots only — the bid window has closed, so there is
+    The 19:30 leg (`final=True`) snapshots only — the bid window has closed, so there is
     nothing left to decide and nothing to email."""
     today = pd.Timestamp.now()
-    capture_point = 1730 if final else 1500
+    # The clock time the leg actually runs at. The day-end leg moved 17:30 -> 19:30 on
+    # 2026-10-08 (1c): 17:30 is before the index closes are published. The older 1730
+    # markers stay truthful - they were captured at 17:30.
+    capture_point = 1930 if final else 1500
 
     if today.weekday() >= 5:
         print(f"{today.strftime('%A')} — no bidding at the weekend, no email.")
@@ -313,12 +354,12 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
 
     # Priority 6: the 17:30 leg is where the index closes are captured — after the market
     # has actually closed. The 15:00 leg only reads back whatever is already on disk.
-    ctx = MC.capture(today) if (final and not dry) else {"skipped": "not the 17:30 leg"}
+    ctx = MC.capture(today) if (final and not dry) else {"skipped": "not the day-end leg"}
 
     if final:
         if not dry:
             LM.mark_ran(capture_point, today, n_snap)
-        print(f"17:30 final capture {today.date()}: {n_snap} snapshot rows, "
+        print(f"19:30 final capture {today.date()}: {n_snap} snapshot rows, "
               f"{ctx.get('n_ok', 0)} index closes. No email at this capture point.")
         return {"sent": False, "mode": "final", "n_snapshots": n_snap,
                 "capture_point": capture_point, "market_context": ctx}
@@ -341,6 +382,20 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     subject, body = compose(mv, scored, today)
     LIVE_DIR.mkdir(parents=True, exist_ok=True)
     (LIVE_DIR / f"{today.date()}.md").write_text(body, encoding="utf-8")
+    # Priority 1d: fail loudly rather than send a dead signal. The report is still
+    # written, so the day leaves a record of what the verdict WOULD have been.
+    may_send, why_not = send_window(today)
+    if not dry and not may_send:
+        LM.mark_ran(capture_point, today, n_snap)
+        msg = (f"REFUSING TO SEND: {why_not}. The report was still written to "
+               f"reports/live/{today.date()}.md, so the day leaves a record of "
+               f"what the verdict would have been. This leg is NEVER caught up "
+               f"- see capture_audit.py.")
+        print(msg, file=sys.stderr)
+        return {"sent": False, "reason": "outside_send_window", "fail_loudly": True,
+                "message": msg, "n_verdicts": len(scored), "n_snapshots": n_snap,
+                "capture_point": capture_point}
+
     out = send(subject, body, dry)
     if not dry:
         LM.mark_ran(capture_point, today, n_snap)
@@ -490,6 +545,34 @@ def self_test() -> int:
     chk("capture_point column exists", "capture_point" in SNAP_COLS)
     chk("segment is carried, not re-derived", "segment" in SNAP_COLS)
 
+    print('\n[6] the 15:00 leg never sends after the broker cutoff (1d)')
+    chk("the cutoff is the 16:00 broker cutoff (E1)", BROKER_CUTOFF_HHMM == 1600)
+    may = lambda t: send_window(t)[0]   # noqa: E731
+    chk("15:00, the scheduled time, may send", may("2026-10-08 15:00") is True)
+    chk("15:59 may still send", may("2026-10-08 15:59") is True)
+    chk("16:00 exactly may NOT", may("2026-10-08 16:00") is False)
+    chk("16:53 - the earliest time a real run sent - may not",
+        may("2026-10-03 16:53") is False)
+    chk("22:11 - another real one - may not", may("2026-10-07 22:11") is False)
+    chk("00:06 may not either, but for the OTHER reason: too early, not too late",
+        may("2026-10-06 00:06") is False
+        and "different distribution" in send_window("2026-10-06 00:06")[1])
+    chk("and the late refusal cites the cutoff, not the distribution",
+        "broker cutoff" in send_window("2026-10-07 22:11")[1])
+    chk("13:59 is too early; L_final_3pm was not fitted on a morning figure",
+        may("2026-10-08 13:59") is False)
+    chk("14:00 may send", may("2026-10-08 14:00") is True)
+    msrc = inspect.getsource(main)
+    chk("the guard returns BEFORE send() is reached",
+        msrc.index("not may_send") < msrc.index("out = send("))
+    chk("it still writes the report, so the day leaves a record",
+        msrc.index(".md").__class__ is int and ".md" in msrc)
+    chk("a refused send is flagged so the CLI can exit non-zero",
+        "fail_loudly" in msrc)
+    chk("there is no flag that re-sends a missed email",
+        "catch_up" not in msrc and "catch-up" not in msrc)
+    chk("the day-end capture point is 19:30 (1c)", "1930" in msrc)
+
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
 
@@ -512,3 +595,5 @@ if __name__ == "__main__":
         print(f"\nFAILED LOUDLY: {type(e).__name__}: {e}", file=sys.stderr)
         raise
     print(f"\n{r}")
+    # A refused send must make the RUN red, or silence looks like success.
+    raise SystemExit(1 if r.get("fail_loudly") else 0)

@@ -122,7 +122,7 @@ CAGR is 0.218. Never merge them.
 | RHP fetcher | SEBI + BSE SME resolvers, 5/5 verified; `data/verified_rhp_manifest.csv` has all 8 PDFs with URL + SHA-256 |
 | RHP extraction | Stage 8 reached 24% on the headline financials and did **not** close Gate C; superseded by Stage 15, which measures coverage on the H6 fields instead. Framework (`extract/`), provenance model and TOC-driven section location with **measured** page offsets are kept |
 | GMP | **not a model feature and never fetched** (B5, D1). Display-only field in live reports, logged for later evaluation (D2) |
-| Live schedule | score 15:00, notify 15:30, snapshot 19:00, ingest Mon & Thu 08:00, retrain monthly — broker cutoff 4:00 PM (E1) |
+| Live schedule | **Three** GitHub Actions jobs and nothing else: 15:00 IST weekday bid email, 19:30 IST weekday day-end capture, Saturday 10:30 capture audit. Two app routines survive: `ipo-retrain-monthly`, `ipo-ingest-outcomes`. The 15:00 leg refuses to send outside 14:00-16:00 IST and is **never** caught up — broker cutoff 4:00 PM (E1). See `LIVE_SETUP.md` |
 
 **Environment:** Windows Application Control on the laptop blocks scikit-learn's and
 statsmodels.tsa's DLLs. Use the validated numpy logistic regression (never add
