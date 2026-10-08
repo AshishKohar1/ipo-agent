@@ -211,6 +211,23 @@ def main(dry: bool = False) -> dict:
         res["thresholds"]["error"] = f"{type(e).__name__}: {e}"
         alerts.append(f"the H17 threshold re-derivation did not run: {type(e).__name__}: {e}")
 
+    # H19, the two-window tripwire. Measured by the EMAIL backtest, not by a separate
+    # reimplementation, so what is tripwired is what the email actually said. One
+    # under-delivering window is recorded and deliberately NOT acted on; two consecutive
+    # on the same target authorises re-deriving that threshold (and only re-deriving -
+    # the 25% drift guard still holds a large move for review).
+    try:
+        import tripwire as TW
+        res["tripwire"] = TW.evaluate(12)
+        for target in ("L1", "L2"):
+            m = res["tripwire"]["targets"][target].get("alert")
+            if m:
+                alerts.append(m)
+    except Exception as e:                                  # noqa: BLE001
+        res["tripwire"] = {"error": f"{type(e).__name__}: {e}"}
+        alerts.append(f"the H19 tripwire did not run: {type(e).__name__}: {e}. The count "
+                      f"is NOT advanced, so a window has been missed rather than passed.")
+
     res["alerts"] = alerts
     if alerts:
         print("\nALERTS:")
@@ -248,6 +265,26 @@ def main(dry: bool = False) -> dict:
                   "drifted 31.11x to 17.20x chasing the hot 2021-24 market and 2025 then "
                   "delivered 60%. A threshold that chases recent conditions is not learning.",
               ""]
+    tw = res.get("tripwire") or {}
+    if tw and "error" not in tw:
+        L += ["## H19 tripwire - trailing 12 months", "",
+              "| target | delivered | promise | bids | counts? | consecutive | fired |",
+              "|---|---|---|---|---|---|---|"]
+        for t in ("L1", "L2"):
+            r = tw["targets"][t]
+            o = [x for x in __import__("tripwire")._load()["targets"][t]["observations"]
+                 if x["window"] == r["window"]]
+            dv = (o[0]["delivered"] if o and o[0]["delivered"] is not None else None)
+            pr = (o[0]["promise"] if o else None)
+            nb = (o[0]["n_bids"] if o else None)
+            L.append(f"| {t} | {'-' if dv is None else f'{dv*100:.1f}%'} "
+                     f"| {'-' if pr is None else f'{pr*100:.0f}%'} | {nb} "
+                     f"| {'yes' if r['counts'] else 'no'} "
+                     f"| {r['consecutive_under']} of {r['trigger_at']} "
+                     f"| {'**YES - RE-DERIVE**' if r['fired'] else 'no'} |")
+        L += ["", "Two consecutive under-delivering windows is the trigger; one is not "
+                  "(H19). Firing authorises re-deriving the threshold, not applying the "
+                  "result.", ""]
     for target, d in res["targets"].items():
         L += [f"## {target}", "", "| candidate | AUC | Brier | fires | hit rate | PSI max |",
               "|---|---|---|---|---|---|"]

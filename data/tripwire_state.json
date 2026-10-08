@@ -1,0 +1,36 @@
+{
+  "rule": "H19",
+  "trigger_at": 2,
+  "targets": {
+    "L1": {
+      "consecutive_under": 1,
+      "observations": [
+        {
+          "window": "2026-10",
+          "delivered": 0.8571428571428571,
+          "promise": 0.9,
+          "n_bids": 49,
+          "counts": true,
+          "under": true
+        }
+      ],
+      "fired": false,
+      "last_window": "2026-10"
+    },
+    "L2": {
+      "consecutive_under": 1,
+      "observations": [
+        {
+          "window": "2026-10",
+          "delivered": 0.7222222222222222,
+          "promise": 0.8,
+          "n_bids": 36,
+          "counts": true,
+          "under": true
+        }
+      ],
+      "fired": false,
+      "last_window": "2026-10"
+    }
+  }
+}
