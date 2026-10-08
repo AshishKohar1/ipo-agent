@@ -60,6 +60,7 @@ import live_markers as LM          # noqa: E402
 import market_context as MC        # noqa: E402
 import trading_day as TD           # noqa: E402  - one date per run (Task 1)
 import sent_markers as SM          # noqa: E402  - idempotent send (Task 4)
+import nse_subscription as NSE     # noqa: E402  - H22 source order (Task 8)
 
 LIVE_DIR = ROOT / "reports" / "live"
 SNAPSHOTS = ROOT / "data" / "subscription_snapshots.csv"
@@ -496,6 +497,18 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
         return {"sent": False, "reason": "already_ran", "capture_point": capture_point}
 
     mv = CL.market_view(today)
+    # H22, PROVISIONAL pending the HDFIRE test (Task 9): NSE is the origin of the
+    # subscription figure and Chittorgarh republishes it, so NSE is tried first.
+    # A payload only replaces the Chittorgarh figure if it passes the freshness
+    # gate - positive Total, updateTime on the trading date, matching symbol -
+    # because it is NOT yet known whether that endpoint publishes intraday. Which
+    # source was used is recorded on every row; the single_source_unverified flag
+    # stays either way, since a figure and a copy of it are not two measurements.
+    try:
+        mv = NSE.enrich_market_view(mv, today=today)
+    except Exception as e:                              # noqa: BLE001
+        print(f"  H22: NSE enrichment skipped ({type(e).__name__}: {str(e)[:70]}); "
+              f"Chittorgarh figures stand.")
     n_snap = 0 if dry else append_snapshots(mv, capture_point, today)
 
     # Priority 6: the 19:30 day-end leg is where the index closes are captured — after

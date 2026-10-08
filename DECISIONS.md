@@ -843,3 +843,101 @@ because they found their own assertion string in the file they were checking.
 The same sweep found a worse instance of the same class: the assertion that the L2
 under-review caveat had been deleted ended in `... or True`, which I had added to stop it
 matching its own text. **It could not fail.** Fixed the same way.
+
+---
+
+## 2026-10-08 (later) — H22 and H23
+
+### H22 — source order for subscription: NSE primary, Chittorgarh fallback (PROVISIONAL)
+
+> **NSE `api/ipo-active-category` is primary (the origin); Chittorgarh is fallback;
+> subscription is single-origin, rule 2 is not achievable — the flag stays. Never use
+> `ipo-detail`.**
+
+**Why NSE is the origin and not a second opinion.** `ipo-active-category` reproduced the
+master's recorded `Total` to two decimal places on **14 of 14** mainboard IPOs. Fourteen
+exact matches is not what two independent measurements look like; it is what a figure and
+a copy of that figure look like. NSE publishes it and Chittorgarh republishes it. Reading
+the original removes a transcription step and a third party's uptime from the live path —
+and that is the entire gain. It buys **no** independence.
+
+So **every subscription row keeps `single_source_unverified`**. Rule 2 needs two
+measurements and there is still only one, for the same reason `CLAUDE.md` says Chittorgarh
+and IPOMatrix are not two sources. BSE, probed the same day, has no working subscription
+endpoint at all — three candidate paths returned the same 1,814-byte ASP.NET error page —
+so the independence problem is not solved by adding NSE and is not solvable today.
+
+**`ipo-detail` is forbidden, and this is the trap worth naming.** It is the more obvious
+endpoint, it has the richer-looking payload, and its `bidDetails` block is an
+**intermediate cut, not the close**: measured against the same 14 IPOs it runs **9% to 57%
+lower** than the final figure. Building on it would understate subscription by tens of
+percent and push every verdict toward `no`. `nse_subscription.py`'s self-test asserts no
+code path constructs an `ipo-detail` URL.
+
+**Why this ships as provisional, and what makes it safe anyway.** It is **not yet known**
+whether `ipo-active-category` updates during the bidding day or only publishes once at
+19:00. Every closed issue shows a single 19:00 `updateTime`, which is consistent with
+either and proves neither. Task 9's HDFIRE test (13–15 Oct) settles it.
+
+Promoting NSE unconditionally before that would risk scoring the 15:00 decision on a zero
+or on yesterday's figure. So a payload is used **only if it passes a freshness gate**:
+
+| check | why |
+|---|---|
+| `Total` present and **> 0** | a forthcoming issue answers `0.00`; that is "nothing published", not "no demand" |
+| `updateTime` parses **and is the trading date** | an undated or stale figure could be any day's. `"Updated as on null"` must never be read as *now* |
+| the symbol in the payload **is the symbol asked for** | the Priority 2 probe silently returned a *different company's* subscription for the guessed symbol `PARAMOUNT` |
+
+A gate failure is a normal outcome, not an error: it means NSE has published nothing usable
+yet, and the Chittorgarh figure stands. **Which source was used is recorded on every row**
+(`sub["source"]`, `sub["nse_note"]`), because a silent switch between two sources is how a
+divergence stops being detectable.
+
+Symbols come from NSE's own `api/all-upcoming-issues`, never from guessing at a name:
+`market_view()` rows carry a company name and a Chittorgarh id and no symbol at all. Two
+candidate matches return nothing rather than the first one.
+
+---
+
+### H23 — the live verdict uses the 15:00 figure, and that is accepted
+
+> **The live verdict uses the 15:00 IST subscription figure. It understates final
+> subscription; this makes verdicts conservative and is accepted. No threshold
+> adjustment.**
+
+**Task 10 — what the thresholds were actually derived on: the FINAL figure.** Traced, with
+lines, rather than assumed:
+
+| step | file:line | what it does |
+|---|---|---|
+| 1 | [derive_subscription_thresholds.py:86](derive_subscription_thresholds.py:86) | `"total": np.expm1(df["log1p_total"])` — the threshold grid is built from this |
+| 2 | [models/model_l.py:97](models/model_l.py:97) | `out["log1p_total"] = np.log1p(_num(df, "Total", "total"))` |
+| 3 | [models/model_l.py:62](models/model_l.py:62) | `load_mainboard()` → `dataio.load_master_with_symbols()` |
+| 4 | the master's `Total` column | the subscription recorded **after the issue closed** |
+
+And this is now **confirmed against the exchange rather than inferred**: the master's
+`Total` for SRTL is `43.66`, and NSE's `ipo-active-category` returns `43.66` with
+`updateTime` `25-Feb-2026 19:00:00` — the published final update. The same held on all 14
+IPOs checked. **So `28.39x` and `54.02x` are thresholds on FINAL subscription, applied live
+to the ~15:00 reading.**
+
+**The direction of the error, and why it is accepted.** Institutional bids concentrate in
+the closing hours, so the 15:00 figure is **lower** than the figure the thresholds were
+derived on. A threshold crossed at 15:00 is therefore crossed by more at the close. The
+error is one-sided: the email **misses qualifying IPOs rather than recommending bad ones**.
+A near-threshold `NO BID` is uncertain, not negative.
+
+**No adjustment, and the reason is not laziness.** Shifting the thresholds down to
+compensate would require knowing the size of the 15:00-to-final gap, and that quantity has
+never been measured — no permitted source publishes day-wise subscription history, which is
+what cancelled Stage 4B. Guessing a correction would replace a known, one-sided,
+conservative bias with an unknown two-sided one.
+
+It is now being measured instead. Task 6 writes `data/final_subscription.csv` on every
+day-end capture: the 15:00 figure, the final figure, `growth_x`, and
+`would_L1_fire_on_final` / `would_L2_fire_on_final` under the same ratified thresholds. The
+3pm understatement stops being a caveat and becomes a counted quantity. When there is
+enough of it, this decision can be revisited on evidence.
+
+The email states the caveat on every closing issue: *"Figures as of HH:MM IST — final
+subscription is usually higher (H23)."*

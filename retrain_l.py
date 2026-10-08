@@ -228,6 +228,27 @@ def main(dry: bool = False) -> dict:
         alerts.append(f"the H19 tripwire did not run: {type(e).__name__}: {e}. The count "
                       f"is NOT advanced, so a window has been missed rather than passed.")
 
+    # Task 11, DISPLAY ONLY. How many IPOs the trailing 12 months actually contained.
+    # Nothing reads this; it exists so a delivered hit rate is never read without its
+    # denominator beside it. 2025 held 102 IPOs and 2013 held 3, and a 12-month window
+    # can be either shape - the P3b analysis found supply, not the index, is what the
+    # delivered rate tracks (-0.767 against supply, +0.206 against the index return).
+    try:
+        import dataio as _dio
+        _m = _dio.load_master_with_symbols()
+        _m = _m[_m["exclude_reason"].isna()] if "exclude_reason" in _m else _m
+        _d = pd.to_datetime(_m["issue_open_date"], errors="coerce").dropna()
+        _cut = _d.max() - pd.DateOffset(months=12)
+        _w = _d[_d > _cut]
+        res["trailing_12m"] = {
+            "n_ipos": int(len(_w)),
+            "window": [str(_w.min().date()), str(_w.max().date())] if len(_w) else None,
+            "note": "display only (Task 11); not an input to any decision"}
+        print(f"{chr(10)}trailing 12 months: {len(_w)} IPOs"
+              + (f" ({_w.min().date()} to {_w.max().date()})" if len(_w) else ""))
+    except Exception as e:                                  # noqa: BLE001
+        res["trailing_12m"] = {"error": f"{type(e).__name__}: {e}"}
+
     res["alerts"] = alerts
     if alerts:
         print("\nALERTS:")
@@ -265,6 +286,14 @@ def main(dry: bool = False) -> dict:
                   "drifted 31.11x to 17.20x chasing the hot 2021-24 market and 2025 then "
                   "delivered 60%. A threshold that chases recent conditions is not learning.",
               ""]
+    t12 = res.get("trailing_12m") or {}
+    if t12.get("n_ipos") is not None:
+        w = t12.get("window") or ["?", "?"]
+        n12 = t12["n_ipos"]
+        L += [f"Trailing 12 months: **{n12} IPOs** ({w[0]} to {w[1]}). "
+              f"Display only (Task 11) - a delivered hit rate should never be "
+              f"read without its denominator beside it."]
+        L += [""]
     tw = res.get("tripwire") or {}
     if tw and "error" not in tw:
         L += ["## H19 tripwire - trailing 12 months", "",
