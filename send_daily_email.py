@@ -148,7 +148,7 @@ def secrets() -> tuple[str, str, str]:
         raise MissingSecret(
             f"missing repo secret(s): {', '.join(missing)}. The email was NOT sent and this "
             "run has failed deliberately — a silently skipped email would look identical to "
-            "a quiet market. See EMAIL_SETUP.md.")
+            "a quiet market. See LIVE_SETUP.md section 6.")
     to = os.environ.get("EMAIL_TO", "").strip() or addr
     return addr, pw, to
 

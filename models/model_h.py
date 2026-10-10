@@ -44,7 +44,7 @@ BASELINE_FEATURES = ["log1p_total", "log1p_qib", "log1p_hni", "log1p_rii", "log_
                      "listing_gain"]
 
 # ----------------------------------------------------------------------
-# RHP FEATURE BLOCKS — PLACEHOLDERS (IPO-Model-Build-Spec-v2.md, Part C.4)
+# RHP FEATURE BLOCKS — PLACEHOLDERS (docs/IPO-Model-Build-Spec-v2.md, Part C.4)
 # ----------------------------------------------------------------------
 # Each block lists the columns it will contribute. Until the RHP extraction writes them
 # (observations table -> reconcile.py -> dataset_reconciled.csv), every column is NaN

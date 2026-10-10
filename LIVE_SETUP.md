@@ -337,6 +337,45 @@ nowhere else — not in a file, not in a routine, not in this document.
 **A missing secret fails the run.** It never silently skips the email, because a skipped
 email looks identical to a quiet market, and silence must always mean something broke.
 
+Use **repository** secrets, not environment secrets and not variables. A *variable* is
+visible in logs; a secret is masked. The password is never written to a file in the repo.
+
+### Creating the Gmail app password
+
+Folded in from `EMAIL_SETUP.md` on 2026-10-10, which this replaces. An app password is a
+16-character key that lets one program send mail as you, without your real password and
+without disabling anything on the account. It can be revoked on its own.
+
+1. The account needs **2-Step Verification** on first:
+   <https://myaccount.google.com/signinoptions/two-step-verification>. App passwords do
+   not appear as an option until it is enabled.
+2. <https://myaccount.google.com/apppasswords> → **App name** `ipo-agent` → **Create**.
+3. Google shows 16 characters in four blocks, e.g. `abcd efgh ijkl mnop`.
+   **Copy it immediately — it is never shown again.** Spaces do not matter; the code
+   strips them.
+4. Paste it into `GMAIL_APP_PASSWORD` at
+   <https://github.com/AshishKohar1/ipo-agent/settings/secrets/actions>.
+
+If `/apppasswords` says the option is unavailable it is almost always because 2-Step is
+off, or because the account is a Workspace account whose admin has disabled app passwords.
+
+### When the email does not arrive
+
+Dispatch the workflow by hand — Actions → *Model L live* → *Run workflow* → mode `email` —
+and read the log. The failure is deliberately loud, and there are only a few:
+
+| In the log | Cause | Fix |
+|---|---|---|
+| `missing repo secret(s): …` | a secret is absent or misnamed | re-check the exact names above |
+| `535 … Username and Password not accepted` | wrong app password, or the real account password was used | regenerate the app password |
+| `534 … Please log in with your web browser` | 2-Step is off, so it is not a real app password | enable 2-Step, regenerate |
+| `Chittorgarh robots.txt no longer permits…` | **the source has withdrawn permission** | stop. This is not a bug to work around |
+| `REFUSING TO SEND: … before 14:00` | the run landed outside the send window | expected on a dispatch; see section 2 |
+
+To test without waiting for a closing IPO, use mode `test-email`: real SMTP, real
+composition, subject `IPO decision - TEST`, and it writes no sent marker and logs no
+prediction — a test is not a decision.
+
 ---
 
 ## 7. Your daily routine
