@@ -1,20 +1,25 @@
 # Capture audit
 
-Window: the last 4 days, weekdays only. Generated 2026-10-10 15:11 IST.
+Window: the last 4 days, weekdays only. Generated 2026-10-10 15:14 IST.
 
-**1 missed 15:00 leg(s), 1 missed day-end leg(s).**
+**1 missed 15:00 leg(s), 2 missed day-end leg(s).**
 
 A gap means the job left *no attempt at all* — an infrastructure failure. A job that ran and captured nothing is a quiet market, not a gap, and is not counted here.
 
 | date | 15:00 attempts | day-end attempts |
 |---|---|---|
-| 2026-10-06 | 1 | 1 |
 | 2026-10-07 | 1 | **0 — MISSED** |
 | 2026-10-08 | **0 — MISSED** | 1 |
+| 2026-10-09 | 5 | **0 — MISSED** |
 
 ## What catch-up recovered
 
 ### 2026-10-07
+
+* listing prices — no live prediction is awaiting an outcome
+* index closes — all already captured
+
+### 2026-10-09
 
 * listing prices — no live prediction is awaiting an outcome
 * index closes — all already captured
