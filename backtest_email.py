@@ -118,6 +118,12 @@ def backtest(months: int = 12) -> tuple[pd.DataFrame, dict]:
         fired = t[t[f"email_{tgt}"] == "BID"]
         met = t[f"{tgt}_target_met"]
         s[tgt] = {
+            # H24. The IDENTITY of the rows the hit rate was computed on, not just the
+            # count: two consecutive trailing-12-month windows share 11 of 12 months, and
+            # the tripwire needs to tell a new reading from the same one shifted along.
+            # `t` has already dropped rows with no resolved gain, so every firing row here
+            # is a resolved one.
+            "fire_keys": [f"{r.date}|{r.company}" for r in fired.itertuples()],
             "promise": SL.required()[tgt],
             "bids": int(len(fired)),
             "bid_hits": int(fired[f"{tgt}_target_met"].sum()) if len(fired) else 0,

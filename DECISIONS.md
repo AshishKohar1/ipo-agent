@@ -941,3 +941,69 @@ enough of it, this decision can be revisited on evidence.
 
 The email states the caveat on every closing issue: *"Figures as of HH:MM IST — final
 subscription is usually higher (H23)."*
+
+---
+
+## H24 — a trailing-12-month window only counts toward the tripwire if half its firing rows are new (2026-10-10)
+
+**Decided before the 1 November retrain, deliberately, while the count stands at 1 of 2
+on both targets and nobody knows what November will say.**
+
+### The problem
+
+H19 says two consecutive under-delivering trailing-12-month windows re-derive the
+threshold. But two consecutive such windows **share eleven of their twelve months**. If
+October under-delivers, November is reading almost the same rows. The second reading is
+near-automatic: one bad year arms the tripwire in October and fires it in November without
+a single new outcome having to disappoint. That is not two pieces of evidence, it is one
+piece of evidence counted twice — the same error as deriving a threshold from a single
+window, wearing a different hat.
+
+Measured on the current data, rolling the window forward by one month leaves **0 of 45 L1
+firing rows new and 0 of 34 L2 firing rows new**. The overlap is not a theoretical worry.
+
+### The rule
+
+On top of H19, unchanged in every other respect:
+
+> A window counts toward the tripwire only if **at least half of its resolved firing rows
+> are new since the last counted window.**
+
+* "Resolved firing rows" is exactly the set the delivered hit rate was computed on: the
+  IPOs the email would have said BID to, whose listing gain is known. Their identity is
+  stored on the observation (`fire_keys`), so the overlap is **measured, not assumed**.
+* Overlap is measured against the **last counted** window, not the previous window. This
+  matters: it means the count advances the first time half the firing rows have turned
+  over, rather than never. With a 12-month window and a monthly retrain that is roughly
+  six retrains, which is the pace at which the evidence actually renews.
+* The gate applies to **incrementing** the count, never to resetting it. A window that
+  delivers disarms the tripwire whether or not its rows are new. H24 exists to stop a
+  near-automatic second strike, not to make the tripwire harder to switch off — gating the
+  reset too would make the rule *more* trigger-happy than H19, in the one direction H19
+  was careful about.
+* A window whose firing rows were **not recorded** is recorded and not counted, with the
+  reason. The exception is the first counted window, which has nothing to overlap with.
+  H24 cannot be checked against rows that were never stored, and counting an unverifiable
+  window is the thing H24 exists to stop.
+* Unchanged from H19: the trigger is still two; a thin window (fewer than 20 bids) is
+  still recorded and not counted; firing still authorises **re-deriving** the threshold and
+  **not** applying the result, with the 25% drift guard still on top.
+
+### What this does to the current state
+
+Nothing. The October 2026 window is the first counted window on both targets, so it has no
+predecessor to overlap with and still counts. `L1` and `L2` both stand at **1 of 2**, and
+`data/tripwire_state.json` now also carries the 49 L1 and 36 L2 firing-row identities that
+the next window will be measured against.
+
+### The consequence, stated plainly
+
+H24 makes the tripwire slower by design. A second strike now needs half the firing rows to
+have turned over, which on a 12-month window is of the order of six monthly retrains
+rather than one. That is the intended trade: the tripwire fires on renewed evidence or not
+at all. If a genuine regime change arrives, it will show up as a delivered rate that keeps
+falling across windows that *do* count — and in the meantime every window, counted or not,
+is still recorded with its numbers, so nothing is hidden while the count waits.
+
+Implemented in `tripwire.py` (`_recount`, `MIN_NEW_SHARE = 0.5`) and
+`backtest_email.backtest()` (which now returns `fire_keys`). 33 self-test assertions.
