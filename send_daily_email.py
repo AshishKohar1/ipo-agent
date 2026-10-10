@@ -472,6 +472,40 @@ def test_email(dry: bool = False) -> dict:
 
 
 # ---------------------------------------------------------------- entry points
+def day_end_captured(day) -> tuple[bool, str]:
+    """Has this trading date's day-end work already been done?
+
+    Task 1. Now that a late schedule run takes the date of the slot it was DUE for, two
+    runs can legitimately arrive for the same day-end: the cron-job.org trigger at 14:00
+    UTC and the GitHub backstop seven hours later, both stamped with the same date. The
+    backstop must not redo the work.
+
+    `live_markers.already_ran` is not enough on its own. It counts SNAPSHOT rows, and the
+    day-end leg's real output is the 15 index closes - on a day with no IPO open it
+    captures 15 closes and zero snapshots, so the marker would say "nothing captured" and
+    the backstop would fetch all 15 again. Those appends are idempotent per (date, index)
+    inside market_context, so nothing would be duplicated, but 15 pointless requests to
+    NSE Indices is not what "already captured" should mean.
+
+    So the test is the index closes themselves: a real close on record for every index on
+    this date means the day is done. The two conditions are ORed, not ANDed - either kind
+    of evidence that the work landed is enough.
+    """
+    try:
+        have = MC._existing()
+        names = [n for n, _ in MC.INDICES]
+        got = [n for n in names if MC.already_have(str(pd.Timestamp(day).date()), n, have)]
+    except Exception as e:                                   # noqa: BLE001
+        # Never claim "already captured" because the check itself broke: that would turn a
+        # read error into a silently skipped capture.
+        return False, f"could not check ({type(e).__name__}: {str(e)[:60]})"
+    if len(got) == len(names) and names:
+        return True, f"all {len(names)} index closes already on record for {pd.Timestamp(day).date()}"
+    if LM.already_ran(1930, day):
+        return True, f"a 19:30 marker for {pd.Timestamp(day).date()} already records a real capture"
+    return False, f"{len(got)} of {len(names)} index closes on record"
+
+
 def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     """The 15:00 leg (`final=False`) scores, logs, snapshots, reports and emails.
     The 19:30 leg (`final=True`) snapshots only — the bid window has closed, so there is
@@ -495,6 +529,17 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     if not dry and not force and LM.already_ran(capture_point, today):
         print(f"{today.date()} {capture_point}: already captured. No-op.")
         return {"sent": False, "reason": "already_ran", "capture_point": capture_point}
+
+    # Task 1, the day-end leg specifically: a late GitHub backstop now carries the same
+    # trading date as the cron-job.org run that already did the work. Exit GREEN - it is
+    # not a fault, it is the backstop finding nothing left to do.
+    if final and not dry and not force:
+        done, why = day_end_captured(today)
+        if done:
+            print(f"{today.date()} day-end: already captured — {why}. No-op, exiting green.")
+            return {"sent": False, "mode": "final", "reason": "already_captured",
+                    "why": why, "capture_point": capture_point, "fail_loudly": False}
+        print(f"  day-end not yet captured for {today.date()}: {why}")
 
     mv = CL.market_view(today)
     # H22, PROVISIONAL pending the HDFIRE test (Task 9): NSE is the origin of the
@@ -853,6 +898,31 @@ def self_test() -> int:
     fsrc = inspect.getsource(_PL.log_final_subscription)
     chk("the finals writer only ever APPENDS (rule 10)",
         'mode="a"' in fsrc and "_append(" not in fsrc)
+
+    print("\n[10] Task 1: the day-end leg is idempotent on its trading date")
+    import market_context as _MC
+    import live_markers as _LM
+    src = inspect.getsource(day_end_captured)
+    chk("it tests the INDEX CLOSES, not just the snapshot marker",
+        "already_have" in src and "INDICES" in src)
+    chk("and the snapshot marker is an alternative, not the only evidence",
+        "already_ran" in src)
+    chk("a broken check never reports 'already captured'",
+        "could not check" in src and src.index("could not check") < src.index("if len(got)"))
+    mainsrc = inspect.getsource(main)
+    i = mainsrc.index("day_end_captured")
+    chk("it is consulted BEFORE the market view is fetched",
+        i < mainsrc.index("CL.market_view"))
+    chk("and the early exit is green, not loud",
+        '"reason": "already_captured"' in mainsrc
+        and mainsrc[i:i + 700].count('"fail_loudly": False') == 1)
+    chk("--force still overrides it", "not force" in mainsrc[:i + 200])
+    # A date with nothing on record must come back False, whatever else is in the file.
+    done, why = day_end_captured("1990-01-02")
+    chk("a date with no closes on record is NOT already captured", done is False, why)
+    chk("and it says how many it found", "index closes on record" in why, why)
+    chk("every index name the capture uses is the one the check asks for",
+        [n for n, _ in _MC.INDICES] and len(_MC.INDICES) == 15, len(_MC.INDICES))
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

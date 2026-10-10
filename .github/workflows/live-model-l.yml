@@ -154,14 +154,27 @@ jobs:
       # stamped itself 2026-10-08 - so it asked NSE Indices for a date that had not
       # happened and logged 15 NULLs instead of 7 October's closes. TZ was already
       # Asia/Kolkata; the bug was that each step asked the clock again.
-      - name: Fix this run's trading date (IST)
+      - name: Fix this run's trading date (IST, from the DUE time)
         run: |
-          TD=$(TZ=Asia/Kolkata date +%F)
+          # Task 1. For a SCHEDULE run the date comes from the cron slot the run was due
+          # for, not from the clock it woke up on. The day-end leg due 19:30 IST on
+          # 9 October actually started 00:46 IST on 10 October and stamped itself
+          # 2026-10-10 - a Saturday, with no index closes to collect. A run seven hours
+          # late is still working on the day it was due for.
+          #
+          # For a workflow_dispatch there is no slot - somebody pressed it now - so the
+          # real IST clock is the right answer. `trading_day.py --due-date` handles both:
+          # an empty --cron means dispatch.
+          CRON='${{ github.event.schedule }}'
+          TD=$(python trading_day.py --due-date --cron "$CRON")
           echo "TRADING_DATE=$TD" >> "$GITHUB_ENV"
-          echo "trading date (IST): $TD"
+          echo "cron that fired  : '$CRON' (UTC)"
+          echo "trading date     : $TD  (the slot this run was DUE for, in IST)"
           echo "wall clock  (IST): $(TZ=Asia/Kolkata date '+%F %H:%M:%S %Z')"
           echo "wall clock  (UTC): $(date -u '+%F %H:%M:%S')"
-          echo "cron that fired  : '${{ github.event.schedule }}' (UTC)"
+          if [ "$TD" != "$(TZ=Asia/Kolkata date +%F)" ]; then
+            echo "::warning::This run is late: it is $(TZ=Asia/Kolkata date +%F) in IST but it is doing $TD's work."
+          fi
 
       - name: Decide which job this run is
         id: which
@@ -257,9 +270,27 @@ jobs:
 
           Automated by .github/workflows/live-model-l.yml. Verdicts are the
           threshold met, never a probability (decision G2)."
-          # Another run may have pushed between checkout and here.
-          git pull --rebase --autostash origin main
-          git push origin HEAD:main
+          # Task 2. The concurrency group above means two runs of THIS workflow never
+          # reach here at once, but it does not stop a push from the retry workflow, a
+          # manual dispatch of another workflow, or the laptop. So the push is retried:
+          # rebase onto whatever landed, then push again. Five attempts with a short
+          # backoff, and a real failure at the end rather than a swallowed one - an
+          # unpushed capture is a capture that does not exist.
+          pushed=no
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase --autostash origin main || true
+            if git push origin HEAD:main; then
+              pushed=yes
+              echo "pushed on attempt $attempt"
+              break
+            fi
+            echo "push rejected on attempt $attempt - rebasing onto origin/main and retrying"
+            sleep $((attempt * 5))
+          done
+          if [ "$pushed" != "yes" ]; then
+            echo "::error::Five pushes rejected. The work is committed locally on a throwaway runner, which means it is lost."
+            exit 1
+          fi
 
       # Priority 1d: the 15:00 leg must FAIL LOUDLY. A failed run that says nothing is
       # indistinguishable from a quiet market, and silence must always mean something
