@@ -50,6 +50,127 @@ recorded, and neither can be invented after the fact - the markers are append-on
 Saturday audit will go red until they age out of its 7-day window (after 2026-10-15). Do
 not backfill a marker to make it green.
 
+## Model H — pending ratification
+
+**Not a decision. Nothing here is in DECISIONS.md and nothing here is implemented.** It is
+a proposal for the user to ratify, reject or amend.
+
+### The stop rule, proposed
+
+> Model H's top band ("Hold") earns the right to issue a hold/exit instruction only if, in a
+> walk-forward backtest on IPOs the model has never seen:
+>
+> 1. the band fires on **at least 50 picks** pooled across the test years, and
+> 2. its hit rate against the Nifty 50 TRI over year one is **at least 54%**, and
+> 3. the **Wilson 95% lower bound** of that hit rate is **above the base rate** (40.3%, or
+>    whatever Task 5's corrected figure turns out to be).
+>
+> All three, or Model H is **display-only**: its score appears in the email and never a
+> hold/exit instruction.
+
+Same discipline that set Model L's thresholds — out-of-sample, a Wilson lower bound rather
+than a point estimate, and a minimum fire count — but **the numbers are not copied from
+Model L, and that is the point.**
+
+### Why 50 picks and not Model L's 20
+
+Model L fires on 20 because its edge is large: pooled walk-forward AUC **0.8084**, and a
+threshold that delivers ~90% against a base rate near 40%. A gap that size shows up in 20
+observations. Model H's baseline AUC is **0.525** — 0.5 is a coin — so whatever edge exists
+is small, and a small edge needs more observations to separate from luck. Carrying Model L's
+20 across would be using a sample size calibrated for a strong signal to certify a weak one.
+
+What 20 picks would actually require, at the base rate of 40.3%:
+
+| Picks | Hits needed | Observed rate | Wilson lo95 | Gap over base |
+|---|---|---|---|---|
+| 10 | 8 | 80.0% | 49.0% | +39.7pp |
+| 15 | 10 | 66.7% | 41.7% | +26.4pp |
+| **20** | **13** | **65.0%** | **43.3%** | **+24.7pp** |
+| 25 | 15 | 60.0% | 40.7% | +19.7pp |
+| 30 | 18 | 60.0% | 42.3% | +19.7pp |
+| 40 | 23 | 57.5% | 42.2% | +17.2pp |
+| **50** | **27** | **54.0%** | **40.4%** | **+13.7pp** |
+| 60 | 32 | 53.3% | 40.9% | +13.0pp |
+| 80 | 41 | 51.2% | 40.5% | +10.9pp |
+| 100 | 50 | 50.0% | 40.4% | +9.7pp |
+| 200 | 95 | 47.5% | 40.7% | +7.2pp |
+
+At 20 picks the band would have to hit **65%** — a 24.7pp edge — before the lower bound
+clears the base rate. Model H showing a 24.7pp edge from an AUC of 0.525 is not a plausible
+outcome; it is what you would see if the 20 picks happened to land well. **50 is the first
+row where the required rate (54%) is something an AUC-0.525 model could actually produce.**
+
+### The other half: would the rule even notice a real edge?
+
+A floor that a genuine edge cannot clear is as useless as one that noise can. 10,000
+simulated draws, asking how often the Wilson lower bound clears 40.3%:
+
+| Picks | If the band's TRUE rate is 55% | If it is only 50% |
+|---|---|---|
+| 20 | 25.1% | 12.7% |
+| 30 | 35.6% | — |
+| 40 | 43.9% | 21.1% |
+| **50** | **60.9%** | **35.6%** (n=60) |
+| 60 | 65.6% | — |
+| 80 | 78.7% | — |
+| 100 | 87.1% | 53.2% |
+| 200 | — | 78.4% |
+
+Read honestly: **at 50 picks, a band that truly runs at 55% is certified only 61% of the
+time.** The rule will fail a real-but-modest edge two times in five. That is the cost of not
+certifying noise, and with the data available it cannot be bought off — see the next
+section. 100 picks would get detection to 87%, and if Model H is still being evaluated in
+two years' time, 100 is the number to move to.
+
+### Is 50 achievable at all?
+
+| Window | Rows | Top 30% | Top 20% | Top 10% |
+|---|---|---|---|---|
+| Last 5 listing years (2021–2025) | 286 | 85 picks | 57 picks | 28 picks |
+
+So a **top-20% band clears 50 with 57 picks**; top-30% gives 85, which is better for power
+but a weaker claim about what "top band" means. A **top-10% band cannot be evaluated** — 28
+picks is below the floor, and a rule cannot certify a band it has too few observations of.
+That is a constraint on how the band is defined, and it should be fixed before fitting, not
+chosen after seeing which cut passes.
+
+### The thing that worries me most about this rule
+
+**The yearly base rate is wildly unstable**, far more than Model L's:
+
+| Year | Rows | Beat TRI | Year | Rows | Beat TRI |
+|---|---|---|---|---|---|
+| 2010 | 42 | **14.3%** | 2019 | 15 | 66.7% |
+| 2011 | 22 | 36.4% | 2020 | 14 | **71.4%** |
+| 2015 | 17 | 52.9% | 2021 | 61 | 32.8% |
+| 2016 | 23 | 56.5% | 2022 | 38 | 63.2% |
+| 2017 | 34 | 20.6% | 2023 | 56 | 46.4% |
+| 2018 | 21 | 42.9% | 2024 | 79 | 32.9% |
+| | | | 2025 | 52 | 36.5% |
+
+From 14.3% to 71.4%. A band evaluated on one test year could clear any threshold or fail
+it for reasons that have nothing to do with the model — which is the same mistake H24 was
+written to stop in the tripwire. So the count and the hit rate must be **pooled across test
+years**, exactly as decision H2 pools AUC rather than averaging per-year AUCs. The rule
+above says "pooled" for that reason, and a per-year version of it should be rejected.
+
+(2012–2014 are omitted from the table: 3, 5 and 9 rows, with 2013 and 2014 at 100% on 3 and
+5 rows. They are in the data and they are why a per-year reading is indefensible.)
+
+### What ratification would mean
+
+Ratifying this does **not** turn Model H on. It fixes the bar *before* the measurement, so
+the result cannot be argued with afterwards — the same reason H19's tripwire trigger was
+decided before the window was seen. If the rule then fails, Model H is display-only, and
+that is a successful outcome of the test, not a setback.
+
+Open, and deliberately not decided here: whether 54% is economically worth acting on at all
+after brokerage and short-term capital gains tax. A 13.7pp gross edge on a one-year hold may
+not survive costs, and that is a separate question from whether the edge is real.
+
+---
+
 ## Queued for after 15 Oct (live-path freeze)
 
 Nothing here is a defect in behaviour. They are comment and citation fixes in files frozen
