@@ -8,40 +8,47 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 `PLAN_AMENDMENT_02.md` (2026-10-01).
 
 ## Summary (updated at the end of every session)
-- **Finished:** Stages 0-3, 4A, 14, 15a/15b, 16, 16b, 17+18, 19, 20-23, 25, 26, 27, 28, **29-34 (2026-10-08)** and **35-40 (2026-10-09)**
+- **Finished:** Stages 0-3, 4A, 14, 15a/15b, 16, 16b, 17+18, 19, 20-23, 25, 26, 27, 28, **29-34 (2026-10-08)** and **35-40 (2026-10-09)**, **41-46 (2026-10-10)**
 - **In progress:** nothing. Working tree clean
 - **Model L is go-live ready** on H17 (ratified): L1 bids at Total >= 28.39x, L2 at >= 54.02x, no probability in the decision path. Three Actions jobs and nothing else: 15:00 IST email, 19:30 IST day-end capture, Saturday 10:30 audit
 - **Model H: NOT started and much further out.** Baseline only, AUC 0.525 (1y) / 0.562 (3y), RHP blocks still placeholders, and 37 prospectuses still missing. Scorecard parked per instruction
-- **Open for the user:** the 12-month email backtest under-delivers both promises (L1 85.7% vs 90%, L2 72.2% vs 80%). Tripwire H19 armed at 1 of 2 on both; **no action by design**
+- **Open for the user:** the 12-month email backtest under-delivers both promises (L1 85.7% vs 90%, L2 72.2% vs 80%). Tripwire armed at 1 of 2 on both; **no action by design**. **H24 (2026-10-10)** now also requires half a window's firing rows to be new before it counts - consecutive 12-month windows share 11 of 12 months, and rolling the current window forward a month leaves 0 of 45 L1 fires new
 - **Needs a date in the diary:** the HDFIRE intraday test, **13-15 October**. Confirmed from NSE's calendar as mainboard (series EQ). The poller is built and wired; it decides whether H22 is confirmed
-- **Needs YOU:** create the fine-grained token and the cron-job.org job (`LIVE_SETUP.md` section 1b). GitHub's scheduler was **5h31m to 9h06m late on nine consecutive runs**, so the external trigger is what actually makes the 15:00 email land
+- **Needs YOU:** jobs 1 and 2 (email + dead-man) are set up. Still to add: **job 3, the 19:30 day-end capture at 14:00 UTC**, and **jobs 4-6, the HDFIRE polls** (`LIVE_SETUP.md` section 1b). GitHub's scheduler was **5h31m to 9h06m late on nine consecutive runs**, so the external trigger is what actually makes the 15:00 email land
 - **Gate C2:** AWAITING_USER since 2026-10-01
 - **Caveat:** Stage 1's Linux/`pip install` half is still unverified on a real cloud session
 
-## FIRST STEP OF THE NEXT SESSION (Task 3 handover, written 2026-10-08 ~23:5x IST)
+## FIRST STEP OF THE NEXT SESSION (written 2026-10-10 ~15:30 IST)
 
-The 9 October scheduled email runs had **not** fired when this session ended. Do this
-before anything else:
+**13-15 October is the HDFIRE window and it is the only thing in this project with a
+deadline.** HD Fire Protect (`HDFIRE`, series EQ, mainboard) bids 13-15 Oct; Ravita
+Engineering (`RAVITA`, SME) is the control. Nothing can be re-run afterwards - the
+subscription table is removed at allotment. So:
 
-```bash
-gh run list --workflow=live-model-l.yml --limit 12 --json workflowName,number,event,conclusion,createdAt,runStartedAt
-```
+1. Confirm the three cron-job.org poll jobs exist (`LIVE_SETUP.md` 1b, jobs 4-6). If they
+   do not, dispatch the polls by hand:
+   `gh workflow run live-model-l.yml -f mode=poll`
+2. On 15 October, confirm the 15:00 email went out for HDFIRE through the NSE-primary path
+   (`data/sent_markers.csv` gains a `decision` row; the report names the source).
+3. After 15 October, write the Task 9 report: update frequency, NSE vs Chittorgarh per
+   poll, 15:00-to-final growth, and whether H22 should be confirmed or stay provisional.
 
-`gh` is at `C:\Program Files\GitHub CLI\gh.exe` and is **not on PATH** in a fresh shell —
-add it or call it by full path.
+### Then: did the 9 Oct handover check close? Yes
 
-For each 9 Oct run report: **scheduled time vs actual IST start**, and the result. The four
-email crons are due at 08:45, 09:00, 09:15 and 09:30 UTC (14:15–15:00 IST). Measured delay
-across 2–8 Oct was **5h31m to 9h06m**, so expect them late; the question is whether any
-landed inside the 14:00–16:00 window.
+All nine of 9 October's scheduled runs fired, all green, **all of them late**: 5h16m to
+7h03m. Every one of the four email attempts arrived after 16:00 IST, so the send-window
+guard refused all four - correctly, and green, because nothing was owed that day. The
+day-end leg due 19:30 IST started 00:46 IST on 10 October and stamped itself 2026-10-10.
+That is fixed (trading date now comes from the cron slot the run was due for), and the
+delay table in `LIVE_SETUP.md` 1b now carries all 21 measured runs.
 
-Then read the log of any red run and classify it as one of exactly four things:
-**old schedule / send-window refusal / runner fault / code**. A send-window refusal with
-nothing owed now exits GREEN, so a red run means something real.
+### Known red that is not a bug
 
-Pre-push state recorded for comparison: **no run had fired between 22:20 IST on 8 Oct and
-the end of this session**, other than the two `workflow_dispatch` runs this session
-triggered (#13 refusal test, #14 test email).
+`capture_audit --audit --days 7` reports two real historical gaps: the **15:00 email on
+2026-10-08** and the **day-end on 2026-10-07**. Both happened, both are correctly
+recorded, and neither can be invented after the fact - the markers are append-only. The
+Saturday audit will go red until they age out of its 7-day window (after 2026-10-15). Do
+not backfill a marker to make it green.
 
 ## Stages
 
@@ -90,6 +97,26 @@ triggered (#13 refusal test, #14 test email).
 | 39 | Ingest rewired (Task 7) | 38 | **DONE** | 2026-10-09 | 2026-10-09 | Pricing **deleted** (6,402 chars): all 15 rows it ever wrote were NULL/no_source, and it priced up to 3 days late, which the Stage 27 rule forbids. Harvest kept. Backfill went 0/15 -> **6/15** after the first attempt diagnosed the real fault: isin AND symbol were NULL on every row, so both bhavcopies were downloading fine and being searched for an unnamed company. Fixed with NSE `public-past-issues`, requiring name AND date to agree. 2 segment labels corrected to `sme` from NSE's own `securityType` (rule 6) |
 | 40 | Source order (H22) + HDFIRE poller | 39 | **DONE (H22 PROVISIONAL)** | 2026-10-09 | 2026-10-09 | **Tasks 8/9.** `nse_subscription.py` (30/30): NSE `ipo-active-category` primary, Chittorgarh fallback, `ipo-detail` NEVER (it is an intermediate cut running 9-57% low). Single-origin - the flag stays, because 14 exact matches is a shared origin not independence. Safe before the test via a freshness gate: Total > 0, `updateTime` on the trading date, symbol matches. `hdfire_poll.py` (18/18); **HDFIRE confirmed from NSE: series EQ = mainboard, 13-15 Oct**, with RAVITA (SME) as a control |
 | 16b | Settle the issue-size sign | 16 | DONE | 2026-10-01 | 2026-10-01 | **H11**: no half-life defends the sign, so issue size is DROPPED. log1p(Total) alone is +0.31pp better on L1, identical on L2, and passes C5 where Set A failed. `reports/stage16b_half_life.json` |
+
+### Stages 41-46 (2026-10-10)
+
+| Stage | Title | Status | Notes |
+|---|---|---|---|
+| 41 | Trading date from the cron DUE time | DONE | `trading_day.py` resolves the UTC cron string to the last slot at or before now and converts it to an IST date. The 9 Oct day-end leg, due 19:30 IST, started 00:46 IST on 10 Oct and stamped itself 2026-10-10. 26/26 self-tests, including the simulated 01:30-next-day run |
+| 42 | Day-end capture idempotent on its trading date | DONE | `send_daily_email.day_end_captured()`. Tests the 15 index closes, not the snapshot marker - a day with no IPO open captures 15 closes and 0 snapshots, so the marker alone would say "nothing captured". Verified green by dispatch #38042425621 |
+| 43 | Concurrency group + push retry | DONE | `group: model-l-live`, `cancel-in-progress: false` (queue, never cancel). The commit step retries a rejected push five times with backoff and exits 1 if all five fail - an unpushed capture on a throwaway runner is a lost capture. "pushed on attempt 1" in the dispatch log |
+| 44 | The 15:35 dead-man, asserted | DONE | `main()` driven end to end with the clock, market view, markers and SMTP substituted. Six paths. **Finding: at 15:35 the window is still OPEN, so a run with no marker sends the real VERDICT** - the notice fires only if that send fails, or past 16:00 |
+| 45 | H24, the tripwire overlap rule | DONE | A window counts only if half its resolved firing rows are new since the last **counted** window. Gate on incrementing, never on resetting. State re-evaluated: both targets stay at 1 of 2, now with 49 / 36 firing-row identities stored. 33/33 |
+| 46 | Recover the lost index closes | DONE | 7 **and** 8 October, 15 of 15 each, from niftyindices.com with per-index source and fetch time. The 15 NULL rows run #11 wrote stay on the record (rule 10) |
+
+**Dispatch-option gap closed in passing:** `dry-run`, `probe` and `rehearse` were
+`workflow_dispatch` options with **no branch** in the workflow's `case`, so choosing one
+ran nothing and exited 0 - a green run that did no work. `rehearse` removed, the other two
+wired, and an unmatched mode now exits 1.
+
+**Known gap, recorded not fixed:** the email subject is the prefix plus a summary of the
+day (`IPO decision - 1 open, 1 closes today`), not the prefix plus the issue name that
+Task 5 asked for. Now asserted in the self-test so it is visible rather than assumed.
 
 ## Gates
 
