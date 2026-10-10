@@ -76,8 +76,17 @@ every scheduled run between 2 and 8 October:
 | 10 | email | `30 9` | 07 Oct 09:30 | 16:41 | **7h 11m** |
 | 11 | final | `0 12` | 07 Oct 12:00 | 18:29 | **6h 29m** |
 | 12 | email | `30 9` | 08 Oct 09:30 | 16:38 | **7h 08m** |
+| 13 | poll | `30 5` | 09 Oct 05:30 | 12:03 | **6h 33m** |
+| 14 | poll | `30 7` | 09 Oct 07:30 | 14:33 | **7h 03m** |
+| 15 | email | `45 8` | 09 Oct 08:45 | 15:34 | **6h 49m** |
+| 16 | email | `0 9` | 09 Oct 09:00 | 15:46 | **6h 46m** |
+| 17 | email | `15 9` | 09 Oct 09:15 | 16:08 | **6h 53m** |
+| 18 | email | `30 9` | 09 Oct 09:30 | 16:22 | **6h 52m** |
+| 19 | poll | `31 9` | 09 Oct 09:31 | 16:26 | **6h 55m** |
+| 20 | poll | `1 12` | 09 Oct 12:01 | 17:48 | **5h 47m** |
+| 21 | final | `0 14` | 09 Oct 14:00 | 19:16 | **5h 16m** |
 
-Nine for nine, between 5h31m and 9h06m late. The cron strings were correct UTC from the
+Twenty-one for twenty-one, between 5h16m and 9h06m late. Every single scheduled run on 9 October - all nine of them, including all four email attempts - arrived after the 16:00 IST broker cutoff had passed or was passing. The cron strings were correct UTC from the
 first commit — `git log` on the workflow confirms it — so this is not a timezone error on
 our side. It is GitHub deprioritising scheduled runs in a low-activity repository.
 
@@ -88,67 +97,121 @@ being triggered. The API path is prompt; the cron path is not.
 
 ### Setting up cron-job.org
 
-1. **Create the token.** GitHub → *Settings → Developer settings → Personal access tokens
-   → Fine-grained tokens → Generate new token*.
-   * **Repository access:** *Only select repositories* → `AshishKohar1/ipo-agent`.
-   * **Permissions:** *Repository permissions → Actions → **Read and write***. Nothing
-     else — no `contents`, no `metadata` beyond the mandatory read, no account
-     permissions.
+1. **Create the token.** GitHub -> *Settings -> Developer settings -> Personal access
+   tokens -> Fine-grained tokens -> Generate new token*.
+   * **Repository access:** *Only select repositories* -> `AshishKohar1/ipo-agent`.
+   * **Permissions:** *Repository permissions -> Actions -> **Read and write***. Nothing
+     else - no `contents`, no account permissions.
    * **Expiry:** 90 days, with a calendar reminder to rotate it.
 
-   **I have not created this token and cannot** — it is an account credential. Create it
-   yourself and paste it only into cron-job.org's header field.
+   **I have not created this token and cannot** - it is an account credential. Create it
+   yourself and paste it only into cron-job.org's header field. One token serves all the
+   jobs below.
 
-2. **Create the job** at cron-job.org → *Create cronjob*:
+2. **Check each job worked:** the run appears in Actions as `workflow_dispatch` within a
+   second or two. A `401` means the token is wrong or expired; a `403` means it lacks
+   *Actions: read and write*; a `404` usually means the token cannot see the repository; a
+   `422` means the body's `mode` value is not one the workflow accepts.
 
-   | field | value |
-   |---|---|
-   | URL | `https://api.github.com/repos/AshishKohar1/ipo-agent/actions/workflows/live-model-l.yml/dispatches` |
-   | Schedule | custom: **09:10 UTC**, Mon–Fri |
-   | Time zone | **UTC** (set this explicitly; the default is the browser's) |
-   | Method | `POST` |
+### The jobs, as they now stand
 
-3. **Headers** (*Advanced → Headers*):
+All five jobs share the same URL, method, time zone, headers and token. Only the
+**schedule** and the **body** differ.
 
-   ```
-   Accept: application/vnd.github+json
-   Authorization: Bearer <your fine-grained token>
-   X-GitHub-Api-Version: 2022-11-28
-   Content-Type: application/json
-   ```
+| field | value (the same for every job) |
+|---|---|
+| URL | `https://api.github.com/repos/AshishKohar1/ipo-agent/actions/workflows/live-model-l.yml/dispatches` |
+| Method | `POST` |
+| Time zone | **UTC** — set it explicitly on every job; cron-job.org defaults to the browser's |
+| Expect | **HTTP 204**, empty body. Not 200. |
 
-4. **Body** (*Advanced → Request body*):
+Headers (*Advanced → Headers*), the same on every job:
 
-   ```json
-   {"ref":"main","inputs":{"mode":"email"}}
-   ```
+```
+Accept: application/vnd.github+json
+Authorization: Bearer <your fine-grained token>
+X-GitHub-Api-Version: 2022-11-28
+Content-Type: application/json
+```
 
-5. **Expect HTTP 204** with an empty body. That is success for this endpoint — not 200.
-   A `401` means the token is wrong or expired; a `403` means it lacks
-   *Actions: read and write*; a `404` usually means the token cannot see the repository.
+| # | title | cron (UTC) | IST | body |
+|---|---|---|---|---|
+| 1 | IPO email | `10,20,30 9 * * 1-5` | 14:40 / 14:50 / 15:00 | `{"ref":"main","inputs":{"mode":"email"}}` |
+| 2 | IPO email dead-man | `5 10 * * 1-5` | 15:35 | `{"ref":"main","inputs":{"mode":"email"}}` |
+| 3 | IPO day-end capture | `0 14 * * 1-5` | 19:30 | `{"ref":"main","inputs":{"mode":"final"}}` |
+| 4 | HDFIRE poll AM | `30 5,7 13-15 10 *` | 11:00 / 13:00 | `{"ref":"main","inputs":{"mode":"poll"}}` |
+| 5 | HDFIRE poll PM 1 | `31 9 13-15 10 *` | 15:01 | `{"ref":"main","inputs":{"mode":"poll"}}` |
+| 6 | HDFIRE poll PM 2 | `1 12 13-15 10 *` | 17:31 | `{"ref":"main","inputs":{"mode":"poll"}}` |
 
-6. **Check it worked:** the run appears in Actions as `workflow_dispatch`, and
-   `data/sent_markers.csv` gains a row.
+**Jobs 1 and 2 are the ones already set up.** Job 3 is new and matters more than it looks
+— see below. Jobs 4–6 are the HDFIRE test and can be deleted after 15 October.
 
-**09:10 UTC is 14:40 IST**, which sits inside the 14:00–16:00 send window with 80 minutes
-to spare before the cutoff. It is deliberately *before* the four GitHub crons' nominal
-times, so on a normal day the external trigger sends and the GitHub crons — whenever they
-eventually arrive — find the sent marker and exit green.
+#### Why the HDFIRE polls need three jobs and not one
 
-### Also worth pointing at the poll (13–15 October only)
+The four poll times are 05:30, 07:30, 09:31 and 12:01 UTC. A cron expression multiplies
+its minute list by its hour list, so `30,31,1 5,7,9,12 13-15 10 *` would not mean "those
+four times" — it would mean twelve fires a day. 05:30 and 07:30 share minute `30`, so they
+combine into one job; 09:31 and 12:01 share nothing with anything.
 
-For the HDFIRE intraday test, add four more cron-job.org jobs with the same URL, headers
-and token, changing only the body and the time:
+Two jobs is possible if you will accept two extra polls: `1,31 9,12 13-15 10 *` fires at
+09:01, 09:31, 12:01 **and** 12:31 UTC. The poller records its real wall-clock time and the
+NSE update stamp on every row, so extra polls are extra data rather than noise. Three
+exact jobs is the cleaner answer; two is the cheaper one.
 
-| time (UTC) | IST | body |
-|---|---|---|
-| 05:30 | 11:00 | `{"ref":"main","inputs":{"mode":"poll"}}` |
-| 07:30 | 13:00 | same |
-| 09:31 | 15:01 | same |
-| 12:01 | 17:31 | same |
+`13-15 10 *` restricts them to 13, 14 and 15 October. `hdfire_poll.py` also exits
+immediately outside that window, so a job left running afterwards does nothing — but
+delete them anyway once the test is reported.
 
-`hdfire_poll.py` exits immediately outside 13–15 October, so these are harmless if left
-in place afterwards — but they are worth deleting once the test is reported.
+#### Why the day-end job (3) is not optional either
+
+The day-end leg does not just snapshot subscription. It fetches **the 15 index closes**,
+captures **listing-day prices** for anything that listed that day, and runs the
+**catch-up** that recovers a day lost to a fault. None of that is recoverable from a later
+run except through the archive, and final subscription is not recoverable at all —
+Chittorgarh removes the table at allotment.
+
+The 9 October day-end leg is the demonstration. It was due at 14:00 UTC (19:30 IST).
+GitHub started it at **19:16 UTC — 00:46 IST on 10 October**. It then took `date +%F` in
+IST, stamped itself **2026-10-10**, and went looking for Saturday's index closes. Two
+things have changed since:
+
+* the trading date now comes from **the cron slot the run was due for**, not the clock it
+  woke up on, so a 19:30 slot starting at 01:30 the next morning still does the previous
+  day's work (`trading_day.py --due-date`);
+* the day-end leg is **idempotent on that date** — if the 15 closes are already on record
+  it prints `already captured` and exits green, so job 3 and the GitHub backstop cannot
+  duplicate or overwrite each other, whichever arrives first.
+
+#### Verifying the bodies against the workflow
+
+The dispatch input is named **`mode`** and is a `choice`, so GitHub rejects any value not
+in its list. The nine it accepts are:
+
+`email`, `final`, `listing`, `audit`, `catch-up`, `test-email`, `poll`, `dry-run`, `probe`
+
+The four values used above — `email`, `final`, `poll` — are all in that list. A typo gives
+HTTP 422 with `Unexpected value for input 'mode'` rather than a wrong-mode run, so a
+mistake here is loud.
+
+Three options were listed and had **no branch** in the workflow's `case`: `dry-run`,
+`probe` and `rehearse`. Dispatching one of those ran nothing and exited 0 — a green run
+that did no work. `rehearse` has been removed, the other two now run something, and an
+unmatched mode exits 1.
+
+#### Why these times
+
+* **09:10 / 09:20 / 09:30 UTC = 14:40 / 14:50 / 15:00 IST.** All three inside the
+  14:00–16:00 send window, the last one a full hour before the broker cutoff. Three
+  attempts rather than one because a single HTTP call can fail.
+* **10:05 UTC = 15:35 IST.** The last chance. At 15:35 the window is **still open**, so if
+  the earlier attempts failed this one sends the real verdict, not a notice — there are
+  still 25 minutes to bid. Only if the 15:35 send *itself* fails does
+  `IPO decision - NOT SENT` go out.
+* **14:00 UTC = 19:30 IST.** After NSE Indices publishes the settlement closes. 17:30 was
+  reading an incomplete table.
+
+A second send is not a risk: `data/sent_markers.csv` is keyed by **IPO and date**, so the
+first attempt that succeeds sends and every later one exits green having done nothing.
 
 ---
 

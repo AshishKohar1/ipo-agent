@@ -97,7 +97,12 @@ on:
         required: true
         default: "email"
         type: choice
-        options: [email, final, listing, audit, catch-up, test-email, poll, dry-run, probe, rehearse]
+        # Task 4. Every option here MUST have a branch in the `case` in the Run step
+        # below. `dry-run`, `probe` and `rehearse` were listed here with no branch, so
+        # choosing one ran nothing and exited 0 - a green run that did no work. `rehearse`
+        # is gone (it never meant anything); the other two now run something, and an
+        # unmatched mode exits 1.
+        options: [email, final, listing, audit, catch-up, test-email, poll, dry-run, probe]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -240,6 +245,13 @@ jobs:
                       # IPO on record. Writes no sent marker and logs no
                       # prediction - a test is not a decision.
                       python send_daily_email.py --test-email ;;
+            dry-run)  # Compose and print, send nothing, write no marker.
+                      python send_daily_email.py --dry-run ;;
+            probe)    # Priority 2 / H18: the exchange-access probe. Writes to
+                      # reports/live/exchange_probe/, never to the live report path.
+                      python run_live_l.py ;;
+            *)        echo "::error::mode '${{ steps.which.outputs.mode }}' has no branch here. A dispatch option with no branch runs nothing and exits 0, which looks green."
+                      exit 1 ;;
           esac
 
       - name: Commit whatever was produced
