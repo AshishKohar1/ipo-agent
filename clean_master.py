@@ -1,16 +1,16 @@
 """
 clean_master.py — reviewed, idempotent cleaning steps on master_with_symbols.csv.
 
-  merge   merge symbols_CANDIDATES_cleanquery.csv under the pipeline's bar:
+  merge   merge reports/intermediate/symbols_CANDIDATES_cleanquery.csv:
             first trading day within ±10 days of the listing date (the master's
             'issue_open_date' column IS the listing date — see CLAUDE.md),
             no duplicate symbol, no conflict with an existing value.
-          Every rejection -> merge_REJECTIONS.csv with its reason.
+          Every rejection -> reports/intermediate/merge_REJECTIONS.csv, with its reason.
   nselist resolve remaining symbols from NSE's official equity list (name + listing
           date within ±10 days); fill missing ISINs by exact symbol match
   scan    first-bar scan of every resolved symbol: a stock that traded >30 days
           before its listing date is a follow-on offer (or a reused symbol).
-          -> first_bar_scan.csv (cached in checkpoints/first_bar.json)
+          -> reports/intermediate/first_bar_scan.csv (cached in checkpoints/)
   flag    write exclude_reason (fpo | reit_invit | idr | bad_listing_date). Flag, never delete.
 
     python clean_master.py merge
@@ -21,6 +21,14 @@ from __future__ import annotations
 import json, re, sys, time
 from pathlib import Path
 import pandas as pd
+
+# Housekeeping, 2026-10-10. These intermediates used to be written as bare
+# `to_csv("name.csv")`. The script chdir's to the project root first, so they landed in
+# the ROOT by design - which is how the root accumulated twenty-odd loose files. They go
+# to reports/intermediate/ now, named from __file__ so the chdir is no longer load-bearing.
+INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
+INTERMEDIATE.mkdir(parents=True, exist_ok=True)
+
 
 MASTER = "master_with_symbols.csv"
 MATCH_DAYS = 10
@@ -56,7 +64,8 @@ def read():
 
 def merge():
     m = read()
-    c = pd.read_csv("symbols_CANDIDATES_cleanquery.csv", parse_dates=["first_bar"])
+    c = pd.read_csv(INTERMEDIATE / "symbols_CANDIDATES_cleanquery.csv",
+                    parse_dates=["first_bar"])
     c["sym"] = c["candidate"].str.replace(r"\.(NS|BO)$", "", regex=True)
     dup_cands = set(c["sym"].dropna()[c["sym"].dropna().duplicated(keep=False)])
     existing = set(m["symbol"].dropna())
@@ -85,7 +94,7 @@ def merge():
         m.at[i, "symbol_source"] = "yahoo_cleanquery"
         existing.add(r["sym"]); n += 1
     m.to_csv(MASTER, index=False)
-    pd.DataFrame(rej).to_csv("merge_REJECTIONS.csv", index=False)
+    pd.DataFrame(rej).to_csv(INTERMEDIATE / "merge_REJECTIONS.csv", index=False)
     print(f"merged {n} | rejected {len(rej)} -> merge_REJECTIONS.csv | "
           f"symbols now {m['symbol'].notna().sum()}/{len(m)}")
     print(pd.DataFrame(rej)["reason"].str.replace(r":.*|\d+", "", regex=True).value_counts().to_string())
@@ -129,7 +138,7 @@ def nselist():
             m.at[i, "isin"] = bysym.at[s, "isin"]; m.at[i, "isin_source"] = "nse_equity_list"; n_isin += 1
     m.to_csv(MASTER, index=False)
     if rej:
-        old = pd.read_csv("merge_REJECTIONS.csv")
+        old = pd.read_csv(INTERMEDIATE / "merge_REJECTIONS.csv")
         pd.concat([old, pd.DataFrame(rej)]).to_csv("merge_REJECTIONS.csv", index=False)
     print(f"nselist: +{n_sym} symbols, +{n_isin} ISINs (exact symbol match) | rejected {len(rej)} | "
           f"symbols now {m['symbol'].notna().sum()}/{len(m)}")
@@ -158,7 +167,7 @@ def scan():
     m["pre_listing_days"] = (m["issue_open_date"] - m["first_bar"]).dt.days
     out = m.loc[m["symbol"].notna(), ["company", "symbol", "issue_open_date", "first_bar",
                                       "pre_listing_days"]]
-    out.to_csv("first_bar_scan.csv", index=False)
+    out.to_csv(INTERMEDIATE / "first_bar_scan.csv", index=False)
     sus = out[out["pre_listing_days"] > PRE_LISTING_DAYS]
     print(f"scanned {len(out)} | no history {out['first_bar'].isna().sum()} | "
           f"traded >{PRE_LISTING_DAYS}d before listing: {len(sus)}")

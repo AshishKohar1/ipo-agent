@@ -23,7 +23,14 @@ import pandas as pd, numpy as np
 import dataio
 
 CKPT = Path(__file__).resolve().parent / "checkpoints"; CKPT.mkdir(exist_ok=True)
-LOG  = Path(__file__).resolve().parent / "run_log.txt"
+LOG  = Path(__file__).resolve().parent / "reports" / "run_overnight.log"
+
+# Housekeeping, 2026-10-10. These intermediates used to be written as bare
+# `to_csv("name.csv")`. The script chdir's to the project root first, so they landed in
+# the ROOT by design - which is how the root accumulated twenty-odd loose files. They go
+# to reports/intermediate/ now, named from __file__ so the chdir is no longer load-bearing.
+INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
+INTERMEDIATE.mkdir(parents=True, exist_ok=True)
 MASTER_CSV = "master_with_symbols.csv"
 
 MATCH_DAYS = 7        # issue-open date window for name matching
@@ -161,10 +168,10 @@ def job1_stage_b(master: pd.DataFrame, trackers: pd.DataFrame,
                 master.at[i, f"{f}_source"] = src
             got[f] += 1
 
-    pd.DataFrame(conflicts).to_csv("job1b_CONFLICTS.csv", index=False)
+    pd.DataFrame(conflicts).to_csv(INTERMEDIATE / "job1b_CONFLICTS.csv", index=False)
     log(f"  1b  matched {got['matched_any']} rows | recovered symbol={got['symbol']} "
         f"isin={got['isin']} listing_date={got['listing_date']} bse_code={got['bse_code']} "
-        f"| source conflicts left NULL: {len(conflicts)} (job1b_CONFLICTS.csv)")
+        f"| source conflicts left NULL: {len(conflicts)} (reports/intermediate/job1b_CONFLICTS.csv)")
     return master
 
 

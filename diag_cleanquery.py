@@ -1,8 +1,15 @@
 """DIAGNOSTIC ONLY — does not modify master_with_symbols.csv or any pipeline file.
 Re-queries Yahoo for unresolved rows with a cleaned name (no Ltd/Limited/brackets) and
-writes candidates to symbols_CANDIDATES_cleanquery.csv for the user to review."""
+writes candidates to reports/intermediate/ for the user to review."""
 import re, time, requests, pandas as pd, yfinance as yf
 import os; from pathlib import Path; os.chdir(Path(__file__).resolve().parent)
+
+# Housekeeping, 2026-10-10. These intermediates used to be written as bare
+# `to_csv("name.csv")`. The script chdir's to the project root first, so they landed in
+# the ROOT by design - which is how the root accumulated twenty-odd loose files. They go
+# to reports/intermediate/ now, named from __file__ so the chdir is no longer load-bearing.
+INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
+INTERMEDIATE.mkdir(parents=True, exist_ok=True)
 
 def clean(n):
     n = re.sub(r"\(.*?\)", " ", str(n))
@@ -37,7 +44,7 @@ for _, r in todo.iterrows():
     time.sleep(0.8)
 
 o = pd.DataFrame(out)
-o.to_csv("symbols_CANDIDATES_cleanquery.csv", index=False)
+o.to_csv(INTERMEDIATE / "symbols_CANDIDATES_cleanquery.csv", index=False)
 print(f"candidates found: {o['candidate'].notna().sum()}/{len(o)}")
 print(o.groupby("year")["candidate"].agg(lambda x: f"{x.notna().sum()}/{len(x)}").to_string())
 print("duplicate candidates:", o["candidate"].dropna()[o["candidate"].dropna().duplicated()].tolist())

@@ -12,12 +12,19 @@ Reconciliation (the NSE spine and IPOMatrix are independent sources):
   sources disagree          -> NULL, confidence rejected, both dates in the flags file
   no match                  -> NULL, confidence none
 Rows whose recovered open date is after the listing date, or more than 45 days before
-it, are written to issue_dates_FLAGS.csv (the date is kept in the main file, flagged).
+it, go to reports/intermediate/issue_dates_FLAGS.csv (the date is kept, flagged).
 
     python recover_issue_dates.py
 """
 from __future__ import annotations
 from pathlib import Path
+
+# Housekeeping, 2026-10-10. These intermediates used to be written as bare
+# `to_csv("name.csv")`. The script chdir's to the project root first, so they landed in
+# the ROOT by design - which is how the root accumulated twenty-odd loose files. They go
+# to reports/intermediate/ now, named from __file__ so the chdir is no longer load-bearing.
+INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
+INTERMEDIATE.mkdir(parents=True, exist_ok=True)
 import pandas as pd
 import dataio
 
@@ -83,7 +90,7 @@ def main():
 
     o = pd.DataFrame(out)
     o.to_csv("issue_dates_recovered.csv", index=False)
-    pd.DataFrame(flags).to_csv("issue_dates_FLAGS.csv", index=False)
+    pd.DataFrame(flags).to_csv(INTERMEDIATE / "issue_dates_FLAGS.csv", index=False)
 
     o["year"] = pd.to_datetime(o["listing_date"]).dt.year
     by = o.groupby("year").agg(rows=("company", "size"),
@@ -92,7 +99,7 @@ def main():
     print(by.to_string())
     print(f"\nTOTAL recovered {o['issue_open_date_true'].notna().sum()}/{len(o)}")
     print(o["confidence"].value_counts().to_string())
-    print(f"flags: {len(flags)} -> issue_dates_FLAGS.csv")
+    print(f"flags: {len(flags)} -> reports/intermediate/issue_dates_FLAGS.csv")
     ok = o.dropna(subset=["issue_open_date_true"])
     gap = (pd.to_datetime(ok["listing_date"]) - pd.to_datetime(ok["issue_open_date_true"])).dt.days
     print("open->listing gap (days):", gap.describe()[["min", "50%", "max"]].to_dict())
