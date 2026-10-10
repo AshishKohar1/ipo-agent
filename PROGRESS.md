@@ -183,6 +183,37 @@ The frozen set is pinned in `.live-path`. Check compliance with:
 git diff --name-only 3ae17ab | grep -xF -f .live-path
 ```
 
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
+
 ### Task 3: `rule 10` cited where `rule 11` is meant
 
 PLAN.md section 4: **rule 10** is the estimator (no scikit-learn), **rule 11** is
