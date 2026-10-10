@@ -56,7 +56,7 @@ def main() -> pd.DataFrame:
     # the progress file can hold the same company twice. Keep the LAST attempt.
     bad = bad.drop_duplicates(subset=["company"], keep="last")
 
-    m = pd.read_csv(ROOT / "master_with_symbols.csv")
+    m = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
     m_isin = dict(zip(m["company"], m["isin"]))
     # listing_date is missing on rows the first run wrote, so the year is filled from the
     # master. An issue year is the first thing needed to find a filing by hand.

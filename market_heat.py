@@ -9,7 +9,7 @@ already listed strictly before that moment contribute. Their listing gains were 
 their own listing day, so the feature is knowable before the bid deadline (global rule 7).
 
 Cutoff, in order of preference:
-  1. the recovered true issue-open date (`issue_dates_recovered.csv`, 2021+ only)
+  1. the recovered true issue-open date (`data/issue_dates_recovered.csv`, 2021+ only)
   2. otherwise listing date − 10 days (the plan's fallback; Indian IPOs list ~6-8 working
      days after bidding opens, so this is conservative rather than optimistic)
 
@@ -21,7 +21,7 @@ already public before the cutoff — not the full-sample median, which would lea
 into the earliest rows. Rows with no prior listing at all (the very first IPOs in the
 dataset) get NaN and are flagged `no_prior_data`.
 
-    python market_heat.py        # writes market_heat.csv + prints coverage
+    python market_heat.py        # writes data/market_heat.csv + prints coverage
 """
 from __future__ import annotations
 from pathlib import Path
@@ -37,7 +37,7 @@ OPEN_TO_LIST_FALLBACK_DAYS = 10
 
 def _true_open_dates() -> pd.Series:
     """company -> recovered true issue-open date (only rows that actually have one)."""
-    p = ROOT / "issue_dates_recovered.csv"
+    p = ROOT / "data" / "issue_dates_recovered.csv"
     if not p.exists():
         return pd.Series(dtype="datetime64[ns]")
     d = pd.read_csv(p, parse_dates=["issue_open_date_true"])
@@ -100,7 +100,7 @@ def build(master: pd.DataFrame | None = None) -> pd.DataFrame:
 
 def main():
     h = build()
-    h.to_csv(ROOT / "market_heat.csv", index=False, encoding="utf-8")
+    h.to_csv(ROOT / "data" / "market_heat.csv", index=False, encoding="utf-8")
     ok = h["heat"].notna()
     print(f"rows {len(h)} | heat present {ok.sum()} | missing {(~ok).sum()}")
     print("\ncutoff source:")
@@ -111,7 +111,7 @@ def main():
     print(h.loc[ok, "heat"].describe().round(2).to_string())
     print("\nrows without heat:")
     print(h[~ok][["company", "listing_date", "heat_flag"]].to_string(index=False))
-    print("\nwritten: market_heat.csv")
+    print("\nwritten: data/market_heat.csv")
 
 
 if __name__ == "__main__":

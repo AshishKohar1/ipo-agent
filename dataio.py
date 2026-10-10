@@ -130,7 +130,7 @@ def load_master_with_symbols() -> pd.DataFrame:
     """The working master. NOTE: its 'issue_open_date' column holds the LISTING date
     (CLAUDE.md). This loader adds 'listing_date_master' = that column, which is the
     listing date for every row except those flagged bad_listing_date."""
-    df = pd.read_csv(ROOT / "master_with_symbols.csv",
+    df = pd.read_csv(DATA / "master_with_symbols.csv",
                      parse_dates=["issue_open_date", "listing_date"])
     df["listing_date_master"] = df["issue_open_date"]
     if "exclude_reason" not in df:
@@ -139,7 +139,7 @@ def load_master_with_symbols() -> pd.DataFrame:
 
 
 def load_holding_target(path: str = "holding_target.csv") -> pd.DataFrame:
-    return pd.read_csv(ROOT / path, parse_dates=["listing_date"])
+    return pd.read_csv(DATA / path, parse_dates=["listing_date"])
 
 
 # ----------------------------------------------------------------------

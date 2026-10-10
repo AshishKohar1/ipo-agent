@@ -267,7 +267,7 @@ jobs:
           # produced", exited 0 and looked GREEN while leaving no record in the repo that
           # it had run at all. Staging each path on its own means one absent file can no
           # longer suppress the others.
-          for f in data/subscription_snapshots.csv predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv data/listing_prices.csv data/listing_prices_progress.csv reports/live reports/CAPTURE_AUDIT.md data/sent_markers.csv data/final_subscription.csv data/hdfire_poll.csv data/new_listings.csv reports/HDFIRE_INTRADAY.md; do
+          for f in data/subscription_snapshots.csv data/predictions_log.csv data/market_context.csv data/market_context_notes.csv data/live_fetch_log.csv data/live_run_markers.csv data/listing_prices.csv data/listing_prices_progress.csv reports/live reports/CAPTURE_AUDIT.md data/sent_markers.csv data/final_subscription.csv data/hdfire_poll.csv data/new_listings.csv reports/HDFIRE_INTRADAY.md; do
             if [ -e "$f" ]; then
               git add -A -- "$f" || echo "could not stage $f"
             else

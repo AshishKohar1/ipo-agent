@@ -3,7 +3,7 @@ build_rhp_manifest.py — data/verified_rhp_manifest.csv: one row per fetched PD
 
 For every PDF: company and document type (read from the cover), source URL, SHA-256,
 page count, verification date. URLs are never assumed: primary documents take the URL
-recorded in rhp_VERIFY.json; the others are re-resolved from the official source. Every
+recorded in data/rhp_verify.json; the others are re-resolved from the source. Every
 URL is then re-downloaded (in memory, not saved) and accepted only if its SHA-256
 equals the local file's. A URL that can't be confirmed is written as empty with a reason.
 
@@ -48,7 +48,7 @@ def sha_of_url(sess, url: str) -> str | None:
 
 
 def main():
-    v = json.loads((ROOT / "rhp_VERIFY.json").read_text(encoding="utf-8"))
+    v = json.loads((ROOT / "data" / "rhp_verify.json").read_text(encoding="utf-8"))
     cases = {c["company"]: c for c in v["cases"]}
     sess = R._session()
     rows = []
@@ -61,7 +61,7 @@ def main():
         # candidate URL: the recorded primary document, else re-resolve officially
         url, how = None, ""
         if c and c.get("doc_type") == kind:
-            url, how = c["doc_url"], "rhp_VERIFY.json"
+            url, how = c["doc_url"], "data/rhp_verify.json"
         elif c:
             time.sleep(SEBI_GAP_S)
             url, why = R.resolve_sebi(sess, company, c.get("isin"), kind,

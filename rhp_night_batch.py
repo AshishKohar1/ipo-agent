@@ -84,8 +84,8 @@ PROGRESS_COLS = ["company", "isin", "listing_date", "segment", "status", "doc_ty
 
 # ---------------------------------------------------------------- queue
 def build_queue() -> pd.DataFrame:
-    m = pd.read_csv(ROOT / "master_with_symbols.csv")
-    h = pd.read_csv(ROOT / "holding_target.csv")
+    m = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
+    h = pd.read_csv(ROOT / "data" / "holding_target.csv")
     labelled = set(h.loc[h["H_label"].notna(), "isin"].dropna())
     q = m[m["exclude_reason"].isna()].copy()
     q = q[q["isin"].isin(labelled)]

@@ -130,7 +130,7 @@ Orient Cables — closing today, bid by 4:00 PM
   GMP: ____%   [NOT IN MODEL — your judgement only]
 ```
 
-`predict_live(total, issue_size_cr, qib=None, rii=None)` returns the verdict, the threshold met and the demand-profile label. The raw and calibrated probabilities are returned only under `diagnostics`, for `predictions_log.csv` — never surfaced as a chance (G2).
+`predict_live(total, issue_size_cr, qib=None, rii=None)` returns the verdict, the threshold met and the demand-profile label. The raw and calibrated probabilities are returned only under `diagnostics`, for `data/predictions_log.csv` — never surfaced as a chance (G2).
 
 ## Known limitations
 

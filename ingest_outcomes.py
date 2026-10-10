@@ -445,7 +445,7 @@ def main(since: str | None = None, dry: bool = False) -> pd.DataFrame:
     # that listed under a former name (Priority 3). symbols.py tries ISIN first, then
     # names including known aliases, and falls back to data/NSE_EQUITY_L.csv, which carries
     # an ISIN for every row and runs to 2026-09-25.
-    sym = pd.read_csv(ROOT / "master_with_symbols.csv")
+    sym = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
     sym["norm"] = sym["company"].str.lower().str.replace(r"[^a-z0-9]", "", regex=True)
     rows, last = [], 0.0
     for r in cand.itertuples():

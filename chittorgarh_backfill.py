@@ -359,7 +359,7 @@ def reconcile() -> pd.DataFrame:
     if not OUT.exists():
         return pd.DataFrame()
     c = pd.read_csv(OUT)
-    m = pd.read_csv(ROOT / "master_with_symbols.csv")
+    m = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
     m["norm"] = m["company"].astype(str).str.lower().str.replace(r"[^a-z0-9]", "", regex=True)
     c["norm"] = c["company"].astype(str).str.lower().str.replace(
         r"(ipo|limited|ltd|india)", "", regex=True).str.replace(r"[^a-z0-9]", "", regex=True)

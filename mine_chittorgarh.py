@@ -101,7 +101,7 @@ def main() -> dict:
     f.to_csv(OUT, index=False, encoding="utf-8")
 
     # ---- rule 2 against the master, on the quantities both hold
-    m = pd.read_csv(ROOT / "master_with_symbols.csv")
+    m = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
 
     def norm(s):
         s = re.sub(r"(?i)\b(limited|ltd|private|pvt|india|the|ipo)\b", "", str(s))

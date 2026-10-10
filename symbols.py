@@ -58,8 +58,8 @@ import dataio                                               # noqa: E402
 import company_aliases                                     # noqa: E402
 
 NSE_LIST = ROOT / "data" / "NSE_EQUITY_L.csv"
-MASTER = ROOT / "master_with_symbols.csv"
-PRED_LOG = ROOT / "predictions_log.csv"
+MASTER = ROOT / "data" / "master_with_symbols.csv"
+PRED_LOG = ROOT / "data" / "predictions_log.csv"
 SNAPSHOTS = ROOT / "data" / "subscription_snapshots.csv"
 
 SEGMENTS = ("mainboard", "sme")

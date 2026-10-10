@@ -37,8 +37,8 @@ Updated 2026-09-30. Live stage status is in `PROGRESS.md`; that file wins on sta
 
 - Master dataset: 652 mainboard IPOs, 2010 to May 2026, with QIB/HNI/RII/Total subscription
   and listing gain. **Its `Date` column is the listing date, not the issue-open date.** True
-  open dates for 2021+ are in `issue_dates_recovered.csv` (313 of 652 recovered).
-- `master_with_symbols.csv`: 578 of 652 with symbols. `exclude_reason` flags 29 rows
+  open dates for 2021+ are in `data/issue_dates_recovered.csv` (313 of 652 recovered).
+- `data/master_with_symbols.csv`: 578 of 652 with symbols. `exclude_reason` flags 29 rows
   (13 FPO, 14 REIT/InvIT, 1 depository receipt, PROTEAN bad listing date). Excluded rows
   are dropped from every model.
 - Official Nifty 50 TRI from NSE Indices, 2009 to Sep 2026, `data/NIFTY50_TRI.csv`.
@@ -157,7 +157,7 @@ in the older PowerShell here.
    outputs labelled `PROVISIONAL — not for bid decisions`, logged, never used for verdicts.
 9. Rows with an `exclude_reason` are excluded from every model.
 10. **Estimator:** use the validated numpy logistic regression. Do not add scikit-learn.
-11. **`predictions_log.csv` is append-only.** Never edit or delete past rows.
+11. **`data/predictions_log.csv` is append-only.** Never edit or delete past rows.
 12. **Agreed decisions (section 5) are fixed.** If evidence contradicts one, report it at the
     next gate. Never change one silently.
 13. All times in IST. No secrets, tokens or passwords in the repository.
@@ -235,7 +235,7 @@ in the older PowerShell here.
 - GMP is **not** a model feature and **not** an automated fetch (D1). It appears in the live
   report as a field the user fills in manually, clearly marked as outside the model.
 - Every live report logs the GMP value the user supplies (or blank) in
-  `predictions_log.csv`, so its incremental value over subscription can be measured
+  `data/predictions_log.csv`, so its incremental value over subscription can be measured
   retrospectively after ~12 months (D2). Until then **no GMP-based rule may influence a
   verdict.**
 - Required live-report format:
@@ -479,7 +479,7 @@ IPOs it publishes "final bidding detail as of the last day", so day-wise depth f
 years is unverified and may thin out.
 
 1. **Read `chittorgarh.com/robots.txt` first and abort if it no longer permits access** (B2).
-2. Sample **20 mainboard IPOs** from `master_with_symbols.csv` spread across 2010, 2013,
+2. Sample **20 mainboard IPOs** from `data/master_with_symbols.csv` spread across 2010, 2013,
    2016, 2019, 2022 and 2025.
 3. For each, record: is the **"Day-wise Subscription Details"** table present, how many
    bidding days it carries, which categories it has, and whether anchor allocation and
@@ -520,7 +520,7 @@ paths are **deleted, not left dormant**. The surviving model, `L_final_3pm`, is 
    met — **never the raw probability as a literal chance**. There is no
    `subscription_as_of` dispatch and no forecaster.
 3. SME Model L in shadow mode; log to `sme_shadow_log.csv`.
-4. `predictions_log.csv` (append-only): IST timestamp, IPO, ISIN, segment, model version,
+4. `data/predictions_log.csv` (append-only): IST timestamp, IPO, ISIN, segment, model version,
    inputs, subscription_as_of, probabilities, thresholds, verdict, veto flags.
 5. `ingest_outcomes.py`: finds every IPO listed since its last run — mainboard and SME, bid
    or not — gets the listing price from two sources, reconciles, appends to the dataset,
@@ -540,7 +540,7 @@ paths are **deleted, not left dormant**. The surviving model, `L_final_3pm`, is 
       name, closing date and **"bid by 4:00 PM"**, the model used, L1/L2 probabilities with
       each model's own threshold and verdict, the displayed QIB/HNI/Retail/Total figures
       with their as-of time (A3), veto flags, and the blank GMP field.
-   e. Append to `predictions_log.csv`.
+   e. Append to `data/predictions_log.csv`.
 8. Write `MODEL_L_CARD.md` v1.0.
 9. Dry run on currently open IPOs, or the most recent week if none are open.
 
@@ -698,7 +698,7 @@ always-sell after tax. Otherwise H stays information-only.
 ### Stage 13 — Integration and wrap-up  (after Stage 7 and Gate E)
 1. `run_h_after_listing.py`: for each newly listed IPO, bid or not, extract its RHP, score
    Model H with RHP and listing-day data, output the hold % if sizing is enabled, and append
-   to `predictions_log.csv`.
+   to `data/predictions_log.csv`.
 2. Add the red-flag veto section to the live Model L report for open IPOs whose RHP has been
    extracted.
 3. Model H retraining quarterly (one-year label lag), champion/challenger as for L.
@@ -726,7 +726,7 @@ Merge `PLAN_AMENDMENT_02.md` into this file in place, record H1–H9 in `DECISIO
    reaches ≥60%**. Report coverage per field and per document. If a field cannot reach 60%
    across vintages, **say so plainly rather than loosening the rules.**
 
-**15b — night batch.** Queue every mainboard IPO in `master_with_symbols.csv` with an
+**15b — night batch.** Queue every mainboard IPO in `data/master_with_symbols.csv` with an
 `excess_1y` label and no `exclude_reason`. Per company: resolve from SEBI (BSE SME for SME)
 → download → verify SHA-256 and `_verify_is_prospectus()` → extract H6 fields → reconcile →
 write to the database → **discard the PDF**.

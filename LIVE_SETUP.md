@@ -255,7 +255,7 @@ target — walk-forward, never in-sample.** The thresholds live in
 `models/model_l_v1.1_thresholds.json`; nothing hardcodes them.
 
 **No probability appears anywhere in the decision.** The calibrated probability is still
-computed into `predictions_log.csv` under `diagnostics`, labelled *not in the decision
+computed into `data/predictions_log.csv` under `diagnostics`, labelled *not in the decision
 path*, purely as a drift monitor — a probability that starts disagreeing with the threshold
 is early warning that the threshold needs re-deriving. G2 still holds: the report prints the
 verdict and the level met, never a number presented as your chance.

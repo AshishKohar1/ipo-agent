@@ -1,5 +1,5 @@
 """
-clean_master.py — reviewed, idempotent cleaning steps on master_with_symbols.csv.
+clean_master.py — reviewed, idempotent cleaning on data/master_with_symbols.csv.
 
   merge   merge reports/intermediate/symbols_CANDIDATES_cleanquery.csv:
             first trading day within ±10 days of the listing date (the master's
@@ -30,7 +30,7 @@ INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
 INTERMEDIATE.mkdir(parents=True, exist_ok=True)
 
 
-MASTER = "master_with_symbols.csv"
+MASTER = Path(__file__).resolve().parent / "data" / "master_with_symbols.csv"
 MATCH_DAYS = 10
 PRE_LISTING_DAYS = 30
 

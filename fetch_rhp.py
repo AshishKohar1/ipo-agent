@@ -17,8 +17,8 @@ The agent NEVER asks the user to download anything. If every source fails, it wr
 'source_unresolved' row whose note lists what each source actually did — never a
 generic "not found". A missing document is a known gap; a wrong one is silent corruption.
 
-    python fetch_rhp.py verify     # the 5-company verification (writes rhp_VERIFY.json)
-    python fetch_rhp.py batch      # REFUSES unless rhp_VERIFY.json shows 5/5 passed
+    python fetch_rhp.py verify     # the 5-company verification -> data/rhp_verify.json
+    python fetch_rhp.py batch      # REFUSES unless data/rhp_verify.json shows 5/5
 """
 from __future__ import annotations
 import io, re, sys, time, hashlib, json, sqlite3, zipfile
@@ -32,7 +32,7 @@ import company_aliases
 ROOT = Path(__file__).resolve().parent
 DB   = ROOT / "ipo.db"
 PDFS = ROOT / "_local" / "rhp_fetched"; PDFS.mkdir(parents=True, exist_ok=True)
-VERIFY_FILE = ROOT / "rhp_VERIFY.json"
+VERIFY_FILE = ROOT / "data" / "rhp_verify.json"
 UA   = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                       "Chrome/120 Safari/537.36"}
 
@@ -416,7 +416,7 @@ def record(rec: DocRecord) -> None:
 def _batch():
     v = json.loads(VERIFY_FILE.read_text(encoding="utf-8")) if VERIFY_FILE.exists() else {}
     if v.get("passed") != 5:
-        sys.exit("REFUSED: rhp_VERIFY.json does not show 5/5 companies verified. Run "
+        sys.exit("REFUSED: data/rhp_verify.json does not show 5/5 companies verified. Run "
                  "`python fetch_rhp.py verify` and fix the failures first (CLAUDE.md).")
     import pandas as pd
     q = pd.read_csv("queue.csv")          # company, isin, listing_date

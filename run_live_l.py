@@ -267,7 +267,7 @@ def capture(capture_point: int, score: bool, dry: bool = False) -> dict:
     sess = _session()
     ipos, why = nse_open_ipos(sess)
     diag = [f"open-IPO lookup: {why}"]
-    sym = pd.read_csv(ROOT / "master_with_symbols.csv")
+    sym = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
 
     snaps, scored = [], []
     for d in ipos:
@@ -321,7 +321,7 @@ def rehearse(days: int = 30, dry: bool = True) -> dict:
     not what it would have said at 3pm.
     """
     when = pd.Timestamp.now()
-    m = pd.read_csv(ROOT / "master_with_symbols.csv")
+    m = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
     m["ld"] = pd.to_datetime(m["listing_date"], errors="coerce")
     recent = m[m["ld"].notna()].sort_values("ld", ascending=False).head(5)
     scored, diag = [], [

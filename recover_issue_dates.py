@@ -4,7 +4,7 @@ recover_issue_dates.py — recover the TRUE issue-open date for each master row.
 The master's 'issue_open_date' column holds the listing date (see CLAUDE.md). This
 script joins each row to the NSE spine (ISSUE START DATE) and the IPOMatrix trackers
 (Opening Date) on completed company name + listing date within ±30 days, and writes
-issue_dates_recovered.csv. It never modifies master_with_symbols.csv.
+data/issue_dates_recovered.csv. It never modifies the master.
 
 Reconciliation (the NSE spine and IPOMatrix are independent sources):
   both sources, same date   -> confidence high,   source nse_spine+tracker
@@ -25,6 +25,7 @@ from pathlib import Path
 # to reports/intermediate/ now, named from __file__ so the chdir is no longer load-bearing.
 INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
 INTERMEDIATE.mkdir(parents=True, exist_ok=True)
+DATA = Path(__file__).resolve().parent / "data"
 import pandas as pd
 import dataio
 
@@ -50,7 +51,8 @@ def best(name, listing, cands):
 
 
 def main():
-    m = pd.read_csv("master_with_symbols.csv", parse_dates=["issue_open_date", "listing_date"])
+    m = pd.read_csv(DATA / "master_with_symbols.csv",
+                    parse_dates=["issue_open_date", "listing_date"])
     spine = dataio.load_nse_spine()
     spine = spine[spine["security_type"].isin(["EQ", "SME", "BE", "IV", "RR"])]
     trk = dataio.load_trackers()
@@ -89,7 +91,7 @@ def main():
                     "source": src, "confidence": conf})
 
     o = pd.DataFrame(out)
-    o.to_csv("issue_dates_recovered.csv", index=False)
+    o.to_csv(DATA / "issue_dates_recovered.csv", index=False)
     pd.DataFrame(flags).to_csv(INTERMEDIATE / "issue_dates_FLAGS.csv", index=False)
 
     o["year"] = pd.to_datetime(o["listing_date"]).dt.year

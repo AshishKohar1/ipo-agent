@@ -262,7 +262,7 @@ def main(check_only: bool = False, test_only: bool = False, limit: int | None = 
               "Nothing fetched, nothing invented.")
         return {"fetched": 0, "blocked": f"{type(e).__name__}", "permission": perm}
 
-    m = pd.read_csv(ROOT / "master_with_symbols.csv")
+    m = pd.read_csv(ROOT / "data" / "master_with_symbols.csv")
     q = m[m["exclude_reason"].isna() & m["symbol"].notna()]
     if limit:
         q = q.head(limit)

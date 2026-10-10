@@ -31,7 +31,8 @@ LOG  = Path(__file__).resolve().parent / "reports" / "run_overnight.log"
 # to reports/intermediate/ now, named from __file__ so the chdir is no longer load-bearing.
 INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
 INTERMEDIATE.mkdir(parents=True, exist_ok=True)
-MASTER_CSV = "master_with_symbols.csv"
+DATA = Path(__file__).resolve().parent / "data"
+MASTER_CSV = Path(__file__).resolve().parent / "data" / "master_with_symbols.csv"
 
 MATCH_DAYS = 7        # issue-open date window for name matching
 MATCH_SIM  = 0.85     # dataio.prefix_sim threshold
@@ -250,8 +251,11 @@ def job1_resolve_symbols():
 # JOB 2 — holding targets (excess return vs benchmark over a horizon)
 # ======================================================================
 HORIZONS = {"1y": 365, "3y": 1095}
-TARGET_FILES = {"1y": ("holding_target.csv", "target_MISSES.csv"),
-                "3y": ("holding_target_3y.csv", "target_MISSES_3y.csv")}
+# Named under data/ since the 2026-10-10 housekeeping; this script chdir's to the
+# project root, so the bare names used to land in the root.
+TARGET_FILES = {"1y": (DATA / "holding_target.csv", DATA / "target_MISSES.csv"),
+                "3y": (DATA / "holding_target_3y.csv",
+                       DATA / "target_MISSES_3y.csv")}
 LABEL_COL = {"1y": "H_label", "3y": "H3_label"}
 
 
@@ -432,7 +436,7 @@ def job3_price_history():
         if rec: rows.append(rec)
         if len(done) % 25 == 0: log(f"  progress {len(done)}/{len(df)}")
         time.sleep(0.3)
-    pd.DataFrame(rows).to_csv("price_history.csv", index=False)
+    pd.DataFrame(rows).to_csv(DATA / "price_history.csv", index=False)
     log(f"JOB 3 done — {len(rows)} symbols")
 
 

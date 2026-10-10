@@ -19,7 +19,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-LOG = ROOT / "predictions_log.csv"
+LOG = ROOT / "data" / "predictions_log.csv"
 
 COLS = [
     "row_type",              # prediction | outcome

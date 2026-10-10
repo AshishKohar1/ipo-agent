@@ -101,8 +101,8 @@ CAGR is 0.218. Never merge them.
 
 | Item | Status |
 |---|---|
-| Master dataset | 652 mainboard IPOs, 2010 – May 2026, in `data/` via `dataio.load_master()`. **Its `Date` column is the listing date, not the issue-open date.** True open dates for 2021+ in `issue_dates_recovered.csv` (313 of 652) |
-| `master_with_symbols.csv` | 578 of 652 with symbols; `exclude_reason` flags 29 rows, dropped from every model |
+| Master dataset | 652 mainboard IPOs, 2010 – May 2026, in `data/` via `dataio.load_master()`. **Its `Date` column is the listing date, not the issue-open date.** True open dates for 2021+ in `data/issue_dates_recovered.csv` (313 of 652) |
+| `data/master_with_symbols.csv` | 578 of 652 with symbols; `exclude_reason` flags 29 rows, dropped from every model |
 | Benchmark | Official Nifty 50 TRI (NSE Indices), 2009 – Sep 2026, `data/NIFTY50_TRI.csv` |
 | Holding targets vs TRI | `excess_1y` 491 rows (40.3% beat); `excess_3y` 331 rows (36.0%) |
 | Framework | `models/framework.py` — numpy logistic regression, walk-forward + embargo, recency weighting, `vif()`, `threshold_section5()`, calibration, model cards |
@@ -142,7 +142,7 @@ What to build next is decided by `PLAN.md` sections 6–7 and `PROGRESS.md`, not
 
 ## Known data defect — master date column
 
-`issue_open_date` in `master_with_symbols.csv` (the master's `Date` column) holds the
+`issue_open_date` in `data/master_with_symbols.csv` (the master's `Date` column) holds the
 **listing date**, not the issue-open date. It matched the listing date in all 316 clean
 NSE-spine matches and all 129 tracker matches (2021–2026), and the open date in none.
 Pre-2021 rows have no second source to check against. The existing `listing_date` column
@@ -153,7 +153,7 @@ an issue-open date for leakage cut-offs (D0–D3) until it has been renamed and 
 
 - **Survivorship.** Delisted/suspended companies vanish from yfinance and are
   disproportionately failures. Any base rate computed after dropping them is optimistic.
-  `target_MISSES.csv` must be read alongside the results.
+  `data/target_MISSES.csv` must be read alongside the results.
 - **Single-source variables.** RPT %, litigation quantum, customer concentration,
   promoter experience, uses-of-proceeds count and auditor qualification exist only in the
   RHP. They cannot be reconciled. They are kept but flagged `single_source_unverified` and

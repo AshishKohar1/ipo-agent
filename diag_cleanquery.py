@@ -1,4 +1,4 @@
-"""DIAGNOSTIC ONLY — does not modify master_with_symbols.csv or any pipeline file.
+"""DIAGNOSTIC ONLY — does not modify data/master_with_symbols.csv or any pipeline file.
 Re-queries Yahoo for unresolved rows with a cleaned name (no Ltd/Limited/brackets) and
 writes candidates to reports/intermediate/ for the user to review."""
 import re, time, requests, pandas as pd, yfinance as yf
@@ -10,13 +10,14 @@ import os; from pathlib import Path; os.chdir(Path(__file__).resolve().parent)
 # to reports/intermediate/ now, named from __file__ so the chdir is no longer load-bearing.
 INTERMEDIATE = Path(__file__).resolve().parent / "reports" / "intermediate"
 INTERMEDIATE.mkdir(parents=True, exist_ok=True)
+DATA = Path(__file__).resolve().parent / "data"
 
 def clean(n):
     n = re.sub(r"\(.*?\)", " ", str(n))
     n = re.sub(r"\b(ltd|limited|pvt|private|company|co)\b\.?", " ", n, flags=re.I)
     return re.sub(r"\s+", " ", n).strip(" .&")
 
-m = pd.read_csv("master_with_symbols.csv", parse_dates=["issue_open_date"])
+m = pd.read_csv(DATA / "master_with_symbols.csv", parse_dates=["issue_open_date"])
 todo = m[m["symbol"].isna()]
 out = []
 for _, r in todo.iterrows():

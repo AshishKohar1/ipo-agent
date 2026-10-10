@@ -119,25 +119,68 @@ def _():
     return f"master {len(m)}, spine {len(s)}, trackers {len(t)} rows"
 
 
-@check("data/ contract: no module reads data/ directly or hardcodes a data/ filename")
+@check("data/ contract: no module READS a data/ file by hardcoded name")
 def _():
+    # What this protects. `dataio` finds every source dataset by GLOB, so a renamed or
+    # duplicated source file raises instead of being silently half-loaded. A module that
+    # opens `data/<exact name>` itself bypasses that and goes quietly wrong the day the
+    # file is renamed.
+    #
+    # Rewritten 2026-10-10. The old regex was `["']data[/\\]|\.xlsx` - ANY `.xlsx`
+    # anywhere, and ANY string starting `data/`. It had been failing on four files, none
+    # of which violated anything: `reports/SPOTCHECK.xlsx` (not under data/ at all) and
+    # `git("add", "data/rhp_progress.csv")` (a git pathspec for committing output, not a
+    # read). A check that reports violations that are not violations stops being read -
+    # and CLAUDE.md requires this script to pass before any overnight run, so it has to be
+    # able to pass.
+    #
+    # It now matches a READ of a hardcoded data/ path, which is the thing the contract is
+    # about, plus any .xlsx named under data/ in a doc.
+    READ = re.compile(
+        r"""(read_csv|read_excel|read_json|read_parquet|open|load|Path)\s*\(\s*"""
+        r"""[^)]*?["']data[/\\][^"']+["']""")
     bad = []
-    for p in ROOT.glob("*.py"):
-        if p.name in ("dataio.py", "check_env.py"):
+    for q in ROOT.glob("*.py"):
+        if q.name in ("dataio.py", "check_env.py"):
             continue
-        src = p.read_text(encoding="utf-8")
-        if re.search(r"""["']data[/\\]|\.xlsx""", src):
-            bad.append(p.name)
-    for p in (ROOT / "CLAUDE.md", ROOT / "README.md"):
-        if re.search(r"data/[^`\s]*\.xlsx", p.read_text(encoding="utf-8")):
-            bad.append(p.name)
-    assert not bad, f"direct data/ reference in: {bad}"
+        for m in READ.finditer(q.read_text(encoding="utf-8")):
+            bad.append(f"{q.name}: {m.group(0)[:60]}")
+    for q in (ROOT / "CLAUDE.md", ROOT / "README.md"):
+        if re.search(r"data/[^`\s]*\.xlsx", q.read_text(encoding="utf-8")):
+            bad.append(f"{q.name}: hardcodes a data/*.xlsx filename")
+    assert not bad, "data/ read by hardcoded name: " + "; ".join(bad)
+
+
+@check("data/ contract: the check above can still fail")
+def _():
+    # A guard that cannot fail is worse than no guard - it reports PASS forever. The
+    # rewritten pattern is run against a line that genuinely violates the contract, and
+    # against the four shapes that were false positives, and must separate them.
+    READ = re.compile(
+        r"""(read_csv|read_excel|read_json|read_parquet|open|load|Path)\s*\(\s*"""
+        r"""[^)]*?["']data[/\\][^"']+["']""")
+    must_catch = [
+        'df = pd.read_csv("data/Initial Public Offering 2010.xlsx")',
+        "m = pd.read_excel('data/IPO-PastIssue-01-01-2010.xlsx')",
+        'open("data/NIFTY50_TRI.csv")',
+    ]
+    must_allow = [
+        'sheet.to_excel(ROOT / "reports" / "SPOTCHECK.xlsx", index=False)',
+        'git("add", "data/chittorgarh_backfill.csv", "data/anchor.csv")',
+        'OUT = ROOT / "data" / "market_context.csv"',
+        'print("writes data/new_listings.csv")',
+    ]
+    missed = [x for x in must_catch if not READ.search(x)]
+    wrong = [x for x in must_allow if READ.search(x)]
+    assert not missed, f"the check would NOT catch a real violation: {missed}"
+    assert not wrong, f"the check still flags a non-violation: {wrong}"
+    return f"catches {len(must_catch)}/{len(must_catch)} real, allows {len(must_allow)}/{len(must_allow)} benign"
 
 
 @check("master_with_symbols.csv: schema + integrity")
 def _():
     import pandas as pd
-    df = pd.read_csv(ROOT / "master_with_symbols.csv",
+    df = pd.read_csv(ROOT / "data" / "master_with_symbols.csv",
                      parse_dates=["issue_open_date", "listing_date"])
     need = {"company", "symbol", "isin", "bse_code", "issue_open_date", "listing_date"}
     assert need <= set(df.columns), f"missing columns {need - set(df.columns)}"

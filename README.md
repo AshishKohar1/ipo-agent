@@ -15,7 +15,7 @@ pip install pandas numpy requests yfinance pdfplumber camelot-py[cv] \
 | # | Command | Produces | Time |
 |---|---|---|---|
 | 0 | `python check_env.py` | pass/fail | seconds |
-| 1 | `python run_overnight.py` (or `build_target_and_stats.py target`, same code) | `master_with_symbols.csv`, `holding_target.csv`, `target_MISSES.csv` | 6–8 h |
+| 1 | `python run_overnight.py` (or `build_target_and_stats.py target`, same code) | `data/master_with_symbols.csv`, `data/holding_target.csv`, `data/target_MISSES.csv` | 6–8 h |
 | 2 | *implement resolvers* (see below) | — | ~half a day |
 | 3 | `python fetch_rhp.py` | `_local/rhp_fetched/`, `documents` table | 20–40 h |
 | 4 | `python extract_batch.py` | `observations` table | 40–60 h |
@@ -78,9 +78,9 @@ IPOMatrix share a parent, so they never count as two sources for the same field.
 |---|---|---|
 | Scanned-image RHPs (pre-2015) | ~15% of that vintage | Needs OCR; logged as `unreadable pdf` |
 | Document not on any official site | 5–10% | `source_unresolved` — logged, never guessed |
-| Delisted/suspended before T+365 | ~8% of target rows | `target_MISSES.csv` — **biases base rate upward** |
+| Delisted/suspended before T+365 | ~8% of target rows | `data/target_MISSES.csv` — **biases base rate upward** |
 | TOC won't parse | ~10% | Regex fallback on section headers |
 
 The survivorship one matters most. Companies that vanish from yfinance are
 disproportionately the failures, so your measured "beat Nifty" base rate will be
-optimistic. Read `target_MISSES.csv` before quoting any number from this dataset.
+optimistic. Read `data/target_MISSES.csv` before quoting any number from this dataset.

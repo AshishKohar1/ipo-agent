@@ -3,7 +3,7 @@ verify_rhp_resolvers.py — the CLAUDE.md verification protocol for fetch_rhp.py
 
 Five companies: a mainboard large-cap, a mainboard mid-cap, an SME, a 2015 issue and a
 2011 issue. Each must (1) resolve to a document that passes _verify_is_prospectus() and
-(2) state an issue size within 1% of the master dataset. Writes rhp_VERIFY.json; the
+(2) state an issue size within 1% of the master dataset. Writes data/rhp_verify.json; the
 batch refuses to run unless passed == 5. Nothing is written to ipo.db.
 
 The master dataset has no SME rows, so the SME test uses an IPOMatrix tracker row (its
