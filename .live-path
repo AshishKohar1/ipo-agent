@@ -1,0 +1,17 @@
+# Files frozen from 12 Oct 18:00 IST to 15 Oct 20:00 IST (HDFIRE is the first live test).
+# One file per line. Checked by: git diff --name-only <boundary> | grep -xF -f .live-path
+send_daily_email.py
+sent_markers.py
+live_markers.py
+trading_day.py
+capture_audit.py
+market_context.py
+listing_prices.py
+score_l.py
+predictions_log.py
+chittorgarh_live.py
+nse_subscription.py
+hdfire_poll.py
+run_live_l.py
+.github/workflows/live-model-l.yml
+.github/workflows/retry-infra-failure.yml
