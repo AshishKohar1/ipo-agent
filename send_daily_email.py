@@ -924,6 +924,129 @@ def self_test() -> int:
     chk("every index name the capture uses is the one the check asks for",
         [n for n, _ in _MC.INDICES] and len(_MC.INDICES) == 15, len(_MC.INDICES))
 
+    print(chr(10) + "[11] Task 3: what a dispatch at 15:35 IST actually does")
+    # main() is driven end to end with the clock, the market view, the marker files and
+    # the SMTP call all substituted. Nothing is fetched and nothing is sent. This is the
+    # only way to assert the 15:35 behaviour without waiting for 15:35.
+    import tempfile as _tf
+    import live_markers as _LM2
+
+    def _drive(hhmm, closing=True, pre_marked=False, send_ok=True, day="2026-10-13"):
+        """Run main() for a synthetic day and return (result, [(subject, body)...])."""
+        sent: list = []
+        mv_one = {
+            "closing_today": ([{"ipo": "Harness Mainboard", "segment": "mainboard",
+                                "ipo_id": 9, "isin": "INEHARNESS", "day_of": 3,
+                                "days_total": 3,
+                                "sub": {"ok": True, "total_x": 60.0, "qib_x": 90.0,
+                                        "rii_x": 20.0, "hni_x": 55.0}}]
+                              if closing else []),
+            "open_not_closing": [], "upcoming": [],
+            "diagnostics": ["harness: no network"], "n_open": 1 if closing else 0,
+        }
+        saved = {k: globals().get(k) for k in ("TD", "CL", "NSE", "send", "PL", "LM", "SM")}
+        savedmc = MC.capture
+        # Bound to LOCALS: the lambdas below must call the REAL modules, and by the time
+        # they run the global names point at the fakes.
+        _SM, _MC = SM, MC
+        with _tf.TemporaryDirectory() as td:
+            tdp = Path(td)
+            stamp = pd.Timestamp(f"{day} {hhmm // 100:02d}:{hhmm % 100:02d}")
+            fake_td = type("T", (), {
+                "now": staticmethod(lambda: stamp),
+                "trading_date": staticmethod(lambda: stamp.normalize()),
+                "ist_now": staticmethod(lambda: stamp),
+                "banner": staticmethod(lambda: f"harness clock {stamp}"),
+                "crossed_midnight": staticmethod(lambda: False)})
+            fake_cl = type("C", (), {"market_view": staticmethod(lambda when=None: mv_one)})
+            fake_nse = type("N", (), {
+                "enrich_market_view": staticmethod(lambda mv, today=None: mv)})
+            fake_pl = type("P", (), {
+                "log_prediction": staticmethod(lambda *a, **k: None),
+                "log_final_subscription": staticmethod(lambda *a, **k: {}),
+                "predictions_for": staticmethod(lambda *a, **k: [])})
+            # Real sent_markers, real live_markers - but pointed at throwaway files, so
+            # "already sent" is genuinely read back from disk rather than mocked.
+            mpath, lpath = tdp / "sent.csv", tdp / "live.csv"
+            fake_sm = type("S", (), {
+                "DECISION": _SM.DECISION, "DEAD_MAN": _SM.DEAD_MAN,
+                "already_sent": staticmethod(lambda d, i: _SM.already_sent(d, i, mpath)),
+                "notice_sent": staticmethod(lambda d, i: _SM.notice_sent(d, i, mpath)),
+                "undelivered": staticmethod(lambda d, i: _SM.undelivered(d, i, mpath)),
+                "mark": staticmethod(lambda *a, **k: _SM.mark(*a, **{**k, "path": mpath}))})
+            fake_lm = type("L", (), {
+                "already_ran": staticmethod(lambda c, w: _LM2.already_ran(c, w, lpath)),
+                "mark_ran": staticmethod(lambda c, w, n: _LM2.mark_ran(c, w, n, lpath))})
+
+            def fake_send(subject, body, dry=False):
+                sent.append((subject, body))
+                return ({"sent": True} if send_ok
+                        else {"sent": False, "error": "harness: SMTP refused"})
+
+            if pre_marked:
+                _SM.mark(stamp.normalize(), "Harness Mainboard", "INEHARNESS",
+                        f"{SUBJECT_PREFIX}Harness Mainboard", stamp, path=mpath)
+            globals().update(TD=fake_td, CL=fake_cl, NSE=fake_nse, send=fake_send,
+                             PL=fake_pl, LM=fake_lm, SM=fake_sm)
+            _MC.capture = staticmethod(lambda *a, **k: {"skipped": "harness"})
+            try:
+                r = main(dry=False, final=False, force=False)
+            finally:
+                globals().update(**saved)
+                _MC.capture = savedmc
+        return r, sent
+
+    r, mail = _drive(1535)
+    chk("15:35, nothing sent yet: the window is still OPEN, so the real VERDICT goes out",
+        r.get("sent") is True and len(mail) == 1, r)
+    # The subject is the prefix plus a one-line summary of the day ("1 open, 1 closes
+    # today"), NOT the issue name. Task 5 asked for the issue name; this records what the
+    # code actually does so the gap is visible rather than assumed away.
+    chk("and its subject is the decision subject, not NOT SENT",
+        mail and mail[0][0].startswith(SUBJECT_PREFIX)
+        and "NOT SENT" not in mail[0][0], mail and mail[0][0])
+    chk("KNOWN GAP: the subject summarises the day rather than naming the issue",
+        mail and mail[0][0] == f"{SUBJECT_PREFIX}1 open, 1 closes today",
+        mail and mail[0][0])
+    chk("and the body carries a verdict",
+        mail and ("BID" in mail[0][1] or "NO BID" in mail[0][1]))
+    chk("no dead-man notice was sent alongside it", "dead_man" not in r, r.get("dead_man"))
+
+    r, mail = _drive(1535, send_ok=False)
+    chk("15:35 and the SEND ITSELF FAILS: the NOT SENT notice goes out",
+        any(sub == f"{SUBJECT_PREFIX}NOT SENT" for sub, _ in mail), [s2 for s2, _ in mail])
+    nd = [b for sub, b in mail if sub == f"{SUBJECT_PREFIX}NOT SENT"]
+    chk("it states the reason", nd and "Reason:" in nd[0])
+    chk("it names the undelivered IPO", nd and "Harness Mainboard" in nd[0])
+    chk("it carries NO verdict of its own", nd and "This is not a verdict." in nd[0])
+    chk("and the run goes RED", r.get("fail_loudly") is True, r)
+
+    r, mail = _drive(1605)
+    chk("16:05, past the cutoff and undelivered: NOT SENT, never a late verdict",
+        [sub for sub, _ in mail] == [f"{SUBJECT_PREFIX}NOT SENT"], [s2 for s2, _ in mail])
+    chk("and the reason given is the broker cutoff",
+        mail and "broker cutoff" in mail[0][1])
+    chk("and the run goes RED", r.get("fail_loudly") is True, r)
+
+    r, mail = _drive(1535, pre_marked=True)
+    chk("15:35 WITH a sent marker: green, no email at all",
+        mail == [] and r.get("reason") == "already_sent", (r, len(mail)))
+    chk("and it is not flagged loud", not r.get("fail_loudly"), r)
+
+    r, mail = _drive(1535, closing=False)
+    chk("15:35 on a day with NOTHING closing: green, no email",
+        mail == [] or not any(sub.endswith("NOT SENT") for sub, _ in mail), mail)
+    chk("and nothing was owed", r.get("owed") == [], r)
+    chk("and it is not flagged loud", not r.get("fail_loudly"), r)
+
+    r, mail = _drive(1535, day="2026-10-11")       # a Sunday
+    chk("15:35 at the WEEKEND: green, no email, no market view fetched",
+        mail == [] and r.get("reason") == "weekend", r)
+
+    r, mail = _drive(1605, closing=False)
+    chk("16:05 with nothing closing: the refusal is green, not red",
+        not r.get("fail_loudly") and mail == [], r)
+
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
 
