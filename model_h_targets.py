@@ -121,8 +121,13 @@ def ist_now() -> str:
 
 RE_DIV = re.compile(r"(?:divid|dividend)[^0-9]{0,24}?(?:rs?\.?|re\.?|inr)?\s*"
                     r"([0-9]+(?:\.[0-9]+)?)", re.I)
-RE_SPLIT = re.compile(r"split[^0-9]{0,40}?([0-9]+(?:\.[0-9]+)?)\s*(?:/-)?\s*"
-                      r"to\s*(?:rs?\.?|re\.?)?\s*([0-9]+(?:\.[0-9]+)?)", re.I)
+# A face-value change is written half a dozen ways - "Face Value Split From Rs 10 To
+# Rs 2", "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share",
+# "Face Value Consolidation From Rs 1 To Rs 10". Anchoring on the word "split" missed the
+# last two. So the numbers are read from the "from X ... to Y" structure, which all of them
+# share, and the keyword is used only to decide that this IS a face-value change.
+RE_FACE = re.compile(r"from[^0-9]{0,24}?([0-9]+(?:\.[0-9]+)?)"
+                     r"[^0-9]{0,34}?to[^0-9]{0,24}?([0-9]+(?:\.[0-9]+)?)", re.I)
 RE_SPLIT_RATIO = re.compile(r"split[^0-9]{0,24}?([0-9]+)\s*[:\-]\s*([0-9]+)", re.I)
 RE_BONUS = re.compile(r"bonus[^0-9]{0,24}?([0-9]+)\s*[:\-]\s*([0-9]+)", re.I)
 
@@ -160,9 +165,16 @@ def classify(subject: str) -> dict:
            "split_to": None, "bonus_new": None, "bonus_old": None, "factor": None,
            "parse_note": ""}
 
-    if "split" in low:
+    if "split" in low or "sub-division" in low or "subdivision" in low \
+            or "consolidat" in low:
+        # One branch for all three because the arithmetic is identical and only the
+        # direction differs: a sub-division raises the share count (Rs 10 -> Rs 2, five
+        # for one), a consolidation lowers it (Rs 1 -> Rs 10, one for ten). `from / to`
+        # gives both without a special case, and a consolidation's factor is correctly
+        # below 1. Detecting only the word "split" missed consolidations entirely - they
+        # fell through to kind "other" and contributed no factor to a window that had one.
         out["kind"] = "split"
-        m = RE_SPLIT.search(s)
+        m = RE_FACE.search(s)
         if m:
             a, b = float(m.group(1)), float(m.group(2))
             if a > 0 and b > 0:
@@ -171,14 +183,24 @@ def classify(subject: str) -> dict:
             else:
                 out["parse_note"] = "split face values not positive"
         else:
+            # A bare ratio - "Stock Split 1:5" - is genuinely AMBIGUOUS and gets no
+            # factor. It can mean the face value went from 1 to 5 (a consolidation, factor
+            # 0.2) or that one share became five (a sub-division, factor 5.0), and Indian
+            # filings use the wording both ways. Those answers differ by 25x. Guessing
+            # would be the same class of error as the inverted factor this module already
+            # had once, so the row is flagged for a human instead.
             m = RE_SPLIT_RATIO.search(s)
             if m:
                 a, b = float(m.group(1)), float(m.group(2))
-                if a > 0 and b > 0:
-                    out["split_from"], out["split_to"] = a, b
-                    out["factor"] = a / b
+                out["split_from"], out["split_to"] = a, b
+                out["parse_note"] = (f"bare ratio {a:g}:{b:g} - direction ambiguous "
+                                     f"(face value {a:g}->{b:g} would be factor "
+                                     f"{a / b if b else float('nan'):g}; one-share-becomes"
+                                     f"-{b:g} would be {b / a if a else float('nan'):g}). "
+                                     f"No factor applied; needs the filing.")
             else:
-                out["parse_note"] = "split named but no face values or ratio found"
+                out["parse_note"] = ("face-value change named but no face values or "
+                                     "ratio found")
         return out
 
     if "bonus" in low:
@@ -711,11 +733,30 @@ def self_test() -> int:
     chk("a 3:1 bonus gives 4 for 1 (factor 4.0)", abs(c["factor"] - 4.0) < 1e-12, c)
     c = classify("Bonus 1:2")
     chk("a 1:2 bonus gives 3 for 2 (factor 1.5)", abs(c["factor"] - 1.5) < 1e-12, c)
-    chk("every factor is >= 1: an event can only ADD shares, never remove them",
-        all(classify(x)["factor"] >= 1.0 for x in
+    chk("a bonus or a sub-division always gives MORE shares (factor > 1)",
+        all(classify(x)["factor"] > 1.0 for x in
             ("Bonus 1:1", "Bonus 3:1", "Bonus 1:2",
              "Face Value Split From Rs 10 To Rs 2",
              "Face Value Split From Rs 10 To Rs 1")))
+    # A CONSOLIDATION is the same arithmetic in reverse and must not be forced above 1.
+    c = classify("Face Value Consolidation From Rs 1 To Rs 10")
+    chk("a consolidation gives FEWER shares (factor 0.1), and is not clamped",
+        c["kind"] == "split" and abs(c["factor"] - 0.1) < 1e-12, c)
+    # A bare ratio is ambiguous in Indian filings and gets NO factor rather than a coin
+    # flip between 0.2 and 5.0 - answers that differ by 25x.
+    c = classify("Stock Split 1:5")
+    chk("a bare 1:5 ratio gets NO factor, because the direction is ambiguous",
+        c["kind"] == "split" and c["factor"] is None, c)
+    chk("and the note states BOTH readings and what it would take to settle it",
+        "ambiguous" in c["parse_note"] and "needs the filing" in c["parse_note"]
+        and "0.2" in c["parse_note"] and "5" in c["parse_note"], c["parse_note"])
+    chk("the ratio itself is still recorded, so nothing is lost",
+        c["split_from"] == 1 and c["split_to"] == 5, c)
+    # NSE's real wording, which the first pattern could not read.
+    c = classify("Face Value Split (Sub-Division) - From Rs 10/- Per Share "
+                 "To Rs 2/- Per Share")
+    chk("NSE's actual sub-division wording parses to 5.0",
+        c["kind"] == "split" and abs(c["factor"] - 5.0) < 1e-12, c)
 
     print("\n[2b] the whole formula, on the worked example")
     # Bought at 100, 1:1 bonus during the year, trading at 60 at the anniversary, Rs 4
