@@ -1,6 +1,6 @@
 # Capture audit
 
-Window: the last 4 days, weekdays only. Generated 2026-10-10 15:53 IST.
+Window: the last 4 days, weekdays only. Generated 2026-10-10 16:39 IST.
 
 **1 missed 15:00 leg(s), 2 missed day-end leg(s).**
 
