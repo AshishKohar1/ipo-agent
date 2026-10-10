@@ -359,6 +359,9 @@ Until it is, **L2's stated 80% is not currently supported by the data.** L1's 90
 
 ### H17 — a failed run no longer locks out its own retry
 
+> **Renumbered `H27` on 2026-10-10.** `H17` now means only the subscription
+> thresholds (2026-10-06). See *Numbering resolved* at the end of this file.
+
 `mark_ran()` wrote an idempotency marker even when the run captured zero rows, and
 `already_ran()` only checked that the key existed. A failure therefore recorded itself as a
 success and blocked every retry for that slot. Three slots were stuck:
@@ -370,6 +373,9 @@ the logic change rather than by deleting rows. Idempotency suppresses duplicate 
 never duplicate *attempts at work that has not happened*.
 
 ### H18 — name similarity cannot identify a company rename (NEEDS RATIFICATION)
+
+> **Renumbered `H28` on 2026-10-10.** `H18` now means only the rule 5 relaxation
+> (2026-10-05). See *Numbering resolved* at the end of this file.
 
 Our master carries current names; SEBI filings carry the name at filing time, so a renamed
 company resolves to nothing and reports `source_unresolved` — which reads as SEBI not having
@@ -1007,3 +1013,37 @@ is still recorded with its numbers, so nothing is hidden while the count waits.
 
 Implemented in `tripwire.py` (`_recount`, `MIN_NEW_SHARE = 0.5`) and
 `backtest_email.backtest()` (which now returns `fire_keys`). 33 self-test assertions.
+
+---
+
+## Numbering resolved: one rule, one number (2026-10-10)
+
+The 2026-10-08 entry above *recorded* the `H17`/`H18` collision and left the superseded
+pair "cited by date". That is not an identifier — you cannot grep a date, and a reader who
+finds `### H17` twice in this file has no way to tell which one a comment meant. So the
+superseded pair is given numbers of its own, at the end, where nothing points yet:
+
+| Was | Meaning | Now | Why this direction |
+|---|---|---|---|
+| `H17` (2026-10-03) | a failed run no longer locks out its own retry | **`H27`** | the 2026-10-06 H17 is recorded inside a shipped artefact — `models/model_l_v1.1_thresholds.json` carries `ratified: "H17"` — and renumbering that would invalidate a ratified identifier in a file already written |
+| `H18` (2026-10-03) | name similarity cannot identify a company rename | **`H28`** | the 2026-10-05 H18 is cited in code comments, report prose and the live email footer; it is the one everything means |
+
+So from today: **`H17` means only the subscription thresholds** (2026-10-06, superseding
+H16) and **`H18` means only the rule 5 relaxation** (2026-10-05). `H27` and `H28` are the
+2026-10-03 pair. The original headings below are left in place with a pointer rather than
+rewritten, because this file is the decision log and editing an entry's identity after the
+fact is the thing it exists to prevent.
+
+### The `rule 10` clash
+
+`rule 10` was being cited for two different rules. PLAN.md section 4 is unambiguous and
+nothing there changes:
+
+* **rule 10** — the estimator. Use the validated numpy logistic regression; do not add
+  scikit-learn.
+* **rule 11** — `data/predictions_log.csv` is append-only. Never edit or delete past rows.
+
+Four live-path files cite `rule 10` where they mean `rule 11`. They are **not edited
+today**: the live-path freeze runs to 15 October and a comment is not worth a diff in
+`send_daily_email.py` the week HDFIRE goes live. They are queued in PROGRESS.md under
+"Queued for after 15 Oct".

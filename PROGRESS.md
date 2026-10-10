@@ -50,6 +50,35 @@ recorded, and neither can be invented after the fact - the markers are append-on
 Saturday audit will go red until they age out of its 7-day window (after 2026-10-15). Do
 not backfill a marker to make it green.
 
+## Queued for after 15 Oct (live-path freeze)
+
+Nothing here is a defect in behaviour. They are comment and citation fixes in files frozen
+from **12 Oct 18:00 IST to 15 Oct 20:00 IST**, because HDFIRE (13–15 Oct) is Model L's
+first live test and a comment is not worth a diff in `send_daily_email.py` that week.
+
+The frozen set is pinned in `.live-path`. Check compliance with:
+
+```bash
+git diff --name-only 3ae17ab | grep -xF -f .live-path
+```
+
+### Task 3: `rule 10` cited where `rule 11` is meant
+
+PLAN.md section 4: **rule 10** is the estimator (no scikit-learn), **rule 11** is
+`data/predictions_log.csv` append-only. These four say 10 and mean 11:
+
+| File:line | Current text | Change to |
+|---|---|---|
+| `predictions_log.py:134` | `(rule 10) - this is a second record keyed to prediction_id` | `(rule 11)` |
+| `send_daily_email.py:644` | `# The prediction row is never rewritten (rule 10)` | `(rule 11)` |
+| `send_daily_email.py:978` | `chk("the finals writer only ever APPENDS (rule 10)"` | `(rule 11)` |
+| `sent_markers.py:26` | `Append-only, like every other log here (rule 10).` | `(rule 11)` |
+
+`send_daily_email.py:20`, `score_l.py:12`, `check_env.py:71` and `models/calibration.py:4`
+also cite `rule 10` and are **correct** — they mean the scikit-learn ban. Do not touch them.
+
+---
+
 ## Stages
 
 | Stage | Title | Depends on | Status | Started (IST) | Finished (IST) | Notes |
@@ -76,7 +105,7 @@ not backfill a marker to make it green.
 | 17+18 | Chittorgarh backfill **[NIGHT]** | 14 | **DONE** | 2026-10-01 01:26 | 2026-10-02 | One request per company serves BOTH stages: `/ipo/x/{id}/` carries the H5 financials and the lock-in block. **CORRECTED 2026-10-08:** what was collected is the pre-issue **lock-in** table, NOT the anchor allocation book - `data/chittorgarh_anchor_lockin.csv` has zero names containing 'mutual fund' across 3,127 rows and 674 IPOs. The anchor book is a different block on the same page and is still uncollected, which is why Priority 4's anchor-quality candidate could not be tested. ids 250-3110, >=3.2 s apart, robots.txt re-verified. Also yields an independent 2nd source for promoter holding |
 | 19 | Productionise + go live | Gate B | **DONE (awaiting Gate B ratification)** | 2026-10-01 | 2026-10-01 | `model_l_v1.0` on H11 (log1p(Total) alone, no recency weighting); coefficients exported as portable JSON and VERIFIED to reproduce every verdict standalone. `predictions_log.py` (append-only), `ingest_outcomes.py`, `run_live_l.py` (dual 15:00/17:30 capture), `retrain_l.py`, `LIVE_SETUP.md`. **5 schedules created.** BLOCKER: NSE/BSE official APIs refuse this host — jobs log honestly and invent nothing |
 | 20 | Fix the live pipeline | 19 | **DONE** | 2026-10-03 | 2026-10-03 | Every scheduled run 1–3 Oct died in ~35 s on `ModuleNotFoundError: joblib`. A clean-venv audit of every module the jobs touch found joblib the ONLY missing package. New `score_l.py` scores from the portable JSON on stdlib alone, so the live path imports in a venv with **no joblib at all**. ONE pipeline now (`send_daily_email.py` for both legs); `run_live_l.py` retired to `reports/live/exchange_probe/`. Subject fixed to `IPO decision - `, `EMAIL_TO` added, marker bug fixed (H17), `subscription_snapshots.csv` written by both legs, runner pinned `ubuntu-24.04`, actions upgraded off Node 20 |
-| 21 | Historical-name aliases | 20 | **DONE** | 2026-10-03 | 2026-10-03 | **H18.** `data/company_aliases.csv`, 23 document/user-evidenced aliases; 8 of 28 hand-sourced companies had a genuine rename. Two systematic sources tried and REJECTED with the evidence recorded (aggregator name matching produced *different companies*; unanchored "formerly known as" produced BRLMs, registrars and an address). Wired into `fetch_rhp.py`, current name first. Live probe: `reports/alias_resolution_probe.csv` |
+| 21 | Historical-name aliases | 20 | **DONE** | 2026-10-03 | 2026-10-03 | **H28** (recorded as H18 before the 2026-10-10 renumbering).** `data/company_aliases.csv`, 23 document/user-evidenced aliases; 8 of 28 hand-sourced companies had a genuine rename. Two systematic sources tried and REJECTED with the evidence recorded (aggregator name matching produced *different companies*; unanchored "formerly known as" produced BRLMs, registrars and an address). Wired into `fetch_rhp.py`, current name first. Live probe: `reports/alias_resolution_probe.csv` |
 | 22 | Manual RHPs **[NIGHT]** | 20 | **DONE** | 2026-10-03 | 2026-10-06 | 28 hand-supplied documents through the same pipeline — SHA-256, `_verify_is_prospectus()`, full provenance, no exceptions. **No network requests.** Branches on `doc_type`: 4 fields that need the issue priced are `not_in_drhp` for DRHP rows. **28/28 settled, 27 done**, 1,008 values. Samhi Hotels reprocessed with the re-supplied file (570 pages, marker on page 1) after the first was a 1-page scan. Coverage **RHP 58.4% / DRHP 57.6%** — within 1pp only BECAUSE 4 pre-pricing fields are `not_in_drhp` (11 occurrences) rather than counted as failures |
 | 23 | Market context | 20 | **DONE** | 2026-10-03 | 2026-10-06 | **Unblocked by H18.** robots.txt now HTTP 200 with `Allow: /`; endpoint PROBED (`/BackPage/getHistoricaldatatabletoString`). **All 15 indices capture.** Nifty Healthcare needed `NIFTY HEALTHCARE`, not `NIFTY HEALTHCARE INDEX` — Pharma was NOT substituted. Guards: the response's INDEX_NAME is checked against what was asked, and the TRI endpoint is explicitly not used (a TRI value is not a close) |
 | 24 | Outcome ingest repair | 20 | **PARTIAL** | 2026-10-03 | | 5a `symbols.py` resolves by ISIN first, then names+aliases, falling back to `NSE_EQUITY_L.csv` (ISIN on all 2,601 rows, runs to 2026-09-25): **56 of 170 post-cutoff listings now resolve, up from 0**; the other 114 are SME and need an SME equity list. 5b rule 6 violation fixed — segment comes from the bid-time record, never defaulted to mainboard. **5c UNSOLVED: still no listing-price source.** Chittorgarh's per-IPO page has a verified "Listing Day Trading Information" table (Final Issue Price / Open / Low / High / Last Trade) — recommended, needs a ~500-page sweep and the user's acceptance of single-source |
@@ -93,7 +122,7 @@ not backfill a marker to make it green.
 | 35 | Cron in UTC + one trading date per run | 30 | **DONE** | 2026-10-08 | 2026-10-09 | **H20 extended.** Timezone hypothesis REJECTED - `git log` shows the cron was correct UTC from the first commit. The real cause is a **5h31m-9h06m GitHub scheduler delay**, nine for nine. Crons rewritten in UTC with IST comments; four email attempts 14:15-15:00 IST; mode selection is an exhaustive `case` that EXITS 1 on an unrecognised trigger. The 2026-10-08 mislabelling was a **midnight crossing**, not a UTC bug: run #11 started 23:59:30 IST and each step re-asked the clock, so it requested tomorrow's index closes and logged 15 NULLs. New `trading_day.py` (11/11) fixes the date once in IST per run |
 | 36 | Idempotent send + dead-man | 35 | **DONE** | 2026-10-09 | 2026-10-09 | **Task 4.** `sent_markers.py` (12/12), keyed by IPO AND date. First attempt inside the window that succeeds sends; the rest exit GREEN. A refusal is RED only if a decision was owed and undelivered. Past 15:30 IST an undelivered decision emails `IPO decision - NOT SENT`. The notice writes a `not_sent_notice` marker that `already_sent()` deliberately does NOT count - otherwise the silence would become permanent. **Verified live: run #16 green, refused for being too EARLY, nothing owed, no email** |
 | 37 | Email content (H23) + test send | 36 | **DONE** | 2026-10-09 | 2026-10-09 | **Task 5.** Body order: name + closing date, 15:00 figures with exact fetch time and source, then L1/L2 as BID / NO BID each with "threshold 28.39x met/NOT met", then the H23 caveat, GMP blank, Nifty footer. Figures print BEFORE verdicts - a reader who sees the verdict first has nothing to check it against. "NO BID" is display-only; `score_l` still returns `no` because the log and the backtest key on it. **Test email SENT: run #14, subject `IPO decision - TEST`, no marker written** |
-| 38 | Record both figures | 37 | **DONE** | 2026-10-09 | 2026-10-09 | **Task 6.** `sub_*_1500` on the prediction row, written at send and only when the capture point really is 1500. Finals go to `data/final_subscription.csv` keyed to `prediction_id`, appended, never by rewriting the prediction (rule 10) - overwriting `total_x` would destroy the only record of what the decision was taken on. Carries `would_L1/L2_fire_on_final` and `verdict_would_have_changed`, so the 3pm understatement becomes a counted quantity |
+| 38 | Record both figures | 37 | **DONE** | 2026-10-09 | 2026-10-09 | **Task 6.** `sub_*_1500` on the prediction row, written at send and only when the capture point really is 1500. Finals go to `data/final_subscription.csv` keyed to `prediction_id`, appended, never by rewriting the prediction (rule 11) - overwriting `total_x` would destroy the only record of what the decision was taken on. Carries `would_L1/L2_fire_on_final` and `verdict_would_have_changed`, so the 3pm understatement becomes a counted quantity |
 | 39 | Ingest rewired (Task 7) | 38 | **DONE** | 2026-10-09 | 2026-10-09 | Pricing **deleted** (6,402 chars): all 15 rows it ever wrote were NULL/no_source, and it priced up to 3 days late, which the Stage 27 rule forbids. Harvest kept. Backfill went 0/15 -> **6/15** after the first attempt diagnosed the real fault: isin AND symbol were NULL on every row, so both bhavcopies were downloading fine and being searched for an unnamed company. Fixed with NSE `public-past-issues`, requiring name AND date to agree. 2 segment labels corrected to `sme` from NSE's own `securityType` (rule 6) |
 | 40 | Source order (H22) + HDFIRE poller | 39 | **DONE (H22 PROVISIONAL)** | 2026-10-09 | 2026-10-09 | **Tasks 8/9.** `nse_subscription.py` (30/30): NSE `ipo-active-category` primary, Chittorgarh fallback, `ipo-detail` NEVER (it is an intermediate cut running 9-57% low). Single-origin - the flag stays, because 14 exact matches is a shared origin not independence. Safe before the test via a freshness gate: Total > 0, `updateTime` on the trading date, symbol matches. `hdfire_poll.py` (18/18); **HDFIRE confirmed from NSE: series EQ = mainboard, 13-15 Oct**, with RAVITA (SME) as a control |
 | 16b | Settle the issue-size sign | 16 | DONE | 2026-10-01 | 2026-10-01 | **H11**: no half-life defends the sign, so issue size is DROPPED. log1p(Total) alone is +0.31pp better on L1, identical on L2, and passes C5 where Set A failed. `reports/stage16b_half_life.json` |
@@ -107,7 +136,7 @@ not backfill a marker to make it green.
 | 43 | Concurrency group + push retry | DONE | `group: model-l-live`, `cancel-in-progress: false` (queue, never cancel). The commit step retries a rejected push five times with backoff and exits 1 if all five fail - an unpushed capture on a throwaway runner is a lost capture. "pushed on attempt 1" in the dispatch log |
 | 44 | The 15:35 dead-man, asserted | DONE | `main()` driven end to end with the clock, market view, markers and SMTP substituted. Six paths. **Finding: at 15:35 the window is still OPEN, so a run with no marker sends the real VERDICT** - the notice fires only if that send fails, or past 16:00 |
 | 45 | H24, the tripwire overlap rule | DONE | A window counts only if half its resolved firing rows are new since the last **counted** window. Gate on incrementing, never on resetting. State re-evaluated: both targets stay at 1 of 2, now with 49 / 36 firing-row identities stored. 33/33 |
-| 46 | Recover the lost index closes | DONE | 7 **and** 8 October, 15 of 15 each, from niftyindices.com with per-index source and fetch time. The 15 NULL rows run #11 wrote stay on the record (rule 10) |
+| 46 | Recover the lost index closes | DONE | 7 **and** 8 October, 15 of 15 each, from niftyindices.com with per-index source and fetch time. The 15 NULL rows run #11 wrote stay on the record (rule 11) |
 
 **Dispatch-option gap closed in passing:** `dry-run`, `probe` and `rehearse` were
 `workflow_dispatch` options with **no branch** in the workflow's `case`, so choosing one
