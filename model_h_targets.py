@@ -130,10 +130,21 @@ RE_BONUS = re.compile(r"bonus[^0-9]{0,24}?([0-9]+)\s*[:\-]\s*([0-9]+)", re.I)
 def classify(subject: str) -> dict:
     """One corporate action's free text -> what it does to a price series.
 
-    `factor` is the number a RAW pre-event price must be MULTIPLIED by to be comparable
-    with a raw post-event price. A 1:1 bonus doubles the share count, so a pre-event price
-    is worth half as much per share afterwards: factor 0.5. A 10->2 face-value split is
-    five new shares for one: factor 0.2.
+    `factor` is **shares held after the event per share held before it** - the number the
+    RAW END price is multiplied by, which is the convention the buy-and-hold formula in
+    `build_corrected()` uses.
+
+    Get this backwards and the numbers are badly wrong in a way that still looks
+    plausible, so here it is worked out. A 1:1 bonus on a share bought at 100, trading at
+    60 a year later: the holder now has TWO shares worth 60 each, so 120, a **+20%**
+    return. That needs factor **2.0**: (60 x 2) / 100 - 1 = +20%. The first version of
+    this function returned 0.5 - the price DEFLATOR, which is the right number for
+    restating a pre-event price and the wrong one here. It would have reported -70%.
+
+      1:1 bonus          1 share -> 2    factor (1+1)/1 = 2.0
+      3:1 bonus          1 share -> 4    factor (1+3)/1 = 4.0
+      1:2 bonus          2 shares -> 3   factor (2+1)/2 = 1.5
+      Rs 10 -> Rs 2      1 share -> 5    factor 10/2    = 5.0
 
     Returns `factor: None` where the text names an action but no number can be read. A
     missing factor must stay missing - defaulting it to 1.0 would assert that no adjustment
@@ -156,7 +167,7 @@ def classify(subject: str) -> dict:
             a, b = float(m.group(1)), float(m.group(2))
             if a > 0 and b > 0:
                 out["split_from"], out["split_to"] = a, b
-                out["factor"] = b / a                  # Rs10 -> Rs2 : factor 0.2
+                out["factor"] = a / b                  # Rs10 -> Rs2 : 5 shares for 1
             else:
                 out["parse_note"] = "split face values not positive"
         else:
@@ -165,7 +176,7 @@ def classify(subject: str) -> dict:
                 a, b = float(m.group(1)), float(m.group(2))
                 if a > 0 and b > 0:
                     out["split_from"], out["split_to"] = a, b
-                    out["factor"] = b / a
+                    out["factor"] = a / b
             else:
                 out["parse_note"] = "split named but no face values or ratio found"
         return out
@@ -177,8 +188,8 @@ def classify(subject: str) -> dict:
             new, old = float(m.group(1)), float(m.group(2))
             if old > 0:
                 out["bonus_new"], out["bonus_old"] = new, old
-                # new:old bonus -> (old + new) shares where there were old.
-                out["factor"] = old / (old + new)
+                # new:old bonus -> (old + new) shares where there were `old`.
+                out["factor"] = (old + new) / old
             else:
                 out["parse_note"] = "bonus ratio has a zero denominator"
         else:
@@ -408,7 +419,257 @@ def coverage_by_year(horizon: str = "1y") -> pd.DataFrame:
     return t.reset_index()
 
 
+# ---------------------------------------------------------------- the corrected target
+CORRECTED_COLS = [
+    "symbol", "company", "isin", "listing_date", "end_date", "horizon",
+    # raw, as reported on the day - the point of the exercise
+    "raw_listing_close", "raw_end_close", "raw_price_source", "raw_price_how",
+    "end_date_actual", "days_from_requested",
+    # corporate actions in the window
+    "ca_factor", "n_splits", "n_bonuses", "n_rights", "dividends_total_per_share",
+    "n_dividends", "ca_state", "ca_note",
+    # the corrected numbers
+    "ipo_ret_corrected_pct", "bench_ret_pct", "excess_corrected_pp",
+    "H_label_corrected", "delisted_or_suspended",
+    # the stored numbers, for comparison - copied, never overwritten
+    "excess_stored_pp", "H_label_stored", "delta_pp",
+    # provenance (H26 / H7)
+    "computed_at_ist", "method",
+]
+
+METHOD = ("CRSP buy-and-hold: (raw_end x cumulative split/bonus factor + dividends in "
+          "window) / raw_listing_close - 1, minus Nifty 50 TRI over the same two dates")
+
+
+def _raw_price(f, day, isin, symbol, within_days: int = 7):
+    """`(close, actual_date, source, how, note)` from the bhavcopy on or after `day`.
+
+    Walks forward at most `within_days` because a listing date can fall on a holiday and an
+    anniversary almost always does. It never walks BACKWARD: a price from before the window
+    opened is not the window's price.
+
+    `listing_prices.bhavcopy` and `.find` are imported and not modified - they are inside
+    the live-path freeze. `find` returns HOW it matched, which is carried through, because a
+    truncated-name match and an ISIN match are not equally trustworthy.
+    """
+    import listing_prices as LP
+    for k in range(within_days + 1):
+        d = pd.Timestamp(day) + pd.Timedelta(days=k)
+        if d.weekday() >= 5:
+            continue
+        for which in ("nse", "bse"):
+            df, note = LP.bhavcopy(f, d, which)
+            if df is None or df.empty:
+                continue
+            hit, how = LP.find(df, isin=isin, symbol=symbol)
+            if len(hit) and pd.notna(hit.iloc[0].get("close")):
+                return (float(hit.iloc[0]["close"]), d, which, how, note)
+    return (None, pd.NaT, None, None, f"no bhavcopy row within {within_days} days")
+
+
+def build_corrected(horizon: str = "1y", limit: int | None = None,
+                    use_cache_only: bool = False) -> dict:
+    """Compute the corrected targets into their OWN file. Resumable.
+
+    `use_cache_only=True` uses only bhavcopy dates already on disk and records the rest as
+    `raw_price_missing`, so the method can be reported on real rows without a 20-minute
+    fetch first. The flag is written into the row, so a partial run is never mistaken for a
+    complete one.
+    """
+    import listing_prices as LP
+    todo = rows_to_do(horizon)
+    acts = (pd.read_csv(ACTIONS) if ACTIONS.exists()
+            else pd.DataFrame(columns=ACTION_COLS))
+    done_ck = _ckpt()
+    bench = _bench()
+    lab_stored = "H_label" if horizon == "1y" else "H3_label"
+    ex_stored = f"excess_{horizon}_pp"
+
+    have = set()
+    if CORRECTED.exists():
+        prev = pd.read_csv(CORRECTED)
+        have = set(zip(prev["symbol"].astype(str), prev["horizon"].astype(str)))
+    pending = [r for _, r in todo.iterrows()
+               if (str(r["symbol"]), horizon) not in have]
+    if limit:
+        pending = pending[:limit]
+    print(f"{horizon}: {len(todo)} rows, {len(have)} already computed, "
+          f"{len(pending)} to do (cache_only={use_cache_only})")
+    if not pending:
+        return {"horizon": horizon, "computed": 0}
+
+    f = LP.Fetcher()
+    out, n_ok, n_nopx, n_noca = [], 0, 0, 0
+    for i, r in enumerate(pending, 1):
+        sym, isin = str(r["symbol"]), r.get("isin")
+        d0, d1 = r["listing_date"], r["end_date"]
+        win = f"{d0:%Y-%m-%d}/{d1:%Y-%m-%d}"
+
+        # --- corporate actions for this window
+        a = acts[(acts["symbol"].astype(str) == sym) & (acts["window"] == win)] \
+            if len(acts) else acts
+        ck = done_ck.get(f"{horizon}|{sym}")
+        rows = a.to_dict("records")
+        factor, fnote = cumulative_factor(rows)
+        divs, ndiv, dnote = dividends_in_window(rows)
+        if ck is None:
+            ca_state, ca_note = "not_attempted", "corporate actions not fetched for this row"
+        elif ck.get("failed"):
+            ca_state, ca_note = "ca_coverage_missing", str(ck.get("note"))[:120]
+        elif factor is None:
+            ca_state, ca_note = "ca_coverage_missing", fnote
+        elif dnote:
+            ca_state, ca_note = "ca_coverage_missing", dnote
+        else:
+            ca_state, ca_note = "ok", ""
+        if ca_state != "ok":
+            n_noca += 1
+
+        # --- raw prices on the exact dates
+        if use_cache_only:
+            p0 = _cached_only(f, d0, isin, sym)
+            p1 = _cached_only(f, d1, isin, sym)
+        else:
+            p0 = _raw_price(f, d0, isin, sym)
+            p1 = _raw_price(f, d1, isin, sym)
+        raw0, _, src0, how0, _ = p0
+        raw1, dd1, src1, how1, note1 = p1
+
+        delisted = bool(raw1 is None and raw0 is not None)
+        ipo_r = bench_r = excess = lab = None
+        if raw0 is not None and raw1 is not None and factor is not None and not dnote:
+            ipo_r = ((raw1 * factor + divs) / raw0 - 1) * 100
+            n0 = _bench_at(bench, d0)
+            n1 = _bench_at(bench, dd1 if pd.notna(dd1) else d1)
+            if n0 and n1:
+                bench_r = (n1 / n0 - 1) * 100
+                excess = ipo_r - bench_r
+                lab = int(excess > 0)
+                n_ok += 1
+        if raw0 is None or raw1 is None:
+            n_nopx += 1
+
+        out.append({
+            "symbol": sym, "company": r.get("company"), "isin": isin,
+            "listing_date": f"{d0:%Y-%m-%d}", "end_date": f"{d1:%Y-%m-%d}",
+            "horizon": horizon,
+            "raw_listing_close": raw0, "raw_end_close": raw1,
+            "raw_price_source": f"{src0 or '-'}/{src1 or '-'}",
+            "raw_price_how": f"{how0 or '-'}/{how1 or '-'}",
+            "end_date_actual": (f"{dd1:%Y-%m-%d}" if pd.notna(dd1) else None),
+            "days_from_requested": ((dd1 - d1).days if pd.notna(dd1) else None),
+            "ca_factor": factor, "n_splits": sum(1 for x in rows if x.get("kind") == "split"),
+            "n_bonuses": sum(1 for x in rows if x.get("kind") == "bonus"),
+            "n_rights": sum(1 for x in rows if x.get("kind") == "rights"),
+            "dividends_total_per_share": divs if not dnote else None,
+            "n_dividends": ndiv, "ca_state": ca_state,
+            "ca_note": ca_note or (note1 if raw1 is None else ""),
+            "ipo_ret_corrected_pct": ipo_r, "bench_ret_pct": bench_r,
+            "excess_corrected_pp": excess, "H_label_corrected": lab,
+            "delisted_or_suspended": delisted,
+            "excess_stored_pp": r.get(ex_stored), "H_label_stored": r.get(lab_stored),
+            "delta_pp": (excess - float(r[ex_stored]))
+                        if excess is not None and pd.notna(r.get(ex_stored)) else None,
+            "computed_at_ist": ist_now(),
+            "method": METHOD + ("  [CACHE-ONLY RUN]" if use_cache_only else ""),
+        })
+        if i % 20 == 0 or i == len(pending):
+            _append_corrected(out)
+            out = []
+            print(f"  {i}/{len(pending)}  computed={n_ok} no_price={n_nopx} "
+                  f"no_ca={n_noca}")
+    if out:
+        _append_corrected(out)
+    return {"horizon": horizon, "computed": n_ok, "no_price": n_nopx,
+            "ca_missing": n_noca}
+
+
+def _cached_only(f, day, isin, symbol, within_days: int = 7):
+    """`_raw_price` restricted to bhavcopy dates ALREADY on disk. Fetches nothing."""
+    import listing_prices as LP
+    for k in range(within_days + 1):
+        d = pd.Timestamp(day) + pd.Timedelta(days=k)
+        if d.weekday() >= 5:
+            continue
+        for which in ("nse", "bse"):
+            cp = LP.CACHE / f"{which}_{d:%Y%m%d}.csv.gz"
+            if not cp.exists():
+                continue
+            try:
+                df = pd.read_csv(cp, low_memory=False)
+            except Exception:                                # noqa: BLE001
+                continue
+            df = LP._norm(df, which) if "close" not in df.columns else df
+            hit, how = LP.find(df, isin=isin, symbol=symbol)
+            if len(hit) and pd.notna(hit.iloc[0].get("close")):
+                return (float(hit.iloc[0]["close"]), d, which, how, "cache")
+    return (None, pd.NaT, None, None, "raw_price_missing: no cached bhavcopy in window")
+
+
+def _bench():
+    import dataio
+    b = dataio.load_nifty_tri()
+    if isinstance(b, pd.DataFrame):
+        col = [c for c in b.columns if "close" in str(c).lower() or "tri" in str(c).lower()]
+        s = b[col[0]] if col else b.iloc[:, -1]
+        s.index = pd.to_datetime(b.index if b.index.name else b.iloc[:, 0], errors="coerce")
+        return s.dropna()
+    return b
+
+
+def _bench_at(bench, d):
+    s = bench[bench.index >= pd.Timestamp(d)]
+    return float(s.iloc[0]) if len(s) else None
+
+
+def _append_corrected(rows: list[dict]) -> None:
+    if not rows:
+        return
+    d = pd.DataFrame([{c: r.get(c) for c in CORRECTED_COLS} for r in rows],
+                     columns=CORRECTED_COLS)
+    d.to_csv(CORRECTED, mode="a", header=not CORRECTED.exists(), index=False,
+             encoding="utf-8")
+
+
+def effects(horizon: str = "1y") -> dict:
+    """Everything Task 5 asks to be printed, from whatever has been computed."""
+    if not CORRECTED.exists():
+        return {"error": "nothing computed yet"}
+    d = pd.read_csv(CORRECTED)
+    d = d[d["horizon"].astype(str) == horizon]
+    done = d[d["excess_corrected_pp"].notna()].copy()
+    o = {"rows_attempted": len(d), "rows_with_a_corrected_value": len(done),
+         "ca_state": d["ca_state"].value_counts().to_dict(),
+         "delisted_or_suspended": int(d["delisted_or_suspended"].sum()),
+         "rows_with_split_or_bonus": int(((d["n_splits"].fillna(0)
+                                           + d["n_bonuses"].fillna(0)) > 0).sum()),
+         "rows_with_rights": int((d["n_rights"].fillna(0) > 0).sum()),
+         "rows_with_a_dividend": int((d["n_dividends"].fillna(0) > 0).sum())}
+    if len(done):
+        o["base_rate_stored_pct"] = round(float(done["H_label_stored"].mean()) * 100, 1)
+        o["base_rate_corrected_pct"] = round(float(done["H_label_corrected"].mean()) * 100, 1)
+        o["median_excess_stored_pp"] = round(float(done["excess_stored_pp"].median()), 1)
+        o["median_excess_corrected_pp"] = round(float(done["excess_corrected_pp"].median()), 1)
+        o["median_delta_pp"] = round(float(done["delta_pp"].median()), 1)
+        o["label_flips"] = int((done["H_label_stored"] != done["H_label_corrected"]).sum())
+        sb = done[(done["n_splits"].fillna(0) + done["n_bonuses"].fillna(0)) > 0]
+        o["split_bonus_rows_with_a_value"] = len(sb)
+        if len(sb):
+            top = sb.reindex(sb["delta_pp"].abs().sort_values(ascending=False).index).head(10)
+            o["ten_largest_split_bonus_corrections"] = top[
+                ["symbol", "listing_date", "ca_factor", "n_splits", "n_bonuses",
+                 "excess_stored_pp", "excess_corrected_pp", "delta_pp"]
+            ].round(2).to_dict("records")
+        dv = done[done["n_dividends"].fillna(0) > 0]
+        if len(dv):
+            o["dividend_rows_with_a_value"] = len(dv)
+            o["median_dividend_contribution_pp"] = round(float(
+                (dv["dividends_total_per_share"] / dv["raw_listing_close"] * 100).median()), 2)
+    return o
+
+
 def self_test() -> int:
+    import inspect
     ok = fail = 0
 
     def chk(name, cond, extra=""):
@@ -436,17 +697,36 @@ def self_test() -> int:
             c["kind"] == kind and c["dividend_per_share"] == amt,
             (c["kind"], c["dividend_per_share"]))
 
-    print("\n[2] splits and bonuses give the factor a RAW price must be multiplied by")
+    print("\n[2] the factor is SHARES AFTER per SHARE BEFORE - checked by hand")
+    # The direction that is easy to get wrong, and did: the first version returned the
+    # price deflator (0.5 for a 1:1 bonus) where the formula needs the share multiplier
+    # (2.0). Each case below is the share count, not a ratio rearranged.
     c = classify("Face Value Split From Rs 10 To Rs 2")
-    chk("a 10->2 face split is factor 0.2", c["kind"] == "split"
-        and abs(c["factor"] - 0.2) < 1e-12, c)
+    chk("Rs 10 -> Rs 2 gives 5 shares for 1 (factor 5.0)",
+        c["kind"] == "split" and abs(c["factor"] - 5.0) < 1e-12, c)
     c = classify("Bonus 1:1")
-    chk("a 1:1 bonus halves a pre-event price (factor 0.5)",
-        c["kind"] == "bonus" and abs(c["factor"] - 0.5) < 1e-12, c)
+    chk("a 1:1 bonus gives 2 shares for 1 (factor 2.0)",
+        c["kind"] == "bonus" and abs(c["factor"] - 2.0) < 1e-12, c)
     c = classify("Bonus issue 3:1")
-    chk("a 3:1 bonus is factor 0.25", abs(c["factor"] - 0.25) < 1e-12, c)
+    chk("a 3:1 bonus gives 4 for 1 (factor 4.0)", abs(c["factor"] - 4.0) < 1e-12, c)
     c = classify("Bonus 1:2")
-    chk("a 1:2 bonus is factor 2/3", abs(c["factor"] - 2 / 3) < 1e-12, c)
+    chk("a 1:2 bonus gives 3 for 2 (factor 1.5)", abs(c["factor"] - 1.5) < 1e-12, c)
+    chk("every factor is >= 1: an event can only ADD shares, never remove them",
+        all(classify(x)["factor"] >= 1.0 for x in
+            ("Bonus 1:1", "Bonus 3:1", "Bonus 1:2",
+             "Face Value Split From Rs 10 To Rs 2",
+             "Face Value Split From Rs 10 To Rs 1")))
+
+    print("\n[2b] the whole formula, on the worked example")
+    # Bought at 100, 1:1 bonus during the year, trading at 60 at the anniversary, Rs 4
+    # of dividends. Two shares at 60 = 120, plus 4 = 124, against 100 -> +24%.
+    f, _ = cumulative_factor([classify("Bonus 1:1")])
+    divs, _, _ = dividends_in_window([classify("Dividend - Rs 4 Per Share")])
+    got = ((60.0 * f + divs) / 100.0 - 1) * 100
+    chk("100 -> 60 with a 1:1 bonus and Rs 4 of dividends is +24%",
+        abs(got - 24.0) < 1e-9, got)
+    chk("and the inverted factor would have said -70%, which is why this test exists",
+        abs(((60.0 * 0.5) / 100.0 - 1) * 100 + 70.0) < 1e-9)
 
     print("\n[3] an action it cannot parse gets NO factor, never 1.0")
     for sub in ("Face Value Split", "Bonus Issue", "Stock Split Announced"):
@@ -473,7 +753,7 @@ def self_test() -> int:
     print("\n[6] cumulative factor refuses to be partially right")
     rows = [classify("Bonus 1:1"), classify("Face Value Split From Rs 10 To Rs 2")]
     f, why = cumulative_factor(rows)
-    chk("two known events multiply (0.5 * 0.2)", abs(f - 0.1) < 1e-12, f)
+    chk("two events multiply: 2.0 x 5.0 = 10 shares for 1", abs(f - 10.0) < 1e-12, f)
     chk("and there is no complaint", why == "")
     rows = [classify("Bonus 1:1"), classify("Bonus Issue")]
     f, why = cumulative_factor(rows)
@@ -520,6 +800,32 @@ def self_test() -> int:
     chk("and a refusal raises rather than fetching anyway",
         "Not fetching." in src)
 
+    print("\n[10] the corrected computation, on arithmetic that can be checked by hand")
+    chk("the method string states the formula", "raw_end x cumulative" in METHOD
+        and "Nifty 50 TRI" in METHOD, METHOD)
+    for c in ("raw_listing_close", "raw_end_close", "excess_corrected_pp",
+              "excess_stored_pp", "delta_pp", "delisted_or_suspended", "ca_state"):
+        chk(f"{c} is a corrected column", c in CORRECTED_COLS)
+    chk("the stored columns are carried for comparison, under their own names",
+        "excess_stored_pp" in CORRECTED_COLS and "H_label_stored" in CORRECTED_COLS)
+    # The direction is asserted in [2] and [2b] rather than reasoned about here.
+    c = classify("Bonus 1:1")
+    chk("a 1:1 bonus factor is 2.0 - shares after per share before",
+        c["factor"] == 2.0)
+    src2 = inspect.getsource(build_corrected)
+    chk("and the formula multiplies the END price by the factor, as specified",
+        "raw1 * factor + divs) / raw0" in src2, src2[src2.find("ipo_r ="):][:80])
+    chk("a missing factor produces NO corrected value, not an unadjusted one",
+        "factor is not None" in src2)
+    chk("an unparsed dividend likewise blocks the row", "not dnote" in src2)
+    chk("a missing end price is recorded as delisted/suspended, not dropped",
+        "delisted = bool(raw1 is None" in src2)
+    chk("and the row is still written out", src2.count("out.append(") == 1)
+    chk("a cache-only run says so IN THE ROW, so it cannot pass as complete",
+        "CACHE-ONLY RUN" in src2)
+    chk("prices are never taken from BEFORE the window opens",
+        "never walks BACKWARD" in inspect.getsource(_raw_price))
+
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
 
@@ -530,6 +836,12 @@ if __name__ == "__main__":
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--actions", action="store_true")
     ap.add_argument("--report", action="store_true")
+    ap.add_argument("--build", action="store_true",
+                    help="compute the corrected targets into their own file")
+    ap.add_argument("--effects", action="store_true",
+                    help="print everything Task 5 asks for, from what is computed")
+    ap.add_argument("--cache-only", dest="cache_only", action="store_true",
+                    help="use only bhavcopy dates already on disk; fetch nothing")
     ap.add_argument("--horizon", default="1y", choices=["1y", "3y"])
     ap.add_argument("--limit", type=int, default=None)
     a = ap.parse_args()
@@ -550,5 +862,12 @@ if __name__ == "__main__":
     if a.report:
         t = coverage_by_year(a.horizon)
         print(t.to_string(index=False) if len(t) else "nothing to report yet")
+        raise SystemExit(0)
+    if a.build:
+        print(json.dumps(build_corrected(a.horizon, a.limit, a.cache_only),
+                         indent=2, default=str))
+        raise SystemExit(0)
+    if a.effects:
+        print(json.dumps(effects(a.horizon), indent=2, default=str))
         raise SystemExit(0)
     ap.print_help()
