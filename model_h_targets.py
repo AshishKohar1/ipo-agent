@@ -446,7 +446,7 @@ CORRECTED_COLS = [
     "symbol", "company", "isin", "listing_date", "end_date", "horizon",
     # raw, as reported on the day - the point of the exercise
     "raw_listing_close", "raw_end_close", "raw_price_source", "raw_price_how",
-    "end_date_actual", "days_from_requested",
+    "end_date_actual", "days_from_requested", "end_price_missing_reason",
     # corporate actions in the window
     "ca_factor", "n_splits", "n_bonuses", "n_rights", "dividends_total_per_share",
     "n_dividends", "ca_state", "ca_note",
@@ -557,7 +557,18 @@ def build_corrected(horizon: str = "1y", limit: int | None = None,
         raw0, _, src0, how0, _ = p0
         raw1, dd1, src1, how1, note1 = p1
 
-        delisted = bool(raw1 is None and raw0 is not None)
+        # A missing end price means one of two completely different things, and
+        # conflating them invents a finding: either the bhavcopy for that date was not
+        # available to us (a gap in OUR data), or the bhavcopy WAS read and the symbol was
+        # not in it (the company stopped trading). Only the second is a delisting. The
+        # first version tested `raw1 is None` alone and reported 205 delistings on a
+        # cache-only run, against the 3 the stored build finds.
+        end_note = note1 or ""
+        bhav_unavailable = ("raw_price_missing" in end_note
+                            or "no bhavcopy row within" in end_note
+                            and src1 is None and how1 is None)
+        delisted = bool(raw1 is None and raw0 is not None
+                        and not str(end_note).startswith("raw_price_missing"))
         ipo_r = bench_r = excess = lab = None
         if raw0 is not None and raw1 is not None and factor is not None and not dnote:
             ipo_r = ((raw1 * factor + divs) / raw0 - 1) * 100
@@ -578,6 +589,10 @@ def build_corrected(horizon: str = "1y", limit: int | None = None,
             "raw_listing_close": raw0, "raw_end_close": raw1,
             "raw_price_source": f"{src0 or '-'}/{src1 or '-'}",
             "raw_price_how": f"{how0 or '-'}/{how1 or '-'}",
+            "end_price_missing_reason": (
+                None if raw1 is not None
+                else ("bhavcopy_not_available" if bhav_unavailable
+                      else "symbol_absent_from_bhavcopy")),
             "end_date_actual": (f"{dd1:%Y-%m-%d}" if pd.notna(dd1) else None),
             "days_from_requested": ((dd1 - d1).days if pd.notna(dd1) else None),
             "ca_factor": factor, "n_splits": sum(1 for x in rows if x.get("kind") == "split"),
@@ -663,6 +678,9 @@ def effects(horizon: str = "1y") -> dict:
     o = {"rows_attempted": len(d), "rows_with_a_corrected_value": len(done),
          "ca_state": d["ca_state"].value_counts().to_dict(),
          "delisted_or_suspended": int(d["delisted_or_suspended"].sum()),
+         "end_price_missing_reason": (
+             d["end_price_missing_reason"].value_counts().to_dict()
+             if "end_price_missing_reason" in d else "column absent - rebuild needed"),
          "rows_with_split_or_bonus": int(((d["n_splits"].fillna(0)
                                            + d["n_bonuses"].fillna(0)) > 0).sum()),
          "rows_with_rights": int((d["n_rights"].fillna(0) > 0).sum()),
@@ -911,6 +929,18 @@ def self_test() -> int:
     chk("and refetches nothing", "requests" not in rsrc and "session(" not in rsrc)
     chk("it reports how many values moved",
         "field_values_changed" in rsrc)
+
+    print("\n[12] a missing FILE is not a delisting")
+    bsrc = inspect.getsource(build_corrected)
+    chk("delisted excludes rows whose bhavcopy was simply unavailable",
+        'startswith("raw_price_missing")' in bsrc, bsrc[bsrc.find("delisted ="):][:160])
+    chk("and the reason is written into the row, so the two are separable",
+        "end_price_missing_reason" in bsrc)
+    chk("the two causes are named, not numbered",
+        "bhavcopy_not_available" in bsrc and "symbol_absent_from_bhavcopy" in bsrc)
+    chk("effects reports them separately", "end_price_missing_reason" in
+        inspect.getsource(effects))
+    chk("end_price_missing_reason is a column", "end_price_missing_reason" in CORRECTED_COLS)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
