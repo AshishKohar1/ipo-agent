@@ -118,6 +118,52 @@ wired, and an unmatched mode now exits 1.
 day (`IPO decision - 1 open, 1 closes today`), not the prefix plus the issue name that
 Task 5 asked for. Now asserted in the self-test so it is visible rather than assumed.
 
+### Root housekeeping (2026-10-10)
+
+The repository root went from **110 entries to 79**: 22 loose data files to 0, and 305 MB
+of local-only bulk out of sight. `git tag pre-housekeep` is the state before it.
+
+| Moved to | What | Why |
+|---|---|---|
+| `data/` | the 10 primary datasets — `master_with_symbols.csv`, `holding_target.csv` / `_3y`, `issue_dates_recovered.csv`, `predictions_log.csv`, `price_history.csv`, `market_heat.csv`, `target_MISSES*.csv`, `rhp_verify.json` | never scratch; they were simply in the wrong folder. 20 modules updated, plus the live workflow's git-add list |
+| `data/rhp_sources.csv` | was `manual_rhp/SOURCES.csv` | the one tracked file inside a now-ignored folder, and it is provenance |
+| `reports/intermediate/` | `first_bar_scan.csv`, `symbols_CANDIDATES_cleanquery.csv`, `merge_REJECTIONS.csv`, `job1b_CONFLICTS.csv`, `issue_dates_FLAGS.csv` | written as bare `to_csv("name.csv")` by scripts that chdir to the root first, so they landed in the root **by design**. Now named from `__file__` |
+| `reports/` | `run_log.txt` → `run_overnight.log`; the two 28 Sep session write-ups, dated | they are reports |
+| `docs/` | `IPO-Factor-Research-v1.md`, `IPO-Model-Build-Spec-v2.md` | the original input specs |
+| `_local/` (gitignored) | `rhp_manual` 279 MB, `rhp_fetched` 26 MB, `backup_pre_fixes`, `backup_session2` | kept, as asked, but in one place. Every PDF is re-fetchable via `data/verified_rhp_manifest.csv` |
+
+**Deleted** — six files mentioned nowhere in any code (`issue_dates_summary.txt`,
+`report_stats.txt`, `task1_baserate.txt`, `task3_targets.txt`, `symbols_TO_RESOLVE.csv`,
+`supervisor_log.txt`), `EMAIL_SETUP.md` (folded into `LIVE_SETUP.md` §6), and two
+superseded scripts (`build_spotcheck.py`, `build_documents_needed.py`). All were tracked,
+so `pre-housekeep` still holds them.
+
+**Two defects it turned up, both fixed:**
+
+1. `check_env.py`'s data/ contract check had been **failing** — 12/13 — on four files,
+   none of which violated anything: it matched any `.xlsx` anywhere
+   (`reports/SPOTCHECK.xlsx`) and any string starting `data/` (a `git add` pathspec). It
+   now matches a *read* of a hardcoded `data/` path, and a second check runs the pattern
+   against 3 real violations and 4 benign shapes so it cannot quietly stop working.
+   **14/14.** CLAUDE.md requires this script to pass before any overnight run, so a gate
+   that could not pass was worse than no gate.
+2. `EMAIL_SETUP.md` printed the email subject as `IPO decision — ` with an **em dash**.
+   The subject is a byte-exact hyphen with a self-test asserting it, so the document would
+   have sent anyone building a filter to the wrong string.
+
+**Not merged, and why:** `build_spotcheck` vs `_v2` and `build_documents_needed` vs
+`_still_missing` look like duplicate pairs but are supersessions — collapsing them would
+have lost the distinction rather than removed a duplicate. `stage2_oof` imports
+`stage2_feature_comparison`: a driver and its library, not two copies. The ~30 remaining
+`stage*.py` / `build_*.py` / `verify_*.py` scripts are the reproducible evidence behind
+claims in PLAN, DECISIONS and the stage reports; `write_model_l_card.py` and
+`stage16_model_l.py` are the only generators of `MODEL_L_CARD.md` and its input. Deleting
+any of those would trade a tidy root for an unreproducible decision log.
+
+Verified: 366 self-test assertions across 12 modules, `check_env` 14/14, and dispatch
+`38044701907` green on the runner with all 11 pre-flight self-tests passing and
+`data/predictions_log.csv` staging correctly.
+
 ## Gates
 
 | Gate | After stage | Status | Decision (verbatim in DECISIONS.md) |
