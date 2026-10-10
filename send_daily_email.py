@@ -161,6 +161,83 @@ def secrets() -> tuple[str, str, str]:
 # none, because it teaches the reader to discount a verdict that is in fact sound.
 
 
+SUBJECT_MAX = 200          # Task 1. See subject_for() for why there is a cap at all.
+
+
+def subject_for(closing: list[dict], scored: dict, n_open: int,
+                open_not: list[dict] | None = None) -> str:
+    """The subject line: the prefix, then today's verdicts.
+
+    Task 1. The subject used to be `IPO decision - 12 open, 9 closes today` - a count,
+    which told the reader nothing they could act on without opening the mail. It now
+    carries the decision itself, one clause per issue closing today, joined by "; ":
+
+        IPO decision - HD Fire Protect: L1 BID, L2 NO BID
+        IPO decision - Alpha Ltd: L1 BID, L2 NO BID; Beta SME: SME, not scored
+
+    `SUBJECT_PREFIX` is byte-exact and unchanged - the user's Mail filters match on it, so
+    it is asserted character by character in the self-test, em dash included as a negative.
+
+    Three clause shapes, because there are three things an issue can be:
+
+    * mainboard with a figure   -> `L1 BID|NO BID, L2 BID|NO BID`
+    * SME                       -> `SME, not scored`, since SME is shadow mode (H3/E2) and
+                                   a verdict there would be a claim the model cannot make
+    * mainboard with NO figure  -> `NO VERDICT`. Not "NO BID": the model said nothing, and
+                                   printing a refusal where there was silence is the one
+                                   mistake that turns a missing input into advice.
+
+    No probability anywhere (G2). `score_l` returns "BID"/"no"; "NO BID" is a DISPLAY
+    mapping only, exactly as in `_verdict_block` - the stored verdict keeps its own
+    spelling because `data/predictions_log.csv` and `backtest_email.py` key on it.
+
+    Nothing closing today keeps the old summary form. The user gets an email on a quiet day
+    by design - silence must always mean something broke - and "none closing" is the honest
+    subject for one.
+
+    The cap: a subject is an RFC 5322 header. Python folds a long one rather than breaking
+    it, and a filter on the prefix keeps working, but forty issues would produce a header no
+    phone can read. Past `SUBJECT_MAX` the clauses that fit are kept and the rest counted,
+    so the line degrades to `...; +3 more` instead of becoming unusable. The body always
+    has every issue.
+    """
+    if not closing:
+        if open_not:
+            soonest = min(open_not, key=lambda r: r["closes"])
+            urgent = f"next closes {pd.Timestamp(soonest['closes']).strftime('%a')}"
+        else:
+            urgent = "none closing"
+        return f"{SUBJECT_PREFIX}{n_open} open, {urgent}"
+
+    clauses = []
+    for r in closing:
+        name = str(r["ipo"]).strip()
+        if r.get("segment") != "mainboard":
+            clauses.append(f"{name}: SME, not scored")
+            continue
+        res = scored.get(r["ipo"])
+        if not res:
+            clauses.append(f"{name}: NO VERDICT")
+            continue
+        parts = []
+        for key in ("L1", "L2"):
+            fired = (res.get(key) or {}).get("verdict") == "BID"
+            parts.append(f"{key} {'BID' if fired else 'NO BID'}")
+        clauses.append(f"{name}: {', '.join(parts)}")
+
+    out = SUBJECT_PREFIX + "; ".join(clauses)
+    if len(out) <= SUBJECT_MAX:
+        return out
+    kept: list[str] = []
+    for i, c in enumerate(clauses):
+        trial = SUBJECT_PREFIX + "; ".join(kept + [c]) + f"; +{len(clauses) - i - 1} more"
+        if kept and len(trial) > SUBJECT_MAX:
+            break
+        kept.append(c)
+    left = len(clauses) - len(kept)
+    return SUBJECT_PREFIX + "; ".join(kept) + (f"; +{left} more" if left else "")
+
+
 def _verdict_block(res: dict) -> list[str]:
     """`BID` / `NO BID`, each with the subscription threshold and whether it was met.
 
@@ -223,14 +300,8 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
     upcoming = mv["upcoming"]
 
     n_open = len(closing) + len(open_not)
-    if closing:
-        urgent = f"{len(closing)} closes today"
-    elif open_not:
-        soonest = min(open_not, key=lambda r: r["closes"])
-        urgent = f"next closes {pd.Timestamp(soonest['closes']).strftime('%a')}"
-    else:
-        urgent = "none closing"
-    subject = f"{SUBJECT_PREFIX}{n_open} open, {urgent}"
+    # Task 1: the subject carries the verdicts, not a count. See subject_for().
+    subject = subject_for(closing, scored, n_open, open_not)
 
     L = [f"IPO MARKET — {today.strftime('%A %d %B').replace(' 0', ' ')}", ""]
 
@@ -439,9 +510,17 @@ def test_email(dry: bool = False) -> dict:
         return "   -  " if v is None else f"{v:.2f}x"
     qib_s, hni_s, rii_s = x("qib_x"), x("hni_x"), x("rii_x")
     subject = f"{SUBJECT_PREFIX}TEST"
+    would_be = subject_for(
+        [{"ipo": r.get("ipo"), "segment": str(r.get("segment") or "mainboard"),
+          "sub": {"ok": True, "total_x": float(total)}}],
+        {r.get("ipo"): res}, 1)
     body = chr(10).join([
         "*** TEST EMAIL - THIS IS NOT A BID DECISION. DO NOT ACT ON IT. ***", "",
         "Sent deliberately to check delivery, the subject prefix and the body layout.",
+        "",
+        "The TEST subject is deliberately unchanged. Had this been a real decision for",
+        f"this issue, the subject line would have read:",
+        f"    {would_be}",
         "It is built from the LAST CLOSED IPO already on record, so every number below is",
         "real recorded data rather than an invented example - but it is historical, and",
         "the issue it describes has already closed.", "",
@@ -999,14 +1078,13 @@ def self_test() -> int:
     r, mail = _drive(1535)
     chk("15:35, nothing sent yet: the window is still OPEN, so the real VERDICT goes out",
         r.get("sent") is True and len(mail) == 1, r)
-    # The subject is the prefix plus a one-line summary of the day ("1 open, 1 closes
-    # today"), NOT the issue name. Task 5 asked for the issue name; this records what the
-    # code actually does so the gap is visible rather than assumed away.
     chk("and its subject is the decision subject, not NOT SENT",
         mail and mail[0][0].startswith(SUBJECT_PREFIX)
         and "NOT SENT" not in mail[0][0], mail and mail[0][0])
-    chk("KNOWN GAP: the subject summarises the day rather than naming the issue",
-        mail and mail[0][0] == f"{SUBJECT_PREFIX}1 open, 1 closes today",
+    # Task 1 closed the gap this used to record: the subject now names the issue and
+    # carries its verdicts. The harness issue sits at 60x, over both thresholds.
+    chk("the subject names the issue and both verdicts (Task 1)",
+        mail and mail[0][0] == f"{SUBJECT_PREFIX}Harness Mainboard: L1 BID, L2 BID",
         mail and mail[0][0])
     chk("and the body carries a verdict",
         mail and ("BID" in mail[0][1] or "NO BID" in mail[0][1]))
@@ -1046,6 +1124,75 @@ def self_test() -> int:
     r, mail = _drive(1605, closing=False)
     chk("16:05 with nothing closing: the refusal is green, not red",
         not r.get("fail_loudly") and mail == [], r)
+
+    print(chr(10) + "[12] Task 1: the subject carries the verdict, not a count")
+    MB = "mainboard"
+
+    def row(name, seg=MB, closes=None):
+        return {"ipo": name, "segment": seg, "ipo_id": 1, "isin": None,
+                "closes": closes, "sub": {"ok": True, "total_x": 60.0}}
+
+    fire = {"L1": {"verdict": "BID"}, "L2": {"verdict": "BID"}}
+    split = {"L1": {"verdict": "BID"}, "L2": {"verdict": "no"}}
+    cold = {"L1": {"verdict": "no"}, "L2": {"verdict": "no"}}
+
+    sub = subject_for([row("HD Fire Protect")], {"HD Fire Protect": split}, 1)
+    chk("the example from the task, byte for byte",
+        sub == "IPO decision - HD Fire Protect: L1 BID, L2 NO BID", sub)
+    chk("the prefix is unchanged and byte-exact",
+        sub.startswith(SUBJECT_PREFIX) and SUBJECT_PREFIX == "IPO decision - ",
+        repr(SUBJECT_PREFIX))
+    chk("the dash is U+002D, never an em dash - the Mail filter matches on it",
+        "\u2014" not in sub and "\u2013" not in sub and sub.isascii(), repr(sub))
+
+    sub = subject_for([row("Alpha Ltd"), row("Beta Industries")],
+                      {"Alpha Ltd": fire, "Beta Industries": cold}, 2)
+    chk("two issues are joined by '; '",
+        sub == ("IPO decision - Alpha Ltd: L1 BID, L2 BID; "
+                "Beta Industries: L1 NO BID, L2 NO BID"), sub)
+
+    sub = subject_for([row("Gamma SME", seg="sme")], {}, 1)
+    chk("an SME issue says SME, not scored",
+        sub == "IPO decision - Gamma SME: SME, not scored", sub)
+    chk("and never carries a verdict word",
+        "BID" not in sub.replace(SUBJECT_PREFIX, ""), sub)
+
+    sub = subject_for([row("Delta Ltd")], {}, 1)
+    chk("a mainboard issue with no figure says NO VERDICT, not NO BID",
+        sub == "IPO decision - Delta Ltd: NO VERDICT", sub)
+    chk("'NO BID' is a refusal and must not stand in for silence",
+        "NO BID" not in sub, sub)
+
+    sub = subject_for([row("Alpha Ltd"), row("Gamma SME", seg="sme"), row("Delta Ltd")],
+                      {"Alpha Ltd": split}, 3)
+    chk("mixed day: scored, SME and no-figure each get their own clause",
+        sub == ("IPO decision - Alpha Ltd: L1 BID, L2 NO BID; "
+                "Gamma SME: SME, not scored; Delta Ltd: NO VERDICT"), sub)
+
+    chk("nothing closing keeps the summary form",
+        subject_for([], {}, 4, [{"ipo": "X", "closes": "2026-10-14"}])
+        == f"{SUBJECT_PREFIX}4 open, next closes Wed",
+        subject_for([], {}, 4, [{"ipo": "X", "closes": "2026-10-14"}]))
+    chk("and nothing open at all says so",
+        subject_for([], {}, 0, []) == f"{SUBJECT_PREFIX}0 open, none closing")
+
+    many = [row(f"Company Number {i} Limited") for i in range(40)]
+    sub = subject_for(many, {r["ipo"]: fire for r in many}, 40)
+    chk("forty issues do not produce an unreadable header",
+        len(sub) <= SUBJECT_MAX, len(sub))
+    chk("the overflow is COUNTED, not silently dropped", "more" in sub, sub[-30:])
+    chk("and the prefix survives the cap", sub.startswith(SUBJECT_PREFIX))
+    chk("one issue is never truncated away even if it is long on its own",
+        subject_for([row("A" * 400)], {"A" * 400: fire}, 1)
+        .startswith(SUBJECT_PREFIX + "A"))
+
+    chk("no probability reaches the subject (G2)",
+        not any(t in subject_for([row("Alpha Ltd")], {"Alpha Ltd": fire}, 1).lower()
+                for t in ("%", "prob", "chance", "0.9", "likel")))
+    chk("NOT SENT keeps its own subject", f"{SUBJECT_PREFIX}NOT SENT"
+        in inspect.getsource(dead_man))
+    chk("TEST keeps its own subject", f"{SUBJECT_PREFIX}TEST"
+        in inspect.getsource(test_email))
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
