@@ -1023,7 +1023,8 @@ def self_test() -> int:
             "open_not_closing": [], "upcoming": [],
             "diagnostics": ["harness: no network"], "n_open": 1 if closing else 0,
         }
-        saved = {k: globals().get(k) for k in ("TD", "CL", "NSE", "send", "PL", "LM", "SM")}
+        saved = {k: globals().get(k) for k in
+                 ("TD", "CL", "NSE", "send", "PL", "LM", "SM", "SNAPSHOTS", "LIVE_DIR")}
         savedmc = MC.capture
         # Bound to LOCALS: the lambdas below must call the REAL modules, and by the time
         # they run the global names point at the fakes.
@@ -1065,8 +1066,16 @@ def self_test() -> int:
             if pre_marked:
                 _SM.mark(stamp.normalize(), "Harness Mainboard", "INEHARNESS",
                         f"{SUBJECT_PREFIX}Harness Mainboard", stamp, path=mpath)
+            # SNAPSHOTS and LIVE_DIR are redirected into the temporary directory. They
+            # were NOT, and `append_snapshots()` and the report write are not mocked, so
+            # running this self-test wrote 49 synthetic "Harness Mainboard" rows into the
+            # real data/subscription_snapshots.csv and a fabricated
+            # reports/live/2026-10-13.md - a report for the HDFIRE bidding day that the
+            # real run would then have found already on disk. A test that writes into the
+            # data it is testing against breaks rule 1 by itself.
             globals().update(TD=fake_td, CL=fake_cl, NSE=fake_nse, send=fake_send,
-                             PL=fake_pl, LM=fake_lm, SM=fake_sm)
+                             PL=fake_pl, LM=fake_lm, SM=fake_sm,
+                             SNAPSHOTS=tdp / "snapshots.csv", LIVE_DIR=tdp / "live")
             _MC.capture = staticmethod(lambda *a, **k: {"skipped": "harness"})
             try:
                 r = main(dry=False, final=False, force=False)
@@ -1193,6 +1202,30 @@ def self_test() -> int:
         in inspect.getsource(dead_man))
     chk("TEST keeps its own subject", f"{SUBJECT_PREFIX}TEST"
         in inspect.getsource(test_email))
+
+    print(chr(10) + "[13] the harness writes NOTHING into the real data or reports")
+    import send_daily_email as _self
+    hsrc = inspect.getsource(_drive)
+    chk("it redirects SNAPSHOTS", "SNAPSHOTS=tdp" in hsrc)
+    chk("and LIVE_DIR", "LIVE_DIR=tdp" in hsrc)
+    chk("and restores both afterwards",
+        '"SNAPSHOTS", "LIVE_DIR"' in hsrc and "globals().update(**saved)" in hsrc)
+    chk("the module constants point back at the real paths once it is done",
+        _self.SNAPSHOTS == ROOT / "data" / "subscription_snapshots.csv"
+        and _self.LIVE_DIR == ROOT / "reports" / "live",
+        (_self.SNAPSHOTS, _self.LIVE_DIR))
+    # The direct check: drive the harness again and confirm neither real file moved.
+    snap_before = (_self.SNAPSHOTS.read_bytes() if _self.SNAPSHOTS.exists() else b"")
+    names_before = sorted(q.name for q in _self.LIVE_DIR.glob("*.md")) \
+        if _self.LIVE_DIR.exists() else []
+    _drive(1535, day="2026-10-13")
+    chk("the real snapshot file is byte-identical after a harness run",
+        (_self.SNAPSHOTS.read_bytes() if _self.SNAPSHOTS.exists() else b"") == snap_before)
+    chk("and no report appeared for the harness date",
+        (sorted(q.name for q in _self.LIVE_DIR.glob("*.md"))
+         if _self.LIVE_DIR.exists() else []) == names_before)
+    chk("no synthetic row carries the harness name into real data",
+        b"Harness Mainboard" not in snap_before)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

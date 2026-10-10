@@ -136,14 +136,14 @@ Content-Type: application/json
 
 | # | title | cron (UTC) | IST | body |
 |---|---|---|---|---|
-| 1 | IPO email | `10,20,30 9 * * 1-5` | 14:40 / 14:50 / 15:00 | `{"ref":"main","inputs":{"mode":"email"}}` |
+| 1 | IPO email | `15,35,45,55 9 * * 1-5` | 14:45 / 15:05 / 15:15 / 15:25 | `{"ref":"main","inputs":{"mode":"email"}}` |
 | 2 | IPO email dead-man | `5 10 * * 1-5` | 15:35 | `{"ref":"main","inputs":{"mode":"email"}}` |
 | 3 | IPO day-end capture | `0 14 * * 1-5` | 19:30 | `{"ref":"main","inputs":{"mode":"final"}}` |
 | 4 | HDFIRE poll AM | `30 5,7 13-15 10 *` | 11:00 / 13:00 | `{"ref":"main","inputs":{"mode":"poll"}}` |
 | 5 | HDFIRE poll PM 1 | `31 9 13-15 10 *` | 15:01 | `{"ref":"main","inputs":{"mode":"poll"}}` |
 | 6 | HDFIRE poll PM 2 | `1 12 13-15 10 *` | 17:31 | `{"ref":"main","inputs":{"mode":"poll"}}` |
 
-**Jobs 1 and 2 are the ones already set up.** Job 3 is new and matters more than it looks
+**Jobs 1 and 2 are set up and live.** Job 3 is new and matters more than it looks
 — see below. Jobs 4–6 are the HDFIRE test and can be deleted after 15 October.
 
 #### Why the HDFIRE polls need three jobs and not one
@@ -158,9 +158,10 @@ Two jobs is possible if you will accept two extra polls: `1,31 9,12 13-15 10 *` 
 NSE update stamp on every row, so extra polls are extra data rather than noise. Three
 exact jobs is the cleaner answer; two is the cheaper one.
 
-`13-15 10 *` restricts them to 13, 14 and 15 October. `hdfire_poll.py` also exits
-immediately outside that window, so a job left running afterwards does nothing — but
-delete them anyway once the test is reported.
+`13-15 10 *` restricts them to 13, 14 and 15 October, and the jobs are set to **expire
+on 16 October**. `hdfire_poll.py` also exits immediately outside 13–15 Oct, so there are
+two independent stops on them: the cron date range and the script's own guard. Nothing to
+delete by hand afterwards.
 
 #### Why the day-end job (3) is not optional either
 
@@ -200,9 +201,20 @@ unmatched mode exits 1.
 
 #### Why these times
 
-* **09:10 / 09:20 / 09:30 UTC = 14:40 / 14:50 / 15:00 IST.** All three inside the
-  14:00–16:00 send window, the last one a full hour before the broker cutoff. Three
-  attempts rather than one because a single HTTP call can fail.
+* **09:15 / 09:35 / 09:45 / 09:55 UTC = 14:45 / 15:05 / 15:15 / 15:25 IST.** Four
+  attempts rather than one because a single HTTP call can fail. All four are inside the
+  14:00–16:00 IST send window, the last one 35 minutes before the broker cutoff. **These
+  are the times as actually configured and they are deliberate — do not "correct" them.**
+
+  Two consequences worth knowing rather than discovering:
+
+  * `15 9 * * 1-5` is the same cron string as GitHub's own third backstop attempt. If
+    GitHub ever runs on time, both fire at 14:45 IST. That is harmless: the
+    `model-l-live` concurrency group queues the second instead of cancelling it, and it
+    then finds the sent marker and exits green. Two runs, one email.
+  * The first attempt is at 14:45, not 14:40, so there are **75 minutes** of headroom to
+    the cutoff rather than 80. Three further attempts sit inside that window, and the
+    15:35 dead-man sits past it.
 * **10:05 UTC = 15:35 IST.** The last chance. At 15:35 the window is **still open**, so if
   the earlier attempts failed this one sends the real verdict, not a notice — there are
   still 25 minutes to bid. Only if the 15:35 send *itself* fails does
