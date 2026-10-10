@@ -1047,3 +1047,73 @@ Four live-path files cite `rule 10` where they mean `rule 11`. They are **not ed
 today**: the live-path freeze runs to 15 October and a comment is not worth a diff in
 `send_daily_email.py` the week HDFIRE goes live. They are queued in PROGRESS.md under
 "Queued for after 15 Oct".
+
+---
+
+## 2026-10-10 — H25 and H26 (ratified by the user)
+
+### H25 — Model H proceeds without the 37 missing RHPs, and "missing" is its own band
+
+37 of the prospectuses Model H's RHP feature blocks were specified against are not on
+disk, and several are not reachable from SEBI or BSE SME at all. Model H waits for them no
+longer.
+
+**Missing is treated as its own band**, not as zero, not as the mean, and not as a dropped
+row. That distinction is the whole decision:
+
+* **imputing** a value invents evidence, which rule 1 forbids outright;
+* **dropping** the row throws away a real IPO with a real outcome, and does it
+  non-randomly — the companies whose documents are hardest to find are not a random
+  sample, so dropping them biases every coefficient toward the well-documented;
+* **a band** says what is true. "We do not know this company's related-party percentage"
+  is a fact about the company's documentation, it is measurable, and the model is allowed
+  to find that it predicts something. If it does, that is a finding about disclosure, not
+  a defect.
+
+Revisited **only** if Task 6a recovers documents. A recovered document moves its rows out
+of the missing band; nothing else does.
+
+### H26 — single-source relaxation for sanctioned third-party access
+
+Rule 2 requires two independent sources. Rule 3 keeps a single-source value but flags it
+`single_source_unverified`. Neither anticipated a field that **no official source carries at
+all** — where the choice is not "one source or two" but "one source or nothing".
+
+**Where no official source carries a field, a third-party source with sanctioned access —
+its own API or token, used within its terms — may be the sole source.** Such values are
+flagged **`single_source_third_party`**, a new flag kept distinct from
+`single_source_unverified`: the existing flag means "one source, and we could not check
+it"; the new one means "one source, by sanctioned access, because there is no other". A
+reader must be able to tell those apart, because they justify different amounts of trust.
+
+**Official sources always take precedence where they exist.** This is a fallback, never a
+shortcut — if NSE publishes the field, NSE is the source, and a third party that disagrees
+is a reconciliation failure, not an alternative.
+
+**Provenance is mandatory and non-negotiable.** Every such value records:
+
+| Field | Why |
+|---|---|
+| source | which provider |
+| endpoint or tool | which call, by name |
+| request parameters | so the call can be repeated exactly |
+| retrieval timestamp (IST) | rule 13; and because a third party may restate |
+| **SHA-256 of the raw response** | the response is the evidence. Without its hash there is nothing to re-verify against, and a restated value later is indistinguishable from a transcription error now |
+
+Any value missing any of the five is not admissible. This is H7's standard applied to a
+new source class, not a weaker one.
+
+**H18's prohibitions are unchanged and are not relaxed by this.** Still forbidden: bypassing
+a login, CAPTCHA, paywall or click-through; ignoring a robots.txt disallow that applies to
+our client; and any source whose terms prohibit scraping or reuse. The B1 blacklist stands.
+"Sanctioned access" means the provider issued us the means of access and permits the use —
+a token is not a licence to ignore the terms it came with, and the terms are read **before**
+the first call, not after.
+
+### What H26 does not do
+
+It does not make a third-party figure equal to an exchange figure, and it does not let one
+into the Model L decision path. Model L's only input is subscription, which NSE and
+Chittorgarh both carry, so H26 has nothing to add there. Its scope is Model H's post-listing
+fields — corporate actions, dividends, identifier history — where the official record is
+incomplete and the alternative to a flagged third-party value is a permanently empty column.
