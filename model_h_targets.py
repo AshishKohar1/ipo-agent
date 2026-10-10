@@ -690,6 +690,42 @@ def effects(horizon: str = "1y") -> dict:
     return o
 
 
+def reclassify() -> dict:
+    """Re-derive every action's kind/factor/amount from its stored `subject`.
+
+    Needed because the classifier was fixed three times while the fetch batch was already
+    running, and a long-running batch holds the module it imported at start. The rows it
+    wrote carry classifications from whichever version was loaded then - including the
+    inverted bonus factor. The raw `subject`, `ex_date`, SHA-256 and timestamps are
+    untouched evidence, so re-deriving is a pure local operation and does not refetch
+    anything.
+
+    This rewrites a DERIVED column in place, which is allowed: `subject` is the record and
+    `kind`/`factor` are an interpretation of it. The provenance columns - source, endpoint,
+    fetched_at_ist, response_sha256 - are never touched, so every row can still be checked
+    against the response it came from.
+    """
+    if not ACTIONS.exists():
+        return {"error": "no actions file"}
+    d = pd.read_csv(ACTIONS)
+    before = d[["kind", "factor", "dividend_per_share"]].copy()
+    for i, row in d.iterrows():
+        c = classify(row.get("subject"))
+        for k, v in c.items():
+            d.at[i, k] = v
+    d.to_csv(ACTIONS, index=False, encoding="utf-8")
+    changed = int((before["kind"].astype(str) != d["kind"].astype(str)).sum()
+                  + (before["factor"].fillna(-999) != d["factor"].fillna(-999)).sum()
+                  + (before["dividend_per_share"].fillna(-999)
+                     != d["dividend_per_share"].fillna(-999)).sum())
+    return {"rows": len(d), "field_values_changed": changed,
+            "kinds": d["kind"].value_counts().to_dict(),
+            "splits_or_bonuses_without_a_factor": int(
+                ((d["kind"].isin(["split", "bonus"])) & d["factor"].isna()).sum()),
+            "dividends_without_an_amount": int(
+                ((d["kind"] == "dividend") & d["dividend_per_share"].isna()).sum())}
+
+
 def self_test() -> int:
     import inspect
     ok = fail = 0
@@ -867,6 +903,15 @@ def self_test() -> int:
     chk("prices are never taken from BEFORE the window opens",
         "never walks BACKWARD" in inspect.getsource(_raw_price))
 
+    print("\n[11] reclassify touches interpretation, never evidence")
+    rsrc = inspect.getsource(reclassify)
+    for keep in ("source", "endpoint", "fetched_at_ist", "response_sha256", "subject"):
+        chk(f"{keep} is not assigned by it", f'd.at[i, "{keep}"]' not in rsrc)
+    chk("it re-derives from the stored subject", 'classify(row.get("subject"))' in rsrc)
+    chk("and refetches nothing", "requests" not in rsrc and "session(" not in rsrc)
+    chk("it reports how many values moved",
+        "field_values_changed" in rsrc)
+
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
 
@@ -879,6 +924,8 @@ if __name__ == "__main__":
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--build", action="store_true",
                     help="compute the corrected targets into their own file")
+    ap.add_argument("--reclassify", action="store_true",
+                    help="re-derive kind/factor/amount from the stored subject text")
     ap.add_argument("--effects", action="store_true",
                     help="print everything Task 5 asks for, from what is computed")
     ap.add_argument("--cache-only", dest="cache_only", action="store_true",
@@ -907,6 +954,9 @@ if __name__ == "__main__":
     if a.build:
         print(json.dumps(build_corrected(a.horizon, a.limit, a.cache_only),
                          indent=2, default=str))
+        raise SystemExit(0)
+    if a.reclassify:
+        print(json.dumps(reclassify(), indent=2, default=str))
         raise SystemExit(0)
     if a.effects:
         print(json.dumps(effects(a.horizon), indent=2, default=str))

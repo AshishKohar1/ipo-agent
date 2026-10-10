@@ -1356,5 +1356,152 @@
   "fetched_at_ist": "2026-10-10 17:54:03.623726",
   "failed": false,
   "note": ""
+ },
+ "1y|RUSTOMJEE": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:06.740087",
+  "failed": false,
+  "note": ""
+ },
+ "1y|INOXGREEN": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:09.855743",
+  "failed": false,
+  "note": ""
+ },
+ "1y|KAYNES": {
+  "n": 1,
+  "sha256": "5fa6f3a2edaab7baa531657d292481c81031fd13ba8adb424799381a57065258",
+  "fetched_at_ist": "2026-10-10 17:54:12.971020",
+  "failed": false,
+  "note": ""
+ },
+ "1y|ACI": {
+  "n": 2,
+  "sha256": "59f8f2d0bc88b3437c17627009eb76ab54afcbede1243963f787570e9a87fbc9",
+  "fetched_at_ist": "2026-10-10 17:54:16.074866",
+  "failed": false,
+  "note": ""
+ },
+ "1y|FIVESTAR": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:19.189281",
+  "failed": false,
+  "note": ""
+ },
+ "1y|BIKAJI": {
+  "n": 1,
+  "sha256": "53e3cf364aa69785a920a60016307b5df1f838e8924cd8b14a572e8aee4c0bf1",
+  "fetched_at_ist": "2026-10-10 17:54:22.296106",
+  "failed": false,
+  "note": ""
+ },
+ "1y|MEDANTA": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:25.416430",
+  "failed": false,
+  "note": ""
+ },
+ "1y|FUSION": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:28.511502",
+  "failed": false,
+  "note": ""
+ },
+ "1y|DCXINDIA": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:31.613264",
+  "failed": false,
+  "note": ""
+ },
+ "1y|TRACXN": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:34.771191",
+  "failed": false,
+  "note": ""
+ },
+ "1y|EMIL": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:37.866692",
+  "failed": false,
+  "note": ""
+ },
+ "1y|HARSHA": {
+  "n": 2,
+  "sha256": "704374e663c0e206450f27dfb4b86ac3da6852eb254332437b98864149bf6d2c",
+  "fetched_at_ist": "2026-10-10 17:54:40.977423",
+  "failed": false,
+  "note": ""
+ },
+ "1y|TMB": {
+  "n": 2,
+  "sha256": "201ac65d61227bca9c7bbc704d680765782317b58fdb19e2009d432b2ff31f1d",
+  "fetched_at_ist": "2026-10-10 17:54:44.081399",
+  "failed": false,
+  "note": ""
+ },
+ "1y|DREAMFOLKS": {
+  "n": 1,
+  "sha256": "1c54f06b4b72f9852d62c951f1b7f2ecd15da84c00db037a0eefa6e6764ad69a",
+  "fetched_at_ist": "2026-10-10 17:54:47.186941",
+  "failed": false,
+  "note": ""
+ },
+ "1y|SYRMA": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:50.291144",
+  "failed": false,
+  "note": ""
+ },
+ "1y|AETHER": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:54:53.392748",
+  "failed": false,
+  "note": ""
+ },
+ "1y|EMUDHRA": {
+  "n": 1,
+  "sha256": "ebca2ca348ff70e2e5311a6b47542903f979bc67ab8de3f25f1245ff1aa77076",
+  "fetched_at_ist": "2026-10-10 17:54:56.501431",
+  "failed": false,
+  "note": ""
+ },
+ "1y|ETHOSLTD": {
+  "n": 1,
+  "sha256": "18e0f0f4e82b74fbc9c4146878e1a4a4df5527961191eaaceae9260910012c3f",
+  "fetched_at_ist": "2026-10-10 17:54:59.633502",
+  "failed": false,
+  "note": ""
+ },
+ "1y|PARADEEP": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-10 17:55:02.746366",
+  "failed": false,
+  "note": ""
+ },
+ "1y|VENUSPIPES": {
+  "n": 1,
+  "sha256": "a5ffeebeab048c1b4ef95349f065bfe8bd640ae379392ae13acf9d9a8e74b754",
+  "fetched_at_ist": "2026-10-10 17:55:05.886384",
+  "failed": false,
+  "note": ""
+ },
+ "1y|DELHIVERY": {
+  "n": 1,
+  "sha256": "a567b0b6e1bd99066acb3bba2179294f2b75177430090799f9288042e59e6013",
+  "fetched_at_ist": "2026-10-10 17:55:08.982312",
+  "failed": false,
+  "note": ""
  }
 }
