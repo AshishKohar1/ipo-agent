@@ -31,7 +31,7 @@ import company_aliases
 
 ROOT = Path(__file__).resolve().parent
 DB   = ROOT / "ipo.db"
-PDFS = ROOT / "rhp_pdfs"; PDFS.mkdir(exist_ok=True)
+PDFS = ROOT / "_local" / "rhp_fetched"; PDFS.mkdir(parents=True, exist_ok=True)
 VERIFY_FILE = ROOT / "rhp_VERIFY.json"
 UA   = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                       "Chrome/120 Safari/537.36"}

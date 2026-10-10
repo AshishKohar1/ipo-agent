@@ -17,7 +17,7 @@ pip install pandas numpy requests yfinance pdfplumber camelot-py[cv] \
 | 0 | `python check_env.py` | pass/fail | seconds |
 | 1 | `python run_overnight.py` (or `build_target_and_stats.py target`, same code) | `master_with_symbols.csv`, `holding_target.csv`, `target_MISSES.csv` | 6–8 h |
 | 2 | *implement resolvers* (see below) | — | ~half a day |
-| 3 | `python fetch_rhp.py` | `rhp_pdfs/`, `documents` table | 20–40 h |
+| 3 | `python fetch_rhp.py` | `_local/rhp_fetched/`, `documents` table | 20–40 h |
 | 4 | `python extract_batch.py` | `observations` table | 40–60 h |
 | 5 | `python reconcile.py` | `dataset_reconciled.csv`, `reconciliation_audit.csv` | minutes |
 | 6 | `python build_target_and_stats.py` | `review/STATS_REVIEW.txt` | minutes |

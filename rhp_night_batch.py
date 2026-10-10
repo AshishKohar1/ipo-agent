@@ -53,7 +53,7 @@ from extract import h6                 # noqa: E402
 
 PROGRESS = ROOT / "data" / "rhp_progress.csv"
 OBS = ROOT / "reports" / "h6_batch_observations.csv"
-TMP = ROOT / "rhp_pdfs" / "_batch_tmp"
+TMP = ROOT / "_local" / "rhp_fetched" / "_batch_tmp"
 # Raised from 3.2 s to 5 s. The first run stopped at 278 of 485 when SEBI began refusing
 # connections and five in a row tripped the breaker — which is the breaker working, but the
 # trigger was throttling rather than the site changing.
@@ -227,7 +227,7 @@ def process(row, known: dict[str, str]) -> dict:
         try:
             if pdf.exists() and TMP in pdf.parents:
                 pdf.unlink()
-            elif pdf.exists() and pdf.parent.name == "rhp_pdfs":
+            elif pdf.exists() and pdf.parent.name == "rhp_fetched":
                 pdf.unlink()
         except Exception as e:
             out["note"] = f"{out.get('note', '')} | PDF not deleted: {e}"

@@ -16,7 +16,7 @@ Hand-sourcing 28 RHPs surfaced it. The user spotted four:
     Eternal                    -> Zomato
     Udayshivakumar Infosolutions -> Udayshivakumar Infra
 
-`manual_rhp/SOURCES.csv` has four more of the same kind — Adani Wilmar -> AWL Agri
+`data/rhp_sources.csv` has four more of the same kind — Adani Wilmar -> AWL Agri
 Business, Abans Financial Services <- Abans Holdings, Fusion Finance <- Fusion Micro
 Finance, IKIO Technologies <- IKIO Lighting — so **8 of 28 hand-sourced companies had a
 genuine rename**, not 4. It also contains seven cosmetic variants and one SEBI typo
@@ -30,7 +30,7 @@ Where the aliases come from
 Each alias carries its evidence and how it was obtained. Nothing is inferred from a
 similar-looking name alone.
 
-  `document`    the name printed on the filing we hold, from manual_rhp/SOURCES.csv or
+  `document`    the name printed on the filing we hold, from data/rhp_sources.csv or
                 `actual_company_name_on_document`. Strongest: we read it.
   `aggregator`  the name Chittorgarh recorded at IPO time for the same ipo_id, where it
                 disagrees with the master's current name. Free (the 2,861-row harvest is
@@ -69,7 +69,7 @@ sys.path.insert(0, str(ROOT))
 import dataio                                               # noqa: E402
 
 OUT = ROOT / "data" / "company_aliases.csv"
-SOURCES = ROOT / "manual_rhp" / "SOURCES.csv"
+SOURCES = ROOT / "data" / "rhp_sources.csv"
 COLS = ["current_name", "filing_name", "kind", "evidence_source", "evidence", "added_on"]
 
 # kind:
@@ -182,7 +182,7 @@ def _row(current, filing, kind, src, evidence) -> dict:
 
 
 def from_sources_csv() -> list[dict]:
-    """Every name difference in manual_rhp/SOURCES.csv, with the filing URL as evidence."""
+    """Every name difference in data/rhp_sources.csv, with the filing URL as evidence."""
     if not SOURCES.exists():
         return []
     s = pd.read_csv(SOURCES)
@@ -249,7 +249,7 @@ def from_local_pdfs() -> list[dict]:
         import pdfplumber
     except Exception:                                        # noqa: BLE001
         return []
-    d = ROOT / "manual_rhp"
+    d = ROOT / "_local" / "rhp_manual"
     if not d.exists():
         return []
     rows = []

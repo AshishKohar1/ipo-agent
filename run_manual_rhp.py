@@ -9,7 +9,7 @@ verification would be the one row nobody ever checks again.
 
 Two things make this different from `rhp_night_batch.py`:
 
-**It makes no network requests.** The PDFs are already on disk in `manual_rhp/`, so this
+**It makes no network requests.** The PDFs are already on disk in `_local/rhp_manual/`, so this
 can run alongside the SEBI batch without touching the source.
 
 **It branches on `doc_type` (4a).** A DRHP is an earlier draft, not a broken RHP. Fields
@@ -63,7 +63,7 @@ from fetch_rhp import _verify_is_prospectus                 # noqa: E402
 # calls pg.flush_cache() and gc.collect() as it goes. The lesson was already paid for once.
 from rhp_night_batch import page_texts_all                  # noqa: E402
 
-MANUAL = ROOT / "manual_rhp"
+MANUAL = ROOT / "_local" / "rhp_manual"
 SOURCES = MANUAL / "SOURCES.csv"
 OUT = ROOT / "data" / "manual_rhp_values.csv"
 PROGRESS = ROOT / "data" / "manual_rhp_progress.csv"
@@ -115,7 +115,7 @@ def pair() -> tuple[list[dict], list[str]]:
                     notes.append(f"{cur!r}: file found under the name {nm!r}")
                     break
         if cand is None:
-            notes.append(f"{cur!r}: NO PDF in manual_rhp/ — cannot process")
+            notes.append(f"{cur!r}: NO PDF in _local/rhp_manual/ — cannot process")
             continue
         used.add(cand)
         rows.append({"csv_company_name": cur, "file": cand,

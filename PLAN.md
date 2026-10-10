@@ -62,7 +62,7 @@ Updated 2026-09-30. Live stage status is in `PROGRESS.md`; that file wins on sta
 - `fetch_rhp.py` resolvers: SEBI (open), BSE SME (open), NSE (behind a disclaimer —
   `NSE_DOWNLOADS_ALLOWED` stays False), BSE mainboard (not implemented). 5 of 5 verification
   companies passed: Hyundai, Jupiter, CapitalNumbers (SME, matched on net offer), Syngene,
-  TD Power (2011, prospectus fallback). 8 PDFs in `rhp_pdfs/`, listed with URL + SHA-256 in
+  TD Power (2011, prospectus fallback). 8 PDFs in `_local/rhp_fetched/`, listed with URL + SHA-256 in
   `data/verified_rhp_manifest.csv`.
 - `check_env.py` 13/13 and `stage1_env_check.py` pass on the laptop; all 11 required domains
   reachable. **The Linux/cloud `pip install` path is still unverified** — the first cloud
@@ -390,11 +390,11 @@ Runs in Claude Code on the user's Windows laptop in `C:\Projects\ipo-agent`.
 
 1. Run `check_env.py`; record the result. Check `git --version`. If git is missing, stop
    and ask the user to install Git for Windows.
-2. Write `data/verified_rhp_manifest.csv`: for every PDF in `rhp_pdfs/`, record company,
+2. Write `data/verified_rhp_manifest.csv`: for every PDF in `_local/rhp_fetched/`, record company,
    document type, SEBI/BSE URL, SHA-256, page count, verification date.
 3. Create `requirements.txt` pinned to the currently working versions of: pandas, numpy,
    requests, yfinance, pdfplumber, openpyxl, statsmodels, beautifulsoup4, lxml.
-4. Create `.gitignore` excluding: `*.pdf`, `rhp_pdfs/`, `_backup_*/`, `__pycache__/`,
+4. Create `.gitignore` excluding: `*.pdf`, `_local/rhp_fetched/`, `_backup_*/`, `__pycache__/`,
    `*.pyc`, `.venv/`, `.env`.
 5. Make the code OS-independent: `pathlib` everywhere, UTF-8 file I/O, no Windows-only
    paths or shell commands. Fix anything found and list it in the report.

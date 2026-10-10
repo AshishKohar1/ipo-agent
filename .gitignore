@@ -1,8 +1,15 @@
 # PDFs are never committed; data/verified_rhp_manifest.csv records URL + SHA-256 so any
 # document can be re-fetched from SEBI / BSE SME and verified.
 *.pdf
-rhp_pdfs/
-_backup_*/
+
+# Everything bulky and local-only lives under _local/, so the root stays readable:
+#   _local/rhp_manual    the 28 hand-supplied prospectuses (279 MB)
+#   _local/rhp_fetched   PDFs fetched by fetch_rhp.py
+#   _local/backup_*      pre-git-history snapshots from 28 September
+# None of it is committed. Every PDF is re-fetchable from SEBI / BSE SME via
+# data/verified_rhp_manifest.csv, which records each URL and its SHA-256. The one file
+# in there that WAS tracked - manual_rhp/SOURCES.csv - is now data/rhp_sources.csv.
+_local/
 __pycache__/
 *.pyc
 .venv/

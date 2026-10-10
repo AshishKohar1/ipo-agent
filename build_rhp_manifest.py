@@ -1,5 +1,5 @@
 """
-build_rhp_manifest.py — data/verified_rhp_manifest.csv: one row per PDF in rhp_pdfs/.
+build_rhp_manifest.py — data/verified_rhp_manifest.csv: one row per fetched PDF.
 
 For every PDF: company and document type (read from the cover), source URL, SHA-256,
 page count, verification date. URLs are never assumed: primary documents take the URL
@@ -52,7 +52,7 @@ def main():
     cases = {c["company"]: c for c in v["cases"]}
     sess = R._session()
     rows = []
-    for p in sorted((ROOT / "rhp_pdfs").glob("*.pdf")):
+    for p in sorted((ROOT / "_local" / "rhp_fetched").glob("*.pdf")):
         sha = hashlib.sha256(p.read_bytes()).hexdigest()
         company, kind, pages = cover(p)
         c = cases.get(company, {})
@@ -73,7 +73,7 @@ def main():
                                "BSE_SME" if url and "bsesme.com" in url else "",
                      "url": url if confirmed else "",
                      "sha256": sha, "pages": pages, "bytes": p.stat().st_size,
-                     "local_file": f"rhp_pdfs/{p.name}", "verified_on_ist": verified_on,
+                     "local_file": f"_local/rhp_fetched/{p.name}", "verified_on_ist": verified_on,
                      "passes_verify_is_prospectus": R._verify_is_prospectus(p.read_bytes(), company)[0]
                                                     if company else False,
                      "url_check": ("sha256 matches re-download" if confirmed else

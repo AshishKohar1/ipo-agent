@@ -28,7 +28,7 @@ import dataio                                              # noqa: E402
 OUT = ROOT / "reports" / "DOCUMENTS_STILL_MISSING.csv"
 PROGRESS = ROOT / "data" / "rhp_progress.csv"
 PROBE = ROOT / "reports" / "alias_resolution_probe.csv"
-MANUAL = ROOT / "manual_rhp" / "SOURCES.csv"
+MANUAL = ROOT / "data" / "rhp_sources.csv"
 
 COLS = ["company", "aliases", "isin", "listing_date", "listing_year", "segment",
         "status", "attempts", "sebi_url_attempted", "sebi_failure",
