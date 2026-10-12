@@ -4597,5 +4597,173 @@
   "fetched_at_ist": "2026-10-12 22:29:18.171674",
   "failed": false,
   "note": ""
+ },
+ "3y|SANDHAR": {
+  "n": 6,
+  "sha256": "171dd0ad875f63fdc04499ac44ab0a621c504719af7ae54538867e50299664bc",
+  "fetched_at_ist": "2026-10-12 22:29:21.294111",
+  "failed": false,
+  "note": ""
+ },
+ "3y|HAL": {
+  "n": 7,
+  "sha256": "f8a4cb89b16ea56c3a2cdd5118b4678f0129a916fe7d49cb6df9a2096bd7b22c",
+  "fetched_at_ist": "2026-10-12 22:29:24.461019",
+  "failed": false,
+  "note": ""
+ },
+ "3y|DHARAN": {
+  "n": 4,
+  "sha256": "aadc66347a91373ff3bd0038ac329ffbc26cede339581d8e3833f3d7864256f1",
+  "fetched_at_ist": "2026-10-12 22:29:27.655650",
+  "failed": false,
+  "note": ""
+ },
+ "3y|BANDHANBNK": {
+  "n": 3,
+  "sha256": "b14ef4b1c2dba341d662cb905ec466a4d4ec0241694c203d268c88e307ba2113",
+  "fetched_at_ist": "2026-10-12 22:29:30.829522",
+  "failed": false,
+  "note": ""
+ },
+ "3y|BDL": {
+  "n": 6,
+  "sha256": "c907e0ba67e03225032ac581f2c613f4d88cec43f41261a099a440b057c09dd0",
+  "fetched_at_ist": "2026-10-12 22:29:33.957143",
+  "failed": false,
+  "note": ""
+ },
+ "3y|HGINFRA": {
+  "n": 2,
+  "sha256": "84f599dd86ab685309d8c1a7485991cc260cf584294b508837fe3018d1c0ae53",
+  "fetched_at_ist": "2026-10-12 22:29:37.079327",
+  "failed": false,
+  "note": ""
+ },
+ "3y|GALAXYSURF": {
+  "n": 4,
+  "sha256": "9f840886d7186722731378b5db9b6ac6c17c726a6b8f066b98f26419e2035ac2",
+  "fetched_at_ist": "2026-10-12 22:29:40.225430",
+  "failed": false,
+  "note": ""
+ },
+ "3y|AMBER": {
+  "n": 5,
+  "sha256": "f4574b5d3238647ec8f4dd0703afe78d1b9d546375aa70c8f65bb29719d00f2c",
+  "fetched_at_ist": "2026-10-12 22:29:43.415789",
+  "failed": false,
+  "note": ""
+ },
+ "3y|NEWGEN": {
+  "n": 3,
+  "sha256": "6d6d3d1cb953199bf44951c276a90c04f1cfb2b33dbb652478136ec92d1db29a",
+  "fetched_at_ist": "2026-10-12 22:29:46.565621",
+  "failed": false,
+  "note": ""
+ },
+ "3y|APOLLO": {
+  "n": 4,
+  "sha256": "a49184ceb2cfb9d8f1b81cc3d2e5a0e167823c1bb8e4dc974ae5ec009e5030cf",
+  "fetched_at_ist": "2026-10-12 22:29:49.746337",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ASTRON": {
+  "n": 3,
+  "sha256": "366bbb038035a174f1e16ccb2ce1bbe0a0f3946a39cc16bb416c81fb2773f35a",
+  "fetched_at_ist": "2026-10-12 22:29:52.925380",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SHALBY": {
+  "n": 3,
+  "sha256": "3972b724976b3fb49c8a3d7696d66b4abfb50134edbc844b3aa8e8cd8334fe59",
+  "fetched_at_ist": "2026-10-12 22:29:56.153001",
+  "failed": false,
+  "note": ""
+ },
+ "3y|HDFCLIFE": {
+  "n": 4,
+  "sha256": "4ac4bc87c01e14eed5ba7d485905133763ab5358f34d9e4f191c51cdffa403d6",
+  "fetched_at_ist": "2026-10-12 22:29:59.288030",
+  "failed": false,
+  "note": ""
+ },
+ "3y|KHADIM": {
+  "n": 3,
+  "sha256": "430837833eaaa022f2043b19708e9cd7a7e66c41c6a79c5c3e4aa13928e07c9a",
+  "fetched_at_ist": "2026-10-12 22:30:02.588049",
+  "failed": false,
+  "note": ""
+ },
+ "3y|NIACL": {
+  "n": 4,
+  "sha256": "2f757636d1caabd7409d680446ff2ca18328e63a3172b2f4e5aaa79da394ed94",
+  "fetched_at_ist": "2026-10-12 22:30:05.755206",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MAHLOG": {
+  "n": 3,
+  "sha256": "826df95a38931d059ab131c5bcd65561744046282d848950200e737154d37cba",
+  "fetched_at_ist": "2026-10-12 22:30:08.942098",
+  "failed": false,
+  "note": ""
+ },
+ "3y|NAM-INDIA": {
+  "n": 6,
+  "sha256": "ae2d9d56e31e6cf13508c754387da1031dbd26832690d82f21c7d2cf2d6a4b29",
+  "fetched_at_ist": "2026-10-12 22:30:12.083858",
+  "failed": false,
+  "note": ""
+ },
+ "3y|GICRE": {
+  "n": 2,
+  "sha256": "89454d768228f1d25afc03a2a83852dcffec214b2586b95f46245b98d15fb572",
+  "fetched_at_ist": "2026-10-12 22:30:15.349921",
+  "failed": false,
+  "note": ""
+ },
+ "3y|IEX": {
+  "n": 6,
+  "sha256": "860eadd710c89f0b3d4e0494dd55d3c2712febf660082424de2922d42cbce29b",
+  "fetched_at_ist": "2026-10-12 22:30:18.572190",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MASFIN": {
+  "n": 6,
+  "sha256": "838f2ee5dfc02bbfdcb29fc1ded120252278002e7db7ba2e406518dc58eb9303",
+  "fetched_at_ist": "2026-10-12 22:30:21.770792",
+  "failed": false,
+  "note": ""
+ },
+ "3y|GODREJAGRO": {
+  "n": 3,
+  "sha256": "8b23096e6c14be7060473a06d441563529de8d43a06191050ca64b4254241de2",
+  "fetched_at_ist": "2026-10-12 22:30:24.944075",
+  "failed": false,
+  "note": ""
+ },
+ "3y|DIAMONDYD": {
+  "n": 3,
+  "sha256": "a44445f8a0a8c100b85b8c31f27bfe6793cfdae0325bbf946df385ceb9540ec3",
+  "fetched_at_ist": "2026-10-12 22:30:28.212278",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SBILIFE": {
+  "n": 2,
+  "sha256": "6f58856d8005384e54b31370185999ddbca2247e9807d25538524bc791d2e674",
+  "fetched_at_ist": "2026-10-12 22:30:31.492021",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ICICIGI": {
+  "n": 5,
+  "sha256": "1f8191311aa1c41d52776510bcd563bfeaf0ebe00a09074de09c92630448c942",
+  "fetched_at_ist": "2026-10-12 22:30:34.668246",
+  "failed": false,
+  "note": ""
  }
 }

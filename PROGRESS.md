@@ -60,6 +60,73 @@ not backfill a marker to make it green.
 > model with an `is_sme` flag, an explicit exception to rule 6), and an **addendum to H25**
 > making the 37 no-RHP IPOs a held-out test set.
 
+### Phase 2 design — quarterly re-scoring (Task 6: design and audit only, nothing built)
+
+H30 puts quarterly re-scoring in phase 2. This is its design, written now so the phase-1
+build does not accidentally foreclose it.
+
+#### Target
+
+At each quarterly re-score date, **excess return vs the Nifty 50 TRI over the NEXT 12
+months**. So a single IPO contributes one row per quarter it is still held, each row
+looking forward a year from its own date.
+
+#### The validation trap, and it is the whole design
+
+An IPO's quarterly rows **overlap**. The row dated Q1 and the row dated Q2 share nine
+months of the same future. If a random split puts Q1 in train and Q2 in test, the model has
+seen three-quarters of the test row's answer and the AUC is meaningless — and it will look
+excellent, which is worse.
+
+So: **hold out whole IPOs, never rows.** Every quarterly row of one company lands on the
+same side of the split. Combined with H30's walk-forward-by-calendar-year, the rule is:
+
+> A row dated in test year Y is scored only by a model trained on rows whose **12-month
+> window closed before Y began**, and no company may appear in both sides of any split.
+
+The second clause is the one that does not follow from phase 1's design and is the reason
+this section exists. Phase 1 has one row per IPO, so the question never arises; phase 2 has
+four to twelve, and the obvious implementation is wrong.
+
+A further consequence worth stating: the **effective sample size is the number of IPOs, not
+the number of rows.** 491 IPOs × 8 quarters is not 3,928 observations, it is 491 clusters.
+Any standard error computed on the row count will be roughly √8 ≈ 2.8× too small. H29's
+50-pick floor must therefore be counted **in IPOs**, not rows, when it is applied to phase 2.
+
+#### Candidate post-listing variables and their sources
+
+| Variable | Why it might matter | Official source | Audit status |
+|---|---|---|---|
+| Price vs sector index since listing | separates company-specific decline from a sector-wide one, which is what a hold decision turns on | NSE Indices sectoral close series + bhavcopy | **source proven** — both already used in phase 1 (`market_context.py` fetches 15 indices; `listing_prices.bhavcopy` is in daily use) |
+| Quarterly results vs the RHP's figures | the RHP's projections are the thing the market priced; a miss against them is new information | NSE `api/results-comparision` / corporate filings; RHP figures from our own extraction | **partly unproven** — the NSE results endpoint has not been probed by this project, and the RHP side depends on Stage 15 extraction coverage, currently well short of its 60% target |
+| Shareholding pattern: promoter, FII, DII | promoter dilution after lock-in expiry, and institutional accumulation, are both read as signals | NSE `api/corporate-share-holdings-master` (quarterly filings) | **unproven** — not probed. Filed quarterly with a lag of up to 21 days, so the as-of date must be the FILING date, not the quarter end, or the variable leaks |
+| Promoter pledge | a rising pledge is a distress signal that does not show in the price until late | same quarterly shareholding filings | **unproven** — and sparsely populated; many filings report zero pledge as a blank rather than a zero, which is exactly the "missing is not zero" trap (rule 1) |
+| Lock-in expiry proximity | anchor and promoter lock-ins expiring are a known supply event | derivable from the listing date + SEBI lock-in rules; anchor lock-in dates already partly collected from Chittorgarh | **derivable, no new source** |
+| Index inclusion or exclusion | forced buying or selling by index funds | NSE Indices announcements | **unproven**, and event-sparse |
+
+**Three of the six are unproven sources.** None should be designed into phase 2 as a
+requirement until a probe shows it is reachable under H18 and carries the history needed.
+The two that are proven — price vs sector, and lock-in proximity — would be the honest
+starting set, with the shareholding block added only after its filing-lag question is
+settled.
+
+#### The leakage rule for every one of them
+
+Each variable must be stamped with **when it became public**, not when it was measured. A
+quarterly result for the September quarter is not knowable on 30 September; it is knowable
+on the filing date in October or November. Phase 1's rule is "knowable on the listing
+date"; phase 2's is "knowable on the re-score date", and the filing lag is where that will
+be got wrong if it is not written down now.
+
+#### What is deliberately NOT in phase 2
+
+**Exit timing.** H30 puts it out of scope and a separate tool handles it. Phase 2 answers
+"should this still be held?" at fixed quarterly dates. It does not answer "when should this
+be sold?", and a quarterly model asked the second question would be answering a different
+one badly.
+
+---
+
 ## Queued for after 15 Oct (live-path freeze)
 
 Nothing here is a defect in behaviour. They are comment and citation fixes in files frozen
