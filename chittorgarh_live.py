@@ -53,16 +53,29 @@ SUB_URL = "https://www.chittorgarh.com/ipo_subscription/x/{id}/"
 
 MONTHS = {m: i for i, m in enumerate(
     ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], 1)}
-# The real markup, verified against the page rather than assumed:
-#   <a href="/ipo/nityas-gems-jewellery-ipo/2974/">Nityas Gems &amp; Jewellery <!-- --> </a>
-#   <span><span ... title="Open">O</span></span><span class="float-end">30 Sep - 05 Oct</span>
-# The badge letter is a rendering of `title`, so the TITLE is parsed instead: "Open" is
-# unambiguous where a bare "O" is not, and the state is what decides whether a verdict may
-# be printed at all.
+# The real markup, RE-VERIFIED against the live page on 2026-10-13 after the parser
+# silently went to 0 rows. What it is today:
+#
+#   <a class=" text-decoration-none" title="HD Fire Protect "
+#      href="/ipo/hd-fire-protect-ipo/2628/">HD Fire Protect <!-- --> <!-- --> </a>
+#   <span class="float-end ms-2">13 - 15 Oct</span>
+#
+# What it was on 2026-10-02, and what the old regex REQUIRED:
+#
+#   ...</a><span><span ... title="Open">O</span></span><span class="float-end">30 Sep - 05 Oct</span>
+#
+# **The state badge is gone from the page entirely** - no title="Open" anywhere on either
+# dashboard. The old pattern made that `<span><span title=...>` block mandatory, so every
+# row stopped matching and the dashboards reported "0 dated rows" while still listing every
+# IPO. The badge group is now OPTIONAL: if Chittorgarh restores it the label is used again,
+# and until then the state is derived from the dates, which `open_ipos` already did as its
+# fallback. A required element that can vanish is a parser that can go silent.
 ROW = re.compile(
     r'href="/ipo/([a-z0-9\-]+)/(\d{3,6})/"[^>]*>(?P<name>[^<]{2,70}?)\s*'
-    r'(?:<!--[^>]*-->\s*)*</a>\s*<span>\s*<span[^>]*title="(?P<state_title>[^"]*)"[^>]*>'
-    r'\s*(?P<badge>[A-Za-z])\s*</span>\s*</span>\s*<span[^>]*>\s*(?P<win>[^<]+?)\s*</span>',
+    r'(?:<!--[^>]*-->\s*)*</a>\s*'
+    r'(?:<span>\s*<span[^>]*title="(?P<state_title>[^"]*)"[^>]*>'
+    r'\s*(?P<badge>[A-Za-z])\s*</span>\s*</span>\s*)?'
+    r'<span[^>]*class="[^"]*float-end[^"]*"[^>]*>\s*(?P<win>[^<]+?)\s*</span>',
     re.S)
 
 
@@ -153,18 +166,33 @@ class Live:
 
     @staticmethod
     def _window(win: str, today: pd.Timestamp):
-        """'30 Sep - 05 Oct' -> (open, close). Year inferred from proximity to today."""
-        parts = re.findall(r"(\d{1,2})\s*([A-Za-z]{3})", win)
-        if not parts:
+        """'30 Sep - 05 Oct' or '13 - 15 Oct' -> (open, close).
+
+        **The same-month form has only ONE month token.** The old parser pulled
+        `(day, mon)` pairs with a single findall, so "13 - 15 Oct" yielded exactly one pair
+        and the window collapsed to open == close == 15 Oct. Every cross-month window parsed
+        correctly, which is why it survived: "30 Sep - 05 Oct" has a month on both sides.
+        HD Fire Protect's window is "13 - 15 Oct", so day 1 of the first live test would
+        have been read as "not open yet".
+
+        The open side therefore INHERITS the month and year from the close side when it
+        carries no month of its own. No calendar arithmetic can recover a month that was
+        never printed; it has to be taken from the other end of the range.
+
+        The year is never printed either. It is chosen as the one that puts the date nearest
+        to today, so a December window read in January resolves to last year rather than
+        eleven months into the future.
+        """
+        parts = re.split(r"\s*(?:-|to|–|—)\s*", win.strip(), maxsplit=1)
+        toks = [re.search(r"(\d{1,2})\s*([A-Za-z]{3,})?", pt) for pt in parts]
+        toks = [t for t in toks if t]
+        if not toks:
             return None, None
 
         def mk(d, mon):
-            mo = MONTHS.get(mon[:3].lower())
+            mo = MONTHS.get(mon[:3].lower()) if mon else None
             if not mo:
                 return None
-            # The calendar prints no year. Choose the year that puts the date nearest to
-            # today, so a December window read in January resolves to last year rather than
-            # eleven months into the future.
             best = None
             for y in (today.year - 1, today.year, today.year + 1):
                 try:
@@ -174,10 +202,25 @@ class Live:
                 if best is None or abs((cand - today).days) < abs((best - today).days):
                     best = cand
             return best
-        o = mk(*parts[0])
-        c = mk(*parts[-1]) if len(parts) > 1 else o
-        if o is None or c is None:
+
+        last = toks[-1]
+        c = mk(last.group(1), last.group(2))
+        if c is None:
             return None, None
+        if len(toks) == 1:
+            return c, c
+        first = toks[0]
+        o = mk(first.group(1), first.group(2))
+        if o is None:
+            # No month on the open side: it is in the close side's month, unless that puts
+            # the open AFTER the close, in which case the range straddles a month end and
+            # the open belongs to the previous month.
+            try:
+                o = pd.Timestamp(year=c.year, month=c.month, day=int(first.group(1)))
+            except ValueError:
+                return None, None
+            if o > c:
+                o = (c.replace(day=1) - pd.Timedelta(days=1)).replace(day=int(first.group(1)))
         if c < o:                      # window crosses a year boundary
             c = c + pd.DateOffset(years=1)
         return o, c

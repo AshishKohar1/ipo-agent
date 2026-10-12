@@ -45,6 +45,7 @@ if hasattr(_sys.stdout, "reconfigure"):
 import argparse
 import inspect
 import os
+import re
 import smtplib
 import sys
 from email.message import EmailMessage
@@ -54,6 +55,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import chittorgarh_live as CL      # noqa: E402
+import ipo_calendar as CAL        # noqa: E402  - Task 1.2: NSE-primary IPO list
 import score_l as SL               # noqa: E402  — portable JSON, no joblib (Priority 1b)
 import predictions_log as PL       # noqa: E402
 import live_markers as LM          # noqa: E402
@@ -163,9 +165,24 @@ def secrets() -> tuple[str, str, str]:
 
 SUBJECT_MAX = 200          # Task 1. See subject_for() for why there is a cap at all.
 
+# Task 1.2. The list now comes from NSE, which carries the full legal name - "HD Fire
+# Protect Limited" where Chittorgarh said "HD Fire Protect". In the SUBJECT the suffix is
+# dead weight: it costs characters on a phone screen and distinguishes nothing, since no
+# two issues differ only by it. It is trimmed for DISPLAY ONLY. `r["ipo"]` keeps the full
+# name everywhere it is used as a key - markers, snapshots, the predictions log - because
+# shortening a key is how two names for one issue stop matching.
+_SUFFIX = re.compile(r"\s*\b(limited|ltd\.?|pvt\.?|private)\b\s*$", re.I)
+
+
+def display_name(name: str) -> str:
+    out = _SUFFIX.sub("", str(name or "").strip()).strip()
+    return out or str(name or "").strip()
+
+
 
 def subject_for(closing: list[dict], scored: dict, n_open: int,
-                open_not: list[dict] | None = None) -> str:
+                open_not: list[dict] | None = None,
+                data_check_failed: bool = False) -> str:
     """The subject line: the prefix, then today's verdicts.
 
     Task 1. The subject used to be `IPO decision - 12 open, 9 closes today` - a count,
@@ -173,7 +190,7 @@ def subject_for(closing: list[dict], scored: dict, n_open: int,
     carries the decision itself, one clause per issue closing today, joined by "; ":
 
         IPO decision - HD Fire Protect: L1 BID, L2 NO BID
-        IPO decision - Alpha Ltd: L1 BID, L2 NO BID; Beta SME: SME, not scored
+        IPO decision - Alpha: L1 BID, L2 NO BID; Beta SME: SME, not scored
 
     `SUBJECT_PREFIX` is byte-exact and unchanged - the user's Mail filters match on it, so
     it is asserted character by character in the self-test, em dash included as a negative.
@@ -202,6 +219,16 @@ def subject_for(closing: list[dict], scored: dict, n_open: int,
     has every issue.
     """
     if not closing:
+        if data_check_failed:
+            # Task 1.2. Both sources returned zero dated rows on a weekday. That is not a
+            # quiet market, it is a broken read, and "Nothing closes today" would be a
+            # claim the system is in no position to make. The subject says so outright.
+            #
+            # It sits INSIDE this branch deliberately. A scored issue's verdict outranks
+            # the alarm: the two cannot both be true today, since zero rows from both
+            # sources means nothing is closing, but the precedence should not depend on
+            # that staying true.
+            return f"{SUBJECT_PREFIX}DATA CHECK FAILED"
         if open_not:
             soonest = min(open_not, key=lambda r: r["closes"])
             urgent = f"next closes {pd.Timestamp(soonest['closes']).strftime('%a')}"
@@ -211,7 +238,7 @@ def subject_for(closing: list[dict], scored: dict, n_open: int,
 
     clauses = []
     for r in closing:
-        name = str(r["ipo"]).strip()
+        name = display_name(r["ipo"])
         if r.get("segment") != "mainboard":
             clauses.append(f"{name}: SME, not scored")
             continue
@@ -301,7 +328,8 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
 
     n_open = len(closing) + len(open_not)
     # Task 1: the subject carries the verdicts, not a count. See subject_for().
-    subject = subject_for(closing, scored, n_open, open_not)
+    subject = subject_for(closing, scored, n_open, open_not,
+                          data_check_failed=bool(mv.get("data_check_failed")))
 
     L = [f"IPO MARKET — {today.strftime('%A %d %B').replace(' 0', ' ')}", ""]
 
@@ -375,10 +403,18 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
 
     if mv.get("diagnostics"):
         L += ["Diagnostics:"] + [f"  - {d}" for d in mv["diagnostics"]]
+    # Task 1.2: the footer names the source that was ACTUALLY used, not a source that
+    # was true when the line was written. The list and the figures can come from
+    # different places on the same day, so both are stated separately.
+    fig_src = sorted({str((r.get("sub") or {}).get("source") or "none")
+                      for r in closing + open_not}) or ["none"]
     L += ["", f"Model {SL.MODEL_ID} / {SL.DECISION_POINT}. The verdict IS the subscription "
               "level met (H17); no probability is involved in the decision.",
-          "Source: chittorgarh.com (single source, decision H14). Every request logged "
-          "with its timestamp and exact URL in data/live_fetch_log.csv."]
+          f"IPO list source: {mv.get('list_source', 'unknown')}.",
+          f"Subscription figure source: {', '.join(fig_src)} "
+          f"(single-origin, single_source_unverified - H14/H22).",
+          "Every request logged with its timestamp and exact URL in "
+          "data/live_fetch_log.csv."]
     return subject, "\n".join(L)
 
 
@@ -402,8 +438,11 @@ def append_snapshots(mv: dict, capture_point: int, when: pd.Timestamp) -> int:
             # Priority 6: only where the source page states it. Chittorgarh's subscription
             # page does not, so this stays NULL rather than being inferred from the name.
             "sector": s.get("sector"),
-            "source": "chittorgarh",
-            "reconciled": "single_source_unverified",
+            # Task 1.2: the source that produced THIS figure. It was hardcoded to
+            # "chittorgarh" even after H22 made NSE primary, so the stored
+            # provenance could disagree with the email that was sent (rule 2).
+            "source": s.get("source") or "unknown",
+            "reconciled": s.get("reconciled") or "single_source_unverified",
             "note": "" if s.get("ok") else (s.get("why") or "no reading"),
         })
     if not rows:
@@ -585,6 +624,34 @@ def day_end_captured(day) -> tuple[bool, str]:
     return False, f"{len(got)} of {len(names)} index closes on record"
 
 
+# Task 1.3. The per-IPO marker in `sent_markers` answers "did the decision for THIS
+# issue reach the user?". On a day with nothing closing there is no issue to key on, so
+# `owed` is empty, the already-sent guard never fires, and every scheduled attempt composed
+# and sent the same market summary. Four cron fires on 12 Oct produced four identical
+# emails. These are the two date-keyed pseudo-issues that make it one per date.
+#
+# They are kept SEPARATE on purpose. If the alarm shared a key with the benign summary, a
+# quiet summary sent at 14:45 would silence a DATA CHECK FAILED at 15:25 - an earlier
+# all-clear would suppress the later alarm, which is the wrong way round.
+SUMMARY_KEY = "__market_summary__"
+ALARM_KEY = "__data_check_failed__"
+SUMMARY_KIND = "market_summary"
+
+
+def summary_key_for(mv: dict) -> str:
+    return ALARM_KEY if mv.get("data_check_failed") else SUMMARY_KEY
+
+
+def summary_sent(day, mv: dict, path=None) -> bool:
+    """Has this date's market summary (or its alarm) already gone out?"""
+    d = SM.read(path)
+    if d.empty:
+        return False
+    hit = d[(d["key"].astype(str) == SM.key(day, summary_key_for(mv)))
+            & (d["kind"].astype(str) == SUMMARY_KIND)]
+    return bool(len(hit))
+
+
 def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     """The 15:00 leg (`final=False`) scores, logs, snapshots, reports and emails.
     The 19:30 leg (`final=True`) snapshots only — the bid window has closed, so there is
@@ -620,7 +687,11 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
                     "why": why, "capture_point": capture_point, "fail_loudly": False}
         print(f"  day-end not yet captured for {today.date()}: {why}")
 
-    mv = CL.market_view(today)
+    # Task 1.2. The LIST of IPOs now comes from NSE first and Chittorgarh second,
+    # unioned - see ipo_calendar. It used to come from the Chittorgarh dashboard
+    # alone, and when that page dropped its state badge the parser went to zero
+    # rows and the email reported an empty market while HDFIRE was bidding.
+    mv = CAL.market_view(today)
     # H22, PROVISIONAL pending the HDFIRE test (Task 9): NSE is the origin of the
     # subscription figure and Chittorgarh republishes it, so NSE is tried first.
     # A payload only replaces the Chittorgarh figure if it passes the freshness
@@ -704,6 +775,15 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
                 "n_verdicts": len(scored), "n_snapshots": n_snap,
                 "capture_point": capture_point}
 
+    # Task 1.3: a day with nothing closing gets ONE market summary, keyed by date.
+    if not owed and not dry and not force and summary_sent(today, mv):
+        LM.mark_ran(capture_point, today, n_snap)
+        kind = "data-check alarm" if mv.get("data_check_failed") else "market summary"
+        print(f"{today.date()}: today's {kind} already went out. No-op, exiting green.")
+        return {"sent": False, "reason": "summary_already_sent", "owed": owed,
+                "n_verdicts": len(scored), "n_snapshots": n_snap,
+                "capture_point": capture_point}
+
     subject, body = compose(mv, scored, today)
     LIVE_DIR.mkdir(parents=True, exist_ok=True)
     (LIVE_DIR / f"{today.date()}.md").write_text(body, encoding="utf-8")
@@ -742,6 +822,12 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
             SM.mark(today, ipo, (scored.get(ipo, {}).get("inputs") or {}).get("isin"),
                     subject, today, kind=SM.DECISION, capture_point=capture_point,
                     note="decision delivered")
+        if not owed:
+            # Task 1.3. Recorded with its own `kind`, so it can never satisfy
+            # "was the decision delivered?" - there was no decision to deliver.
+            SM.mark(today, summary_key_for(mv), None, subject, today,
+                    kind=SUMMARY_KIND, capture_point=capture_point,
+                    note="market summary delivered; nothing closing today")
     if not dry:
         LM.mark_ran(capture_point, today, n_snap)
     out.update({"n_open": mv["n_open"], "n_closing": len(mv["closing_today"]),
@@ -991,7 +1077,7 @@ def self_test() -> int:
     mainsrc = inspect.getsource(main)
     i = mainsrc.index("day_end_captured")
     chk("it is consulted BEFORE the market view is fetched",
-        i < mainsrc.index("CL.market_view"))
+        i < mainsrc.index("CAL.market_view"))
     chk("and the early exit is green, not loud",
         '"reason": "already_captured"' in mainsrc
         and mainsrc[i:i + 700].count('"fail_loudly": False') == 1)
@@ -1010,7 +1096,8 @@ def self_test() -> int:
     import tempfile as _tf
     import live_markers as _LM2
 
-    def _drive(hhmm, closing=True, pre_marked=False, send_ok=True, day="2026-10-13"):
+    def _drive(hhmm, closing=True, pre_marked=False, send_ok=True,
+               day="2026-10-13", mdir=None):
         """Run main() for a synthetic day and return (result, [(subject, body)...])."""
         sent: list = []
         mv_one = {
@@ -1024,13 +1111,17 @@ def self_test() -> int:
             "diagnostics": ["harness: no network"], "n_open": 1 if closing else 0,
         }
         saved = {k: globals().get(k) for k in
-                 ("TD", "CL", "NSE", "send", "PL", "LM", "SM", "SNAPSHOTS", "LIVE_DIR")}
+                 ("TD", "CAL", "NSE", "send", "PL", "LM", "SM", "SNAPSHOTS", "LIVE_DIR")}
         savedmc = MC.capture
         # Bound to LOCALS: the lambdas below must call the REAL modules, and by the time
         # they run the global names point at the fakes.
         _SM, _MC = SM, MC
         with _tf.TemporaryDirectory() as td:
             tdp = Path(td)
+            # A shared marker directory makes the markers survive between two _drive
+            # calls. Without it every run starts with an empty sent_markers file and an
+            # idempotency bug is untestable - the test would pass by forgetting.
+            kdir = Path(mdir) if mdir else tdp
             stamp = pd.Timestamp(f"{day} {hhmm // 100:02d}:{hhmm % 100:02d}")
             fake_td = type("T", (), {
                 "now": staticmethod(lambda: stamp),
@@ -1038,7 +1129,7 @@ def self_test() -> int:
                 "ist_now": staticmethod(lambda: stamp),
                 "banner": staticmethod(lambda: f"harness clock {stamp}"),
                 "crossed_midnight": staticmethod(lambda: False)})
-            fake_cl = type("C", (), {"market_view": staticmethod(lambda when=None: mv_one)})
+            fake_cal = type("C", (), {"market_view": staticmethod(lambda when=None: mv_one)})
             fake_nse = type("N", (), {
                 "enrich_market_view": staticmethod(lambda mv, today=None: mv)})
             fake_pl = type("P", (), {
@@ -1047,12 +1138,17 @@ def self_test() -> int:
                 "predictions_for": staticmethod(lambda *a, **k: [])})
             # Real sent_markers, real live_markers - but pointed at throwaway files, so
             # "already sent" is genuinely read back from disk rather than mocked.
-            mpath, lpath = tdp / "sent.csv", tdp / "live.csv"
+            mpath, lpath = kdir / "sent.csv", kdir / "live.csv"
             fake_sm = type("S", (), {
                 "DECISION": _SM.DECISION, "DEAD_MAN": _SM.DEAD_MAN,
                 "already_sent": staticmethod(lambda d, i: _SM.already_sent(d, i, mpath)),
                 "notice_sent": staticmethod(lambda d, i: _SM.notice_sent(d, i, mpath)),
                 "undelivered": staticmethod(lambda d, i: _SM.undelivered(d, i, mpath)),
+                # Task 1.3's date-keyed summary marker reads the file directly, so the
+                # harness has to redirect `read` too - otherwise the guard consults the
+                # REAL data/sent_markers.csv while everything around it is a fixture.
+                "key": staticmethod(_SM.key),
+                "read": staticmethod(lambda path=None: _SM.read(mpath)),
                 "mark": staticmethod(lambda *a, **k: _SM.mark(*a, **{**k, "path": mpath}))})
             fake_lm = type("L", (), {
                 "already_ran": staticmethod(lambda c, w: _LM2.already_ran(c, w, lpath)),
@@ -1073,7 +1169,7 @@ def self_test() -> int:
             # reports/live/2026-10-13.md - a report for the HDFIRE bidding day that the
             # real run would then have found already on disk. A test that writes into the
             # data it is testing against breaks rule 1 by itself.
-            globals().update(TD=fake_td, CL=fake_cl, NSE=fake_nse, send=fake_send,
+            globals().update(TD=fake_td, CAL=fake_cal, NSE=fake_nse, send=fake_send,
                              PL=fake_pl, LM=fake_lm, SM=fake_sm,
                              SNAPSHOTS=tdp / "snapshots.csv", LIVE_DIR=tdp / "live")
             _MC.capture = staticmethod(lambda *a, **k: {"skipped": "harness"})
@@ -1156,8 +1252,11 @@ def self_test() -> int:
 
     sub = subject_for([row("Alpha Ltd"), row("Beta Industries")],
                       {"Alpha Ltd": fire, "Beta Industries": cold}, 2)
+    # The legal suffix is trimmed for display (Task 1.2), so "Alpha Ltd" prints as
+    # "Alpha" while the dict key stays "Alpha Ltd". That the key is unchanged is the
+    # point: it is what the marker and the predictions log match on.
     chk("two issues are joined by '; '",
-        sub == ("IPO decision - Alpha Ltd: L1 BID, L2 BID; "
+        sub == ("IPO decision - Alpha: L1 BID, L2 BID; "
                 "Beta Industries: L1 NO BID, L2 NO BID"), sub)
 
     sub = subject_for([row("Gamma SME", seg="sme")], {}, 1)
@@ -1168,15 +1267,15 @@ def self_test() -> int:
 
     sub = subject_for([row("Delta Ltd")], {}, 1)
     chk("a mainboard issue with no figure says NO VERDICT, not NO BID",
-        sub == "IPO decision - Delta Ltd: NO VERDICT", sub)
+        sub == "IPO decision - Delta: NO VERDICT", sub)
     chk("'NO BID' is a refusal and must not stand in for silence",
         "NO BID" not in sub, sub)
 
     sub = subject_for([row("Alpha Ltd"), row("Gamma SME", seg="sme"), row("Delta Ltd")],
                       {"Alpha Ltd": split}, 3)
     chk("mixed day: scored, SME and no-figure each get their own clause",
-        sub == ("IPO decision - Alpha Ltd: L1 BID, L2 NO BID; "
-                "Gamma SME: SME, not scored; Delta Ltd: NO VERDICT"), sub)
+        sub == ("IPO decision - Alpha: L1 BID, L2 NO BID; "
+                "Gamma SME: SME, not scored; Delta: NO VERDICT"), sub)
 
     chk("nothing closing keeps the summary form",
         subject_for([], {}, 4, [{"ipo": "X", "closes": "2026-10-14"}])
@@ -1226,6 +1325,69 @@ def self_test() -> int:
          if _self.LIVE_DIR.exists() else []) == names_before)
     chk("no synthetic row carries the harness name into real data",
         b"Harness Mainboard" not in snap_before)
+
+    print(chr(10) + "[14] Phase 1 Task 1.2/1.3: the list source, the alarm, the duplicate")
+    # The subject the 12 Oct silence produced, and the subject it must produce now.
+    quiet = subject_for([], {}, 0, [], data_check_failed=False)
+    alarm = subject_for([], {}, 0, [], data_check_failed=True)
+    chk("a genuinely quiet weekday still reads as quiet",
+        quiet == f"{SUBJECT_PREFIX}0 open, none closing", quiet)
+    chk("but two dead sources read as a DATA CHECK FAILURE, not as a quiet market",
+        alarm == f"{SUBJECT_PREFIX}DATA CHECK FAILED", alarm)
+    chk("the alarm never claims nothing closes", "closing" not in alarm.lower())
+    chk("and it keeps the byte-exact prefix the mail filters match",
+        alarm.startswith(SUBJECT_PREFIX))
+    # The alarm must not outrank a real verdict: if an issue closes today and was scored,
+    # the decision is what the user needs to read in the subject.
+    row = {"ipo": "HD Fire Protect Limited", "segment": "mainboard", "closes": "2026-10-15"}
+    res = {"L1": {"verdict": "BID"}, "L2": {"verdict": "no"}}
+    with_verdict = subject_for([row], {"HD Fire Protect Limited": res}, 1, [],
+                               data_check_failed=True)
+    chk("a scored issue still gets its verdict in the subject",
+        "L1 BID" in with_verdict and "L2 NO BID" in with_verdict, with_verdict)
+
+    msrc = inspect.getsource(main)
+    csrc = inspect.getsource(compose)
+    chk("the subject trims the legal suffix NSE carries, for the phone",
+        display_name("HD Fire Protect Limited") == "HD Fire Protect")
+    chk("and a name that IS only a suffix is never trimmed to nothing",
+        display_name("Limited") == "Limited")
+    chk("the trim is display-only - the row key keeps the full name",
+        'display_name(r["ipo"])' in inspect.getsource(subject_for)
+        and "display_name" not in inspect.getsource(append_snapshots))
+    chk("the list comes from the NSE-primary calendar, not the single dashboard",
+        "CAL.market_view" in msrc and "CL.market_view" not in msrc)
+    chk("the alarm flag reaches the subject from the view, not from a guess",
+        'data_check_failed=bool(mv.get("data_check_failed"))' in csrc)
+    chk("the footer names the list source that was actually used", "list_source" in csrc)
+    chk("and the figure source is read off the rows, not hardcoded",
+        'r.get("sub") or {}).get("source")' in csrc
+        and "Source: chittorgarh.com (single source" not in csrc)
+    asrc = inspect.getsource(append_snapshots)
+    chk("the stored snapshot records the source that produced the figure",
+        's.get("source")' in asrc)
+
+    # Task 1.3, driven end to end: two attempts on a day with NOTHING closing, against
+    # ONE marker file - which is the condition the 12 Oct duplicates happened under.
+    with _tf.TemporaryDirectory() as _kd:
+        r1, m1 = _drive(1445, closing=False, send_ok=True, mdir=_kd)
+        r2, m2 = _drive(1455, closing=False, send_ok=True, mdir=_kd)
+        r3, m3 = _drive(1515, closing=False, send_ok=True, mdir=_kd, day="2026-10-14")
+    chk("a quiet day still sends ONE market summary", len(m1) == 1, (r1, m1))
+    chk("the second attempt the same day sends nothing at all", len(m2) == 0, (r2, m2))
+    chk("and it exits green, with the reason on the record",
+        r2.get("reason") == "summary_already_sent" and not r2.get("fail_loudly"), r2)
+    chk("the NEXT day gets its own summary - the marker is per date, not permanent",
+        len(m3) == 1, (r3, m3))
+    chk("the marker key changes with the date and not with the run",
+        SM.key("2026-10-13", SUMMARY_KEY) != SM.key("2026-10-14", SUMMARY_KEY)
+        and SM.key("2026-10-13", SUMMARY_KEY) == SM.key("2026-10-13", SUMMARY_KEY))
+    chk("the alarm and the quiet summary are keyed SEPARATELY, so an earlier all-clear "
+        "cannot silence a later alarm",
+        summary_key_for({"data_check_failed": True})
+        != summary_key_for({"data_check_failed": False}))
+    chk("a market summary can never satisfy 'was the decision delivered?'",
+        SUMMARY_KIND not in (SM.DECISION, SM.DEAD_MAN))
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

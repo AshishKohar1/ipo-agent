@@ -142,11 +142,12 @@ jobs:
       # breakage on 1 Oct instead of three silent days later.
       - name: Verify the live path imports in this environment
         run: |
-          python -c "import send_daily_email, chittorgarh_live, score_l, predictions_log, live_markers, market_context, capture_audit, trading_day, sent_markers, nse_subscription; print('live path imports OK')"
+          python -c "import send_daily_email, ipo_calendar, chittorgarh_live, score_l, predictions_log, live_markers, market_context, capture_audit, trading_day, sent_markers, nse_subscription; print('live path imports OK')"
           python score_l.py --self-test
           python live_markers.py --self-test
           python market_context.py --self-test
           python send_daily_email.py --self-test
+          python ipo_calendar.py --self-test
           python listing_prices.py --self-test
           python capture_audit.py --self-test
           python trading_day.py --self-test

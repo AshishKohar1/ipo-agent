@@ -1222,3 +1222,39 @@ the way to find out is to score rows that *are* in that band and compare the pre
 rate against the realised one. If the band's realised rate is far from its predicted rate,
 "missing" is not a usable band and H25 has to be revisited — which is the condition H25
 already names.
+
+---
+
+### H32 — a narrow freeze exception for the HDFIRE email fix (2026-10-13)
+
+**Approved by the user on 13 Oct 2026**, inside the 12 Oct 18:00 → 15 Oct 20:00 IST
+live-path freeze, and limited to Phase 1 Tasks 1.1–1.3. Nothing else in `.live-path` moves
+until the freeze lifts; the four queued `rule 10` → `rule 11` comment fixes stay queued.
+
+**Why an exception was the right call rather than waiting.** The freeze existed to protect
+the first live test. The 12 Oct emails proved the thing being protected was already broken:
+two identical emails said "UPCOMING: Nothing scheduled to open" while NSE's calendar
+carried HD Fire Protect bidding 13–15 Oct. Freezing a working system protects it; freezing
+a silent one guarantees the test produces nothing. The exception is the narrower risk.
+
+**Files changed under this exception**
+
+| File | Why |
+|---|---|
+| `chittorgarh_live.py` | the two parser defects (badge removed from the page; same-month window) |
+| `ipo_calendar.py` *(new)* | NSE-primary IPO list, Chittorgarh fallback and union |
+| `send_daily_email.py` | consume the new list; `DATA CHECK FAILED` subject; honest footer; one summary email per date |
+| `.github/workflows/live-model-l.yml` | gate the new module in the pre-flight |
+| `.live-path` | add the new module to the frozen manifest |
+
+**What was NOT changed, though it was tempting.** `nse_subscription.enrich_market_view`
+still covers mainboard issues **closing today** only, so an issue that is open but not
+closing shows a Chittorgarh figure even though NSE is the source of record under H22.
+Widening H22's scope is a behaviour change nobody asked for, three days into a live test,
+on a path that had just been found broken. It is queued, not done.
+
+**The standing rule this produced.** A required element of a third-party page must never be
+mandatory in a parser. Chittorgarh dropped a status badge and the row regex went from
+matching every IPO to matching none, reporting "0 dated rows" with no error, on the one
+page the entire live path depended on. Where a source can go silent, there are two sources
+or there is an alarm. There are now both.
