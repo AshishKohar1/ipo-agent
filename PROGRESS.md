@@ -18,6 +18,215 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 - **Gate C2:** AWAITING_USER since 2026-10-01
 - **Caveat:** Stage 1's Linux/`pip install` half is still unverified on a real cloud session
 
+## PHASE 3 — RUN THIS AFTER 15 Oct 2026, 20:00 IST. NOT BEFORE.
+
+Written 13 Oct 2026 ~04:00 IST, during the live-path freeze. Every item below touches a
+file in `.live-path` or depends on data the HDFIRE window has not produced yet, so none of
+it may start until the freeze lifts. The user will send **"Run Phase 3"**.
+
+**Before starting, check the freeze is actually over:**
+
+```bash
+python -c "import datetime,zoneinfo; print(datetime.datetime.now(zoneinfo.ZoneInfo('Asia/Kolkata')))"
+```
+
+### 3.1 Finish `reports/HDFIRE_INTRADAY.md`
+
+The file exists and already carries one pre-window poll (label `0145-manual`, 13 Oct
+01:45 IST, both sources empty because bidding had not opened). The scheduled polls are
+11:00, 13:00, 15:00 and 17:30 IST on 13-15 Oct. The report must answer:
+
+- **update frequency per source.** Does `api/ipo-active-category` move intraday, or publish
+  once at 19:00? This is the question H22 was shipped provisionally against. Every closed
+  issue shows a single `updateTime` of 19:00 on the final day, which is consistent with
+  either behaviour and proves neither.
+- **NSE vs Chittorgarh per poll** — the difference at each of the twelve slots.
+- **15:00-to-final growth** for HDFIRE, which is what H23's conservative bias costs.
+- whether the 15 Oct email went out on time with the right verdict. Evidence:
+  `data/sent_markers.csv` gains a `decision` row keyed to 2026-10-15 and HD Fire Protect
+  Limited, and `reports/live/2026-10-15.md` names the source actually used.
+- **whether H22 should be confirmed or stay provisional.** If the endpoint turns out to
+  publish only at 19:00, H22 as written is still correct - the freshness gate rejects a
+  stale payload and falls back - but the claim that NSE is the *live* source of record
+  would have to be narrowed to "the source of record for the final figure".
+
+### 3.2 Move `ipo-ingest-outcomes` into the day-end capture (mode `final`)
+
+- Harvest new listings daily from NSE public-past-issues; **name AND date must agree**
+  (H28). Idempotent - a second run the same day adds nothing.
+- Pricing only via the bhavcopy on the listing date (2d standing rule: a price read later
+  has been retroactively restated for every split and bonus since).
+- **An ingest failure never blocks the capture.** Its own line in the run summary, and the
+  run goes red at the end rather than exiting early - the capture is the thing with a
+  deadline, the ingest is not.
+- Prove it with a `workflow_dispatch` `final` run and print what ingest found.
+
+Note while doing this: `_raw_price` now tries the symbol **as of the listing date** via
+NSE's `symbolchange.csv` register. The ingest should use the same helper
+(`model_h_targets._symbols_as_of`) rather than a second copy, or it will keep failing on
+renamed companies the way the target build did.
+
+### 3.3 Move `ipo-retrain-monthly` to a rule-based job
+
+- New workflow mode `retrain`, added to **both** the `choice` list and the `case` branch.
+  A dispatch option with no branch runs nothing and exits 0, which looks green - the
+  workflow's own `*)` branch already errors on exactly this, and that guard must keep
+  working.
+- It runs what the routine runs: walk-forward threshold re-derivation, L1/L2 delivered vs
+  promise, the tripwire (H19 + H24), the drift guard (>25% or a sign flip held), and the
+  trailing-12-month IPO count. **It never applies a threshold** - it reports.
+- Writes `reports/retrain/YYYY-MM.md` and emails it:
+  `IPO decision - RETRAIN YYYY-MM: no flags` or
+  `IPO decision - RETRAIN YYYY-MM: FLAG <rules>`. One table per check: number, limit,
+  pass/flag. **No probability (G2).**
+- Idempotent per month; it must never double-increment the tripwire.
+- Prove with a `workflow_dispatch` `retrain` run, compare against the routine's last
+  output, and list every difference.
+
+### 3.4 cron-job.org settings to hand to the user
+
+One new job only:
+
+| Field | Value |
+|---|---|
+| Title | IPO monthly retrain |
+| Cron | `25 2 1 * *` UTC (07:55 IST on the 1st) |
+| URL and headers | the same as the existing jobs |
+| Body | `{"ref":"main","inputs":{"mode":"retrain"}}` |
+
+**Verify `retrain` against the workflow's `choice` list before handing this over** - a body
+naming a mode the workflow does not offer fails at dispatch, and the failure is a 422 that
+says nothing useful. **No new job for ingest** (3.2 folds it into the day-end capture).
+
+Then update `LIVE_SETUP.md` section 1b to the full job list and print it.
+
+### 3.5 Decommission plan — delete nothing yet
+
+Record as the next free H-number (H34 at the time of writing). The user may delete both
+Claude routines once **both** hold:
+
+1. ingest has run inside the day-end capture on **three consecutive weekdays** with no
+   error, and
+2. **one** retrain run matches the routine's last output.
+
+What to check before deleting, exactly:
+
+- `data/new_listings.csv` gained rows on each of the three days, or the run summary says
+  "no new listings" for that date - a silent zero is not evidence.
+- `data/ingest_state.json` advanced.
+- `reports/retrain/YYYY-MM.md` exists and its per-check table matches the routine's last
+  output number for number.
+- the tripwire state in `data/tripwire_state.json` did not double-increment.
+
+If the routines' run history is visible, print the last 5 runs with date, duration and
+tokens. **If it is not visible, say so - do not estimate.**
+
+### 3.6 Apply the queued comment fixes
+
+The four queued `rule 10` -> `rule 11` comment fixes in `Queued for after 15 Oct` below.
+Task 1.3 was **not** queued - it was implemented under the Phase 1 exception, because it
+landed in `send_daily_email.py` which Task 1.2 was already changing.
+
+---
+
+## Phase 1 and Phase 2, 13 Oct 2026 (session record)
+
+### Phase 1 — the email went silent while HDFIRE was bidding
+
+The 12 Oct emails reported "Nothing closes today / Nothing scheduled to open" while NSE's
+calendar carried HD Fire Protect bidding 13-15 Oct. **Three faults, not one.**
+
+| # | Fault | Why it was invisible |
+|---|---|---|
+| 1 | Chittorgarh removed the open/past state badge from both dashboards; the row regex required that `<span><span title="Open">` block | Every row stopped matching, so the page reported "0 dated rows" while still listing every IPO. No error, no exception, no log line |
+| 2 | `_window` collapsed a same-month range to open == close, because "13 - 15 Oct" carries only ONE month token | Every cross-month window parsed fine, so it had never shown. HDFIRE's window is same-month |
+| 3 | The **list** of IPOs had exactly one source, while H22 had already made NSE the source of record for the **figures** | One parser against a third party's markup, with no second opinion, produces silence that reads exactly like "no IPOs today" |
+
+Fixed under the narrow freeze exception **H32**. `ipo_calendar.py` takes the list from NSE
+first and **unions** Chittorgarh, which is still the only source for an SME issue on BSE
+SME - on 13 Oct NSE listed RAVITA (NSE Emerge) and Chittorgarh listed Vaibhav Vyapaar, and
+neither page had both. If both sources yield zero dated rows on a weekday the subject is
+`IPO decision - DATA CHECK FAILED`, never "Nothing closes today".
+
+Also: one market summary per date. `owed` is empty on a quiet day, so the already-sent
+guard never fired and all four cron attempts sent. The alarm is keyed **separately** from
+the quiet summary, so an earlier all-clear cannot silence a later alarm.
+
+**The standing rule this produced.** A required element of a third party's page must never
+be mandatory in a parser. Where a source can go silent, there are two sources or there is
+an alarm. There are now both.
+
+### Phase 2 — what was built, and what is still blocked
+
+| Block | Status | Evidence |
+|---|---|---|
+| 2.0 SME out of scope | recorded | **H33**; H31 dormant because `is_sme` has zero variance |
+| 2.1 the 60 NULL symbols | **15 recovered**, 44 handed over, 1 withdrawn | `data/recovered_symbols.csv`; measured 449 correct / 0 wrong on 563 known rows |
+| 2.2 the 37 missing RHPs | handed over | `data/manual_inputs/missing_rhps.csv` |
+| 2.3 the 12 RHP fields | built | 32-66% coverage; the six `msci_*` fields **excluded** |
+| 2.4a day-1 turnover | built | `data/day1_turnover.csv`; needed a re-fetch, the cache drops turnover |
+| 2.4b sector mapping | built | 755 symbols, 479 mapped; 258 handed over |
+| 2.4c/d/f index blocks | built | `data/index_history.csv`, 16 indices x 4405 days |
+| 2.4e Nifty P/E | **BLOCKED** | no reachable endpoint; four tried |
+| 2.4g India VIX | **BLOCKED** | `api/historical/vixhistory` returns 503 |
+| 2.4h peer premium | **BLOCKED** | not among the 36 extracted fields AND the 418 prospectuses were not retained |
+| 2.4i anchor book | built | 39.3% coverage, from 2016; MF share 23.3% |
+| 2.5 close the targets | 1y **497/506**, 3y **323/343** | the symbol walk-back recovered 9 |
+| 2.6 stability analysis | done | `reports/MODEL_H_STABILITY.md` |
+
+### Model H — which variables and which window I would carry forward (PROPOSAL ONLY)
+
+**Not a decision.** H29 is unchanged, no variable set is chosen, and nothing here is a hold
+instruction. This is what I would put to a walk-forward if asked, and why.
+
+**Window: scheme C (expanding), with the `Y-2` embargo.** Not A or B.
+
+- Scheme A forgets 2010-14 by the time it tests 2025, and with ~500 rows across 16 years
+  the cost of forgetting is severe: the 2020-24 training window carries about 200 rows and
+  80 beat-Nifty outcomes, which at one variable per ten outcomes caps the model at eight
+  variables however many are stable.
+- The **embargo matters more than the scheme.** A row listing in 2024 has a 12-month window
+  closing in 2025, so scheme A as specified trains on outcomes that are not knowable when
+  the model would be fitted. The embargoed table is in the report; where the two disagree
+  the embargoed number is the one to believe.
+- Note an artefact before reading too much into it: the embargoed median IVs are **higher**
+  than the unembargoed ones across the board. That is the smaller training fold inflating
+  in-sample IV, not the embargo improving anything.
+
+**Variables: the eight that are STABLE in scheme A, scheme C and the embargoed run alike.**
+
+| Variable | Why | Caution |
+|---|---|---|
+| `ipo_count_prior_3m`, `ipo_count_prior_6m` | highest median IV of anything (0.36 / 0.27), sign agrees in 12/14 and 11/14 | market-heat, and the sign is the one the research expects: hot market -> worse long-run relative returns |
+| `nifty_tri_ret_12m` | 13/14 windows agree, IV 0.22 | same direction, same caution |
+| `mean_listing_gain_prior_3m` | 13/14 agree, IV 0.23 | same |
+| `log_issue_size` | **14/14** windows agree - the only variable with no sign disagreement at all | the sign is negative: bigger issues do worse against the index |
+| `listing_gain_minus_sector_day` | new in 2.4d, 12/14 agree, median test AUC 0.536 - the highest of any STABLE variable | 26.5% coverage, because the sector map only reaches index members |
+| `sector_minus_nifty_6m` | 11/14 agree | 26.6% coverage, same reason |
+| `rhp_uses_of_proceeds_n` | 13/14 agree, and the only RHP field that is stable | 48.3% coverage |
+
+**What I would NOT carry forward, and why that matters.**
+
+- `listing_gain_pct` is **NOISE** in scheme A (10/14) despite the highest median test AUC
+  of any variable (0.570). A variable whose direction is unstable but whose AUC is high is
+  the signature of a relationship that changed sign partway through the sample. It is worth
+  a separate look - split before and after 2020 - not inclusion.
+- `rhp_board_size_n` has median test AUC **0.606**, the highest in the table, on 7/14 sign
+  agreement and 37.4% coverage. On 14 windows that is well inside what chance produces.
+  **This is the one I would most expect somebody to pick because of the AUC, and it is the
+  one most likely to be noise.**
+- `rhp_auditor_qualification_flag` and `anchor_mf_share_of_book_pct` are **NO SPREAD**: the
+  quantile bins collapse to one, so there is no direction to measure. That is a fact about
+  the variables - almost every RHP discloses no auditor qualification - not noise in a
+  relationship.
+
+**The honest summary.** Median out-of-sample AUC across every STABLE variable is roughly
+0.50. The stability analysis says which variables have a *consistent* relationship; it does
+not say any of them has a *strong* one. Nothing here suggests H29 would pass on a refit,
+and the 0.99pp miss recorded above should not be read as nearly-there on the strength of it.
+
+---
+
 ## FIRST STEP OF THE NEXT SESSION (written 2026-10-10 ~15:30 IST)
 
 **13-15 October is the HDFIRE window and it is the only thing in this project with a
