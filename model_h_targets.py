@@ -320,13 +320,33 @@ def dividends_in_window(rows: list[dict]) -> tuple[float, int, str]:
 
 
 # ---------------------------------------------------------------- the batch
+EXTRA = DATA / "holding_target_extra.csv"
+
+
 def rows_to_do(horizon: str = "1y") -> pd.DataFrame:
+    """The row universe: symbol, ISIN and listing date. No prices come from here.
+
+    `holding_target.csv` is the yfinance-era file and is read for its ROWS only - which
+    IPOs exist and when they listed - never for a price. `holding_target_extra.csv` adds
+    the rows recovered since (Phase 2.1), so a newly resolved symbol gets a corrected
+    target without editing a file that another job's provenance points at.
+    """
     f = DATA / ("holding_target.csv" if horizon == "1y" else "holding_target_3y.csv")
     d = pd.read_csv(f)
+    if EXTRA.exists():
+        e = pd.read_csv(EXTRA)
+        keep = [c for c in ("symbol", "company", "isin", "listing_date") if c in e]
+        e = e[keep].copy()
+        e["source_of_row"] = "recovered_phase2"
+        have = set(d["symbol"].astype(str))
+        d = pd.concat([d, e[~e["symbol"].astype(str).isin(have)]], ignore_index=True)
     d["listing_date"] = pd.to_datetime(d["listing_date"], errors="coerce")
     days = 365 if horizon == "1y" else 1095
     d["end_date"] = d["listing_date"] + pd.Timedelta(days=days)
-    return d.dropna(subset=["listing_date", "symbol"])
+    d = d.dropna(subset=["listing_date", "symbol"])
+    # A window that has not closed yet has no end price to find, and asking for one would
+    # log a run of failures that mean nothing. The row returns when the window closes.
+    return d[d["end_date"] <= pd.Timestamp.today().normalize()]
 
 
 def _ckpt() -> dict:

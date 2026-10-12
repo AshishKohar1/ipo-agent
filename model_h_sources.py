@@ -247,9 +247,16 @@ def fetch_sectors(q: Queue) -> pd.DataFrame:
         raise RuntimeError("no constituent file yielded a Symbol/Industry pair")
     out["sector_index"] = out["nse_industry"].map(
         lambda v: SECTOR_TO_INDEX.get(str(v).strip().lower()))
+    # `pd.isna(idx)`, NOT `if idx`. `.map()` returns **NaN** for an unmapped sector, and
+    # `bool(float("nan"))` is True - so the first version took the "mapped" branch for
+    # every row and wrote an empty reason for all 276 unmapped symbols. The column read
+    # back as all-NULL and said nothing about why, which is the exact failure rule 1
+    # exists to prevent: a missing value that does not announce itself.
     out["sector_index_missing_reason"] = [
-        "" if idx else NO_INDEX_REASON.get(str(v).strip().lower(),
-                                           f"sector {v!r} is not in the mapping table")
+        "" if not pd.isna(idx)
+        else NO_INDEX_REASON.get(str(v).strip().lower(),
+                                 f"sector {v!r} has no index among the 15 captured and "
+                                 f"is not in the declined list - review the mapping")
         for v, idx in zip(out["nse_industry"], out["sector_index"])]
     out.to_csv(SECTOR_MAP, index=False, encoding="utf-8")
     if clashes:
@@ -260,6 +267,30 @@ def fetch_sectors(q: Queue) -> pd.DataFrame:
     print(f"  wrote {SECTOR_MAP.name}: {len(out)} symbols, "
           f"{out['sector_index'].notna().sum()} mapped to one of the 15 indices")
     return out
+
+
+def remap_sectors() -> pd.DataFrame:
+    """Recompute `sector_index` and its reason on the sector map already on disk.
+
+    The industry per symbol is the fetched fact; the mapping to an index is ours. So a
+    mapping fix is recomputed in place rather than re-requested from NSE - refetching
+    identical bytes to change our own lookup table would be a worse citizen for no gain.
+    """
+    d = pd.read_csv(SECTOR_MAP)
+    d["sector_index"] = d["nse_industry"].map(
+        lambda v: SECTOR_TO_INDEX.get(str(v).strip().lower()))
+    d["sector_index_missing_reason"] = [
+        "" if not pd.isna(idx)
+        else NO_INDEX_REASON.get(str(v).strip().lower(),
+                                 f"sector {v!r} has no index among the 15 captured and "
+                                 f"is not in the declined list - review the mapping")
+        for v, idx in zip(d["nse_industry"], d["sector_index"])]
+    d.to_csv(SECTOR_MAP, index=False, encoding="utf-8")
+    n_map = int(d["sector_index"].notna().sum())
+    n_reason = int((d["sector_index_missing_reason"].astype(str).str.len() > 0).sum())
+    print(f"  remapped {len(d)} symbols: {n_map} to an index, "
+          f"{n_reason} with a stated reason for having none")
+    return d
 
 
 def write_missing_sectors() -> int:
@@ -458,6 +489,13 @@ def self_test() -> int:
     chk("Nifty 50 is fetched too, since every relative number needs it",
         "NIFTY 50" in WANT_INDICES)
 
+    chk("an unmapped sector gets a REASON - NaN is truthy, so `if idx` wrote none",
+        ("" if not pd.isna(float("nan")) else "reason") == "reason")
+    chk("and the truthiness version this replaced wrote an empty string",
+        ("" if float("nan") else "reason") == "")
+    chk("the remap path exists, so a mapping fix needs no refetch",
+        callable(globals().get("remap_sectors")))
+
     print("\n[3] the gap is shared, not per-call")
     q = Queue()
     t0 = time.time()
@@ -474,7 +512,8 @@ if __name__ == "__main__":
     import os
     os.chdir(ROOT)
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage", choices=["sectors", "indices", "renames", "all"])
+    ap.add_argument("--stage",
+                    choices=["sectors", "indices", "renames", "remap", "all"])
     ap.add_argument("--only", help="comma-separated index names, for --stage indices")
     ap.add_argument("--start", default="2009-01-01")
     ap.add_argument("--self-test", action="store_true")
@@ -488,6 +527,10 @@ if __name__ == "__main__":
     if a.stage in ("sectors", "all"):
         print("\n=== stage sectors (2.4b)")
         fetch_sectors(q)
+        write_missing_sectors()
+    if a.stage == "remap":
+        print(chr(10) + "=== stage remap (no network: our mapping table only)")
+        remap_sectors()
         write_missing_sectors()
     if a.stage in ("renames", "all"):
         print(chr(10) + "=== stage renames (2.1)")

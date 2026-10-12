@@ -255,8 +255,16 @@ def self_test() -> int:
     blank_all = s_all.isin(["", "nan", "NaN", "None"]) | m_all["symbol"].isna()
     chk("74 master rows have no symbol at all", int(blank_all.sum()) == 74,
         int(blank_all.sum()))
-    chk("but only the ones with no exclusion reason are handed over",
-        len(u) == 60, len(u))
+    # NOT pinned at 60. 60 was the count before any recovery; the file shrinks as
+    # symbols are found, and a test that pins the number would fail for the right reason
+    # and have to be edited every time, which is how an assertion stops being read.
+    rec = (pd.read_csv(DATA / "recovered_symbols.csv")
+           if (DATA / "recovered_symbols.csv").exists() else pd.DataFrame())
+    found = int(rec["symbol"].notna().sum()) if "symbol" in rec else 0
+    chk("the handoff holds exactly the unresolved remainder of the 60",
+        len(u) + found == 60, (len(u), found))
+    chk("and it excludes the 14 that are an FPO, a REIT/InvIT or an IDR",
+        int(blank_all.sum()) - 60 == 14)
     chk("no FPO, REIT/InvIT or IDR reaches the file the user is asked to fill",
         u["exclude_reason"].isna().all() or
         not u["exclude_reason"].astype(str).str.strip().isin(
