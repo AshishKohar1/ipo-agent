@@ -62,10 +62,8 @@ not backfill a marker to make it green.
 
 ### Open after 2026-10-12, in the order they unblock each other
 
-1. **Finish the night batch.** `bash run_model_h_night.sh` is resumable and safe to kill.
-   Stage 1 (3y corporate actions) is done, 331 of 331, 0 failures. Stages 2 and 3 fetch
-   bhavcopies for dates not on disk and are the long half.
-2. **Re-run Task 4 on the complete targets.** `python model_h_scorecard.py --backtest`.
+1. ~~Finish the night batch.~~ **DONE 2026-10-12**: 1y 473 of 491 corrected, 3y 312 of 331, 0 failures. Only 14 (1y) and 11 (3y) rows lack a bhavcopy. Task 4 re-run on the complete set - see above.
+2. **Re-run Task 4 after any new targets land.** `python model_h_scorecard.py --backtest`.
    The H29 verdict above is provisional on 281 of 491 rows. Expect it to stay FAIL — the
    deciles are flat, not marginal — but it has to be re-stated on the full set.
 3. **Recover the 60 NULL-symbol IPOs** via `ingest_outcomes.nse_past_issues()`, which
@@ -94,91 +92,94 @@ not backfill a marker to make it green.
 
 ---
 
-### Task 5 — hold-% mapping: the proposal is that there is no mapping
+### Task 5 — hold-% mapping, on the COMPLETE corrected targets
 
-**Provisional on 281 of 491 rows** — the corrected-target night batch is still running, so
-these numbers will move. The direction of the finding is unlikely to.
+**Superseded reading, kept as a warning.** An earlier run of this section reported pooled
+AUC 0.4513, a top band *worse* than the base rate and flat deciles, on the 281 rows the
+cache-only build could price. That subset was **not random**: it contained only rows whose
+bhavcopy dates happened to already be on disk from other work. On the full set the
+conclusion is different in every particular except the verdict. A provisional number from a
+convenience sample was worth less than it looked.
 
-#### What the backtest says
-
-H29 was applied exactly, pooled across test years, on the top-20% band fixed beforehand:
+#### The backtest, 473 of 491 corrected 1y targets
 
 | H29 condition | Required | Measured | |
 |---|---|---|---|
-| picks | ≥ 50 | **45** | fail |
-| hit rate | ≥ 54% | **35.6%** | fail |
-| Wilson 95% lower bound | > base rate (40.4%) | **23.2%** | fail |
+| picks | ≥ 50 | **83** | **pass** |
+| hit rate | ≥ 54% | **53.01%** | fail by 0.99pp |
+| Wilson 95% lower bound | > base rate 43.13% | **42.38%** | fail by 0.75pp |
 
-**Pooled out-of-fold AUC 0.4513** — below 0.5, so the ranking is worse than random. The
-top-20% band beats the Nifty on **29.2%** of its picks against a **40.4%** base rate: the
-band the model is most confident about is the *worst* of the three.
+Pooled out-of-fold **AUC 0.5338** on 415 scored rows.
 
-#### So the proposed mapping is
+**H29 FAILS, and it fails by a hair.** Two conditions short by under one percentage point
+each. **Model H is display-only.**
 
-| Band | % of allotment to hold |
-|---|---|
-| any | **no instruction — Model H is display-only** |
+The threshold was fixed before the measurement and is not revisited now that the
+measurement is in. 53.01% is not 54%. That is the entire function of setting the bar first,
+and this is the exact situation it was set for — a result close enough to argue about.
 
-Per H29 that is not a judgement call, it is the rule firing. The score may appear in the
-email; it may not carry a hold or exit instruction.
-
-#### Are finer bands supported? No — and nor are three
+#### The bands, which now behave as intended
 
 | Band | n | beat rate | Wilson lo95 |
 |---|---|---|---|
-| top 20% | 48 | 29.2% | 18.2% |
-| middle 30% | 73 | 43.8% | 33.0% |
-| bottom 50% | 122 | 42.6% | 34.2% |
+| **top 20%** | 83 | **53.0%** | 42.4% |
+| middle 30% | 124 | 40.3% | 32.1% |
+| bottom 50% | 208 | 40.9% | 34.4% |
 
-The three intervals overlap heavily and the ordering is **inverted**. By decile it is
-plainly noise:
+The top band is genuinely the best, by about 12pp over both others — the opposite of the
+subset reading. By decile the top three separate and the rest do not:
 
 | Decile | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| beat rate | 37.5% | 20.8% | 50.0% | 40.0% | 41.7% | 37.5% | 36.0% | 37.5% | **54.2%** | 48.0% |
+| beat rate | 48.8% | 57.1% | 53.7% | 31.0% | 36.6% | 38.1% | 39.0% | 40.5% | 34.1% | 52.4% |
 
-The highest-scoring decile beats 37.5%; decile 9 beats 54.2%. There is no monotone
-relationship to carve bands out of at any granularity.
+Deciles 1-3 average about 53%; 4-9 sit below the base rate; decile 10 at 52.4% is
+unexplained and is the reason finer bands are **not** supported. Three bands are supported.
+Ten are not.
+
+#### Proposed mapping — for ratification, and not to be acted on while H29 fails
+
+| Band | Realised beat rate | Proposed % of allotment to hold |
+|---|---|---|
+| top 20% | 53.0% | **50%** |
+| middle 30% | 40.3% | **0%** |
+| bottom 50% | 40.9% | **0%** |
+
+50% rather than 100% on the top band because its Wilson lower bound (42.4%) does not clear
+the base rate: the evidence supports "better than the rest", not "reliably better than the
+index". Nothing above 0% elsewhere, because neither other band beats the base rate at all.
+
+**This mapping is inert until H29 passes.** It is written down so that if a later refit does
+pass, the percentages were not chosen after seeing which ones would have paid.
 
 #### The post-tax view
 
-Rates from `data/tax_rates.csv` — **STCG 20% (§111A), LTCG 12.5% (§112A)** — read out of an
-official CBDT document, with the URL, page, quoted line, PDF SHA-256 and fetch time
-recorded. **The annual LTCG exemption is ignored**, as instructed: it is a per-person
-allowance and cannot be attributed to one IPO without knowing the rest of the portfolio.
-Both options are therefore pessimistic in absolute terms; the comparison between them is
-barely affected.
-
-Only **143 of 243** scored rows qualify: §112A needs the holding to **exceed** 12 months, so
-rows whose actual exit price is at day 365 or earlier are short-term and are excluded rather
-than taxed at the wrong rate.
+Rates from `data/tax_rates.csv` — **STCG 20% (§111A)**, **LTCG 12.5% (§112A)** — read out of
+an official CBDT document with URL, page, quoted line, PDF SHA-256 and fetch time recorded.
+The annual LTCG exemption is ignored, as instructed: it is a per-person allowance and cannot
+be attributed to a single IPO. Only **211 of 415** scored rows qualify, because §112A needs
+the holding to **exceed** 12 months and rows exiting on day 365 or earlier are short-term.
 
 | Band | n | beat rate | median pre-tax excess | median post-tax excess |
 |---|---|---|---|---|
-| top 20% | 28 | 28.6% | **−17.1pp** | **−13.4pp** |
-| middle 30% | 43 | 44.2% | −6.4pp | −5.5pp |
-| bottom 50% | 72 | 44.4% | −4.8pp | −5.9pp |
-| **all** | 143 | 41.3% | **−10.3pp** | **−8.5pp** |
+| **top 20%** | 42 | **57.1%** | **+16.9pp** | **+17.1pp** |
+| middle 30% | 63 | 39.7% | −11.3pp | −8.0pp |
+| bottom 50% | 106 | 36.8% | −12.7pp | −11.7pp |
+| all | 211 | 41.7% | −9.0pp | −7.1pp |
 
-Two things worth reading off that table.
+**The tension worth putting in front of the user.** The top band's median excess is
+**+16.9pp** while its hit rate is only 53.0%. Its value is concentrated in large winners
+rather than a high win rate — and **H29 tests the win rate, not expected return.** Those are
+different questions, and H29 answers the more conservative one. That is a statement about
+what H29 measures, not an argument for changing it; if the user wants a rule about expected
+return, that is a new decision to take before the next measurement, not after this one.
 
-**Tax slightly favours holding, and not nearly enough.** Post-tax is less bad than pre-tax
-(−8.5pp against −10.3pp) because selling at the listing close triggers STCG at 20% on the
-listing gain, which handicaps the sell-now option. A 1.8pp tax advantage does not rescue a
-10pp pre-tax deficit.
+Post-tax barely moves the top band (+17.1pp against +16.9pp) and improves the losing bands,
+because selling at the listing close triggers STCG at 20% on the listing gain and so
+handicaps the sell-now option.
 
-**The median IPO underperforms the Nifty 50 TRI over its first year either way.** That is
-the base-rate fact Model H was built to exploit, and it is still true — what has failed is
-the attempt to tell *which* IPOs.
-
-#### What would change this
-
-Not a different estimator. Pooled AUC 0.4513 with non-monotone WoE bins (below) says the
-candidate variables carry no usable listing-day signal for this target, and a stronger
-learner would fit that noise more confidently. What might change it is **variables that do
-not exist yet**: the RHP fundamentals (Task 3a, unbuilt), the peer-valuation premium (3b),
-sector momentum (3e) and the anchor book (3d). Those are the blocks H30 specified and this
-run did not have.
+**The median IPO still underperforms the Nifty 50 TRI over its first year** — all 211 rows
+median −9.0pp pre-tax. That base-rate fact is unchanged.
 
 ---
 
