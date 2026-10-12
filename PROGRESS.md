@@ -60,6 +60,40 @@ not backfill a marker to make it green.
 > model with an `is_sme` flag, an explicit exception to rule 6), and an **addendum to H25**
 > making the 37 no-RHP IPOs a held-out test set.
 
+### Open after 2026-10-12, in the order they unblock each other
+
+1. **Finish the night batch.** `bash run_model_h_night.sh` is resumable and safe to kill.
+   Stage 1 (3y corporate actions) is done, 331 of 331, 0 failures. Stages 2 and 3 fetch
+   bhavcopies for dates not on disk and are the long half.
+2. **Re-run Task 4 on the complete targets.** `python model_h_scorecard.py --backtest`.
+   The H29 verdict above is provisional on 281 of 491 rows. Expect it to stay FAIL — the
+   deciles are flat, not marginal — but it has to be re-stated on the full set.
+3. **Recover the 60 NULL-symbol IPOs** via `ingest_outcomes.nse_past_issues()`, which
+   reaches back before 2021. Not done today because the batch was on NSE at a 3 s gap
+   (rule 5) and a second client would halve it. Name AND date must agree (H28); the 57
+   renames are the whole problem and date-only matching has already been measured and
+   rejected — see `recover_symbols.py`.
+4. **Task 2, the SME feasibility audit.** Needs NSE, so it waits with (3). What is already
+   settled without a single request: the master contains **0 SME rows** (309 mainboard, 314
+   unknown series), so `is_sme` has zero variance and **H31 cannot be exercised at all**
+   until SME IPOs are added. The audit's real question is therefore not "which Model H
+   variables do SME rows have" but "can SME rows be obtained at all" — NSE Emerge and BSE
+   SME listing and price files, and whether ISIN matching works against them.
+5. **Task 3's unbuilt blocks**, each needing a source not on disk:
+   `a` RHP fundamentals (the 12 scorecard fields) — blocked on Stage 15 extraction
+   coverage, which is well short of its 60% target; `b` peer-valuation premium from the
+   "Basis for Issue Price" tables; `c` day-1 turnover (the bhavcopy carries it, but
+   `listing_prices._norm` drops it and that file is frozen — re-parse the raw cache here
+   instead); `e` sector momentum and the NSE industry mapping; `f` Nifty 50 P/E vs its 10y
+   median, smallcap minus Nifty, India VIX; `d` anchor share from
+   `data/chittorgarh_anchor_lockin.csv`.
+6. **The H25 addendum test** — scoring the 37 no-RHP IPOs on non-RHP variables plus the
+   "missing" band — **cannot run until (5a) exists.** There is no RHP variable built, so
+   there is no "missing" band to test the behaviour of. Stated plainly rather than
+   approximated with a different variable.
+
+---
+
 ### Task 5 — hold-% mapping: the proposal is that there is no mapping
 
 **Provisional on 281 of 491 rows** — the corrected-target night batch is still running, so
