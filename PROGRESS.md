@@ -60,6 +60,94 @@ not backfill a marker to make it green.
 > model with an `is_sme` flag, an explicit exception to rule 6), and an **addendum to H25**
 > making the 37 no-RHP IPOs a held-out test set.
 
+### Task 5 — hold-% mapping: the proposal is that there is no mapping
+
+**Provisional on 281 of 491 rows** — the corrected-target night batch is still running, so
+these numbers will move. The direction of the finding is unlikely to.
+
+#### What the backtest says
+
+H29 was applied exactly, pooled across test years, on the top-20% band fixed beforehand:
+
+| H29 condition | Required | Measured | |
+|---|---|---|---|
+| picks | ≥ 50 | **45** | fail |
+| hit rate | ≥ 54% | **35.6%** | fail |
+| Wilson 95% lower bound | > base rate (40.4%) | **23.2%** | fail |
+
+**Pooled out-of-fold AUC 0.4513** — below 0.5, so the ranking is worse than random. The
+top-20% band beats the Nifty on **29.2%** of its picks against a **40.4%** base rate: the
+band the model is most confident about is the *worst* of the three.
+
+#### So the proposed mapping is
+
+| Band | % of allotment to hold |
+|---|---|
+| any | **no instruction — Model H is display-only** |
+
+Per H29 that is not a judgement call, it is the rule firing. The score may appear in the
+email; it may not carry a hold or exit instruction.
+
+#### Are finer bands supported? No — and nor are three
+
+| Band | n | beat rate | Wilson lo95 |
+|---|---|---|---|
+| top 20% | 48 | 29.2% | 18.2% |
+| middle 30% | 73 | 43.8% | 33.0% |
+| bottom 50% | 122 | 42.6% | 34.2% |
+
+The three intervals overlap heavily and the ordering is **inverted**. By decile it is
+plainly noise:
+
+| Decile | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| beat rate | 37.5% | 20.8% | 50.0% | 40.0% | 41.7% | 37.5% | 36.0% | 37.5% | **54.2%** | 48.0% |
+
+The highest-scoring decile beats 37.5%; decile 9 beats 54.2%. There is no monotone
+relationship to carve bands out of at any granularity.
+
+#### The post-tax view
+
+Rates from `data/tax_rates.csv` — **STCG 20% (§111A), LTCG 12.5% (§112A)** — read out of an
+official CBDT document, with the URL, page, quoted line, PDF SHA-256 and fetch time
+recorded. **The annual LTCG exemption is ignored**, as instructed: it is a per-person
+allowance and cannot be attributed to one IPO without knowing the rest of the portfolio.
+Both options are therefore pessimistic in absolute terms; the comparison between them is
+barely affected.
+
+Only **143 of 243** scored rows qualify: §112A needs the holding to **exceed** 12 months, so
+rows whose actual exit price is at day 365 or earlier are short-term and are excluded rather
+than taxed at the wrong rate.
+
+| Band | n | beat rate | median pre-tax excess | median post-tax excess |
+|---|---|---|---|---|
+| top 20% | 28 | 28.6% | **−17.1pp** | **−13.4pp** |
+| middle 30% | 43 | 44.2% | −6.4pp | −5.5pp |
+| bottom 50% | 72 | 44.4% | −4.8pp | −5.9pp |
+| **all** | 143 | 41.3% | **−10.3pp** | **−8.5pp** |
+
+Two things worth reading off that table.
+
+**Tax slightly favours holding, and not nearly enough.** Post-tax is less bad than pre-tax
+(−8.5pp against −10.3pp) because selling at the listing close triggers STCG at 20% on the
+listing gain, which handicaps the sell-now option. A 1.8pp tax advantage does not rescue a
+10pp pre-tax deficit.
+
+**The median IPO underperforms the Nifty 50 TRI over its first year either way.** That is
+the base-rate fact Model H was built to exploit, and it is still true — what has failed is
+the attempt to tell *which* IPOs.
+
+#### What would change this
+
+Not a different estimator. Pooled AUC 0.4513 with non-monotone WoE bins (below) says the
+candidate variables carry no usable listing-day signal for this target, and a stronger
+learner would fit that noise more confidently. What might change it is **variables that do
+not exist yet**: the RHP fundamentals (Task 3a, unbuilt), the peer-valuation premium (3b),
+sector momentum (3e) and the anchor book (3d). Those are the blocks H30 specified and this
+run did not have.
+
+---
+
 ### Phase 2 design — quarterly re-scoring (Task 6: design and audit only, nothing built)
 
 H30 puts quarterly re-scoring in phase 2. This is its design, written now so the phase-1

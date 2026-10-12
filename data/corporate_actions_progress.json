@@ -5717,5 +5717,40 @@
   "fetched_at_ist": "2026-10-12 22:37:46.542987",
   "failed": false,
   "note": ""
+ },
+ "3y|JUBLFOOD": {
+  "n": 3,
+  "sha256": "acb09c736473cd31bac310dac4746c5e6da83ee3d635ab3ce5a562a927602ec0",
+  "fetched_at_ist": "2026-10-12 22:37:49.717348",
+  "failed": false,
+  "note": ""
+ },
+ "3y|DBCORP": {
+  "n": 7,
+  "sha256": "c95f1bd1ab667ea2f7f75a445fda06cd7df3a9f68659dfc90924c37c3331d9fc",
+  "fetched_at_ist": "2026-10-12 22:37:52.846172",
+  "failed": false,
+  "note": ""
+ },
+ "3y|GODREJPROP": {
+  "n": 3,
+  "sha256": "734851c58f016e63a665215397bd40d46c322992820d149c843e169ec523fc62",
+  "fetched_at_ist": "2026-10-12 22:37:55.990926",
+  "failed": false,
+  "note": ""
+ },
+ "3y|JSWENERGY": {
+  "n": 3,
+  "sha256": "51f88a9aaee713ecbab5c9cece98d6096583664658a5a49b3def0297ef8241c1",
+  "fetched_at_ist": "2026-10-12 22:37:59.125948",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MBLINFRA": {
+  "n": 4,
+  "sha256": "06eebedf53f63cdd9052de37c8b346f24e6f0938231f72dab324ed2aae4007c7",
+  "fetched_at_ist": "2026-10-12 22:38:02.287290",
+  "failed": false,
+  "note": ""
  }
 }
