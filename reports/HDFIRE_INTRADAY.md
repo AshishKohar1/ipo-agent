@@ -2,4 +2,41 @@
 
 Does NSE's `ipo-active-category` publish during the bidding day, or only at 19:00? Subjects: **HDFIRE** (EQ, mainboard) and **RAVITA** (SME, control), both bidding 2026-10-13 to 2026-10-15, confirmed from NSE's own calendar.
 
-**No polls recorded yet.** The window has not started, or the poller has not run. Nothing is inferred from an empty file.
+`4` rows recorded.
+
+## Every poll, as recorded
+
+| trading date | polled at (real) | slot | symbol | source | Total | QIB | HNI | RII | NSE updateTime | gate |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-10-13 | 2026-10-13 01:37:37 | 0145-manual | HDFIRE | nse_active_category | 0.00x | — | — | — | Updated as on null | False |
+| 2026-10-13 | 2026-10-13 01:37:37 | 0145-manual | HDFIRE | chittorgarh | — | — | — | — | nan | nan |
+| 2026-10-13 | 2026-10-13 01:37:37 | 0145-manual | RAVITA | nse_active_category | 0.00x | — | — | — | Updated as on null | False |
+| 2026-10-13 | 2026-10-13 01:37:37 | 0145-manual | RAVITA | chittorgarh | — | — | — | — | nan | nan |
+
+## Did NSE's updateTime advance within a day?
+
+This is the whole test. An advancing `updateTime` means NSE publishes intraday and can carry the 15:00 decision; a single pinned value means it cannot.
+
+| trading date | symbol | distinct NSE updateTimes | values |
+|---|---|---|---|
+| 2026-10-13 | HDFIRE | **1** | Updated as on null |
+| 2026-10-13 | RAVITA | **1** | Updated as on null |
+
+## NSE versus Chittorgarh, per poll
+
+| trading date | slot | symbol | NSE Total | Chittorgarh Total | difference |
+|---|---|---|---|---|---|
+| 2026-10-13 | 0145-manual | HDFIRE | 0.00x | — | — |
+| 2026-10-13 | 0145-manual | RAVITA | 0.00x | — | — |
+
+## 15:00 to final growth (H23's unmeasured quantity)
+
+| trading date | symbol | 15:00 Total | last poll Total | growth |
+|---|---|---|---|---|
+| 2026-10-13 | HDFIRE | — | 0.00x | — |
+| 2026-10-13 | RAVITA | — | 0.00x | — |
+
+## Verdict on H22
+
+**Not yet decided — this is filled in after 15 October.** The decision rule: if `updateTime` advances within a bidding day on HDFIRE, confirm H22 and let NSE carry the live 15:00 decision. If it does not, H22 is reduced to an archival and verification role and Chittorgarh stays primary for the live figure. The freshness gate already makes either outcome safe.
+
