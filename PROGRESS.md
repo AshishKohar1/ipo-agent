@@ -171,59 +171,100 @@ an alarm. There are now both.
 | 2.4g India VIX | **BLOCKED** | `api/historical/vixhistory` returns 503 |
 | 2.4h peer premium | **BLOCKED** | not among the 36 extracted fields AND the 418 prospectuses were not retained |
 | 2.4i anchor book | built | 39.3% coverage, from 2016; MF share 23.3% |
-| 2.5 close the targets | 1y **497/506**, 3y **323/343** | the symbol walk-back recovered 9 |
+| 2.5 close the targets | 1y **497/506**, 3y **323/343** | the symbol walk-back recovered 9; modelling rows 473 -> **497** |
 | 2.6 stability analysis | done | `reports/MODEL_H_STABILITY.md` |
 
 ### Model H — which variables and which window I would carry forward (PROPOSAL ONLY)
 
 **Not a decision.** H29 is unchanged, no variable set is chosen, and nothing here is a hold
-instruction. This is what I would put to a walk-forward if asked, and why.
+instruction. This is what I would put to a walk-forward if asked, and the reasons.
 
-**Window: scheme C (expanding), with the `Y-2` embargo.** Not A or B.
+Measured on **497 mainboard IPOs** with a corrected 1y target, 2010-2025, base rate
+**39.8%**. 31 candidate variables, each measured **one at a time** across three window
+schemes and both schemes again with a `Y-2` embargo. Full tables in
+`reports/MODEL_H_STABILITY.md`.
 
-- Scheme A forgets 2010-14 by the time it tests 2025, and with ~500 rows across 16 years
-  the cost of forgetting is severe: the 2020-24 training window carries about 200 rows and
-  80 beat-Nifty outcomes, which at one variable per ten outcomes caps the model at eight
-  variables however many are stable.
-- The **embargo matters more than the scheme.** A row listing in 2024 has a 12-month window
+**Window: scheme C (expanding), with the embargo.** Not A or B.
+
+- Scheme A forgets 2010-14 by the time it tests 2025. With ~500 rows across 16 years that
+  is expensive: the 2020-24 training window carries about 200 rows and 80 beat-Nifty
+  outcomes, which at one variable per ten outcomes caps the model at eight variables
+  however many turn out to be stable.
+- **The embargo matters more than the scheme.** A row listing in 2024 has a 12-month window
   closing in 2025, so scheme A as specified trains on outcomes that are not knowable when
-  the model would be fitted. The embargoed table is in the report; where the two disagree
-  the embargoed number is the one to believe.
-- Note an artefact before reading too much into it: the embargoed median IVs are **higher**
-  than the unembargoed ones across the board. That is the smaller training fold inflating
-  in-sample IV, not the embargo improving anything.
+  the model would be fitted. Where the embargoed and unembargoed tables disagree, the
+  embargoed one is the number to believe.
+- One artefact to discount before reading the embargoed table: its median IVs are
+  **higher** across the board. That is the smaller training fold inflating in-sample IV,
+  not the embargo improving anything.
 
-**Variables: the eight that are STABLE in scheme A, scheme C and the embargoed run alike.**
+**Variables: the six that are STABLE under A, B, C and both embargoed runs.**
 
-| Variable | Why | Caution |
+| Variable | median IV (A) | sign agrees | median test AUC | direction |
+|---|---|---|---|---|
+| `ipo_count_prior_6m` | 0.308 | 13/14 | 0.500 | more IPOs -> worse |
+| `ipo_count_prior_3m` | 0.282 | **14/14** | 0.500 | more IPOs -> worse |
+| `mean_listing_gain_prior_3m` | 0.243 | 13/14 | **0.578** | hotter -> worse |
+| `nifty_tri_ret_12m` | 0.236 | 13/14 | 0.500 | stronger market -> worse |
+| `listing_gain_minus_sector_day` | 0.184 | 12/14 | 0.535 | bigger pop vs sector -> worse |
+| `rhp_uses_of_proceeds_n` | 0.082 | 13/14 | 0.500 | more stated objects -> better |
+
+Five of the six are **market-heat** variables, and all five point the way the research
+expects: a hot primary market produces worse long-run relative returns. That consistency is
+the strongest thing in this analysis. It is also a warning, because five correlated
+measures of one thing are not five pieces of evidence - a selection step would have to keep
+one or two of them, not all five.
+
+`rhp_uses_of_proceeds_n` is the only RHP field that survives, at 48.3% coverage.
+`listing_gain_minus_sector_day` is the only one of the new 2.4 blocks that survives, at
+26.5% coverage, limited by the sector map reaching only NSE index members.
+
+**Where schemes A and C disagree — which is the point of running both.** Fifteen variables
+change label between them:
+
+| Variable | A | C |
 |---|---|---|
-| `ipo_count_prior_3m`, `ipo_count_prior_6m` | highest median IV of anything (0.36 / 0.27), sign agrees in 12/14 and 11/14 | market-heat, and the sign is the one the research expects: hot market -> worse long-run relative returns |
-| `nifty_tri_ret_12m` | 13/14 windows agree, IV 0.22 | same direction, same caution |
-| `mean_listing_gain_prior_3m` | 13/14 agree, IV 0.23 | same |
-| `log_issue_size` | **14/14** windows agree - the only variable with no sign disagreement at all | the sign is negative: bigger issues do worse against the index |
-| `listing_gain_minus_sector_day` | new in 2.4d, 12/14 agree, median test AUC 0.536 - the highest of any STABLE variable | 26.5% coverage, because the sector map only reaches index members |
-| `sector_minus_nifty_6m` | 11/14 agree | 26.6% coverage, same reason |
-| `rhp_uses_of_proceeds_n` | 13/14 agree, and the only RHP field that is stable | 48.3% coverage |
+| `log1p_sub_total`, `sub_total`, `sub_qib`, `mean_sub_total_prior_3m`, `log_issue_size`, `sector_minus_nifty_6m` | STABLE | NOISE |
+| `smallcap_minus_nifty_6m`, `qib_share_of_total`, `anchor_amount_cr` | CURRENT | NOISE |
+| `sub_hni` | CURRENT | STABLE |
+| `promoter_holding_post_pct_agg`, `listing_gain_pct`, `nifty_tri_ret_6m`, `anchor_share_of_issue_pct` | NOISE | STABLE |
 
-**What I would NOT carry forward, and why that matters.**
+Six variables are stable on a rolling 5-year view and noise on an expanding one. That is
+the signature of a relationship that holds **locally in time** and does not survive being
+asked to hold over sixteen years - subscription level and issue size most of all. Keeping
+them would be a bet that the recent regime continues, and that bet should be made
+explicitly if it is made at all.
 
-- `listing_gain_pct` is **NOISE** in scheme A (10/14) despite the highest median test AUC
-  of any variable (0.570). A variable whose direction is unstable but whose AUC is high is
-  the signature of a relationship that changed sign partway through the sample. It is worth
-  a separate look - split before and after 2020 - not inclusion.
-- `rhp_board_size_n` has median test AUC **0.606**, the highest in the table, on 7/14 sign
-  agreement and 37.4% coverage. On 14 windows that is well inside what chance produces.
-  **This is the one I would most expect somebody to pick because of the AUC, and it is the
-  one most likely to be noise.**
-- `rhp_auditor_qualification_flag` and `anchor_mf_share_of_book_pct` are **NO SPREAD**: the
-  quantile bins collapse to one, so there is no direction to measure. That is a fact about
-  the variables - almost every RHP discloses no auditor qualification - not noise in a
-  relationship.
+**What I would not carry forward, and why it matters.**
 
-**The honest summary.** Median out-of-sample AUC across every STABLE variable is roughly
-0.50. The stability analysis says which variables have a *consistent* relationship; it does
-not say any of them has a *strong* one. Nothing here suggests H29 would pass on a refit,
-and the 0.99pp miss recorded above should not be read as nearly-there on the strength of it.
+- `listing_gain_pct` has the second-highest median test AUC of anything (0.557) and is
+  **NOISE in scheme A** while **STABLE in scheme C**. A variable whose direction is
+  unstable but whose AUC is high is the signature of a relationship that changed sign
+  partway through the sample. Worth a separate look - split before and after 2020 - not
+  inclusion on the strength of the AUC.
+- Three anchor variables and three RHP flags qualified as STABLE on an earlier run of this
+  analysis and **do not now**. Two things changed: the corrected-target set grew from 473
+  to 497 rows, and the classifier was corrected. It had been dividing the
+  sign-agreement count by the windows where a direction was *measurable* rather than by all
+  windows, so `rhp_pre_ipo_placement_flag` - direction measurable in 5 of 14 windows,
+  agreeing in 4 of those 5 - printed as "STABLE, same_sign 4, windows 14". The table now
+  carries `dirs_measured` as the denominator, and a variable must have a measurable
+  direction in at least 60% of windows before "agrees in 75% of them" is allowed to mean
+  anything.
+- `rhp_board_size_n` had median test AUC **0.606** on the 473-row set, the highest in the
+  table, on 7/14 sign agreement. On the 497-row set it is **0.506**. It was flagged at the
+  time as the variable most likely to be picked for its AUC and most likely to be noise,
+  and that is what it turned out to be.
+- `rhp_auditor_qualification_flag` and `anchor_mf_share_of_book_pct` are **NO SPREAD**:
+  their quantile bins collapse to one, so there is no direction to measure at all. That is
+  a fact about the variables - almost every RHP discloses no auditor qualification - not
+  noise in a relationship, and the two must not be read as 0/14 sign agreement.
+
+**The honest summary.** Median out-of-sample AUC across every STABLE variable in scheme A
+is exactly **0.500**. The best single variable anywhere reaches 0.578. This analysis says
+which variables have a *consistent* relationship with beating the index; it does not say
+any of them has a *strong* one. Nothing in it suggests H29 would pass on a refit, and the
+0.99pp miss recorded above should not be read as nearly-there on the strength of it.
 
 ---
 

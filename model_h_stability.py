@@ -182,7 +182,8 @@ def classify(res: pd.DataFrame) -> pd.DataFrame:
         n = len(g)
         if n == 0:
             out.append({"variable": v, "label": "NOT MEASURED", "windows": 0,
-                        "same_sign": 0, "iv_ok": 0, "median_iv": None,
+                        "same_sign": 0, "dirs_measured": 0, "iv_ok": 0,
+                        "median_iv": None,
                         "median_auc": None,
                         "why": "no window had enough beat-Nifty outcomes to measure"})
             continue
@@ -194,7 +195,8 @@ def classify(res: pd.DataFrame) -> pd.DataFrame:
         # in the relationship.
         if len(dirs) == 0:
             out.append({"variable": v, "label": "NO SPREAD", "windows": n,
-                        "same_sign": 0, "iv_ok": iv_ok_pre(g),
+                        "same_sign": 0, "dirs_measured": 0,
+                        "iv_ok": iv_ok_pre(g),
                         "median_iv": round(float(g["iv"].median()), 4),
                         "median_auc": (None if g["auc"].dropna().empty
                                        else round(float(g["auc"].median()), 4)),
@@ -213,25 +215,35 @@ def classify(res: pd.DataFrame) -> pd.DataFrame:
         tail_dirs = tail["direction"].dropna()
         tail_ok = (len(tail) and (tail["iv"] >= IV_FLOOR).all()
                    and len(tail_dirs) == len(tail) and tail_dirs.nunique() == 1)
-        if frac_sign >= STABLE_SIGN and frac_iv >= STABLE_IV:
+        # The sign fraction has `len(dirs)` as its denominator, not `n`. For a variable
+        # whose bins collapse in most windows those differ a lot, and 4 agreements out of
+        # 5 measurable windows would print beside "windows 14" and read as 4 of 14. So the
+        # denominator is now carried in the table, AND a variable has to have a measurable
+        # direction in most windows before "same direction in 75% of them" means anything.
+        enough_dirs = len(dirs) >= STABLE_IV * n
+        if frac_sign >= STABLE_SIGN and frac_iv >= STABLE_IV and enough_dirs:
             label = "STABLE"
-            why = (f"sign agrees in {same}/{len(dirs)} windows (>= {STABLE_SIGN:.0%}) "
+            why = (f"sign agrees in {same}/{len(dirs)} measurable windows "
+                   f"(>= {STABLE_SIGN:.0%}), direction measurable in {len(dirs)}/{n}, "
                    f"and IV >= {IV_FLOOR} in {iv_ok}/{n} (>= {STABLE_IV:.0%})")
         elif tail_ok:
             label = "CURRENT"
             why = (f"sign agrees and IV >= {IV_FLOOR} in all of the last "
                    f"{len(tail)} windows, but only {same}/{len(dirs)} and {iv_ok}/{n} "
                    f"overall")
-        elif frac_sign < STABLE_SIGN or frac_iv < 0.5:
+        elif frac_sign < STABLE_SIGN or frac_iv < 0.5 or not enough_dirs:
             label = "NOISE"
-            why = (f"sign agrees in only {same}/{len(dirs)} windows and IV >= "
-                   f"{IV_FLOOR} in {iv_ok}/{n}")
+            why = (f"sign agrees in {same}/{len(dirs)} measurable windows, direction "
+                   f"measurable in only {len(dirs)}/{n}, IV >= {IV_FLOOR} in {iv_ok}/{n}"
+                   if not enough_dirs else
+                   f"sign agrees in only {same}/{len(dirs)} measurable windows and "
+                   f"IV >= {IV_FLOOR} in {iv_ok}/{n}")
         else:
             label = "WEAK"
             why = (f"sign agrees in {same}/{len(dirs)} and IV >= {IV_FLOOR} in "
                    f"{iv_ok}/{n} - neither stable nor clearly noise")
         out.append({"variable": v, "label": label, "windows": n,
-                    "same_sign": same, "iv_ok": iv_ok,
+                    "same_sign": same, "dirs_measured": len(dirs), "iv_ok": iv_ok,
                     "median_iv": round(float(g["iv"].median()), 4),
                     "median_auc": (None if g["auc"].dropna().empty
                                    else round(float(g["auc"].median()), 4)),
@@ -294,7 +306,8 @@ def main(write: bool = True) -> dict:
                         ("C", "C — expanding")):
             L += [f"## Scheme {name}", "",
                   md_table(cls[s], ["variable", "label", "windows", "same_sign",
-                                    "iv_ok", "median_iv", "median_auc", "direction"]),
+                                    "dirs_measured", "iv_ok", "median_iv",
+                                    "median_auc", "direction"]),
                   "", "Why each label:", ""]
             for _, r in cls[s].iterrows():
                 L.append(f"- `{r['variable']}` **{r['label']}** — {r['why']}")
@@ -304,8 +317,8 @@ def main(write: bool = True) -> dict:
               "12-month outcomes close **inside** it. Below is scheme A recomputed with "
               "that year dropped. Where the two disagree, this one is the honest number.",
               "",
-              md_table(cls_emb, ["variable", "label", "windows", "same_sign", "iv_ok",
-                                 "median_iv", "median_auc"]), ""]
+              md_table(cls_emb, ["variable", "label", "windows", "same_sign", "dirs_measured",
+                                 "iv_ok", "median_iv", "median_auc"]), ""]
         REPORT.write_text("\n".join(L), encoding="utf-8")
         res.to_csv(ROOT / "reports" / "model_h_stability_windows.csv", index=False,
                    encoding="utf-8")
@@ -404,6 +417,19 @@ def self_test() -> int:
         classify(recent).iloc[0]["label"] == "CURRENT",
         classify(recent).iloc[0].to_dict())
 
+    thin = pd.DataFrame({
+        "variable": ["t"] * 14, "test_year": list(range(2012, 2026)),
+        "iv": [0.05] * 14,
+        "direction": [1, 1, 1, 1, None, None, None, None, None, None, None, None,
+                      None, None],
+        "auc": [0.52] * 14})
+    th = classify(thin).iloc[0]
+    chk("4 agreements out of 4 measurable windows is NOT stable when 10 of 14 had "
+        "no measurable direction",
+        th["label"] == "NOISE", th.to_dict())
+    chk("and the table carries the denominator, so 4 cannot read as 4 of 14",
+        th["dirs_measured"] == 4 and th["windows"] == 14, th.to_dict())
+
     print(chr(10) + "[6] it fits no final model and gives no advice")
     # The scan EXCLUDES this function's own source. Every earlier version of a check like
     # this searched the whole file, found its own needles, and passed or failed against
@@ -456,9 +482,10 @@ if __name__ == "__main__":
         for s in ("A", "B", "C"):
             print(f"{chr(10)}=== scheme {s}")
             print(out["classified"][s][["variable", "label", "windows", "same_sign",
-                                        "iv_ok", "median_iv", "median_auc",
-                                        "direction"]].to_string(index=False))
+                                        "dirs_measured", "iv_ok", "median_iv",
+                                        "median_auc", "direction"]].to_string(index=False))
         print(f"{chr(10)}=== scheme A WITH the embargo")
-        print(out["embargoed"][["variable", "label", "windows", "same_sign", "iv_ok",
-                               "median_iv", "median_auc"]].to_string(index=False))
+        print(out["embargoed"][["variable", "label", "windows", "same_sign",
+                                "dirs_measured", "iv_ok",
+                                "median_iv", "median_auc"]].to_string(index=False))
         print(f"{chr(10)}wrote {REPORT.relative_to(ROOT)}")

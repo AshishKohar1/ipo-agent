@@ -49,6 +49,7 @@ import sys as _sys
 if hasattr(_sys.stdout, "reconfigure"):
     _sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import argparse
+import inspect
 import re
 import sys
 from pathlib import Path
@@ -249,12 +250,47 @@ def anchor_table() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _fill_recovered_symbols(base: pd.DataFrame) -> pd.DataFrame:
+    """Attach the symbols recovered in Phase 2.1 to their feature rows.
+
+    The base table is built from the master, which still has a NULL symbol for those 15
+    companies - `recover_symbols` deliberately never writes into the master, and its
+    self-test asserts that. So the rows are present with no symbol, every join on symbol
+    misses them, and they were being dropped from the modelling set while having a
+    perfectly good corrected target. Fifteen rows, and the renamed-company slice at that,
+    which is the one it would be worst to lose silently.
+
+    Only rows whose symbol is currently NULL are touched, and only with a symbol the
+    bhavcopy confirmed on its listing date. An existing symbol is never overwritten.
+    """
+    f = DATA / "recovered_symbols.csv"
+    if not f.exists():
+        return base
+    r = pd.read_csv(f)
+    if "bhavcopy_confirmed" in r.columns:
+        r = r[r["bhavcopy_confirmed"] == True]                 # noqa: E712
+    r = r[r["symbol"].notna()]
+    if not len(r):
+        return base
+    by = {dataio.norm_name(c): str(sy).strip()
+          for c, sy in zip(r["company"], r["symbol"])}
+    blank = base["symbol"].isna() | base["symbol"].astype(str).str.strip().isin(
+        ["", "nan", "None"])
+    filled = base["company"].map(lambda c: by.get(dataio.norm_name(c)))
+    base.loc[blank & filled.notna(), "symbol"] = filled[blank & filled.notna()]
+    n = int((blank & filled.notna()).sum())
+    if n:
+        print(f"  attached {n} symbols recovered in Phase 2.1 to their feature rows")
+    return base
+
+
 # ------------------------------------------------------------------ build
 def build(write: bool = True) -> pd.DataFrame:
     if not BASE.exists():
         raise FileNotFoundError(f"{BASE} is not on disk. Run model_h_features.py first.")
     base = pd.read_csv(BASE)
     base["listing_date"] = pd.to_datetime(base["listing_date"], errors="coerce")
+    base = _fill_recovered_symbols(base)
     panel = index_panel()
 
     # --- 2.4b sector
@@ -442,6 +478,20 @@ def self_test() -> int:
         probe["sector_minus_nifty_3m"] = probe["sector_minus_nifty_3m"] + 5.0
         bad = assert_no_leakage(probe)
         chk("and a tampered value IS caught", bad["recompute_mismatches"] == 1, bad)
+
+    print(chr(10) + "[3b] the rows recovered in 2.1 reach the feature table")
+    rec = (pd.read_csv(DATA / "recovered_symbols.csv")
+           if (DATA / "recovered_symbols.csv").exists() else pd.DataFrame())
+    if len(rec) and "bhavcopy_confirmed" in rec:
+        want = set(rec.loc[rec["bhavcopy_confirmed"] == True, "symbol"]  # noqa: E712
+                   .dropna().astype(str))
+        got = set(d["symbol"].dropna().astype(str))
+        chk("every bhavcopy-confirmed recovered symbol is in the feature table",
+            want <= got, sorted(want - got))
+        chk("and an existing symbol is never overwritten by the fill",
+            'blank & filled.notna()' in inspect.getsource(_fill_recovered_symbols))
+        chk("only symbols the bhavcopy confirmed are attached",
+            "bhavcopy_confirmed" in inspect.getsource(_fill_recovered_symbols))
 
     print(chr(10) + "[4] missing is never zero")
     chk("a sector with no index keeps a REASON, not a blank",
