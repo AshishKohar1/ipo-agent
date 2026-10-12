@@ -4765,5 +4765,523 @@
   "fetched_at_ist": "2026-10-12 22:30:34.668246",
   "failed": false,
   "note": ""
+ },
+ "3y|CAPACITE": {
+  "n": 3,
+  "sha256": "3215268e63e15e964ff000f7d874a7aa7957bb682a28dff287cea60709e70743",
+  "fetched_at_ist": "2026-10-12 22:30:37.872318",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MATRIMONY": {
+  "n": 3,
+  "sha256": "cdfde75259e233c66c238b8b0d2b169dedf46c6a3ed7932ff010820ebf6ee4df",
+  "fetched_at_ist": "2026-10-12 22:30:41.012697",
+  "failed": false,
+  "note": ""
+ },
+ "3y|BRNL": {
+  "n": 3,
+  "sha256": "de653e2080ba60191671c75412cf710d5d46ce31107316ad12b9fd71d4d5b944",
+  "fetched_at_ist": "2026-10-12 22:30:44.168772",
+  "failed": false,
+  "note": ""
+ },
+ "3y|DIXON": {
+  "n": 3,
+  "sha256": "81db11d348ce7ac188dbbc5c26c3ad597d30f59b2bb195c9d5f497c40f5127fc",
+  "fetched_at_ist": "2026-10-12 22:30:47.341968",
+  "failed": false,
+  "note": ""
+ },
+ "3y|APEX": {
+  "n": 3,
+  "sha256": "d04c3e4109fdbc28d60c35f5a37415194916f1cbda7884142b95979893c91954",
+  "fetched_at_ist": "2026-10-12 22:30:50.532822",
+  "failed": false,
+  "note": ""
+ },
+ "3y|COCHINSHIP": {
+  "n": 4,
+  "sha256": "65f66ac97e896adb61352c58ea11588236c751b9f96c30f9cd87af2f85ec2426",
+  "fetched_at_ist": "2026-10-12 22:30:53.700323",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SALASAR": {
+  "n": 5,
+  "sha256": "d591199a7d84fe2a12bf9c20696c4242c9291bf1b8196bc76dcbbd4976fbfaac",
+  "fetched_at_ist": "2026-10-12 22:30:56.881334",
+  "failed": false,
+  "note": ""
+ },
+ "3y|AUBANK": {
+  "n": 3,
+  "sha256": "eba8777353c8c21085e779dcb60c84a3df0ffe31d82e8b22772bc6eb8bd984bd",
+  "fetched_at_ist": "2026-10-12 22:31:00.112142",
+  "failed": false,
+  "note": ""
+ },
+ "3y|GTPL": {
+  "n": 3,
+  "sha256": "9ce1807898ed7d1b60a3d347804025ca7150d4f194adfa459bc83743b3b9017c",
+  "fetched_at_ist": "2026-10-12 22:31:03.418978",
+  "failed": false,
+  "note": ""
+ },
+ "3y|CDSL": {
+  "n": 2,
+  "sha256": "193dc563741d7cdf63dcaa2b94e872d6d78a3b3c77248cb8b3b84acd60c1606b",
+  "fetched_at_ist": "2026-10-12 22:31:06.861979",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ERIS": {
+  "n": 5,
+  "sha256": "7654323a6a2e76587b988f98b77c1f1eec163a144332ff79cdc6e602f90db038",
+  "fetched_at_ist": "2026-10-12 22:31:10.032812",
+  "failed": false,
+  "note": ""
+ },
+ "3y|TEJASNET": {
+  "n": 3,
+  "sha256": "884bfd58ca5c2d772442ce49527aeffba9e39bb0f97478324034cf63471cffce",
+  "fetched_at_ist": "2026-10-12 22:31:13.165372",
+  "failed": false,
+  "note": ""
+ },
+ "3y|PSPPROJECT": {
+  "n": 4,
+  "sha256": "ceed8a2a97d005035624e878530b76af115c8652487bf6b049eedd1e23e37a5d",
+  "fetched_at_ist": "2026-10-12 22:31:16.355523",
+  "failed": false,
+  "note": ""
+ },
+ "3y|HUDCO": {
+  "n": 6,
+  "sha256": "dc0eac664bde49b52a90bd70eb62cef6e5483a9d4d1f1b0952d90c2321d83d79",
+  "fetched_at_ist": "2026-10-12 22:31:19.490257",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SCHAND": {
+  "n": 3,
+  "sha256": "2f416bb17248d2e6c6cac2ac1c6f33480ba24dd65c7c1d5b4dac87bee2571c4b",
+  "fetched_at_ist": "2026-10-12 22:31:22.680108",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SHANKARA": {
+  "n": 4,
+  "sha256": "00e1176a6dd7f7fcd78c8e0b2bc41ecc3e51debb3b5b64f76d9af257093af208",
+  "fetched_at_ist": "2026-10-12 22:31:25.892668",
+  "failed": false,
+  "note": ""
+ },
+ "3y|CLEDUCATE": {
+  "n": 5,
+  "sha256": "2eaa5a1468e6d3b9a66e876906f808a7253e31f7c1c1c6cfad795921358b0b3b",
+  "fetched_at_ist": "2026-10-12 22:31:29.090998",
+  "failed": false,
+  "note": ""
+ },
+ "3y|DMART": {
+  "n": 3,
+  "sha256": "9a8bc2dd8088db4399871e53981f40cc50dfd5a3e0c0dddb464b213e64d52240",
+  "fetched_at_ist": "2026-10-12 22:31:32.227042",
+  "failed": false,
+  "note": ""
+ },
+ "3y|RADIOCITY": {
+  "n": 5,
+  "sha256": "2d08b2eac5688625d53406e4c9d616c77a685b2dc4f6ae2ed4491df568a520e8",
+  "fetched_at_ist": "2026-10-12 22:31:35.379435",
+  "failed": false,
+  "note": ""
+ },
+ "3y|BSE": {
+  "n": 7,
+  "sha256": "6939129529ac3ffc973de515b36511e076c77c0a665abe4f7554075d51699759",
+  "fetched_at_ist": "2026-10-12 22:31:38.680935",
+  "failed": false,
+  "note": ""
+ },
+ "3y|LAURUSLABS": {
+  "n": 3,
+  "sha256": "c6dde33517802efb6cfbb655ebc4f830c08fce125df709a0609ef2c39e4383a2",
+  "fetched_at_ist": "2026-10-12 22:31:41.828162",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SFL": {
+  "n": 3,
+  "sha256": "eede45816c9011e2f32d7ce5edd5b0c6bbd685274aa3b1453d8619fffc373692",
+  "fetched_at_ist": "2026-10-12 22:31:44.999667",
+  "failed": false,
+  "note": ""
+ },
+ "3y|VBL": {
+  "n": 7,
+  "sha256": "39da297294b213b322379552dc4493f56f0ec6c3f707dfd1b342444bbfe5f320",
+  "fetched_at_ist": "2026-10-12 22:31:48.225248",
+  "failed": false,
+  "note": ""
+ },
+ "3y|PNBHOUSING": {
+  "n": 3,
+  "sha256": "186078d4cef217c3ff4fd1e53cfe9441a975a1a560ed0b53a1fd54b7b0340aee",
+  "fetched_at_ist": "2026-10-12 22:31:51.364820",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ENDURANCE": {
+  "n": 3,
+  "sha256": "18b4c84baf48832a3b312f9ecc3c2f69d9bcb5a98ede93f6654c1f6758a8a39d",
+  "fetched_at_ist": "2026-10-12 22:31:54.496044",
+  "failed": false,
+  "note": ""
+ },
+ "3y|HPL": {
+  "n": 3,
+  "sha256": "ac2095a80ed66bdc6e0077acae2ed69634f8772e78af8f9677384aea9ca5aba5",
+  "fetched_at_ist": "2026-10-12 22:31:57.629261",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ICICIPRULI": {
+  "n": 6,
+  "sha256": "527324623e934b95acc83ede439d778137626d78e3c89996bea875e2e3962f9a",
+  "fetched_at_ist": "2026-10-12 22:32:00.782788",
+  "failed": false,
+  "note": ""
+ },
+ "3y|GNA": {
+  "n": 4,
+  "sha256": "9f3d9ea2c9e1e619622ecd32fb25b7d7c37174f027d5cdda54b12ea60a16bd10",
+  "fetched_at_ist": "2026-10-12 22:32:03.940783",
+  "failed": false,
+  "note": ""
+ },
+ "3y|LTTS": {
+  "n": 6,
+  "sha256": "1a728c23bdda17c08ef5c52e3ac548bee2e2d355d458325b994418a940508a37",
+  "fetched_at_ist": "2026-10-12 22:32:07.168607",
+  "failed": false,
+  "note": ""
+ },
+ "3y|RBLBANK": {
+  "n": 3,
+  "sha256": "50a4f6b337093d326030e08a5c6c2c65e95172b41641f3cd59cd715b09f9c0be",
+  "fetched_at_ist": "2026-10-12 22:32:10.325429",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SPAL": {
+  "n": 2,
+  "sha256": "51322a8b1e27443cc305029fa7f46ded5de387ba7fcb9d2751b0dd5291affb21",
+  "fetched_at_ist": "2026-10-12 22:32:13.473058",
+  "failed": false,
+  "note": ""
+ },
+ "3y|DBL": {
+  "n": 2,
+  "sha256": "868831f768c609d9f5340c17ed3d28f322e390575a5d8be9893cb1bcab9706b2",
+  "fetched_at_ist": "2026-10-12 22:32:16.625394",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ADVENZYMES": {
+  "n": 5,
+  "sha256": "eb0234e75c1bb3d3f5182a4cb8a0f3983c94165e386e9331e5c0067f09a16159",
+  "fetched_at_ist": "2026-10-12 22:32:19.869188",
+  "failed": false,
+  "note": ""
+ },
+ "3y|QUESS": {
+  "n": 2,
+  "sha256": "d58bb8e182b9fe4c3b8772b0fc819fd934712164260ffaf5a8a524099c09b8bd",
+  "fetched_at_ist": "2026-10-12 22:32:22.970666",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MGL": {
+  "n": 6,
+  "sha256": "e73d1bda0b073f5c45fb065a130b71cc175de8a9fc3c80f6357e131883cc1769",
+  "fetched_at_ist": "2026-10-12 22:32:26.142908",
+  "failed": false,
+  "note": ""
+ },
+ "3y|PARAGMILK": {
+  "n": 2,
+  "sha256": "1ccba61b9cc57e212dbd64020ac7b1ed287ef0267170265d79fac89a66189907",
+  "fetched_at_ist": "2026-10-12 22:32:29.323423",
+  "failed": false,
+  "note": ""
+ },
+ "3y|THYROCARE": {
+  "n": 5,
+  "sha256": "2473217d4134b098e95daaa14735a37ed93bb7d5f9a591de0a541182c90939eb",
+  "fetched_at_ist": "2026-10-12 22:32:32.425341",
+  "failed": false,
+  "note": ""
+ },
+ "3y|BHARATWIRE": {
+  "n": 3,
+  "sha256": "214801d7d61ef50476855ac7af8a31b081a512d7c760abd45a133fdae92d334e",
+  "fetched_at_ist": "2026-10-12 22:32:35.629014",
+  "failed": false,
+  "note": ""
+ },
+ "3y|HCG": {
+  "n": 3,
+  "sha256": "c487f7ce26cc94e4554f0951355af12f565092e7dc7d6ad11e74baf02274ba95",
+  "fetched_at_ist": "2026-10-12 22:32:38.811635",
+  "failed": false,
+  "note": ""
+ },
+ "3y|QUICKHEAL": {
+  "n": 3,
+  "sha256": "f2a9f6816940178a9ba47e115f7e7b47e29507a84b0f04d801c59d126ce81db6",
+  "fetched_at_ist": "2026-10-12 22:32:41.933721",
+  "failed": false,
+  "note": ""
+ },
+ "3y|TEAMLEASE": {
+  "n": 2,
+  "sha256": "2fcdc419ba90a7a6199740d61046aeea9804813ea3865d291d6d47d83c43d2b8",
+  "fetched_at_ist": "2026-10-12 22:32:45.064230",
+  "failed": false,
+  "note": ""
+ },
+ "3y|PRECAM": {
+  "n": 5,
+  "sha256": "d3931ee5d0bf695aebe52effcc34e67fdba8a974391ccc9728dca9b0b7d05267",
+  "fetched_at_ist": "2026-10-12 22:32:48.162620",
+  "failed": false,
+  "note": ""
+ },
+ "3y|NH": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-12 22:32:51.325478",
+  "failed": false,
+  "note": ""
+ },
+ "3y|LALPATHLAB": {
+  "n": 6,
+  "sha256": "5c326a82cb23064798cebd42448bb3fdd2c20f92011a31966e5a89ceef84f1e1",
+  "fetched_at_ist": "2026-10-12 22:32:54.497887",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ALKEM": {
+  "n": 5,
+  "sha256": "f52a93519d6742f213b450c77db0b40f6d64a71dd97eff697a95d038dc64c91b",
+  "fetched_at_ist": "2026-10-12 22:32:57.646172",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SHK": {
+  "n": 4,
+  "sha256": "ae63427bcac0c77e4fa9704a87e9391006b66124cb43f707791ad003e5a9a2c1",
+  "fetched_at_ist": "2026-10-12 22:33:00.903236",
+  "failed": false,
+  "note": ""
+ },
+ "3y|INDIGO": {
+  "n": 3,
+  "sha256": "9a607d350fbddc764ddf1d88cb7c6996951a058539174aca16e7c3b41b164165",
+  "fetched_at_ist": "2026-10-12 22:33:04.070839",
+  "failed": false,
+  "note": ""
+ },
+ "3y|COFFEEDAY": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-12 22:33:07.251235",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SADBHIN": {
+  "n": 4,
+  "sha256": "7c6478c67dc23f03db85a8850574ed0ffce57c036b580b7b876237331e7d4235",
+  "fetched_at_ist": "2026-10-12 22:33:10.369712",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SHREEPUSHK": {
+  "n": 3,
+  "sha256": "d75ab85a2c2c31563a08c1679a0691dac4c393a5384b4a6b52533841bbdc27b9",
+  "fetched_at_ist": "2026-10-12 22:33:13.529776",
+  "failed": false,
+  "note": ""
+ },
+ "3y|NAVKARCORP": {
+  "n": 3,
+  "sha256": "64051a4fb93596a1d984ebb78222b04f5b6a5183d5b77257947ce07db2682286",
+  "fetched_at_ist": "2026-10-12 22:33:16.706033",
+  "failed": false,
+  "note": ""
+ },
+ "3y|POWERMECH": {
+  "n": 3,
+  "sha256": "5e4438ee4371faaa2cce5000c5562a4de6273700bd886fbd9fce8d78d63351f8",
+  "fetched_at_ist": "2026-10-12 22:33:19.836036",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SYNGENE": {
+  "n": 3,
+  "sha256": "0a95b40f83347821b912503422ed951fa1184fb2551927d360e75c1fecf73a41",
+  "fetched_at_ist": "2026-10-12 22:33:22.985574",
+  "failed": false,
+  "note": ""
+ },
+ "3y|PNCINFRA": {
+  "n": 4,
+  "sha256": "0f6067224419146d80da60b361f453be2746f86ae81309fe673bca4a177765ad",
+  "fetched_at_ist": "2026-10-12 22:33:26.125029",
+  "failed": false,
+  "note": ""
+ },
+ "3y|UFO": {
+  "n": 4,
+  "sha256": "1d2d5c5fe678e80c3adae19689f2396d54d728e56b005235412a994d9a2aa6af",
+  "fetched_at_ist": "2026-10-12 22:33:29.247355",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MEP": {
+  "n": 5,
+  "sha256": "524948eca61ac59b1c769850ede581ee4628330529ab5f4d3074d4a9f0816c27",
+  "fetched_at_ist": "2026-10-12 22:33:32.416002",
+  "failed": false,
+  "note": ""
+ },
+ "3y|VRLLOG": {
+  "n": 3,
+  "sha256": "c8f6bf2c1d6329a43f587410d6b57c894f65ddddcd61d362b3208cacc76717dc",
+  "fetched_at_ist": "2026-10-12 22:33:35.677673",
+  "failed": false,
+  "note": ""
+ },
+ "3y|INOXWIND": {
+  "n": 3,
+  "sha256": "4fcf608ac9a9d8d9ed5298d742e57f1685d7fb00d552a90711f5fed87a1f6e9a",
+  "fetched_at_ist": "2026-10-12 22:33:38.831715",
+  "failed": false,
+  "note": ""
+ },
+ "3y|IMAGICAA": {
+  "n": 3,
+  "sha256": "1b45fa6fe257500fea1c53ba741a8607c3ea28d8608e794edfe485917a5a8ac1",
+  "fetched_at_ist": "2026-10-12 22:33:42.051234",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ORTEL": {
+  "n": 3,
+  "sha256": "e2029bccba7367685f229ed695d17fe9cc68eee30863500ee6ec2bb232ba1051",
+  "fetched_at_ist": "2026-10-12 22:33:45.211015",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MONTECARLO": {
+  "n": 3,
+  "sha256": "daa3df7be2e3a7dcac3006a09ca3584fa053464fa45ea3f9c58c61a619c72cd2",
+  "fetched_at_ist": "2026-10-12 22:33:48.405972",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SHEMAROO": {
+  "n": 3,
+  "sha256": "f18028523632918cfb8909521dab7237193515fba09e7ede67a46dbe60b5f059",
+  "fetched_at_ist": "2026-10-12 22:33:51.649270",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SHARDACROP": {
+  "n": 6,
+  "sha256": "3dbabacf63ed8478cab6f4bed7ae857ecbef0057564c97e68c057add647b13ee",
+  "fetched_at_ist": "2026-10-12 22:33:54.826257",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SNOWMAN": {
+  "n": 3,
+  "sha256": "dd3d831e5dbff33c548b33e47401d6fd9bb2ddd57b1a1aab3f9ce2a1e01dd183",
+  "fetched_at_ist": "2026-10-12 22:33:57.998197",
+  "failed": false,
+  "note": ""
+ },
+ "3y|WONDERLA": {
+  "n": 4,
+  "sha256": "3a920b2ba3c5cc515c056200984f6d640058385b0750f753b15ba4dc3e401f33",
+  "fetched_at_ist": "2026-10-12 22:34:01.175361",
+  "failed": false,
+  "note": ""
+ },
+ "3y|JUSTDIAL": {
+  "n": 4,
+  "sha256": "bdc06250e96cd4c771b684f08afaba9df8860f859dab12d9c93a827f46848ff5",
+  "fetched_at_ist": "2026-10-12 22:34:04.327632",
+  "failed": false,
+  "note": ""
+ },
+ "3y|REPCOHOME": {
+  "n": 3,
+  "sha256": "2129ae749f7666500687865f80f2e29c1d5a80f89d8cbc937a2deca6fae0cca0",
+  "fetched_at_ist": "2026-10-12 22:34:07.543611",
+  "failed": false,
+  "note": ""
+ },
+ "3y|VMART": {
+  "n": 3,
+  "sha256": "c7f9692b79c30bf3b490a937b6f738e9be63d366956d7ceebd0c664b02be89b2",
+  "fetched_at_ist": "2026-10-12 22:34:10.686668",
+  "failed": false,
+  "note": ""
+ },
+ "3y|INDUSTOWER": {
+  "n": 3,
+  "sha256": "c43d37177cdc0cee946c9fab6d513f378f7e850d8233c92407291821f54caa38",
+  "fetched_at_ist": "2026-10-12 22:34:13.802679",
+  "failed": false,
+  "note": ""
+ },
+ "3y|PCJEWELLER": {
+  "n": 4,
+  "sha256": "3f70ad79130f33333cab846b7ef1f287d48118fc8a12a5243e61f65caf89c176",
+  "fetched_at_ist": "2026-10-12 22:34:17.003567",
+  "failed": false,
+  "note": ""
+ },
+ "3y|CARERATING": {
+  "n": 10,
+  "sha256": "4ed864a5c50f9e50b409e7d669062ab569276c9dfc8c5c3c2f765470760ca20e",
+  "fetched_at_ist": "2026-10-12 22:34:20.316687",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SPECIALITY": {
+  "n": 3,
+  "sha256": "d3efc541cc6f195383e8d7049c0800845f060752588ebc828a3e563136d06898",
+  "fetched_at_ist": "2026-10-12 22:34:23.415679",
+  "failed": false,
+  "note": ""
+ },
+ "3y|TBZ": {
+  "n": 3,
+  "sha256": "43b4f47a637d3b470356be4f1d2baa348cfe3079533b303c04993ffd474010a8",
+  "fetched_at_ist": "2026-10-12 22:34:26.609022",
+  "failed": false,
+  "note": ""
+ },
+ "3y|MTEDUCARE": {
+  "n": 8,
+  "sha256": "293d7604016cc53dc8bdd2b11bbf53cca727537ab74c37f6ea940079ca27f174",
+  "fetched_at_ist": "2026-10-12 22:34:29.719841",
+  "failed": false,
+  "note": ""
  }
 }
