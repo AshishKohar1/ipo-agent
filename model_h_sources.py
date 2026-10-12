@@ -293,6 +293,56 @@ def write_missing_sectors() -> int:
     return len(rows)
 
 
+# ------------------------------------------------------------- 2.1 official renames
+NAME_CHANGES = DATA / "nse_name_changes.csv"
+SYMBOL_CHANGES = DATA / "nse_symbol_changes.csv"
+RENAME_FILES = (("namechange.csv", NAME_CHANGES),
+                ("symbolchange.csv", SYMBOL_CHANGES))
+RENAME_ARCHIVE = "https://nsearchives.nseindia.com/content/equities/"
+
+
+def fetch_renames(q: Queue) -> dict:
+    """NSE's own change-of-name and change-of-symbol registers.
+
+    This is what Task 2.1 asks for first: the exchange's record of old name -> new name
+    with an effective date, rather than any judgement about which names look alike. Both
+    files are open CSV on nsearchives and need no login (H18).
+
+    They are stored verbatim with the SHA-256 of the exact bytes. Both carry mutual-fund
+    scheme rows in the thousands as well as companies; nothing is filtered out at fetch
+    time, because a filter applied before storage is a filter nobody can audit later.
+    """
+    import nse_subscription as NSE
+    f = NSE.Fetcher()
+    if not f.warm():
+        raise RuntimeError("NSE warm-up/robots check failed; nothing fetched")
+    out = {}
+    for name, dest in RENAME_FILES:
+        wait_if_paused()
+        q.gap()
+        url = RENAME_ARCHIVE + name
+        try:
+            r = f.s.get(url, timeout=60, headers={"Referer": "https://www.nseindia.com/"})
+        except Exception as e:                                  # noqa: BLE001
+            log_fetch(url, "error", 0, f"{type(e).__name__}: {str(e)[:60]}")
+            print(f"  {name:24s} FAILED {type(e).__name__}")
+            continue
+        sha = hashlib.sha256(r.content).hexdigest()
+        log_fetch(url, r.status_code, len(r.content), sha)
+        if r.status_code != 200:
+            print(f"  {name:24s} HTTP {r.status_code}")
+            continue
+        d = pd.read_csv(io.StringIO(r.text))
+        d.columns = [c.strip() for c in d.columns]
+        d["source_url"] = url
+        d["source_sha256"] = sha
+        d["fetched_at_ist"] = str(pd.Timestamp.now())
+        d.to_csv(dest, index=False, encoding="utf-8")
+        print(f"  {name:24s} {len(d):6d} rows -> {dest.name}")
+        out[name] = d
+    return out
+
+
 # ------------------------------------------------------------------ index history
 def fetch_indices(q: Queue, start="2009-01-01", end=None,
                   only: list[str] | None = None) -> pd.DataFrame:
@@ -424,7 +474,7 @@ if __name__ == "__main__":
     import os
     os.chdir(ROOT)
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage", choices=["sectors", "indices", "all"])
+    ap.add_argument("--stage", choices=["sectors", "indices", "renames", "all"])
     ap.add_argument("--only", help="comma-separated index names, for --stage indices")
     ap.add_argument("--start", default="2009-01-01")
     ap.add_argument("--self-test", action="store_true")
@@ -439,6 +489,9 @@ if __name__ == "__main__":
         print("\n=== stage sectors (2.4b)")
         fetch_sectors(q)
         write_missing_sectors()
+    if a.stage in ("renames", "all"):
+        print(chr(10) + "=== stage renames (2.1)")
+        fetch_renames(q)
     if a.stage in ("indices", "all"):
         print("\n=== stage indices (2.4c / 2.4d / 2.4f)")
         fetch_indices(q, start=a.start,
