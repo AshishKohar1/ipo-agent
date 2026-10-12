@@ -1,0 +1,13 @@
+fetched_at_ist,url,http_status,bytes,sha256,note
+2026-10-13 01:47:49.712423,https://nsearchives.nseindia.com/content/indices/ind_niftytotalmarket_list.csv,200,49439,af5b8bfd8590c75ddc4abdec7a742b9efe2ce03f426ccceffb57e3a281efe84f,
+2026-10-13 01:47:52.339152,https://nsearchives.nseindia.com/content/indices/ind_nifty500list.csv,200,32785,2959bf206239284e145f7aecc65095b18d11556d2642323a70f2d26efe0f5cb3,
+2026-10-13 01:47:55.640167,https://nsearchives.nseindia.com/content/indices/ind_niftymicrocap250_list.csv,200,16700,01fcf89ae976ad0942888f8c44cb8a32e27590c431e645eea50806dff16408c1,
+2026-10-13 01:47:58.852603,https://nsearchives.nseindia.com/content/indices/ind_niftysmallcap250list.csv,200,16497,48ed754ed01486a3d60011a867b328f484325385376c7727951503c87a452510,
+2026-10-13 01:48:02.040301,https://nsearchives.nseindia.com/content/indices/ind_niftymidsmallcap400list.csv,200,26230,cdb365f3fce73c9826be014aca336598dfae6a02320bdb44ce71fc59dddeb21c,
+2026-10-13 01:48:05.301851,https://nsearchives.nseindia.com/content/indices/ind_niftylargemidcap250list.csv,200,16334,68fbc7c89fbc54ccfef08796aa804dbbfcb42bd95218e09a76828a2e4911ea8a,
+2026-10-13 01:48:18.670596,https://www.niftyindices.com/reports/historical-data,200,110615,,session cookies
+2026-10-13 01:48:21.062015,https://www.niftyindices.com/BackPage/getTotalReturnIndexString,200,33806,,NIFTY 50 2009-01-01..2009-12-27 rows=240
+2026-10-13 01:48:24.415005,https://www.niftyindices.com/BackPage/getTotalReturnIndexString,200,35080,,NIFTY 50 2009-12-28..2010-12-23 rows=249
+2026-10-13 01:48:27.440016,https://www.niftyindices.com/BackPage/getTotalReturnIndexString,200,34377,,NIFTY 50 2010-12-24..2011-12-19 rows=244
+2026-10-13 01:48:30.640324,https://www.niftyindices.com/BackPage/getTotalReturnIndexString,200,35218,,NIFTY 50 2011-12-20..2012-12-14 rows=250
+2026-10-13 01:48:33.841319,https://www.niftyindices.com/BackPage/getTotalReturnIndexString,200,34660,,NIFTY 50 2012-12-15..2013-12-10 rows=246

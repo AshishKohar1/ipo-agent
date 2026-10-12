@@ -1258,3 +1258,26 @@ mandatory in a parser. Chittorgarh dropped a status badge and the row regex went
 matching every IPO to matching none, reporting "0 dated rows" with no error, on the one
 page the entire live path depended on. Where a source can go silent, there are two sources
 or there is an alarm. There are now both.
+
+---
+
+### H33 — Model H excludes SME for now; H31 stays recorded but inactive (2026-10-13)
+
+**Ratified by the user on 13 Oct 2026.** Model H is a **mainboard** model. SME issues are
+out of its scope until an SME dataset exists.
+
+**H31 is not withdrawn — it is dormant.** H31 permits one pooled Model H across SME and
+mainboard with an `is_sme` flag, as an exception to rule 6. That exception cannot be
+exercised, because the master contains **0 SME rows**: 309 mainboard and 314 whose series is
+unknown, and `is_sme` therefore has zero variance. A flag that is constant is not a
+control; the pooled model H31 describes has never been fitted and cannot be.
+
+So H31 remains the standing design for the day an SME dataset arrives, and its condition is
+unchanged: **SME hold advice must pass H29 on SME picks alone before it is given.** Until
+then Model H says nothing about SME issues at all — which is a stronger statement than a
+model with an untested flag, and an honest one.
+
+**What this does not change.** Model L's separate-SME treatment is untouched: SME issues
+still appear in the live email, still get `SME, not scored`, and still carry the
+shadow-mode caveat (H3/E2). The question Phase 2 Task 2.2 asks is not "which Model H
+variables do SME rows have" but "can SME rows be obtained at all".
