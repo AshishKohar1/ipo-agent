@@ -484,6 +484,27 @@ METHOD = ("CRSP buy-and-hold: (raw_end x cumulative split/bonus factor + dividen
           "window) / raw_listing_close - 1, minus Nifty 50 TRI over the same two dates")
 
 
+def _symbols_as_of(symbol, day) -> list:
+    """`[today's symbol, the symbol on that date]`, in that order, de-duplicated.
+
+    Today's symbol is tried FIRST so nothing that already resolved changes, and the
+    historical one is a fallback rather than a replacement. The chain comes from NSE's own
+    `symbolchange.csv` via `recover_symbols.walk_symbol_back`; if that register is not on
+    disk the list is just the one symbol and behaviour is unchanged.
+    """
+    out = [symbol]
+    try:
+        import recover_symbols as RS
+        _, sc = RS._changes()
+        if len(sc):
+            then, _ = RS.walk_symbol_back(str(symbol), day, sc)
+            if then and then != symbol:
+                out.append(then)
+    except Exception:                                          # noqa: BLE001
+        pass
+    return out
+
+
 def _raw_price(f, day, isin, symbol, within_days: int = 7):
     """`(close, actual_date, source, how, note)` from the bhavcopy on or after `day`.
 
@@ -496,6 +517,17 @@ def _raw_price(f, day, isin, symbol, within_days: int = 7):
     truncated-name match and an ISIN match are not equally trustworthy.
     """
     import listing_prices as LP
+    # The symbol as it was ON that date, not as it is now. The master and NSE's current
+    # lists carry TODAY's ticker, and looking that up in an old bhavcopy fails for the
+    # right company: Jupiter Wagons was CEBBCO in 2010, Va Tech Wabag was VATECH, Angel
+    # One was ANGELBRKG. Nine of the eighteen rows that had no corrected 1y target failed
+    # for exactly this reason.
+    #
+    # It also removes a bias, not just a gap. A company whose ticker was renamed is
+    # disproportionately one that was restructured, merged or distressed, so losing the
+    # renamed rows was losing a non-random slice - survivorship bias arriving through a
+    # symbol lookup rather than through a missing price.
+    alts = _symbols_as_of(symbol, day)
     for k in range(within_days + 1):
         d = pd.Timestamp(day) + pd.Timedelta(days=k)
         if d.weekday() >= 5:
@@ -504,9 +536,12 @@ def _raw_price(f, day, isin, symbol, within_days: int = 7):
             df, note = LP.bhavcopy(f, d, which)
             if df is None or df.empty:
                 continue
-            hit, how = LP.find(df, isin=isin, symbol=symbol)
-            if len(hit) and pd.notna(hit.iloc[0].get("close")):
-                return (float(hit.iloc[0]["close"]), d, which, how, note)
+            for sym in alts:
+                hit, how = LP.find(df, isin=isin, symbol=sym)
+                if len(hit) and pd.notna(hit.iloc[0].get("close")):
+                    if sym != symbol:
+                        how = f"{how} (symbol as of {pd.Timestamp(day).date()}: {sym})"
+                    return (float(hit.iloc[0]["close"]), d, which, how, note)
     return (None, pd.NaT, None, None, f"no bhavcopy row within {within_days} days")
 
 
@@ -820,6 +855,44 @@ def self_test() -> int:
         chk(f"{sub[:44]!r} -> {amt}",
             c["kind"] == kind and c["dividend_per_share"] == amt,
             (c["kind"], c["dividend_per_share"]))
+
+    print(chr(10) + "[1b] the symbol is looked up as it was ON the date")
+    import recover_symbols as _RS
+    _, _sc = _RS._changes()
+    if not len(_sc):
+        print("  (NSE symbol register not on disk - skipped)")
+    else:
+        alts = _symbols_as_of("JWL", pd.Timestamp("2010-10-18"))
+        chk("today's symbol is tried FIRST, so nothing that worked changes",
+            alts[0] == "JWL", alts)
+        chk("and the 2010 symbol is offered as a fallback",
+            "CEBBCO" in alts, alts)
+        chk("a symbol with no rename history yields just itself",
+            _symbols_as_of("ZZZNOSUCH", pd.Timestamp("2010-01-01")) == ["ZZZNOSUCH"])
+        chk("and a recent date leaves the symbol alone",
+            _symbols_as_of("JWL", pd.Timestamp("2026-01-01")) == ["JWL"],
+            _symbols_as_of("JWL", pd.Timestamp("2026-01-01")))
+
+    print(chr(10) + "[1c] no Model H code imports yfinance")
+    import inspect as _insp
+    mods = ["model_h_targets", "model_h_features", "model_h_features_ext",
+            "model_h_scorecard", "model_h_stability", "model_h_sources",
+            "model_h_handoff"]
+    needle = "import " + "yf" + "inance"
+    offenders = []
+    for m in mods:
+        q = ROOT / f"{m}.py"
+        if not q.exists():
+            continue
+        txt = q.read_text(encoding="utf-8")
+        # Strip docstrings and comments: this module DISCUSSES the old library at length
+        # and that prose is worth keeping. What must not exist is an import.
+        code = "".join(ln.split("#")[0] for ln in txt.splitlines(keepends=True))
+        if needle in code:
+            offenders.append(m)
+    chk("the Model H chain contains no yf" + "inance import", not offenders, offenders)
+    chk("and the check can still fail - a planted import is found",
+        needle in ("x = 1" + chr(10) + needle + " as yf"))
 
     print("\n[2] the factor is SHARES AFTER per SHARE BEFORE - checked by hand")
     # The direction that is easy to get wrong, and did: the first version returned the
