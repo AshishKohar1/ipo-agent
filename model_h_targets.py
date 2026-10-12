@@ -72,6 +72,7 @@ import sys as _sys
 if hasattr(_sys.stdout, "reconfigure"):
     _sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import argparse
+import pathlib
 import json
 import re
 import sys
@@ -507,10 +508,16 @@ def build_corrected(horizon: str = "1y", limit: int | None = None,
     lab_stored = "H_label" if horizon == "1y" else "H3_label"
     ex_stored = f"excess_{horizon}_pp"
 
+    # Only a row that already has a VALUE is done. A previous attempt that produced no
+    # corrected value - because the bhavcopy was not on disk during a cache-only run - must
+    # be retryable, or the 229 rows that run could not price would be skipped forever.
+    # Append-only is kept: a retry appends, so the failed attempts stay on the record as
+    # what was tried, and `latest()` picks the row that counts.
     have = set()
     if CORRECTED.exists():
         prev = pd.read_csv(CORRECTED)
-        have = set(zip(prev["symbol"].astype(str), prev["horizon"].astype(str)))
+        got = prev[prev["excess_corrected_pp"].notna()]
+        have = set(zip(got["symbol"].astype(str), got["horizon"].astype(str)))
     pending = [r for _, r in todo.iterrows()
                if (str(r["symbol"]), horizon) not in have]
     if limit:
@@ -668,12 +675,33 @@ def _append_corrected(rows: list[dict]) -> None:
              encoding="utf-8")
 
 
+def latest(horizon: str | None = None) -> pd.DataFrame:
+    """One row per (symbol, horizon): the attempt that produced a value, else the last.
+
+    The file is append-only, so a symbol can appear more than once - a cache-only attempt
+    that found no price, then a later one that did. Readers want the row that counts, and
+    the discarded attempts stay in the file as the record of what was tried.
+    """
+    if not CORRECTED.exists():
+        return pd.DataFrame(columns=CORRECTED_COLS)
+    d = pd.read_csv(CORRECTED)
+    if horizon:
+        d = d[d["horizon"].astype(str) == str(horizon)]
+    if d.empty:
+        return d
+    # Sort so rows WITH a value come last within each group, then keep the last.
+    d["_has"] = d["excess_corrected_pp"].notna().astype(int)
+    d = d.sort_values(["symbol", "horizon", "_has"], kind="stable")
+    return (d.groupby(["symbol", "horizon"], as_index=False, sort=False)
+             .tail(1).drop(columns="_has").reset_index(drop=True))
+
+
 def effects(horizon: str = "1y") -> dict:
     """Everything Task 5 asks to be printed, from whatever has been computed."""
     if not CORRECTED.exists():
         return {"error": "nothing computed yet"}
-    d = pd.read_csv(CORRECTED)
-    d = d[d["horizon"].astype(str) == horizon]
+    # Through latest(): the file is append-only and a retried row appears twice.
+    d = latest(horizon)
     done = d[d["excess_corrected_pp"].notna()].copy()
     o = {"rows_attempted": len(d), "rows_with_a_corrected_value": len(done),
          "ca_state": d["ca_state"].value_counts().to_dict(),
@@ -941,6 +969,37 @@ def self_test() -> int:
     chk("effects reports them separately", "end_price_missing_reason" in
         inspect.getsource(effects))
     chk("end_price_missing_reason is a column", "end_price_missing_reason" in CORRECTED_COLS)
+
+    print("\n[13] append-only with retries: latest() picks the row that counts")
+    lsrc = inspect.getsource(latest)
+    chk("it keeps one row per symbol and horizon", 'groupby(["symbol", "horizon"]' in lsrc)
+    chk("preferring the attempt that produced a VALUE",
+        '"_has"' in lsrc and "excess_corrected_pp" in lsrc)
+    chk("and it never deletes the discarded attempts", "to_csv" not in lsrc)
+    chk("effects reads through it, not the raw file",
+        "latest(horizon)" in inspect.getsource(effects))
+    bsrc = inspect.getsource(build_corrected)
+    chk("a valueless prior attempt is retryable, not treated as done",
+        'prev["excess_corrected_pp"].notna()' in bsrc)
+    import tempfile as _tf2
+    with _tf2.TemporaryDirectory() as td:
+        f = pathlib.Path(td) / "c.csv"
+        pd.DataFrame([
+            {"symbol": "AAA", "horizon": "1y", "excess_corrected_pp": None},
+            {"symbol": "AAA", "horizon": "1y", "excess_corrected_pp": 12.5},
+            {"symbol": "BBB", "horizon": "1y", "excess_corrected_pp": None},
+        ]).to_csv(f, index=False)
+        import model_h_targets as _M
+        keep, _M.CORRECTED = _M.CORRECTED, f
+        try:
+            got = _M.latest("1y")
+        finally:
+            _M.CORRECTED = keep
+        chk("two attempts for one symbol collapse to one row", len(got) == 2, len(got))
+        chk("and the surviving row is the one with a value",
+            float(got[got["symbol"] == "AAA"]["excess_corrected_pp"].iloc[0]) == 12.5, got)
+        chk("a symbol with only a failed attempt is still listed, with no value",
+            pd.isna(got[got["symbol"] == "BBB"]["excess_corrected_pp"].iloc[0]))
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
