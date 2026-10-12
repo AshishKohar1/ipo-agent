@@ -3435,5 +3435,145 @@
   "fetched_at_ist": "2026-10-10 18:09:30.506489",
   "failed": false,
   "note": ""
+ },
+ "3y|SAMHI": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-12 22:20:35.203778",
+  "failed": false,
+  "note": ""
+ },
+ "3y|ZAGGLE": {
+  "n": 1,
+  "sha256": "31c028d7bf95e9809458a0dbd34c532b7f54737cc171703eb77cb6cb4f14d8a6",
+  "fetched_at_ist": "2026-10-12 22:20:38.554753",
+  "failed": false,
+  "note": ""
+ },
+ "3y|RRKABEL": {
+  "n": 6,
+  "sha256": "ca599a485cfd3e6916de6d0e82ed49664c03df7f0e3e924c733d90d01695d60b",
+  "fetched_at_ist": "2026-10-12 22:20:41.766642",
+  "failed": false,
+  "note": ""
+ },
+ "3y|EMSLIMITED": {
+  "n": 4,
+  "sha256": "5d3b824eb09081eef53041afd3d7a913630b15ce46cb93702e90dd3ec8a2f85f",
+  "fetched_at_ist": "2026-10-12 22:20:44.899888",
+  "failed": false,
+  "note": ""
+ },
+ "3y|JLHL": {
+  "n": 4,
+  "sha256": "5359f4f24e031373cb1f4cd435da02ae264084e4e571e2f8af130b1786f8b1a9",
+  "fetched_at_ist": "2026-10-12 22:20:48.104592",
+  "failed": false,
+  "note": ""
+ },
+ "3y|RATNAVEER": {
+  "n": 2,
+  "sha256": "1c05d86c21ad080fcabede69d5e62eb1d6c554244a5877bdf10bb9fbfad107ff",
+  "fetched_at_ist": "2026-10-12 22:20:51.239593",
+  "failed": false,
+  "note": ""
+ },
+ "3y|RISHABH": {
+  "n": 1,
+  "sha256": "b3188e41aed24d5e0eca6620c2f020ebc82dd1e2bac2715de9aef13720db82b2",
+  "fetched_at_ist": "2026-10-12 22:20:54.378877",
+  "failed": false,
+  "note": ""
+ },
+ "3y|VPRPL": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-12 22:20:57.484682",
+  "failed": false,
+  "note": ""
+ },
+ "3y|AEROFLEX": {
+  "n": 4,
+  "sha256": "42c95d6af1071c434e40382d8b203c3ac17c68b05ca6e79f57ecec5726d51274",
+  "fetched_at_ist": "2026-10-12 22:21:00.623568",
+  "failed": false,
+  "note": ""
+ },
+ "3y|PYRAMID": {
+  "n": 1,
+  "sha256": "31077e597c7378d604615ceea8b065b7b991aca4b9fbcc23888e3069e31c90c8",
+  "fetched_at_ist": "2026-10-12 22:21:03.800962",
+  "failed": false,
+  "note": ""
+ },
+ "3y|TVSSCS": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-12 22:21:07.211995",
+  "failed": false,
+  "note": ""
+ },
+ "3y|CONCORDBIO": {
+  "n": 4,
+  "sha256": "c8727789a418da3efa22866845afeb8d608f5bcf3c619e6a3da42f63004a90e4",
+  "fetched_at_ist": "2026-10-12 22:21:10.321342",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SBFC": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-12 22:21:13.439390",
+  "failed": false,
+  "note": ""
+ },
+ "3y|YATHARTH": {
+  "n": 1,
+  "sha256": "ccdbc0d898e1a56660a991c471eddb52fa3ccf29672a53ae0e4d280903543012",
+  "fetched_at_ist": "2026-10-12 22:21:16.616425",
+  "failed": false,
+  "note": ""
+ },
+ "3y|NETWEB": {
+  "n": 3,
+  "sha256": "c407f35ad175805289e472798296fa86f1a365d5b25acc9f54322ac98149864c",
+  "fetched_at_ist": "2026-10-12 22:21:19.720173",
+  "failed": false,
+  "note": ""
+ },
+ "3y|UTKARSHBNK": {
+  "n": 2,
+  "sha256": "ca9bd053767583a36234661fc2674f3491ea4dd0b5fa73f371b45eecff625c15",
+  "fetched_at_ist": "2026-10-12 22:21:22.875434",
+  "failed": false,
+  "note": ""
+ },
+ "3y|SENCO": {
+  "n": 6,
+  "sha256": "0f8b1947a136d6810118241d627bfb589ed1196893c51a0ada038c5dedef9926",
+  "fetched_at_ist": "2026-10-12 22:21:25.995407",
+  "failed": false,
+  "note": ""
+ },
+ "3y|CYIENTDLM": {
+  "n": 1,
+  "sha256": "8bd8e8cd019fc2064828322aaa366476825b92f89e9e1c18ca1ebcaca4de494f",
+  "fetched_at_ist": "2026-10-12 22:21:29.157118",
+  "failed": false,
+  "note": ""
+ },
+ "3y|IDEAFORGE": {
+  "n": 0,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "fetched_at_ist": "2026-10-12 22:21:32.438022",
+  "failed": false,
+  "note": ""
+ },
+ "3y|HMAAGRO": {
+  "n": 4,
+  "sha256": "8b7852e5e3748e3c10cbb92cd4d95dd35de0d6093ebb7887c01105dcc436afe5",
+  "fetched_at_ist": "2026-10-12 22:21:35.646604",
+  "failed": false,
+  "note": ""
  }
 }

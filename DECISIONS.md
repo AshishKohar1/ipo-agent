@@ -1117,3 +1117,108 @@ into the Model L decision path. Model L's only input is subscription, which NSE 
 Chittorgarh both carry, so H26 has nothing to add there. Its scope is Model H's post-listing
 fields — corporate actions, dividends, identifier history — where the official record is
 incomplete and the alternative to a flagged third-party value is a permanently empty column.
+
+---
+
+## 2026-10-12 — H29 to H31, and an addendum to H25 (all ratified by the user)
+
+### H29 — Model H's stop rule, fixed before the measurement
+
+Adopted exactly as proposed in PROGRESS.md on 2026-10-10 and moved here on ratification.
+
+> Model H's top band earns the right to issue a hold/exit instruction only if, in a
+> **walk-forward backtest on IPOs the model has never seen, pooled across test years**, the
+> **top-20% score band ("Hold")**:
+>
+> 1. fires on **at least 50 picks**, and
+> 2. hits **at least 54%** against the Nifty 50 TRI over year one, and
+> 3. has a **Wilson 95% lower bound above the base rate**.
+>
+> All three, or Model H is **display-only**: its score appears in the email and never a
+> hold/exit instruction.
+
+**Why 50 and not Model L's 20.** Model L fires on 20 because its edge is large — pooled
+walk-forward AUC 0.8084. Model H's baseline is **0.525**, and 0.5 is a coin. At 20 picks the
+band would have to hit **65%**, a +24.7pp gap, before the lower bound cleared a 40.3% base
+rate; an AUC-0.525 model producing 24.7pp is not a plausible outcome, it is what 20 lucky
+picks look like. 50 is the first count whose required rate (54%) that model could actually
+produce.
+
+**The cost, stated rather than buried.** At 50 picks a band whose true rate is 55% is
+certified only **61%** of the time. The rule will fail a real-but-modest edge two times in
+five. That is the price of not certifying noise. If Model H is still being evaluated when
+100 picks are available, 100 is the number to move to — detection rises to 87%.
+
+**Pooled, never per-year.** The yearly base rate runs from **14.3% (2010) to 71.4% (2020)**.
+A band judged on one test year could clear or fail any threshold for reasons unconnected to
+the model, which is the mistake H24 exists to stop in the tripwire and H2 avoids by pooling
+AUC rather than averaging per-year AUCs.
+
+**Top-20% is the band, and it was chosen before fitting.** Over 2021–2025 (286 rows) the
+bands hold 85 picks (top 30%), **57 (top 20%)** and 28 (top 10%). Top-10% cannot satisfy
+condition 1 at all, so it is not an available choice later — fixing the band now is what
+stops the cut being picked after seeing which one passes.
+
+### H30 — Model H's design
+
+| Element | Decision |
+|---|---|
+| Target | excess return vs **Nifty 50 TRI**, listing-day close to +12 months, **corrected method**: raw bhavcopy prices × official split/bonus factors + dividends in the window |
+| Primary decision point | **listing day** |
+| Quarterly re-scoring | **phase 2**, designed but not built (see PROGRESS.md) |
+| Method | **credit scorecard** — WoE binning, IV selection, logistic |
+| Estimator | **numpy only** (rule 10 — never scikit-learn) |
+| Recency weighting | **none.** Market conditions enter as explicit market-heat variables instead |
+| Validation | **walk-forward expanding window by calendar year.** Never in-sample |
+| Output | score band → **% of allotment to hold**, bands and percentages derived from the backtest |
+| Reporting | **both pre-tax and post-tax**; the user decides |
+| Benchmark | **Nifty 50 TRI only** |
+| Sector | **NSE's own industry classification** |
+| Data | free and permitted sources only (H18, H26) |
+| Exit timing | **out of scope** — a separate tool handles it |
+| Drift guard | as Model L: any coefficient moving **>25% or flipping sign** between refits is held for review |
+
+Two of these are worth saying out loud because they are the opposite of the obvious choice.
+
+**No recency weighting, deliberately.** Model L uses it (half-life chosen by pooled AUC).
+Model H does not, because recency weighting and market-heat variables are two answers to the
+same question and using both makes neither interpretable: a coefficient on "hot market" is
+not readable if recent hot years are also weighted up. Model H's whole claim is that market
+conditions are *measurable*, so they are measured.
+
+**A scorecard rather than a better classifier.** With AUC 0.525 the limit is the signal, not
+the estimator — a stronger learner would fit noise more confidently. WoE binning gives
+monotone, inspectable bins and an IV number per variable, so a variable earns its place for
+a reason that can be read off a table. That matters more here than a decimal of AUC.
+
+### H31 — one pooled Model H for SME and mainboard, with a flag
+
+Rule 6 requires separate SME and mainboard models. **This is an exception, for Model H
+only:** one pooled model with an **`is_sme` flag (0/1)**, every other variable captured
+identically wherever available.
+
+**Why the exception is defensible here and not in Model L.** Rule 6 exists because SME and
+mainboard Model L coefficients differ in *sign* on market hotness and band width — a
+measured fact about bid-time behaviour. Model H is a different target at a different horizon,
+and there is no equivalent measurement for it; what there is instead is a sample-size problem
+that a split would make fatal. A pooled model with a flag can be *tested* for whether the
+segments behave differently; two models fitted on too few rows each cannot.
+
+**Model L is unchanged. SME is still never scored for bids.**
+
+**And the flag does not earn SME advice.** SME hold advice is given only if the picks that
+are SME **pass H29 on their own** — ≥50 SME picks, ≥54%, Wilson lower bound above the base
+rate. Below that: display-only for SME, whatever the pooled model achieves. A pooled model
+that works because of its mainboard rows must not be allowed to speak for SME.
+
+### H25 addendum — the 37 IPOs without RHPs are a held-out test set
+
+H25 made "missing" its own band. This makes those 37 rows do work: they are **held out** and
+scored on the **non-RHP variables plus the "missing" band only**, to check that the band
+behaves as the fitted model predicts it will.
+
+That is the test H25 otherwise lacked. A band is only honest if it predicts something, and
+the way to find out is to score rows that *are* in that band and compare the predicted beat
+rate against the realised one. If the band's realised rate is far from its predicted rate,
+"missing" is not a usable band and H25 has to be revisited — which is the condition H25
+already names.
