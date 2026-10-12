@@ -16,3 +16,7 @@ __pycache__/
 .env
 reports/~$*.xlsx
 data/bhavcopy_cache/
+# The RAW bhavcopies model_h_turnover.py re-fetches, kept for the same reason: bulky,
+# local, and re-fetchable from the exchange. Every row it produces records its source URL
+# and the column the value came from, so nothing in the output depends on keeping these.
+data/bhavcopy_raw_cache/
