@@ -762,8 +762,23 @@ def financials(doc: Doc) -> list[Value]:
     a, b = rng
     b = min(b, a + 40)
     out, done = [], set()
-    tabs = page_tables(doc.path, a, b)
+    # Table extraction is the expensive operation - minutes, on forty pages of a
+    # restated-financials section. The TEXT of those pages is cheap, so it is read first
+    # and tables are extracted ONLY on pages whose text actually carries one of the row
+    # labels being looked for. On a 500-page prospectus this is the difference between
+    # the batch finishing overnight and not finishing.
     texts = page_texts(doc.path, a, b)
+    want = re.compile("|".join(f"(?:{pat})" for pat in FIN_ROWS.values()))
+    pages = [i for i in sorted(texts)
+             if any(want.search(ln) for ln in (texts[i] or "").splitlines())]
+    if not pages:
+        del texts
+        return [_miss(doc, f"{k}_fy1",
+                      "no page in the financial section carries any of these row labels")
+                for k in FIN_ROWS]
+    tabs = {}
+    for i in pages[:12]:
+        tabs.update(page_tables(doc.path, i, i))
     for idx in sorted(tabs):
         printed = doc.index_to_printed(idx)
         mult, unit_phrase = _unit_of(texts.get(idx, ""))

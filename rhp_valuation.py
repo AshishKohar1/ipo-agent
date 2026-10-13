@@ -35,6 +35,7 @@ if hasattr(_sys.stdout, "reconfigure"):
 import argparse
 import gc
 import hashlib
+import inspect
 import sys
 import time
 from pathlib import Path
@@ -223,6 +224,107 @@ def fetch(limit: int | None = None, deadline=None) -> pd.DataFrame:
     return d
 
 
+# ------------------------------------------------------------------ stage: extract
+def extract(limit: int | None = None, deadline=None, only: list[str] | None = None,
+            write: bool = True) -> pd.DataFrame:
+    """Run the valuation extractor over the prospectuses on disk, one at a time.
+
+    One document in memory at a time. Each is opened, read section by section, and the
+    Doc plus its page texts are deleted before the next; `gc.collect()` runs at every
+    flush. The earlier batch reached 3.4 GB resident by holding opened documents, and the
+    only defence that works is not holding them.
+    """
+    import extract.base as B
+    from extract import valuation as V
+
+    f = pd.read_csv(FETCH_LOG)
+    f = f[f["status"].astype(str).str.startswith("ok")]
+    if only:
+        f = f[f["company"].astype(str).isin(only)]
+    done = set()
+    if VALUES.exists():
+        done = set(pd.read_csv(VALUES, usecols=["company"])["company"].astype(str))
+    pend = [r for _, r in f.iterrows() if str(r["company"]) not in done]
+    if limit:
+        pend = pend[:limit]
+    print(f"{len(f)} documents on disk, {len(done)} already extracted, "
+          f"{len(pend)} to do")
+    rows, t0 = [], time.time()
+    for i, r in enumerate(pend, 1):
+        if deadline is not None and pd.Timestamp.now() >= pd.Timestamp(deadline):
+            print(f"  HARD STOP at {deadline} reached after {i - 1} documents")
+            break
+        pdf = ROOT / str(r["path"])
+        comp = str(r["company"])
+        if not pdf.exists():
+            rows.append({"company": comp, "variable": "_document", "value": None,
+                         "status": "not_found", "note": "PDF not on disk",
+                         "missing_reason": "document_unavailable"})
+            continue
+        try:
+            n_pages = int(r["pages"]) if pd.notna(r.get("pages")) else 0
+            toc = B.parse_toc(pdf, n_pages)
+            off = B.measure_offset(pdf, n_pages)
+            doc = B.Doc(pdf, comp, str(r.get("doc_type") or "RHP"),
+                        str(r["sha256_now"]), str(r["url"]), n_pages, off, toc)
+            vals = V.extract(doc)
+            for v in vals:
+                d = v.as_row()
+                d["listing_date"] = str(r.get("listing_date"))[:10]
+                d["symbol"] = r.get("symbol")
+                d["hash_matches"] = r.get("hash_matches")
+                rows.append(d)
+            n_ok = sum(1 for v in vals if v.status == "ok")
+            del doc, vals, toc
+        except Exception as e:                                 # noqa: BLE001
+            n_ok = 0
+            rows.append({"company": comp, "variable": "_document", "value": None,
+                         "status": "unreadable",
+                         "note": f"{type(e).__name__}: {str(e)[:120]}",
+                         "missing_reason": "present_but_unparsed"})
+        if i % 5 == 0 or i == len(pend):
+            if write and rows:
+                pd.DataFrame(rows).to_csv(VALUES, mode="a",
+                                          header=not VALUES.exists(), index=False,
+                                          encoding="utf-8")
+                rows = []
+            el = time.time() - t0
+            print(f"  {i}/{len(pend)}  last doc {n_ok} ok  "
+                  f"({el / max(i, 1):.0f}s/doc, {el / 60:.0f} min elapsed)")
+            gc.collect()
+    if write and rows:
+        pd.DataFrame(rows).to_csv(VALUES, mode="a", header=not VALUES.exists(),
+                                  index=False, encoding="utf-8")
+    if not VALUES.exists():
+        return pd.DataFrame()
+    d = pd.read_csv(VALUES, low_memory=False)
+    print(f"{VALUES.name}: {len(d)} rows, {d['company'].nunique()} companies, "
+          f"{int((d['status'] == 'ok').sum())} values extracted")
+    return d
+
+
+def coverage() -> pd.DataFrame:
+    """variable | rows | % | first year | withheld count and top reason (Task 1.5)."""
+    if not VALUES.exists():
+        return pd.DataFrame()
+    d = pd.read_csv(VALUES, low_memory=False)
+    n_docs = d["company"].nunique()
+    out = []
+    for var, g in d.groupby("variable"):
+        if str(var).startswith("_"):
+            continue
+        ok = g[g["status"] == "ok"]
+        wh = g[g["status"] != "ok"]
+        yr = pd.to_datetime(ok.get("listing_date"), errors="coerce").dt.year
+        reasons = wh["missing_reason"].value_counts().head(2).to_dict()
+        out.append({"variable": var, "rows": len(ok),
+                    "pct": round(100 * len(ok) / max(n_docs, 1), 1),
+                    "first_year": None if yr.dropna().empty else int(yr.min()),
+                    "withheld": len(wh),
+                    "top_reasons": "; ".join(f"{k}={v}" for k, v in reasons.items())})
+    return pd.DataFrame(out).sort_values("pct", ascending=False)
+
+
 # ------------------------------------------------------------------ self-test
 def self_test() -> int:
     ok = fail = 0
@@ -249,8 +351,16 @@ def self_test() -> int:
     chk("the found/not-found table covers every listing year",
         len(g) >= 15 and g["ipos"].sum() == n_t, (len(g), int(g["ipos"].sum())))
 
+    print(chr(10) + "[1b] the extract stage holds one document at a time")
+    esrc = inspect.getsource(extract)
+    chk("the Doc and its values are deleted before the next document",
+        "del doc, vals, toc" in esrc)
+    chk("rows are flushed to CSV, not accumulated", 'mode="a"' in esrc)
+    chk("and the collector runs at each flush", "gc.collect()" in esrc)
+    chk("it is resumable on company", "already extracted" in esrc)
+    chk("and it honours a deadline", "HARD STOP" in esrc)
+
     print(chr(10) + "[2] hashing streams, so a large PDF never sits in memory whole")
-    import inspect
     src = inspect.getsource(_sha_of)
     chk("the hash is computed block by block", "iter(lambda: f.read(CHUNK)" in src)
     fsrc = inspect.getsource(fetch)
@@ -294,6 +404,7 @@ if __name__ == "__main__":
     ap.add_argument("--limit", type=int)
     ap.add_argument("--deadline", help="IST timestamp to stop at, e.g. '2026-10-14 08:00'")
     ap.add_argument("--found-table", action="store_true")
+    ap.add_argument("--coverage", action="store_true")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -302,3 +413,7 @@ if __name__ == "__main__":
         print(not_on_sebi_by_year().to_string(index=False))
     if a.stage == "fetch":
         fetch(limit=a.limit, deadline=a.deadline)
+    if a.stage == "extract":
+        extract(limit=a.limit, deadline=a.deadline)
+    if a.coverage:
+        print(coverage().to_string(index=False))
