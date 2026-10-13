@@ -38,6 +38,21 @@ from .base import (Doc, Value, EXTRACTOR_VERSION, page_tables, page_texts, find,
 NAME = "valuation"
 MAX_PEERS = 12
 
+# This module's OWN version, independent of `base.EXTRACTOR_VERSION`, which is shared with
+# the h6 extractor and must not be relabelled when only this one changes.
+#
+# Bump it whenever a change could alter an extracted VALUE. The first pilot wrote 243 rows
+# for 5 companies and stamped them `1.0.0`; the financials stage was then narrowed to scan
+# only pages whose text carries a target row label, which can change which values are
+# found - and because the version string had not moved, a file mixing the two code paths
+# was indistinguishable from a clean one. Those 5 companies were discarded and re-extracted
+# rather than left as rows nobody could date.
+#
+#   1.0.0  first pilot
+#   1.1.0  financials narrowed by a text pre-scan; peer role order taken from table
+#          columns rather than line-joined text; TOC and offset probes read in one open
+VALUATION_VERSION = "1.1.0"
+
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
 STUB = re.compile(r"(?i)(?:six|nine|three|6|9|3)[\s-]*month|period\s+ended|stub")
@@ -49,9 +64,9 @@ UNIT_MULT = {"crore": 1.0, "crores": 1.0, "cr": 1.0, "lakh": 0.01, "lakhs": 0.01
 
 
 def _v(doc: Doc, var: str, **kw) -> Value:
+    kw.setdefault("extractor_version", VALUATION_VERSION)
     return Value(company=doc.company, doc_type=doc.doc_type, variable=var,
-                 doc_url=doc.doc_url, sha256=doc.sha256, extractor=NAME,
-                 extractor_version=EXTRACTOR_VERSION, **kw)
+                 doc_url=doc.doc_url, sha256=doc.sha256, extractor=NAME, **kw)
 
 
 def _miss(doc: Doc, var: str, note: str, reason: str = "not_present_on_page") -> Value:

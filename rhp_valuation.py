@@ -241,9 +241,21 @@ def extract(limit: int | None = None, deadline=None, only: list[str] | None = No
     f = f[f["status"].astype(str).str.startswith("ok")]
     if only:
         f = f[f["company"].astype(str).isin(only)]
+    # Resume only on rows written by the CURRENT extractor version. A row from an older
+    # version is not "done" - it was produced by a different code path, and skipping it
+    # would leave a file whose rows came from two extractors with no way to tell which.
+    from extract.valuation import VALUATION_VERSION
     done = set()
     if VALUES.exists():
-        done = set(pd.read_csv(VALUES, usecols=["company"])["company"].astype(str))
+        prev = pd.read_csv(VALUES, usecols=["company", "extractor_version"],
+                           low_memory=False)
+        cur = prev[prev["extractor_version"].astype(str) == VALUATION_VERSION]
+        stale = sorted(set(prev["company"].astype(str)) - set(cur["company"].astype(str)))
+        done = set(cur["company"].astype(str))
+        if stale:
+            print(f"  {len(stale)} companies were extracted by an older version and will "
+                  f"be re-done: {', '.join(stale[:4])}"
+                  f"{' ...' if len(stale) > 4 else ''}")
     pend = [r for _, r in f.iterrows() if str(r["company"]) not in done]
     if limit:
         pend = pend[:limit]
@@ -384,6 +396,16 @@ def self_test() -> int:
     chk("the page set is read in a single open",
         "pdfplumber.open" in inspect.getsource(_B.page_texts_at)
         and inspect.getsource(_B.page_texts_at).count("pdfplumber.open") == 1)
+
+    print(chr(10) + "[1d] a row from an older extractor is not treated as done")
+    from extract.valuation import VALUATION_VERSION as _VV
+    chk("the extractor carries its own version, not base's shared one",
+        _VV != getattr(__import__("extract.base", fromlist=["x"]),
+                       "EXTRACTOR_VERSION", None), _VV)
+    chk("resume filters on that version", "VALUATION_VERSION" in esrc
+        and "older version" in esrc)
+    chk("and the stale companies are named, not silently re-done",
+        "will " in esrc and "be re-done" in esrc)
 
     print(chr(10) + "[2] hashing streams, so a large PDF never sits in memory whole")
     src = inspect.getsource(_sha_of)
