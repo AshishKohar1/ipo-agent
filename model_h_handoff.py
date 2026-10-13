@@ -93,33 +93,68 @@ def write_missing_symbols() -> int:
 
 
 # ------------------------------------------------------------------ 2.2 RHPs
+ERA_CUTOFF = 2019          # H37: 2019+ is what the user fills; earlier is kept, not chased
+
+
 def write_missing_rhps() -> int:
-    if not STILL_MISSING.exists():
-        raise FileNotFoundError(f"{STILL_MISSING} is not on disk, so the 37 cannot be "
-                                f"listed. Nothing is guessed at.")
-    d = pd.read_csv(STILL_MISSING)
-    m = dataio.load_master_with_symbols()
-    by_isin = {str(r.get("isin")).strip(): str(r.get("symbol") or "").strip()
-               for _, r in m.iterrows() if pd.notna(r.get("isin"))}
-    by_name = {dataio.norm_name(r.get("company")): str(r.get("symbol") or "").strip()
-               for _, r in m.iterrows()}
+    """The IPOs with a corrected 1y target and NO prospectus URL on record.
+
+    **Rebuilt from the real universe.** The earlier version read
+    `reports/DOCUMENTS_STILL_MISSING.csv` and produced 37 rows, but that file was built
+    against the 486 rows of `rhp_progress.csv` - a different population from "IPOs with a
+    corrected 1y target", which has since grown to 497 as targets were corrected and 15
+    symbols recovered. Reconciled against the current set: 35 of the 37 are still missing
+    a URL, and **46 rows that need one were never in the 37**. So the 37 was not the true
+    list and this is.
+    """
+    import rhp_valuation as RV
+    j = RV.targets()
+    miss = j[~j["has_url"]].copy()
+    miss["year"] = pd.to_datetime(miss["listing_date"], errors="coerce").dt.year
+    prog = pd.read_csv(ROOT / "reports" / "DOCUMENTS_STILL_MISSING.csv")         if (ROOT / "reports" / "DOCUMENTS_STILL_MISSING.csv").exists() else pd.DataFrame()
+    why = {}
+    if len(prog):
+        prog["_n"] = prog["company"].map(dataio.norm_name)
+        why = {r["_n"]: f"{r.get('status')}: {str(r.get('next_step'))[:150]}"
+               for _, r in prog.iterrows()}
     rows = []
-    for _, r in d.iterrows():
-        sym = by_isin.get(str(r.get("isin")).strip()) or \
-            by_name.get(dataio.norm_name(r.get("company"))) or ""
+    for _, r in miss.iterrows():
+        n = dataio.norm_name(r["company"]) if pd.notna(r["company"]) else ""
         rows.append({
-            "company": r.get("company"),
-            "listing_date": r.get("listing_date"),
-            "symbol": sym,
+            "company": r["company"],
+            "listing_date": str(r.get("listing_date"))[:10],
+            "symbol": r.get("symbol"),
             "rhp_url": "",
-            # The note says WHY it is missing, so the user knows whether to look for a
-            # better URL or a different document altogether.
-            "notes": f"{r.get('status')}: {str(r.get('next_step'))[:180]}",
+            "notes": why.get(n, "no SEBI URL on record for this IPO; the resolver never "
+                                "matched a full prospectus to it"),
         })
     MANUAL.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows, columns=RHP_COLS).to_csv(MISSING_RHPS, index=False,
-                                                encoding="utf-8")
-    return len(rows)
+    d = pd.DataFrame(rows, columns=RHP_COLS)
+    d.to_csv(MISSING_RHPS, index=False, encoding="utf-8")
+    return len(d)
+
+
+def split_era(path: Path, date_col: str, cutoff: int = ERA_CUTOFF) -> tuple[int, int]:
+    """Keep `cutoff`+ rows in place; move earlier ones to `*_pre2019.csv`.
+
+    H37: the early rows are **kept, not filled**. They stay in the model with the missing
+    band, and moving them out of the file the user fills is a statement about priority, not
+    about the data - which is why they go to a sibling file rather than being deleted.
+    """
+    if not path.exists():
+        return 0, 0
+    d = pd.read_csv(path, keep_default_na=False)
+    yr = pd.to_datetime(d[date_col], errors="coerce").dt.year
+    keep, old = d[yr >= cutoff], d[yr < cutoff]
+    undated = d[yr.isna()]
+    if len(undated):
+        # An undated row cannot be put in either era, so it stays in the file the user
+        # fills - the alternative is quietly parking it where nobody looks.
+        keep = pd.concat([keep, undated]).drop_duplicates()
+    keep.to_csv(path, index=False, encoding="utf-8")
+    out = path.with_name(path.stem + f"_pre{cutoff}.csv")
+    old.to_csv(out, index=False, encoding="utf-8")
+    return len(keep), len(old)
 
 
 # ------------------------------------------------------------------ the gate
@@ -247,6 +282,32 @@ def self_test() -> int:
     chk("a prefix-only bhavcopy match is NOT accepted as confirmation",
         "symbol_prefix" in inspect.getsource(bhavcopy_has)
         and 'how in ("isin", "symbol", "code")' in inspect.getsource(bhavcopy_has))
+
+    print(chr(10) + "[2b] the era split keeps the early rows rather than dropping them")
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        q = Path(td) / "x.csv"
+        pd.DataFrame({"company": ["a", "b", "c", "d"],
+                      "listing_date": ["2018-06-01", "2019-01-01", "2024-05-05", ""]
+                      }).to_csv(q, index=False)
+        keep, old = split_era(q, "listing_date")
+        kept = pd.read_csv(q, keep_default_na=False)
+        moved = pd.read_csv(q.with_name("x_pre2019.csv"), keep_default_na=False)
+        chk("2019+ rows stay in the file the user fills", keep == 3, keep)
+        chk("pre-2019 rows are MOVED, not deleted", old == 1 and len(moved) == 1,
+            (old, len(moved)))
+        chk("and none is lost", keep + old == 4)
+        chk("an undated row stays where the user will see it",
+            "d" in set(kept["company"]), kept["company"].tolist())
+        chk("the cutoff is H37's, not a literal scattered about",
+            ERA_CUTOFF == 2019)
+
+    print(chr(10) + "[2c] the RHP list comes from the real universe")
+    rsrc = inspect.getsource(write_missing_rhps)
+    chk("it is built from the corrected-target set, not DOCUMENTS_STILL_MISSING",
+        "RV.targets()" in rsrc and 'read_csv(ROOT / "reports"' in rsrc)
+    chk("and that file is used only for the REASON text",
+        "why.get(" in rsrc)
 
     print(chr(10) + "[3] the handoff list is the 60, not the 74")
     u = unresolved_symbol_rows()

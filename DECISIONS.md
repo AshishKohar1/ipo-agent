@@ -1377,3 +1377,40 @@ confirmed in an NSE bhavcopy is NSE's fact, found faster.
 **Budget: 50 calls per day**, counted and reported. The token lives only in the local
 environment as `TAPETIDE_TOKEN` and is never written to the repository (CLAUDE.md: no
 secrets in the repository).
+
+---
+
+### H37 — train and test on ALL years; pre-2019 gaps are not chased (2026-10-13)
+
+**Decided by the user on 13 Oct 2026, before any model run.**
+
+**Every year stays in.** Model H trains and tests on the whole 2010–2025 span, walk-forward,
+**scheme C (expanding) with the `Y-2` embargo** — unchanged from H30 and H35. No year is
+dropped, no era is excluded, and the sample is not trimmed to the years whose data happens
+to be better.
+
+**Pre-2019 data gaps are low priority.** They are not chased and nothing waits for them.
+Where a value is absent it takes the **missing band (H25)** — its own bin, never zero, never
+the mean, never a dropped row. That is what makes keeping the early years costless: a 2011
+IPO with no RHP fundamentals contributes its market-heat variables and sits in the missing
+band for the rest, rather than being excluded for what it lacks.
+
+The gaps are real and measured, so the shape of them is on the record rather than implied:
+
+| Source | Pre-2019 | 2019+ |
+|---|---|---|
+| Prospectus on SEBI | 60–67% of 2010–13 IPOs | 86–100% of 2019–25 |
+| India VIX | **none** — NSE Indices serves the series from 2018 only | full |
+| NSE industry (sector map) | sparse; index-constituent files cover current members | better |
+
+**Reporting, not a decision rule.** Alongside the pooled result, the pooled figures for
+**test years 2021–2025** are printed. That is a second view of the same fitted model, not a
+second model and not a second pass mark: H34 (= H29) is still judged on the pooled result
+across all test years, and H35's three conditions are still judged on all of them.
+
+Why that distinction is worth stating: a recent-years figure will usually look better,
+because coverage is better and the sample is denser. If the pass mark were read off it, the
+model would effectively be judged on the subset where it has the most data — which is the
+same error as choosing a threshold after seeing the result. The 2021–2025 block is there to
+show whether the pooled number is being held down by the thin early years, and that is all
+it may be used for.
