@@ -7,3 +7,7 @@ trading_date,polled_at_ist,nominal_slot,symbol,series,source,total_x,qib_x,hni_x
 2026-10-13,2026-10-13 11:01:29.887269,1101,HDFIRE,EQ,chittorgarh,,,,,,,the subscription table has no Total row yet — normal before bidding opens or very early on day 1
 2026-10-13,2026-10-13 11:01:29.887269,1101,RAVITA,SME,nse_active_category,0.0,,,,Updated as on null,False,Total is 0.0 - nothing published yet
 2026-10-13,2026-10-13 11:01:29.887269,1101,RAVITA,SME,chittorgarh,,,,,,,not on the Chittorgarh dashboard
+2026-10-13,2026-10-13 13:01:32.604331,1301,HDFIRE,EQ,nse_active_category,1.9999400667474028,0.003629828453887636,5.76072659132595,2.034334287735688,Updated as on 13-Oct-2026 12:57:00,True,
+2026-10-13,2026-10-13 13:01:32.604331,1301,HDFIRE,EQ,chittorgarh,1.37,,3.01,1.46,,,
+2026-10-13,2026-10-13 13:01:32.604331,1301,RAVITA,SME,nse_active_category,0.0,,,,Updated as on null,False,Total is 0.0 - nothing published yet
+2026-10-13,2026-10-13 13:01:32.604331,1301,RAVITA,SME,chittorgarh,,,,,,,not on the Chittorgarh dashboard
