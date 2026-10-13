@@ -300,3 +300,13 @@ fetched_at_ist,url,http_status,bytes,note
 2026-10-13 21:47:16.298454,https://www.chittorgarh.com/robots.txt,200,0,permitted; User-agent:* disallows ['/ipo/ipo_discussions.asp']
 2026-10-13 21:47:16.523054,https://www.chittorgarh.com/report/ipo-in-india-list-main-board-sme/82/mainboard/?year=2015,200,134407,
 2026-10-13 21:47:19.674322,https://www.chittorgarh.com/report/ipo-in-india-list-main-board-sme/82/mainboard/?year=2011,200,134407,
+2026-10-13 22:34:36.065286,https://www.chittorgarh.com/robots.txt,200,0,permitted; User-agent:* disallows ['/ipo/ipo_discussions.asp']
+2026-10-13 22:34:36.712002,https://www.chittorgarh.com/ipo/,200,127284,
+2026-10-13 22:34:39.306678,https://www.chittorgarh.com/ipo/ipo_dashboard.asp?a=sme,200,152348,
+2026-10-13 22:34:43.696275,https://www.chittorgarh.com/ipo_subscription/x/2628/,200,224164,
+2026-10-13 22:34:46.651596,https://www.chittorgarh.com/ipo_subscription/x/3180/,200,180720,
+2026-10-13 22:34:47.420514,https://www.chittorgarh.com/robots.txt,200,0,permitted; User-agent:* disallows ['/ipo/ipo_discussions.asp']
+2026-10-13 22:34:48.494258,https://www.chittorgarh.com/ipo/,200,127284,
+2026-10-13 22:34:51.245999,https://www.chittorgarh.com/ipo/ipo_dashboard.asp?a=sme,200,150852,
+2026-10-13 22:34:54.568337,https://www.chittorgarh.com/ipo_subscription/x/2628/,200,224164,
+2026-10-13 22:34:57.667790,https://www.chittorgarh.com/ipo_subscription/x/3180/,200,180720,
