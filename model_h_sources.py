@@ -116,20 +116,36 @@ SECTOR_TO_INDEX = {
     "media entertainment & publication": "NIFTY MEDIA",
     "consumer durables": "NIFTY CONSUMER DURABLES",
     "construction": "NIFTY INFRASTRUCTURE",
+    # Added 13 Oct 2026 after reading NSE's OWN index catalogue (api/equity-master)
+    # rather than assuming the 15 already captured were all that existed. These three
+    # have a dedicated official index whose basket IS the sector:
+    "chemicals": "NIFTY CHEMICALS",                # Sectoral Market Indices
+    "construction materials": "NIFTY CEMENT",      # Sectoral; the sector IS cement here
+    "services": "NIFTY SERVICES SECTOR",           # Thematic, but the named basket
 }
 # Named explicitly so a reader can see these were considered and declined, rather than
 # wonder whether they were forgotten.
+# Checked against NSE's own catalogue, not against the 15 already captured. Each reason
+# below names the nearest official index that DOES exist and says why it is not the right
+# benchmark - because "no index exists" and "an index exists but is a different basket"
+# are different facts, and only the second one is a judgement somebody can disagree with.
 NO_INDEX_REASON = {
-    "capital goods": "no Nifty Capital Goods index among the 15 captured; "
-                     "Infrastructure is a different basket",
-    "chemicals": "no Nifty Chemicals index among the 15 captured",
-    "telecommunication": "no Nifty Telecom index among the 15 captured",
-    "services": "too broad to benchmark - spans finance, logistics and hospitality",
-    "consumer services": "no Nifty Consumer Services index among the 15 captured",
-    "textiles": "no Nifty Textiles index among the 15 captured",
-    "construction materials": "cement sits in no captured index",
-    "diversified": "a conglomerate has no single sector by definition",
-    "forest materials": "no captured index covers paper and forest products",
+    "capital goods": "NSE has no Capital Goods index. The nearest is NIFTY INDIA "
+                     "MANUFACTURING (thematic), a different and much broader basket; "
+                     "NIFTY CAPITAL MARKETS is financial capital markets, not capital "
+                     "goods. Not forced",
+    "telecommunication": "the only telecom index is NIFTY MIDSMALL IT & TELECOM, which "
+                         "pools telecom with midsmall IT. Not a telecom benchmark. "
+                         "Not forced",
+    "consumer services": "NIFTY INDIA CONSUMPTION and NIFTY NON-CYCLICAL CONSUMER are "
+                         "consumption baskets spanning goods and services, not the "
+                         "Consumer Services sector. Not forced",
+    "utilities": "NSE has no Utilities index. NIFTY ENERGY is oil, gas and power "
+                 "generation; NIFTY CPSE is an ownership basket. Not forced",
+    "textiles": "NSE publishes no Textiles index at all",
+    "diversified": "NIFTY CONGLOMERATE 50 exists but is a 50-stock large-cap basket; "
+                   "a diversified small-cap has no sector by definition. Not forced",
+    "forest materials": "NSE publishes no paper or forest-products index at all",
 }
 
 NIFTY_HOST = "niftyindices.com"
@@ -148,7 +164,9 @@ WANT_INDICES = ("NIFTY 50", "NIFTY SMALLCAP 100", "NIFTY AUTO", "NIFTY BANK",
                 "NIFTY FINANCIAL SERVICES", "NIFTY IT", "NIFTY PHARMA",
                 "NIFTY HEALTHCARE", "NIFTY FMCG", "NIFTY METAL", "NIFTY REALTY",
                 "NIFTY ENERGY", "NIFTY OIL & GAS", "NIFTY INFRASTRUCTURE",
-                "NIFTY MEDIA", "NIFTY CONSUMER DURABLES")
+                "NIFTY MEDIA", "NIFTY CONSUMER DURABLES",
+                # the three added from NSE's catalogue on 13 Oct 2026
+                "NIFTY CHEMICALS", "NIFTY CEMENT", "NIFTY SERVICES SECTOR")
 
 
 # ------------------------------------------------------------------ politeness
@@ -798,6 +816,19 @@ def self_test() -> int:
         ("" if float("nan") else "reason") == "")
     chk("the remap path exists, so a mapping fix needs no refetch",
         callable(globals().get("remap_sectors")))
+
+    chk("the three sectors with a real official index are now mapped",
+        all(SECTOR_TO_INDEX.get(k) for k in
+            ("chemicals", "construction materials", "services")))
+    chk("and each declined sector names the nearest index that DOES exist",
+        all("NIFTY" in v or "no " in v.lower() for v in NO_INDEX_REASON.values()),
+        [k for k, v in NO_INDEX_REASON.items()
+         if "NIFTY" not in v and "no " not in v.lower()])
+    chk("'Not forced' is said out loud where a near-miss index exists",
+        sum("Not forced" in v for v in NO_INDEX_REASON.values()) >= 4)
+    chk("every newly mapped index is in the fetch list",
+        all(v in WANT_INDICES for v in SECTOR_TO_INDEX.values()),
+        [v for v in SECTOR_TO_INDEX.values() if v not in WANT_INDICES])
 
     print("\n[3] the gap is shared, not per-call")
     q = Queue()

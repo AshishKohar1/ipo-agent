@@ -1281,3 +1281,99 @@ model with an untested flag, and an honest one.
 still appear in the live email, still get `SME, not scored`, and still carry the
 shadow-mode caveat (H3/E2). The question Phase 2 Task 2.2 asks is not "which Model H
 variables do SME rows have" but "can SME rows be obtained at all".
+
+---
+
+### H34 — Model H's stock-level pass mark is unchanged (2026-10-13)
+
+**H29 stands exactly as written.** Nothing measured since — the corrected targets growing from
+473 to 497 rows, three new source blocks, 37 candidate variables instead of 31 — changes the
+bar or the way it is applied.
+
+This is recorded as its own decision because the measured result was a **0.99pp miss** on
+hit rate and a 0.75pp miss on the Wilson lower bound. A miss that small is exactly the
+situation in which a threshold gets revisited, and the point of fixing it beforehand is that
+it does not. Re-stating it here, before any combined model is fitted, means the next run
+cannot be read as having been scored against a bar chosen with the result already in view.
+
+**Model H remains display-only at the stock level until H29 passes on its own terms.**
+
+---
+
+### H35 — the fallback: "Model H-market", a market-heat statement rather than a per-IPO one
+
+**Specified by the user on 13 Oct 2026, before the combined model is fitted.** This is a
+second, weaker question asked of the same data: not *which IPO* will beat the index, but
+*whether the market conditions at listing* say anything about how often IPOs of that vintage
+did.
+
+**Why it is worth asking separately.** Six of the seven variables that are STABLE across
+every window scheme and both embargoed runs point the same way — a crowded IPO calendar, a
+hot recent cohort, a strong index, a big listing pop against the sector, heavy first-day
+churn all precede *worse* relative returns. The stock-level model cannot turn that into a
+per-IPO ranking better than AUC 0.50. A tercile statement about the market is a much coarser
+claim and may survive where the fine one does not.
+
+**The score.** The six **stable heat variables**, and only these:
+
+| Variable |
+|---|
+| `ipo_count_prior_3m` |
+| `ipo_count_prior_6m` |
+| `mean_listing_gain_prior_3m` |
+| `nifty_tri_ret_12m` |
+| `listing_gain_minus_sector_day` |
+| `turnover_x_issue_size` |
+
+Each **standardised** (mean and standard deviation computed **inside the training fold
+only**), signed so that higher means hotter, then averaged with **equal weights**. No
+fitted coefficients: equal weights are the point, because six correlated measures of one
+thing cannot support six estimated weights on ~500 rows, and fitting them would be the
+quiet way of reintroducing the stock-level model that already failed.
+
+**The pass mark.** Walk-forward, **scheme C (expanding) with the `Y-2` embargo**. All three
+must hold:
+
+1. Pooled across test years, IPOs listed in the **coolest third** beat the Nifty 50 TRI at
+   least **10 percentage points more often** than those in the **hottest third**.
+2. The sign of that gap is the same in **at least 75% of test years**.
+3. A **one-sided two-proportion test** on the pooled coolest-versus-hottest difference gives
+   **p < 0.05**.
+
+**What it may output if it passes.** A market-heat band — **LOW / MID / HIGH** — with that
+tercile's historical beat rate against the index. Nothing else.
+
+**What it may never output.** A per-IPO hold instruction, a percentage of an allotment, or
+anything that reads as advice about a specific issue. H34 governs that, and H34 is a fail.
+A tercile beat rate is a statement about a cohort; attaching it to one IPO would be exactly
+the inference the stock-level AUC says cannot be made.
+
+---
+
+### H36 — Tapetide may be used for lookups only, and nothing of theirs is stored (2026-10-13)
+
+**Their terms** (tapetide.com/terms) permit automated access **only** through their MCP or
+API — no scraping — and forbid reproducing, distributing or making derivative works of their
+data without written consent.
+
+So Tapetide is used as a **pointer service and nothing else**:
+
+| Permitted | Forbidden |
+|---|---|
+| Asking for a historical symbol or ISIN for the 45 unresolved rows | Storing any Tapetide **value** - a financial, a ratio, a price |
+| Asking where an IPO document for the 37 missing RHPs can be found | Treating a Tapetide answer as a fact without official confirmation |
+| Recording the note "located via Tapetide lookup" beside an official fact | Scraping their site; cloning their repo; putting their token in a GitHub secret |
+
+**Every answer is a hypothesis until an official source confirms it.** A symbol is accepted
+only if it appears in the **bhavcopy for that listing date** — the same gate every recovered
+symbol passed in Phase 2.1. A document is accepted only if it is fetched from **SEBI, BSE,
+NSE or another official host** and passes `_verify_is_prospectus()`. What gets stored is the
+official fact with its official provenance; the Tapetide note records only *how it was
+found*, which is a fact about our process and not their data.
+
+A derivative work of their data is what storing their values would create. A symbol
+confirmed in an NSE bhavcopy is NSE's fact, found faster.
+
+**Budget: 50 calls per day**, counted and reported. The token lives only in the local
+environment as `TAPETIDE_TOKEN` and is never written to the repository (CLAUDE.md: no
+secrets in the repository).
