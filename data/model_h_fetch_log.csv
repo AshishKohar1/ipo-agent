@@ -345,3 +345,312 @@ fetched_at_ist,url,http_status,bytes,sha256,note
 2026-10-13 11:50:29.830959,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,44187,,INDIA VIX 2024-10-20..2025-10-15
 2026-10-13 11:50:33.034803,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,43578,,INDIA VIX 2025-10-16..2026-10-11
 2026-10-13 11:50:36.221377,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,180,,INDIA VIX 2026-10-12..2026-10-13
+2026-10-13 16:33:05.070941,https://www.nseindia.com/get-quotes/equity?symbol=LT,200,147446,,"quote page, for cookies"
+2026-10-13 16:33:07.453795,https://www.nseindia.com/api/equity-master,200,3133,,index catalogue
+2026-10-13 16:33:10.500657,https://www.nseindia.com/api/quote-equity?symbol=EUROPRATIK,403,397,,EUROPRATIK
+2026-10-13 16:33:13.706782,https://www.nseindia.com/api/quote-equity?symbol=DEVX,403,397,,DEVX
+2026-10-13 16:33:16.892761,https://www.nseindia.com/api/quote-equity?symbol=SHRINGARMS,403,397,,SHRINGARMS
+2026-10-13 16:33:20.111236,https://www.nseindia.com/api/quote-equity?symbol=AMANTA,403,397,,AMANTA
+2026-10-13 16:33:23.299123,https://www.nseindia.com/api/quote-equity?symbol=AHCL,403,397,,AHCL
+2026-10-13 16:33:26.498413,https://www.nseindia.com/api/quote-equity?symbol=VIKRAN,403,397,,VIKRAN
+2026-10-13 16:33:29.740196,https://www.nseindia.com/api/quote-equity?symbol=MEIL,403,397,,MEIL
+2026-10-13 16:33:32.898451,https://www.nseindia.com/api/quote-equity?symbol=GEMAROMA,403,397,,GEMAROMA
+2026-10-13 16:33:36.094423,https://www.nseindia.com/api/quote-equity?symbol=PATELRMART,403,397,,PATELRMART
+2026-10-13 16:33:39.291685,https://www.nseindia.com/api/quote-equity?symbol=REGAAL,403,397,,REGAAL
+2026-10-13 16:33:42.484444,https://www.nseindia.com/api/quote-equity?symbol=ALLTIME,403,397,,ALLTIME
+2026-10-13 16:33:45.695383,https://www.nseindia.com/api/quote-equity?symbol=HILINFRA,403,397,,HILINFRA
+2026-10-13 16:33:48.895991,https://www.nseindia.com/api/quote-equity?symbol=MBEL,403,397,,MBEL
+2026-10-13 16:33:52.120234,https://www.nseindia.com/api/quote-equity?symbol=NSDL,403,397,,NSDL
+2026-10-13 16:33:55.293296,https://www.nseindia.com/api/quote-equity?symbol=LAXMIINDIA,403,397,,LAXMIINDIA
+2026-10-13 16:33:58.495507,https://www.nseindia.com/api/quote-equity?symbol=SHANTIGOLD,403,397,,SHANTIGOLD
+2026-10-13 16:34:01.696714,https://www.nseindia.com/api/quote-equity?symbol=BRIGHOTEL,403,397,,BRIGHOTEL
+2026-10-13 16:34:04.900434,https://www.nseindia.com/api/quote-equity?symbol=INDIQUBE,403,397,,INDIQUBE
+2026-10-13 16:34:08.099652,https://www.nseindia.com/api/quote-equity?symbol=SMARTWORKS,403,397,,SMARTWORKS
+2026-10-13 16:34:11.308882,https://www.nseindia.com/api/quote-equity?symbol=TRAVELFOOD,403,397,,TRAVELFOOD
+2026-10-13 16:34:14.496623,https://www.nseindia.com/api/quote-equity?symbol=CRIZAC,403,397,,CRIZAC
+2026-10-13 16:34:17.701589,https://www.nseindia.com/api/quote-equity?symbol=IGCL,403,397,,IGCL
+2026-10-13 16:34:20.916938,https://www.nseindia.com/api/quote-equity?symbol=SAMBHV,403,397,,SAMBHV
+2026-10-13 16:34:24.102675,https://www.nseindia.com/api/quote-equity?symbol=GLOBECIVIL,403,397,,GLOBECIVIL
+2026-10-13 16:34:27.314331,https://www.nseindia.com/api/quote-equity?symbol=KALPATARU,403,397,,KALPATARU
+2026-10-13 16:34:30.502493,https://www.nseindia.com/api/quote-equity?symbol=SCODATUBES,403,397,,SCODATUBES
+2026-10-13 16:34:33.704571,https://www.nseindia.com/api/quote-equity?symbol=PROSTARM,403,397,,PROSTARM
+2026-10-13 16:34:36.916753,https://www.nseindia.com/api/quote-equity?symbol=BORANA,403,397,,BORANA
+2026-10-13 16:34:40.092232,https://www.nseindia.com/api/quote-equity?symbol=AJAXENGG,403,397,,AJAXENGG
+2026-10-13 16:34:43.302090,https://www.nseindia.com/api/quote-equity?symbol=AGARWALEYE,403,397,,AGARWALEYE
+2026-10-13 16:34:46.512168,https://www.nseindia.com/api/quote-equity?symbol=STALLION,403,397,,STALLION
+2026-10-13 16:34:49.762161,https://www.nseindia.com/api/quote-equity?symbol=LAXMIDENTL,403,397,,LAXMIDENTL
+2026-10-13 16:34:52.911889,https://www.nseindia.com/api/quote-equity?symbol=QUADFUTURE,403,397,,QUADFUTURE
+2026-10-13 16:34:56.120054,https://www.nseindia.com/api/quote-equity?symbol=INDOFARM,403,397,,INDOFARM
+2026-10-13 16:34:57.772242,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,33133,,NIFTY 50 1999-01-01..1999-12-27
+2026-10-13 16:34:59.315389,https://www.nseindia.com/api/quote-equity?symbol=VENTIVE,403,397,,VENTIVE
+2026-10-13 16:35:00.966301,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32869,,NIFTY 50 1999-12-28..2000-12-22
+2026-10-13 16:35:02.509553,https://www.nseindia.com/api/quote-equity?symbol=CARRARO,403,397,,CARRARO
+2026-10-13 16:35:04.164883,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32209,,NIFTY 50 2000-12-23..2001-12-18
+2026-10-13 16:35:05.712198,https://www.nseindia.com/api/quote-equity?symbol=DAMCAPITAL,403,397,,DAMCAPITAL
+2026-10-13 16:35:07.373524,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32737,,NIFTY 50 2001-12-19..2002-12-14
+2026-10-13 16:35:08.934442,https://www.nseindia.com/api/quote-equity?symbol=MAMATA,403,397,,MAMATA
+2026-10-13 16:35:10.565688,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,33133,,NIFTY 50 2002-12-15..2003-12-10
+2026-10-13 16:35:12.117174,https://www.nseindia.com/api/quote-equity?symbol=SANATHAN,403,397,,SANATHAN
+2026-10-13 16:35:13.767009,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32737,,NIFTY 50 2003-12-11..2004-12-05
+2026-10-13 16:35:15.312883,https://www.nseindia.com/api/quote-equity?symbol=CEWATER,403,397,,CEWATER
+2026-10-13 16:35:16.971780,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,33001,,NIFTY 50 2004-12-06..2005-12-01
+2026-10-13 16:35:18.513425,https://www.nseindia.com/api/quote-equity?symbol=MOBIKWIK,403,397,,MOBIKWIK
+2026-10-13 16:35:20.166588,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32737,,NIFTY 50 2005-12-02..2006-11-27
+2026-10-13 16:35:21.715159,https://www.nseindia.com/api/quote-equity?symbol=SURAKSHA,403,397,,SURAKSHA
+2026-10-13 16:35:23.366803,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32737,,NIFTY 50 2006-11-28..2007-11-23
+2026-10-13 16:35:24.921648,https://www.nseindia.com/api/quote-equity?symbol=GODAVARIB,403,397,,GODAVARIB
+2026-10-13 16:35:26.602560,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,31945,,NIFTY 50 2007-11-24..2008-11-18
+2026-10-13 16:35:28.111704,https://www.nseindia.com/api/quote-equity?symbol=DBEIL,403,397,,DBEIL
+2026-10-13 16:35:29.770352,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,31549,,NIFTY 50 2008-11-19..2009-11-14
+2026-10-13 16:35:31.321109,https://www.nseindia.com/api/quote-equity?symbol=GARUDA,403,397,,GARUDA
+2026-10-13 16:35:32.969225,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32869,,NIFTY 50 2009-11-15..2010-11-10
+2026-10-13 16:35:34.516445,https://www.nseindia.com/api/quote-equity?symbol=DIFFNKG,403,397,,DIFFNKG
+2026-10-13 16:35:36.171936,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32341,,NIFTY 50 2010-11-11..2011-11-06
+2026-10-13 16:35:37.724383,https://www.nseindia.com/api/quote-equity?symbol=MANBA,403,397,,MANBA
+2026-10-13 16:35:39.369254,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32869,,NIFTY 50 2011-11-07..2012-11-01
+2026-10-13 16:35:40.942130,https://www.nseindia.com/api/quote-equity?symbol=ARKADE,403,397,,ARKADE
+2026-10-13 16:35:42.566194,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32341,,NIFTY 50 2012-11-02..2013-10-28
+2026-10-13 16:35:44.213653,https://www.nseindia.com/api/quote-equity?symbol=WCIL,403,397,,WCIL
+2026-10-13 16:35:45.771286,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32077,,NIFTY 50 2013-10-29..2014-10-24
+2026-10-13 16:35:47.316647,https://www.nseindia.com/api/quote-equity?symbol=TOLINS,403,397,,TOLINS
+2026-10-13 16:35:48.973173,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32341,,NIFTY 50 2014-10-25..2015-10-20
+2026-10-13 16:35:50.517131,https://www.nseindia.com/api/quote-equity?symbol=KROSS,403,397,,KROSS
+2026-10-13 16:35:52.243619,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,31813,,NIFTY 50 2015-10-21..2016-10-15
+2026-10-13 16:35:53.730948,https://www.nseindia.com/api/quote-equity?symbol=BALAJEE,403,397,,BALAJEE
+2026-10-13 16:35:55.386400,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32605,,NIFTY 50 2016-10-16..2017-10-11
+2026-10-13 16:35:56.927142,https://www.nseindia.com/api/quote-equity?symbol=GALAPREC,403,397,,GALAPREC
+2026-10-13 16:35:58.599171,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32209,,NIFTY 50 2017-10-12..2018-10-07
+2026-10-13 16:36:00.128094,https://www.nseindia.com/api/quote-equity?symbol=STYLEBAAZA,403,397,,STYLEBAAZA
+2026-10-13 16:36:01.780289,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32077,,NIFTY 50 2018-10-08..2019-10-03
+2026-10-13 16:36:03.327825,https://www.nseindia.com/api/quote-equity?symbol=ECOSMOBLTY,403,397,,ECOSMOBLTY
+2026-10-13 16:36:04.998093,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32473,,NIFTY 50 2019-10-04..2020-09-28
+2026-10-13 16:36:06.613170,https://www.nseindia.com/api/quote-equity?symbol=ORIENTTECH,403,397,,ORIENTTECH
+2026-10-13 16:36:08.177514,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32473,,NIFTY 50 2020-09-29..2021-09-24
+2026-10-13 16:36:09.735188,https://www.nseindia.com/api/quote-equity?symbol=INTERARCH,403,397,,INTERARCH
+2026-10-13 16:36:11.376419,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32341,,NIFTY 50 2021-09-25..2022-09-20
+2026-10-13 16:36:12.963486,https://www.nseindia.com/api/quote-equity?symbol=SSDL,403,397,,SSDL
+2026-10-13 16:36:14.597689,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32473,,NIFTY 50 2022-09-21..2023-09-16
+2026-10-13 16:36:16.130808,https://www.nseindia.com/api/quote-equity?symbol=UNIECOM,403,397,,UNIECOM
+2026-10-13 16:36:17.796514,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32179,,NIFTY 50 2023-09-17..2024-09-11
+2026-10-13 16:36:19.321437,https://www.nseindia.com/api/quote-equity?symbol=SANSTAR,403,397,,SANSTAR
+2026-10-13 16:36:20.978038,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32272,,NIFTY 50 2024-09-12..2025-09-07
+2026-10-13 16:36:22.533662,https://www.nseindia.com/api/quote-equity?symbol=BANSALWIRE,403,397,,BANSALWIRE
+2026-10-13 16:36:24.198021,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,32386,,NIFTY 50 2025-09-08..2026-09-03
+2026-10-13 16:36:25.755203,https://www.nseindia.com/api/quote-equity?symbol=VRAJ,403,397,,VRAJ
+2026-10-13 16:36:27.376532,https://www.niftyindices.com/BackPage/getpepbHistoricaldataDBtoString,200,3292,,NIFTY 50 2026-09-04..2026-10-13
+2026-10-13 16:36:28.935275,https://www.nseindia.com/api/quote-equity?symbol=STANLEY,403,397,,STANLEY
+2026-10-13 16:36:32.172891,https://www.nseindia.com/api/quote-equity?symbol=SRM,403,397,,SRM
+2026-10-13 16:36:33.032019,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2008-01-01..2008-12-26
+2026-10-13 16:36:35.326222,https://www.nseindia.com/api/quote-equity?symbol=KRYSTAL,403,397,,KRYSTAL
+2026-10-13 16:36:36.229728,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2008-12-27..2009-12-22
+2026-10-13 16:36:38.537287,https://www.nseindia.com/api/quote-equity?symbol=PVSL,403,397,,PVSL
+2026-10-13 16:36:39.433676,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2009-12-23..2010-12-18
+2026-10-13 16:36:41.736057,https://www.nseindia.com/api/quote-equity?symbol=GOPAL,403,397,,GOPAL
+2026-10-13 16:36:42.641106,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2010-12-19..2011-12-14
+2026-10-13 16:36:44.934956,https://www.nseindia.com/api/quote-equity?symbol=JGCHEM,403,397,,JGCHEM
+2026-10-13 16:36:45.830600,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2011-12-15..2012-12-09
+2026-10-13 16:36:48.138253,https://www.nseindia.com/api/quote-equity?symbol=RKSWAMY,403,397,,RKSWAMY
+2026-10-13 16:36:49.028117,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2012-12-10..2013-12-05
+2026-10-13 16:36:51.335443,https://www.nseindia.com/api/quote-equity?symbol=MUKKA,403,397,,MUKKA
+2026-10-13 16:36:52.324829,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2013-12-06..2014-12-01
+2026-10-13 16:36:54.562277,https://www.nseindia.com/api/quote-equity?symbol=EXICOM,403,397,,EXICOM
+2026-10-13 16:36:55.473421,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2014-12-02..2015-11-27
+2026-10-13 16:36:57.733394,https://www.nseindia.com/api/quote-equity?symbol=PLATIND,403,397,,PLATIND
+2026-10-13 16:36:58.641627,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2015-11-28..2016-11-22
+2026-10-13 16:37:00.929793,https://www.nseindia.com/api/quote-equity?symbol=GPTHEALTH,403,397,,GPTHEALTH
+2026-10-13 16:37:01.905367,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,2,,INDIA VIX 2016-11-23..2017-11-18
+2026-10-13 16:37:04.142348,https://www.nseindia.com/api/quote-equity?symbol=JUNIPER,403,397,,JUNIPER
+2026-10-13 16:37:05.046930,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,37753,,INDIA VIX 2017-11-19..2018-11-14
+2026-10-13 16:37:07.337421,https://www.nseindia.com/api/quote-equity?symbol=VSTL,403,397,,VSTL
+2026-10-13 16:37:08.261070,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,43150,,INDIA VIX 2018-11-15..2019-11-10
+2026-10-13 16:37:10.536276,https://www.nseindia.com/api/quote-equity?symbol=CAPITALSFB,403,397,,CAPITALSFB
+2026-10-13 16:37:11.456289,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,44710,,INDIA VIX 2019-11-11..2020-11-05
+2026-10-13 16:37:13.746816,https://www.nseindia.com/api/quote-equity?symbol=RPTECH,403,397,,RPTECH
+2026-10-13 16:37:14.657829,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,43447,,INDIA VIX 2020-11-06..2021-11-01
+2026-10-13 16:37:16.925429,https://www.nseindia.com/api/quote-equity?symbol=BLSE,403,397,,BLSE
+2026-10-13 16:37:17.947900,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,42769,,INDIA VIX 2021-11-02..2022-10-28
+2026-10-13 16:37:20.133687,https://www.nseindia.com/api/quote-equity?symbol=NOVAAGRI,403,397,,NOVAAGRI
+2026-10-13 16:37:21.109029,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,42603,,INDIA VIX 2022-10-29..2023-10-24
+2026-10-13 16:37:23.337254,https://www.nseindia.com/api/quote-equity?symbol=EPACK,403,397,,EPACK
+2026-10-13 16:37:24.267142,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,44173,,INDIA VIX 2023-10-25..2024-10-19
+2026-10-13 16:37:26.535258,https://www.nseindia.com/api/quote-equity?symbol=MEDIASSIST,403,397,,MEDIASSIST
+2026-10-13 16:37:27.454170,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,44187,,INDIA VIX 2024-10-20..2025-10-15
+2026-10-13 16:37:29.746658,https://www.nseindia.com/api/quote-equity?symbol=INNOVACAP,403,397,,INNOVACAP
+2026-10-13 16:37:30.680681,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,43578,,INDIA VIX 2025-10-16..2026-10-11
+2026-10-13 16:37:32.957755,https://www.nseindia.com/api/quote-equity?symbol=MUFTI,403,397,,MUFTI
+2026-10-13 16:37:33.860006,https://www.niftyindices.com/BackPage/getHistoricaldatatabletoString,200,180,,INDIA VIX 2026-10-12..2026-10-13
+2026-10-13 16:37:36.144324,https://www.nseindia.com/api/quote-equity?symbol=RBZJEWEL,403,397,,RBZJEWEL
+2026-10-13 16:37:39.340676,https://www.nseindia.com/api/quote-equity?symbol=MUTHOOTMF,403,397,,MUTHOOTMF
+2026-10-13 16:37:42.540841,https://www.nseindia.com/api/quote-equity?symbol=MOTISONS,403,397,,MOTISONS
+2026-10-13 16:37:45.739157,https://www.nseindia.com/api/quote-equity?symbol=SURAJEST,403,397,,SURAJEST
+2026-10-13 16:37:48.951352,https://www.nseindia.com/api/quote-equity?symbol=INDIASHLTR,403,397,,INDIASHLTR
+2026-10-13 16:37:52.163877,https://www.nseindia.com/api/quote-equity?symbol=GANDHAR,403,397,,GANDHAR
+2026-10-13 16:37:55.366304,https://www.nseindia.com/api/quote-equity?symbol=ASKAUTOLTD,403,397,,ASKAUTOLTD
+2026-10-13 16:37:58.546745,https://www.nseindia.com/api/quote-equity?symbol=ESAFSFB,403,397,,ESAFSFB
+2026-10-13 16:38:01.745803,https://www.nseindia.com/api/quote-equity?symbol=IRMENERGY,403,397,,IRMENERGY
+2026-10-13 16:38:04.958449,https://www.nseindia.com/api/quote-equity?symbol=PLAZACABLE,403,397,,PLAZACABLE
+2026-10-13 16:38:08.150283,https://www.nseindia.com/api/quote-equity?symbol=VALIANTLAB,403,397,,VALIANTLAB
+2026-10-13 16:38:11.344691,https://www.nseindia.com/api/quote-equity?symbol=UDS,403,397,,UDS
+2026-10-13 16:38:14.550475,https://www.nseindia.com/api/quote-equity?symbol=MVGJL,403,397,,MVGJL
+2026-10-13 16:38:17.748203,https://www.nseindia.com/api/quote-equity?symbol=KALAMANDIR,403,397,,KALAMANDIR
+2026-10-13 16:38:20.951556,https://www.nseindia.com/api/quote-equity?symbol=YATRA,403,397,,YATRA
+2026-10-13 16:38:24.147417,https://www.nseindia.com/api/quote-equity?symbol=EMSLIMITED,403,397,,EMSLIMITED
+2026-10-13 16:38:27.353929,https://www.nseindia.com/api/quote-equity?symbol=JLHL,403,397,,JLHL
+2026-10-13 16:38:30.584141,https://www.nseindia.com/api/quote-equity?symbol=RATNAVEER,403,397,,RATNAVEER
+2026-10-13 16:38:33.750393,https://www.nseindia.com/api/quote-equity?symbol=RISHABH,403,397,,RISHABH
+2026-10-13 16:38:36.959875,https://www.nseindia.com/api/quote-equity?symbol=VPRPL,403,397,,VPRPL
+2026-10-13 16:38:40.157321,https://www.nseindia.com/api/quote-equity?symbol=PYRAMID,403,397,,PYRAMID
+2026-10-13 16:38:43.348284,https://www.nseindia.com/api/quote-equity?symbol=UTKARSHBNK,403,397,,UTKARSHBNK
+2026-10-13 16:38:46.561650,https://www.nseindia.com/api/quote-equity?symbol=CYIENTDLM,403,397,,CYIENTDLM
+2026-10-13 16:38:49.754334,https://www.nseindia.com/api/quote-equity?symbol=IDEAFORGE,403,397,,IDEAFORGE
+2026-10-13 16:38:52.955260,https://www.nseindia.com/api/quote-equity?symbol=HMAAGRO,403,397,,HMAAGRO
+2026-10-13 16:38:56.187699,https://www.nseindia.com/api/quote-equity?symbol=IKIO,403,397,,IKIO
+2026-10-13 16:38:59.401385,https://www.nseindia.com/api/quote-equity?symbol=USK,403,397,,USK
+2026-10-13 16:39:02.565225,https://www.nseindia.com/api/quote-equity?symbol=GSLSU,403,397,,GSLSU
+2026-10-13 16:39:05.762233,https://www.nseindia.com/api/quote-equity?symbol=DIVGIITTS,403,397,,DIVGIITTS
+2026-10-13 16:39:08.965408,https://www.nseindia.com/api/quote-equity?symbol=RADIANTCMS,403,397,,RADIANTCMS
+2026-10-13 16:39:12.164791,https://www.nseindia.com/api/quote-equity?symbol=ELIN,403,397,,ELIN
+2026-10-13 16:39:15.373716,https://www.nseindia.com/api/quote-equity?symbol=LANDMARK,403,397,,LANDMARK
+2026-10-13 16:39:18.579627,https://www.nseindia.com/api/quote-equity?symbol=AFSL,403,397,,AFSL
+2026-10-13 16:39:21.778258,https://www.nseindia.com/api/quote-equity?symbol=SULA,403,397,,SULA
+2026-10-13 16:39:24.952238,https://www.nseindia.com/api/quote-equity?symbol=UNIPARTS,403,397,,UNIPARTS
+2026-10-13 16:39:28.162984,https://www.nseindia.com/api/quote-equity?symbol=DHARMAJ,403,397,,DHARMAJ
+2026-10-13 16:39:31.368403,https://www.nseindia.com/api/quote-equity?symbol=RUSTOMJEE,403,397,,RUSTOMJEE
+2026-10-13 16:39:34.572094,https://www.nseindia.com/api/quote-equity?symbol=INOXGREEN,403,397,,INOXGREEN
+2026-10-13 16:39:37.792680,https://www.nseindia.com/api/quote-equity?symbol=BIKAJI,403,397,,BIKAJI
+2026-10-13 16:39:40.965238,https://www.nseindia.com/api/quote-equity?symbol=FUSION,403,397,,FUSION
+2026-10-13 16:39:44.198423,https://www.nseindia.com/api/quote-equity?symbol=DCXINDIA,403,397,,DCXINDIA
+2026-10-13 16:39:47.359889,https://www.nseindia.com/api/quote-equity?symbol=TRACXN,403,397,,TRACXN
+2026-10-13 16:39:50.569271,https://www.nseindia.com/api/quote-equity?symbol=HARSHA,403,397,,HARSHA
+2026-10-13 16:39:53.769312,https://www.nseindia.com/api/quote-equity?symbol=DREAMFOLKS,403,397,,DREAMFOLKS
+2026-10-13 16:39:56.967389,https://www.nseindia.com/api/quote-equity?symbol=EMUDHRA,403,397,,EMUDHRA
+2026-10-13 16:40:00.161004,https://www.nseindia.com/api/quote-equity?symbol=ETHOSLTD,403,397,,ETHOSLTD
+2026-10-13 16:40:03.385903,https://www.nseindia.com/api/quote-equity?symbol=VENUSPIPES,403,397,,VENUSPIPES
+2026-10-13 16:40:06.569835,https://www.nseindia.com/api/quote-equity?symbol=PRUDENT,403,397,,PRUDENT
+2026-10-13 16:40:09.769849,https://www.nseindia.com/api/quote-equity?symbol=HARIOMPIPE,403,397,,HARIOMPIPE
+2026-10-13 16:40:12.959597,https://www.nseindia.com/api/quote-equity?symbol=VERANDA,403,397,,VERANDA
+2026-10-13 16:40:16.180602,https://www.nseindia.com/api/quote-equity?symbol=UMAEXPORTS,403,397,,UMAEXPORTS
+2026-10-13 16:40:19.370714,https://www.nseindia.com/api/quote-equity?symbol=AGSTRA,403,397,,AGSTRA
+2026-10-13 16:40:22.572699,https://www.nseindia.com/api/quote-equity?symbol=HPAL,403,397,,HPAL
+2026-10-13 16:40:25.766591,https://www.nseindia.com/api/quote-equity?symbol=SHRIRAMPPS,403,397,,SHRIRAMPPS
+2026-10-13 16:40:28.975969,https://www.nseindia.com/api/quote-equity?symbol=GOCOLORS,403,397,,GOCOLORS
+2026-10-13 16:40:32.180756,https://www.nseindia.com/api/quote-equity?symbol=TARSONS,403,397,,TARSONS
+2026-10-13 16:40:35.374111,https://www.nseindia.com/api/quote-equity?symbol=SIGACHI,403,397,,SIGACHI
+2026-10-13 16:40:38.570043,https://www.nseindia.com/api/quote-equity?symbol=FINOPB,403,397,,FINOPB
+2026-10-13 16:40:41.793731,https://www.nseindia.com/api/quote-equity?symbol=CHEMPLASTS,403,397,,CHEMPLASTS
+2026-10-13 16:40:44.979784,https://www.nseindia.com/api/quote-equity?symbol=WINDLAS,403,397,,WINDLAS
+2026-10-13 16:40:48.181287,https://www.nseindia.com/api/quote-equity?symbol=EXXARO,403,397,,EXXARO
+2026-10-13 16:40:51.501736,https://www.nseindia.com/api/quote-equity?symbol=KRSNAA,403,397,,KRSNAA
+2026-10-13 16:40:54.586525,https://www.nseindia.com/api/quote-equity?symbol=ROLEXRINGS,403,397,,ROLEXRINGS
+2026-10-13 16:40:57.783966,https://www.nseindia.com/api/quote-equity?symbol=ALIVUS,403,397,,ALIVUS
+2026-10-13 16:41:00.984076,https://www.nseindia.com/api/quote-equity?symbol=TATVA,403,397,,TATVA
+2026-10-13 16:41:04.275382,https://www.nseindia.com/api/quote-equity?symbol=GRINFRA,403,397,,GRINFRA
+2026-10-13 16:41:07.397347,https://www.nseindia.com/api/quote-equity?symbol=IPL,403,397,,IPL
+2026-10-13 16:41:10.577046,https://www.nseindia.com/api/quote-equity?symbol=DODLA,403,397,,DODLA
+2026-10-13 16:41:13.786436,https://www.nseindia.com/api/quote-equity?symbol=SURYODAY,403,397,,SURYODAY
+2026-10-13 16:41:16.999423,https://www.nseindia.com/api/quote-equity?symbol=EASEMYTRIP,403,397,,EASEMYTRIP
+2026-10-13 16:41:20.208542,https://www.nseindia.com/api/quote-equity?symbol=HERANBA,403,397,,HERANBA
+2026-10-13 16:41:23.373269,https://www.nseindia.com/api/quote-equity?symbol=NURECA,403,397,,NURECA
+2026-10-13 16:41:26.583746,https://www.nseindia.com/api/quote-equity?symbol=STOVEKRAFT,403,397,,STOVEKRAFT
+2026-10-13 16:41:29.798528,https://www.nseindia.com/api/quote-equity?symbol=AWHCL,403,397,,AWHCL
+2026-10-13 16:41:32.982998,https://www.nseindia.com/api/quote-equity?symbol=LIKHITHA,403,397,,LIKHITHA
+2026-10-13 16:41:36.206765,https://www.nseindia.com/api/quote-equity?symbol=CHEMCON,403,397,,CHEMCON
+2026-10-13 16:41:39.385869,https://www.nseindia.com/api/quote-equity?symbol=ROSSARI,403,397,,ROSSARI
+2026-10-13 16:41:42.578669,https://www.nseindia.com/api/quote-equity?symbol=PRINCEPIPE,403,397,,PRINCEPIPE
+2026-10-13 16:41:45.782931,https://www.nseindia.com/api/quote-equity?symbol=VISHWARAJ,403,397,,VISHWARAJ
+2026-10-13 16:41:48.997436,https://www.nseindia.com/api/quote-equity?symbol=SPANDANA,403,397,,SPANDANA
+2026-10-13 16:41:52.193241,https://www.nseindia.com/api/quote-equity?symbol=XELPMOC,403,397,,XELPMOC
+2026-10-13 16:41:55.391522,https://www.nseindia.com/api/quote-equity?symbol=VARROC,403,397,,VARROC
+2026-10-13 16:41:58.590440,https://www.nseindia.com/api/quote-equity?symbol=FINEORG,403,397,,FINEORG
+2026-10-13 16:42:01.789101,https://www.nseindia.com/api/quote-equity?symbol=INDOSTAR,403,397,,INDOSTAR
+2026-10-13 16:42:04.991154,https://www.nseindia.com/api/quote-equity?symbol=SANDHAR,403,397,,SANDHAR
+2026-10-13 16:42:08.188623,https://www.nseindia.com/api/quote-equity?symbol=DHARAN,403,397,,DHARAN
+2026-10-13 16:42:11.390727,https://www.nseindia.com/api/quote-equity?symbol=GALAXYSURF,403,397,,GALAXYSURF
+2026-10-13 16:42:14.590223,https://www.nseindia.com/api/quote-equity?symbol=ASTRON,403,397,,ASTRON
+2026-10-13 16:42:17.791886,https://www.nseindia.com/api/quote-equity?symbol=SHALBY,403,397,,SHALBY
+2026-10-13 16:42:21.094935,https://www.nseindia.com/api/quote-equity?symbol=KHADIM,403,397,,KHADIM
+2026-10-13 16:42:24.199268,https://www.nseindia.com/api/quote-equity?symbol=MAHLOG,403,397,,MAHLOG
+2026-10-13 16:42:27.401544,https://www.nseindia.com/api/quote-equity?symbol=MASFIN,403,397,,MASFIN
+2026-10-13 16:42:30.598362,https://www.nseindia.com/api/quote-equity?symbol=DIAMONDYD,403,397,,DIAMONDYD
+2026-10-13 16:42:33.804985,https://www.nseindia.com/api/quote-equity?symbol=CAPACITE,403,397,,CAPACITE
+2026-10-13 16:42:36.987533,https://www.nseindia.com/api/quote-equity?symbol=MATRIMONY,403,397,,MATRIMONY
+2026-10-13 16:42:40.200701,https://www.nseindia.com/api/quote-equity?symbol=BRNL,403,397,,BRNL
+2026-10-13 16:42:43.395820,https://www.nseindia.com/api/quote-equity?symbol=APEX,403,397,,APEX
+2026-10-13 16:42:46.607786,https://www.nseindia.com/api/quote-equity?symbol=SALASAR,403,397,,SALASAR
+2026-10-13 16:42:49.795718,https://www.nseindia.com/api/quote-equity?symbol=GTPL,403,397,,GTPL
+2026-10-13 16:42:53.006695,https://www.nseindia.com/api/quote-equity?symbol=PSPPROJECT,403,397,,PSPPROJECT
+2026-10-13 16:42:56.198426,https://www.nseindia.com/api/quote-equity?symbol=SCHAND,403,397,,SCHAND
+2026-10-13 16:42:59.409386,https://www.nseindia.com/api/quote-equity?symbol=SHANKARA,403,397,,SHANKARA
+2026-10-13 16:43:02.599056,https://www.nseindia.com/api/quote-equity?symbol=CLEDUCATE,403,397,,CLEDUCATE
+2026-10-13 16:43:05.803082,https://www.nseindia.com/api/quote-equity?symbol=RADIOCITY,403,397,,RADIOCITY
+2026-10-13 16:43:09.019115,https://www.nseindia.com/api/quote-equity?symbol=HPL,403,397,,HPL
+2026-10-13 16:43:12.244994,https://www.nseindia.com/api/quote-equity?symbol=GNA,403,397,,GNA
+2026-10-13 16:43:15.402147,https://www.nseindia.com/api/quote-equity?symbol=SPAL,403,397,,SPAL
+2026-10-13 16:43:18.622393,https://www.nseindia.com/api/quote-equity?symbol=PARAGMILK,403,397,,PARAGMILK
+2026-10-13 16:43:21.810112,https://www.nseindia.com/api/quote-equity?symbol=BHARATWIRE,403,397,,BHARATWIRE
+2026-10-13 16:43:25.044358,https://www.nseindia.com/api/quote-equity?symbol=QUICKHEAL,403,397,,QUICKHEAL
+2026-10-13 16:43:28.245404,https://www.nseindia.com/api/quote-equity?symbol=TEAMLEASE,403,397,,TEAMLEASE
+2026-10-13 16:43:31.459664,https://www.nseindia.com/api/quote-equity?symbol=PRECAM,403,397,,PRECAM
+2026-10-13 16:43:34.664543,https://www.nseindia.com/api/quote-equity?symbol=SHK,403,397,,SHK
+2026-10-13 16:43:37.850813,https://www.nseindia.com/api/quote-equity?symbol=COFFEEDAY,403,397,,COFFEEDAY
+2026-10-13 16:43:41.023559,https://www.nseindia.com/api/quote-equity?symbol=SADBHIN,403,397,,SADBHIN
+2026-10-13 16:43:44.212693,https://www.nseindia.com/api/quote-equity?symbol=SHREEPUSHK,403,397,,SHREEPUSHK
+2026-10-13 16:43:47.406542,https://www.nseindia.com/api/quote-equity?symbol=NAVKARCORP,403,397,,NAVKARCORP
+2026-10-13 16:43:50.610446,https://www.nseindia.com/api/quote-equity?symbol=UFO,403,397,,UFO
+2026-10-13 16:43:53.816176,https://www.nseindia.com/api/quote-equity?symbol=MEP,403,397,,MEP
+2026-10-13 16:43:57.030675,https://www.nseindia.com/api/quote-equity?symbol=VRLLOG,403,397,,VRLLOG
+2026-10-13 16:44:00.208932,https://www.nseindia.com/api/quote-equity?symbol=IMAGICAA,403,397,,IMAGICAA
+2026-10-13 16:44:03.427730,https://www.nseindia.com/api/quote-equity?symbol=ORTEL,403,397,,ORTEL
+2026-10-13 16:44:06.614354,https://www.nseindia.com/api/quote-equity?symbol=MONTECARLO,403,397,,MONTECARLO
+2026-10-13 16:44:09.817687,https://www.nseindia.com/api/quote-equity?symbol=SHEMAROO,403,397,,SHEMAROO
+2026-10-13 16:44:13.013083,https://www.nseindia.com/api/quote-equity?symbol=SNOWMAN,403,397,,SNOWMAN
+2026-10-13 16:44:16.215638,https://www.nseindia.com/api/quote-equity?symbol=WONDERLA,403,397,,WONDERLA
+2026-10-13 16:44:19.417293,https://www.nseindia.com/api/quote-equity?symbol=REPCOHOME,403,397,,REPCOHOME
+2026-10-13 16:44:22.618627,https://www.nseindia.com/api/quote-equity?symbol=CARERATING,403,397,,CARERATING
+2026-10-13 16:44:25.816981,https://www.nseindia.com/api/quote-equity?symbol=SPECIALITY,403,397,,SPECIALITY
+2026-10-13 16:44:29.017277,https://www.nseindia.com/api/quote-equity?symbol=TBZ,403,397,,TBZ
+2026-10-13 16:44:32.219199,https://www.nseindia.com/api/quote-equity?symbol=MTEDUCARE,403,397,,MTEDUCARE
+2026-10-13 16:44:35.416635,https://www.nseindia.com/api/quote-equity?symbol=OLPCL,403,397,,OLPCL
+2026-10-13 16:44:38.616530,https://www.nseindia.com/api/quote-equity?symbol=INDOTHAI,403,397,,INDOTHAI
+2026-10-13 16:44:41.811978,https://www.nseindia.com/api/quote-equity?symbol=FLEXITUFF,403,397,,FLEXITUFF
+2026-10-13 16:44:45.042815,https://www.nseindia.com/api/quote-equity?symbol=ONELIFECAP,403,397,,ONELIFECAP
+2026-10-13 16:44:48.217268,https://www.nseindia.com/api/quote-equity?symbol=UEL,403,397,,UEL
+2026-10-13 16:44:51.446718,https://www.nseindia.com/api/quote-equity?symbol=RDBRL,403,397,,RDBRL
+2026-10-13 16:44:54.622720,https://www.nseindia.com/api/quote-equity?symbol=SETUINFRA,403,397,,SETUINFRA
+2026-10-13 16:44:57.828655,https://www.nseindia.com/api/quote-equity?symbol=BROOKS,403,397,,BROOKS
+2026-10-13 16:45:01.021768,https://www.nseindia.com/api/quote-equity?symbol=TREEHOUSE,403,397,,TREEHOUSE
+2026-10-13 16:45:04.219874,https://www.nseindia.com/api/quote-equity?symbol=INVENTURE,403,397,,INVENTURE
+2026-10-13 16:45:07.433903,https://www.nseindia.com/api/quote-equity?symbol=BGLOBAL,403,397,,BGLOBAL
+2026-10-13 16:45:10.624670,https://www.nseindia.com/api/quote-equity?symbol=KRIDHANINF,403,397,,KRIDHANINF
+2026-10-13 16:45:13.827600,https://www.nseindia.com/api/quote-equity?symbol=RUSHIL,403,397,,RUSHIL
+2026-10-13 16:45:17.024722,https://www.nseindia.com/api/quote-equity?symbol=VMS,403,397,,VMS
+2026-10-13 16:45:20.223121,https://www.nseindia.com/api/quote-equity?symbol=VASWANI,403,397,,VASWANI
+2026-10-13 16:45:23.430436,https://www.nseindia.com/api/quote-equity?symbol=FCONSUMER,403,397,,FCONSUMER
+2026-10-13 16:45:26.653480,https://www.nseindia.com/api/quote-equity?symbol=PFS,403,397,,PFS
+2026-10-13 16:45:29.839640,https://www.nseindia.com/api/quote-equity?symbol=LOVABLE,403,397,,LOVABLE
+2026-10-13 16:45:33.037090,https://www.nseindia.com/api/quote-equity?symbol=FCL,403,397,,FCL
+2026-10-13 16:45:36.233161,https://www.nseindia.com/api/quote-equity?symbol=PSB,403,397,,PSB
+2026-10-13 16:45:39.435734,https://www.nseindia.com/api/quote-equity?symbol=A2ZINFRA,403,397,,A2ZINFRA
+2026-10-13 16:45:42.625092,https://www.nseindia.com/api/quote-equity?symbol=RKDL,403,397,,RKDL
+2026-10-13 16:45:45.830493,https://www.nseindia.com/api/quote-equity?symbol=RPPINFRA,403,397,,RPPINFRA
+2026-10-13 16:45:49.034516,https://www.nseindia.com/api/quote-equity?symbol=SHAH,403,397,,SHAH
+2026-10-13 16:45:52.232227,https://www.nseindia.com/api/quote-equity?symbol=BEDMUTHA,403,397,,BEDMUTHA
+2026-10-13 16:45:55.441003,https://www.nseindia.com/api/quote-equity?symbol=SEATV,403,397,,SEATV
+2026-10-13 16:45:58.645511,https://www.nseindia.com/api/quote-equity?symbol=CANTABIL,403,397,,CANTABIL
+2026-10-13 16:46:01.844173,https://www.nseindia.com/api/quote-equity?symbol=GREENPOWER,403,397,,GREENPOWER
+2026-10-13 16:46:05.054555,https://www.nseindia.com/api/quote-equity?symbol=RAMKY,403,397,,RAMKY
+2026-10-13 16:46:08.242254,https://www.nseindia.com/api/quote-equity?symbol=CPCAP,403,397,,CPCAP
+2026-10-13 16:46:11.541371,https://www.nseindia.com/api/quote-equity?symbol=WAAREEINDO,403,397,,WAAREEINDO
+2026-10-13 16:46:14.653117,https://www.nseindia.com/api/quote-equity?symbol=PRAKASHSTL,403,397,,PRAKASHSTL
+2026-10-13 16:46:17.839496,https://www.nseindia.com/api/quote-equity?symbol=HMVL,403,397,,HMVL
+2026-10-13 16:46:21.046260,https://www.nseindia.com/api/quote-equity?symbol=TARAPUR,403,397,,TARAPUR
+2026-10-13 16:46:24.246110,https://www.nseindia.com/api/quote-equity?symbol=SATCH,403,397,,SATCH
+2026-10-13 16:46:27.459341,https://www.nseindia.com/api/quote-equity?symbol=ISFT,403,397,,ISFT
+2026-10-13 16:46:30.640226,https://www.nseindia.com/api/quote-equity?symbol=IL&FSTRANS,403,397,,IL&FSTRANS
+2026-10-13 16:46:33.843678,https://www.nseindia.com/api/quote-equity?symbol=MANINFRA,403,397,,MANINFRA
+2026-10-13 16:46:37.031788,https://www.nseindia.com/api/quote-equity?symbol=TEXMOPIPES,403,397,,TEXMOPIPES
+2026-10-13 16:46:40.246776,https://www.nseindia.com/api/quote-equity?symbol=HATHWAY,403,397,,HATHWAY
+2026-10-13 16:46:43.441993,https://www.nseindia.com/api/quote-equity?symbol=EMMBI,403,397,,EMMBI
+2026-10-13 16:46:46.643066,https://www.nseindia.com/api/quote-equity?symbol=VASCONEQ,403,397,,VASCONEQ
+2026-10-13 16:46:49.843470,https://www.nseindia.com/api/quote-equity?symbol=DBCORP,403,397,,DBCORP
+2026-10-13 16:46:53.077939,https://www.nseindia.com/api/quote-equity?symbol=MBLINFRA,403,397,,MBLINFRA
