@@ -82,25 +82,29 @@ def counts() -> dict:
             total = len(f)
         except Exception:                                      # noqa: BLE001
             pass
-    done = rows = ok = 0
+    # Per VERSION, not just the current one. A pass that is running loaded the module at
+    # launch, so it keeps stamping the version it started with - and when the code is
+    # bumped mid-run, a watcher that counted only the new version showed "0 of 412" while
+    # a pass was 90 documents in. Useless exactly when it is most wanted.
+    by_ver: dict[str, dict] = {}
     if VALUES.exists():
         try:
             # on_bad_lines="skip": the file is being APPENDED to while this reads, so the
             # last line can be half-written. Skipping it is right - it will be complete
             # the next time this runs.
             d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
-            cur = d[d["extractor_version"].astype(str) == V]
-            done = cur["company"].nunique()
-            rows = len(cur)
-            ok = int((cur["status"] == "ok").sum())
+            for ver, g in d.groupby(d["extractor_version"].astype(str)):
+                by_ver[str(ver)] = {"companies": g["company"].nunique(),
+                                    "rows": len(g),
+                                    "ok": int((g["status"] == "ok").sum())}
         except Exception:                                      # noqa: BLE001
             pass
     return {"pdfs": n_pdf, "fetched": fetched, "fetch_total": total,
-            "extracted": done, "rows": rows, "ok": ok, "version": V,
-            "target": fetched or total}
+            "by_ver": by_ver, "version": V, "target": fetched or total}
 
 
-def rate_and_eta(done: int, target: int) -> tuple[str, str]:
+def rate_and_eta(by_ver: dict, target: int) -> tuple[str, str, str]:
+    """Rate on whichever version GREW since the last run - that is the pass in flight."""
     prev = {}
     if STATE.exists():
         try:
@@ -108,26 +112,32 @@ def rate_and_eta(done: int, target: int) -> tuple[str, str]:
         except Exception:                                      # noqa: BLE001
             prev = {}
     now = _now()
+    cur = {v: g["companies"] for v, g in by_ver.items()}
     try:
-        STATE.write_text(json.dumps({"done": done, "t": now}), encoding="utf-8")
+        STATE.write_text(json.dumps({"ver": cur, "t": now}), encoding="utf-8")
     except Exception:                                          # noqa: BLE001
         pass
-    if not prev or prev.get("done") is None:
-        return "(run again in a minute for a rate)", ""
-    dd = done - int(prev["done"])
+    old_ver = prev.get("ver") or {}
+    if not old_ver:
+        return "", "(run again in a minute for a rate)", ""
+    grew = [(v, cur.get(v, 0) - old_ver.get(v, 0)) for v in cur]
+    grew = [g for g in grew if g[1] > 0]
+    if not grew:
+        active = max(cur, key=lambda v: cur[v]) if cur else ""
+        mins = (now - float(prev["t"])) / 60
+        if mins >= STALL_MIN:
+            return active, f"NO PROGRESS in {mins:.0f} min - looks STALLED", ""
+        return active, f"no new document in {mins:.0f} min (still working on one)", ""
+    ver, dd = max(grew, key=lambda g: g[1])
+    done = cur[ver]
     dt = now - float(prev["t"])
     if dt <= 0:
-        return "(no elapsed time)", ""
-    if dd <= 0:
-        mins = dt / 60
-        if mins >= STALL_MIN:
-            return (f"NO PROGRESS in {mins:.0f} min - looks STALLED", "")
-        return f"no new document in {mins:.0f} min (still working on one)", ""
+        return ver, "(no elapsed time)", ""
     per = dt / dd
     left = max(target - done, 0)
     eta_min = left * per / 60
-    return (f"{per:.0f} s/document", f"{left} left, about {eta_min:.0f} min "
-            f"({eta_min / 60:.1f} h)")
+    return (ver, f"{per:.0f} s/document",
+            f"{left} left, about {eta_min:.0f} min ({eta_min / 60:.1f} h)")
 
 
 def main() -> int:
@@ -145,10 +155,16 @@ def main() -> int:
     print()
     print(f"  PDFs on disk        {c['pdfs']}")
     print(f"  downloaded ok       {c['fetched']} of {c['fetch_total']} attempted")
-    print(f"  extracted           {c['extracted']} of {c['target']} documents"
-          f"   (extractor {c['version']})")
-    print(f"  values written      {c['rows']} rows, {c['ok']} with a value")
-    r, eta = rate_and_eta(c["extracted"], c["target"])
+    if not c["by_ver"]:
+        print("  extracted           nothing yet")
+    for ver in sorted(c["by_ver"]):
+        g = c["by_ver"][ver]
+        tag = "  <- target" if ver == c["version"] else ""
+        print(f"  extractor {ver:<8s}  {g['companies']:4d} of {c['target']} documents, "
+              f"{g['rows']:6d} rows, {g['ok']:6d} with a value{tag}")
+    active, r, eta = rate_and_eta(c["by_ver"], c["target"])
+    if active:
+        print(f"  pass in flight      extractor {active}")
     print(f"  rate                {r}")
     if eta:
         print(f"  remaining           {eta}")
