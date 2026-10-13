@@ -327,11 +327,103 @@ def extract(limit: int | None = None, deadline=None, only: list[str] | None = No
     return d
 
 
+CROSSCHECK = DATA / "promoter_holding_crosscheck.csv"
+REVIEW = ROOT / "reports" / "rhp_valuation_review.csv"
+TOL_PCT = 5.0        # rule 2's tolerance, applied to promoter holding
+
+
+def promoter_crosscheck(write: bool = True) -> pd.DataFrame:
+    """RHP promoter holding against Chittorgarh's. Disagreement > 5% -> NULL, both logged.
+
+    The RHP is now the source and Chittorgarh is the **cross-check**, which is the way
+    round rule 2 wants: the prospectus is the primary document and the aggregator
+    republishes it. Where they disagree by more than `TOL_PCT` the value is withheld and
+    **both readings are kept on the row** - the point is not to pick a winner but to make
+    the disagreement findable. A row Chittorgarh has no figure for is
+    `rhp_only`, which is not a disagreement and not a failure.
+    """
+    if not VALUES.exists():
+        return pd.DataFrame()
+    from extract.valuation import VALUATION_VERSION as V
+    d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
+    d = d[d["extractor_version"].astype(str) == V]
+    keep = d[d["variable"].isin(["promoter_pre_pct", "promoter_post_pct"])
+             & (d["status"] == "ok")]
+    rhp = keep.pivot_table(index="company", columns="variable", values="value",
+                           aggfunc="first")
+    agg_path = DATA / "model_h_from_aggregator.csv"
+    if not agg_path.exists():
+        return rhp.reset_index()
+    a = pd.read_csv(agg_path, low_memory=False)
+    a["_n"] = a["company"].map(dataio.norm_name)
+    a = a.drop_duplicates("_n").set_index("_n")
+    rows = []
+    for comp, r in rhp.iterrows():
+        n = dataio.norm_name(comp)
+        for var, aggcol in (("promoter_pre_pct", "promoter_pre_pct"),
+                            ("promoter_post_pct", "promoter_post_pct")):
+            v_rhp = r.get(var)
+            v_cg = a.loc[n, aggcol] if n in a.index else None
+            v_cg = None if (v_cg is None or pd.isna(v_cg)) else float(v_cg)
+            if v_rhp is None or pd.isna(v_rhp):
+                continue
+            if v_cg is None:
+                rows.append({"company": comp, "variable": var, "rhp": v_rhp,
+                             "chittorgarh": None, "diff_pct": None,
+                             "accepted": v_rhp, "verdict": "rhp_only"})
+                continue
+            base = max(abs(v_rhp), abs(v_cg))
+            diff = 100.0 * abs(v_rhp - v_cg) / base if base else 0.0
+            ok = diff <= TOL_PCT
+            rows.append({"company": comp, "variable": var, "rhp": v_rhp,
+                         "chittorgarh": v_cg, "diff_pct": round(diff, 2),
+                         "accepted": v_rhp if ok else None,
+                         "verdict": "agree" if ok else
+                         f"WITHHELD: {diff:.1f}% apart, above the {TOL_PCT}% tolerance"})
+    out = pd.DataFrame(rows)
+    if write and len(out):
+        out.to_csv(CROSSCHECK, index=False, encoding="utf-8")
+    return out
+
+
+def review_sheet(write: bool = True) -> pd.DataFrame:
+    """reports/rhp_valuation_review.csv - one row per extracted value, so any number can
+    be checked against the page it came from.
+
+    Only rows at the CURRENT extractor version: the output file is append-only and holds
+    earlier versions' attempts, and a review sheet that mixed them would send the reader
+    to a page for a value the pipeline no longer produces.
+    """
+    if not VALUES.exists():
+        return pd.DataFrame()
+    from extract.valuation import VALUATION_VERSION as V
+    d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
+    d = d[(d["extractor_version"].astype(str) == V) & (d["status"] == "ok")]
+    f = pd.read_csv(FETCH_LOG, low_memory=False)
+    f = f[f["status"].astype(str).str.startswith("ok")]
+    name = {str(r["company"]): Path(str(r["path"])).name for _, r in f.iterrows()}
+    out = pd.DataFrame({
+        "company": d["company"],
+        "listing_date": d.get("listing_date"),
+        "pdf_file": d["company"].astype(str).map(name),
+        "variable": d["variable"],
+        "value": d["value"],
+        "page": d["page"],
+        "quoted_line": d["source_text"],
+    }).sort_values(["company", "variable"])
+    if write and len(out):
+        REVIEW.parent.mkdir(parents=True, exist_ok=True)
+        out.to_csv(REVIEW, index=False, encoding="utf-8")
+    return out
+
+
 def coverage() -> pd.DataFrame:
     """variable | rows | % | first year | withheld count and top reason (Task 1.5)."""
     if not VALUES.exists():
         return pd.DataFrame()
-    d = pd.read_csv(VALUES, low_memory=False)
+    from extract.valuation import VALUATION_VERSION as V
+    d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
+    d = d[d["extractor_version"].astype(str) == V]
     n_docs = d["company"].nunique()
     out = []
     for var, g in d.groupby("variable"):
@@ -407,6 +499,28 @@ def self_test() -> int:
     chk("and the stale companies are named, not silently re-done",
         "will " in esrc and "be re-done" in esrc)
 
+    print(chr(10) + "[1e] the cross-check withholds rather than picking a winner")
+    csrc = inspect.getsource(promoter_crosscheck)
+    chk("the tolerance is 5% (rule 2)", TOL_PCT == 5.0)
+    chk("a disagreement beyond it yields NULL", '"accepted": v_rhp if ok else None' in csrc)
+    chk("and BOTH readings stay on the row",
+        '"rhp": v_rhp' in csrc and '"chittorgarh": v_cg' in csrc)
+    chk("a missing Chittorgarh figure is rhp_only, not a disagreement",
+        '"rhp_only"' in csrc)
+    chk("the RHP is the source and Chittorgarh the check, not the reverse",
+        '"accepted": v_rhp' in csrc and '"accepted": v_cg' not in csrc)
+
+    print(chr(10) + "[1f] coverage and the review sheet read ONE version")
+    for fn in (coverage, review_sheet):
+        src = inspect.getsource(fn)
+        chk(f"{fn.__name__} filters on the current extractor version",
+            'extractor_version"].astype(str) == V' in src)
+    rsrc = inspect.getsource(review_sheet)
+    chk("the review sheet carries the page and the quoted line",
+        '"page"' in rsrc and '"quoted_line"' in rsrc)
+    chk("and the PDF file name, so the page can be opened",
+        '"pdf_file"' in rsrc)
+
     print(chr(10) + "[2] hashing streams, so a large PDF never sits in memory whole")
     src = inspect.getsource(_sha_of)
     chk("the hash is computed block by block", "iter(lambda: f.read(CHUNK)" in src)
@@ -452,6 +566,7 @@ if __name__ == "__main__":
     ap.add_argument("--deadline", help="IST timestamp to stop at, e.g. '2026-10-14 08:00'")
     ap.add_argument("--found-table", action="store_true")
     ap.add_argument("--coverage", action="store_true")
+    ap.add_argument("--review", action="store_true")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -464,3 +579,12 @@ if __name__ == "__main__":
         extract(limit=a.limit, deadline=a.deadline)
     if a.coverage:
         print(coverage().to_string(index=False))
+    if a.review:
+        r = review_sheet()
+        print(f"{REVIEW.relative_to(ROOT)}: {len(r)} rows, "
+              f"{r['company'].nunique() if len(r) else 0} companies")
+        x = promoter_crosscheck()
+        if len(x):
+            print(f"{CROSSCHECK.name}: {len(x)} comparisons")
+            print(x["verdict"].str.replace(r"WITHHELD.*", "WITHHELD", regex=True)
+                  .value_counts().to_string())

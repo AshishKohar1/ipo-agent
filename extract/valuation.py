@@ -51,7 +51,8 @@ MAX_PEERS = 12
 #   1.0.0  first pilot
 #   1.1.0  financials narrowed by a text pre-scan; peer role order taken from table
 #          columns rather than line-joined text; TOC and offset probes read in one open
-VALUATION_VERSION = "1.1.0"
+#   1.2.0  promoter pre-/post-offer shareholding, via extract/capital.py
+VALUATION_VERSION = "1.2.0"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
@@ -865,11 +866,39 @@ def shares_post_issue(doc: Doc) -> list[Value]:
                note="post-issue equity share count from Capital Structure")]
 
 
+def promoter_shareholding(doc: Doc) -> list[Value]:
+    """Promoter and promoter-group % before and after the offer, from Capital Structure.
+
+    This calls `extract/capital.py` rather than reimplementing it. That module already
+    anchors the figures to a promoter-labelled row in a pre/post table, records the page
+    and the quoted line, and deliberately WITHHOLDS the pre-IPO allotment price because
+    the price column cannot be identified positionally - a previous version averaged a
+    share-transfer row containing negative share counts and reported -1.0. Writing a third
+    implementation of the same table would be inviting the two to disagree.
+
+    Only the three shareholding variables are carried through here; the allotment fields
+    belong to the H6 block and are already collected there.
+    """
+    from . import capital
+    want = {"promoter_pre_pct", "promoter_post_pct", "promoter_change_pp"}
+    out = []
+    for v in capital.extract(doc):
+        if v is None or v.variable not in want:
+            continue
+        # Re-stamped with THIS module's version, because this pipeline's output file is
+        # resumed on that version and a row carrying capital.py's would look stale for
+        # ever.
+        v.extractor_version = VALUATION_VERSION
+        v.extractor = f"{NAME}->capital"
+        out.append(v)
+    return out
+
+
 def extract(doc: Doc) -> list[Value]:
     """Everything 1.2 asks for. Each group opens and closes the PDF itself, so peak
     memory is one section's tables rather than the whole document."""
     out = []
-    for fn in (basis, financials, shares_post_issue):
+    for fn in (basis, financials, shares_post_issue, promoter_shareholding):
         try:
             out += fn(doc)
         except Exception as e:                                 # noqa: BLE001
