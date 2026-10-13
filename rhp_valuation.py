@@ -263,8 +263,20 @@ def extract(limit: int | None = None, deadline=None, only: list[str] | None = No
             continue
         try:
             n_pages = int(r["pages"]) if pd.notna(r.get("pages")) else 0
-            toc = B.parse_toc(pdf, n_pages)
-            off = B.measure_offset(pdf, n_pages)
+            # The TOC pages and the offset probes are read in ONE open. The default path
+            # opens the document seven times before extraction even starts - once for the
+            # TOC and once per offset probe - and on a 582-page prospectus that was a
+            # large share of the 96 s this was taking per document.
+            probe = [i for i in B.OFFSET_PROBES if i < n_pages]
+            pre = B.page_texts_at(pdf, list(range(min(10, n_pages))) + probe)
+            # parse_toc gets ONLY the first ten pages. Handing it the whole pre-read set
+            # would let a TOC-like page at index 200 contribute entries the original
+            # never saw - a speedup must not change what is read, only how often the
+            # file is opened.
+            toc = B.parse_toc(pdf, n_pages,
+                              texts={i: t for i, t in pre.items() if i < 10})
+            off = B.measure_offset(pdf, n_pages, texts=pre)
+            del pre
             doc = B.Doc(pdf, comp, str(r.get("doc_type") or "RHP"),
                         str(r["sha256_now"]), str(r["url"]), n_pages, off, toc)
             vals = V.extract(doc)
@@ -359,6 +371,19 @@ def self_test() -> int:
     chk("and the collector runs at each flush", "gc.collect()" in esrc)
     chk("it is resumable on company", "already extracted" in esrc)
     chk("and it honours a deadline", "HARD STOP" in esrc)
+
+    print(chr(10) + "[1c] the one-open speedup does not change what is read")
+    import extract.base as _B
+    chk("parse_toc is given only the first ten pages",
+        "if i < 10" in esrc)
+    chk("measure_offset filters the supplied pages to its own probe list",
+        "for i in probes if i in texts" in inspect.getsource(_B.measure_offset))
+    chk("and both still read the file themselves when given nothing",
+        "if texts is None" in inspect.getsource(_B.measure_offset)
+        and "if texts is None" in inspect.getsource(_B.parse_toc))
+    chk("the page set is read in a single open",
+        "pdfplumber.open" in inspect.getsource(_B.page_texts_at)
+        and inspect.getsource(_B.page_texts_at).count("pdfplumber.open") == 1)
 
     print(chr(10) + "[2] hashing streams, so a large PDF never sits in memory whole")
     src = inspect.getsource(_sha_of)

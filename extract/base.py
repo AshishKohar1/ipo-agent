@@ -166,6 +166,36 @@ def page_texts(path: Path, first_idx: int, last_idx: int) -> dict[int, str]:
     return out
 
 
+def page_texts_at(path: Path, indices) -> dict[int, str]:
+    """Text of an arbitrary SET of page indices, in ONE open.
+
+    `page_texts` takes a contiguous range, so reading the table of contents and the six
+    offset probes meant seven opens of the same document - and each open re-parses the
+    page tree, which on a 582-page prospectus is most of the cost. Per-page caches are
+    still flushed, so memory stays flat.
+    """
+    import pdfplumber
+    want = sorted({int(i) for i in indices})
+    out: dict[int, str] = {}
+    if not want:
+        return out
+    with pdfplumber.open(path) as pdf:
+        n = len(pdf.pages)
+        for i in want:
+            if not 0 <= i < n:
+                continue
+            try:
+                out[i] = pdf.pages[i].extract_text() or ""
+            except Exception:                                  # noqa: BLE001
+                out[i] = ""
+            finally:
+                try:
+                    pdf.pages[i].flush_cache()
+                except Exception:                              # noqa: BLE001
+                    pass
+    return out
+
+
 def page_tables(path: Path, first_idx: int, last_idx: int) -> dict[int, list]:
     """Tables of PDF pages [first_idx, last_idx]. Opens and closes the file."""
     import pdfplumber
@@ -205,13 +235,25 @@ SECTIONS = {
 }
 
 
-def measure_offset(path: Path, n_pages: int) -> int:
-    """offset = pdf_index - printed_page, measured from page footers (the modal value)."""
+OFFSET_PROBES = (10, 25, 50, 80, 120, 200)
+
+
+def measure_offset(path: Path, n_pages: int, texts: dict[int, str] | None = None) -> int:
+    """offset = pdf_index - printed_page, measured from page footers (the modal value).
+
+    `texts` lets a caller that has ALREADY read the probe pages supply them instead. The
+    original opened the document once per probe - six opens of a 582-page prospectus,
+    which is a large share of the cost of extracting it, because every open re-parses the
+    page tree. Callers that do not pass anything behave exactly as before.
+    """
     from collections import Counter
-    probes = [i for i in (10, 25, 50, 80, 120, 200) if i < n_pages]
-    texts = {}
-    for i in probes:                                  # one open per probe keeps memory flat
-        texts.update(page_texts(path, i, i))
+    probes = [i for i in OFFSET_PROBES if i < n_pages]
+    if texts is None:
+        texts = {}
+        for i in probes:                  # one open per probe keeps memory flat
+            texts.update(page_texts(path, i, i))
+    else:
+        texts = {i: texts[i] for i in probes if i in texts}
     votes = []
     for i, t in texts.items():
         lines = [ln.strip() for ln in (t or "").splitlines() if ln.strip()]
@@ -223,10 +265,16 @@ def measure_offset(path: Path, n_pages: int) -> int:
     return Counter(votes).most_common(1)[0][0] if votes else 0
 
 
-def parse_toc(path: Path, n_pages: int) -> dict[str, int]:
-    """SECTION NAME -> printed page, from the table of contents."""
+def parse_toc(path: Path, n_pages: int,
+              texts: dict[int, str] | None = None) -> dict[str, int]:
+    """SECTION NAME -> printed page, from the table of contents.
+
+    `texts` lets a caller supply the first ten pages it has already read, for the same
+    reason `measure_offset` does: one open instead of two.
+    """
     toc: dict[str, int] = {}
-    texts = page_texts(path, 0, min(9, n_pages - 1))
+    if texts is None:
+        texts = page_texts(path, 0, min(9, n_pages - 1))
     for i in sorted(texts):
         t = texts[i]
         if "TABLE OF CONTENTS" not in (t or "").upper():
