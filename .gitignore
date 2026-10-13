@@ -20,3 +20,7 @@ data/bhavcopy_cache/
 # local, and re-fetchable from the exchange. Every row it produces records its source URL
 # and the column the value came from, so nothing in the output depends on keeping these.
 data/bhavcopy_raw_cache/
+
+# watch_progress.py keeps its last reading here so a second run can compute a rate.
+# Per-machine scratch, not data.
+data/.watch_state.json
