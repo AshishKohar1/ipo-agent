@@ -155,6 +155,68 @@ def _day_ret(panel: pd.DataFrame, name: str, on) -> float | None:
     return float(s.iloc[pos] / s.iloc[pos - 1] - 1.0) * 100.0
 
 
+# ----------------------------------------- 2.4e Nifty P/E, 2.4g India VIX
+PE_HISTORY = DATA / "nifty_pe_history.csv"
+VIX_HISTORY = DATA / "india_vix_history.csv"
+
+
+def _series(path: Path, col: str) -> pd.Series:
+    if not path.exists():
+        return pd.Series(dtype=float)
+    d = pd.read_csv(path)
+    d["date"] = pd.to_datetime(d["date"], errors="coerce")
+    d = d.dropna(subset=["date", col]).sort_values("date")
+    return pd.Series(pd.to_numeric(d[col], errors="coerce").values,
+                     index=d["date"]).dropna()
+
+
+def pe_at(pe: pd.Series, on) -> tuple[float | None, float | None]:
+    """`(P/E on the listing date, P/E minus its trailing 10-year median)`.
+
+    The median window is a full ten years ending on the listing date, and **both ends must
+    be inside the series or the comparison is NULL**. A 2010 listing needs P/E back to
+    2000, which is why this series is fetched from 1999 rather than 2009: a four-year
+    median reported as a ten-year one would make every early IPO look like it listed into
+    a cheaper market than it did.
+
+    The level itself is knowable on the listing date; so is the median, which uses only
+    prior closes.
+    """
+    if pe.empty:
+        return None, None
+    d = pd.Timestamp(on)
+    if d > pe.index.max():
+        return None, None
+    upto = pe[pe.index <= d]
+    if upto.empty:
+        return None, None
+    lvl = float(upto.iloc[-1])
+    start = d - pd.DateOffset(years=10)
+    if start < pe.index.min():
+        return lvl, None               # level is known; the 10y median is not
+    win = pe[(pe.index > start) & (pe.index <= d)]
+    if win.empty:
+        return lvl, None
+    return lvl, float(lvl - win.median())
+
+
+def vix_at(vix: pd.Series, on) -> float | None:
+    """India VIX close on the listing date, or the last close before it.
+
+    **NSE Indices serves this series only from 2018**, although the index itself began in
+    2008: the same endpoint returns 0 rows for 2010, 2015 and 2017, HTTP 200, no error.
+    So pre-2018 listings have no VIX at all. Outside the series this is NULL - never the
+    series' first value carried backwards.
+    """
+    if vix.empty:
+        return None
+    d = pd.Timestamp(on)
+    if d < vix.index.min() or d > vix.index.max():
+        return None
+    upto = vix[vix.index <= d]
+    return None if upto.empty else float(upto.iloc[-1])
+
+
 # ------------------------------------------------------------------ 2.3 RHP fields
 def rhp_table() -> pd.DataFrame:
     """One row per company, one column per scorecard-ready RHP field, with status.
@@ -190,23 +252,43 @@ def rhp_table() -> pd.DataFrame:
 
 
 def promoter_holding_from_aggregator() -> pd.DataFrame:
-    """Promoter holding from the aggregator backfill (H5: do not read the RHP for what an
-    aggregator already publishes). Returns an empty frame if the columns are absent."""
+    """Promoter holding before AND after the issue, from the aggregator backfill (H5).
+
+    **Columns are taken by name, not by pattern.** The first version matched
+    `/promoter/` and `/hold|pct|%|share/` and took `cand[0]`, which is `promoter_pre_pct`
+    in column order - and stored it as `promoter_holding_post_pct_agg`. The two differ by
+    about twenty percentage points by construction (Hindustan Media Ventures: 99.85 pre,
+    77.72 post), so a variable labelled "post" carrying "pre" would be read exactly
+    backwards in any discussion of dilution. Guessing a column by regex is how that
+    happens; there are two columns and both are named explicitly here.
+
+    `promoter_dilution_pp` is carried too - the aggregator computes it, and recomputing a
+    difference the source already publishes just invites the two to disagree.
+    """
+    empty = pd.DataFrame(columns=["company", "listing_date_agg",
+                                  "promoter_holding_pre_pct_agg",
+                                  "promoter_holding_post_pct_agg",
+                                  "promoter_dilution_pp_agg"])
     if not AGG.exists():
-        return pd.DataFrame(columns=["company", "promoter_holding_post_pct_agg"])
+        return empty
     d = pd.read_csv(AGG, low_memory=False)
-    cand = [c for c in d.columns
-            if re.search(r"promoter", str(c), re.I) and re.search(r"hold|pct|%|share",
-                                                                  str(c), re.I)]
-    if not cand:
-        return pd.DataFrame(columns=["company", "promoter_holding_post_pct_agg"])
-    col = cand[0]
-    namecol = "company" if "company" in d.columns else d.columns[0]
-    out = pd.DataFrame({"company": d[namecol].astype(str),
-                        "promoter_holding_post_pct_agg":
-                            pd.to_numeric(d[col], errors="coerce")})
-    return out.dropna(subset=["promoter_holding_post_pct_agg"]) \
-              .drop_duplicates("company")
+    need = ("promoter_pre_pct", "promoter_post_pct")
+    missing = [c for c in need if c not in d.columns]
+    if missing:
+        print(f"  aggregator lacks {missing}; promoter holding left NULL")
+        return empty
+    out = pd.DataFrame({
+        "company": d["company"].astype(str),
+        "listing_date_agg": pd.to_datetime(d.get("listing_date"), errors="coerce"),
+        "promoter_holding_pre_pct_agg": pd.to_numeric(d["promoter_pre_pct"],
+                                                      errors="coerce"),
+        "promoter_holding_post_pct_agg": pd.to_numeric(d["promoter_post_pct"],
+                                                       errors="coerce"),
+        "promoter_dilution_pp_agg": pd.to_numeric(d.get("promoter_dilution_pp"),
+                                                  errors="coerce"),
+    })
+    return out.dropna(subset=["promoter_holding_pre_pct_agg",
+                              "promoter_holding_post_pct_agg"], how="all")
 
 
 # ------------------------------------------------------------------ 2.4i anchor
@@ -334,6 +416,34 @@ def build(write: bool = True) -> pd.DataFrame:
     d["listing_gain_minus_sector_day"] = rel
     d["smallcap_minus_nifty_6m"] = sc6
 
+    # --- 2.4a day-1 turnover as a multiple of issue size, joined on SYMBOL
+    tv = DATA / "day1_turnover.csv"
+    if tv.exists():
+        t = pd.read_csv(tv)
+        t = (t[t["turnover_x_issue_size"].notna()]
+             .drop_duplicates("symbol")[["symbol", "turnover_x_issue_size",
+                                         "exchange", "both_exchanges"]]
+             .rename(columns={"exchange": "turnover_exchange",
+                              "both_exchanges": "turnover_both_exchanges"}))
+        t["symbol"] = t["symbol"].astype(str).str.upper()
+        d = d.merge(t, left_on="_sym", right_on="symbol", how="left",
+                    suffixes=("", "_tv")).drop(columns=["symbol_tv"], errors="ignore")
+
+    # --- 2.4e Nifty 50 P/E vs its trailing 10-year median, 2.4g India VIX at listing
+    pe = _series(PE_HISTORY, "pe")
+    vix = _series(VIX_HISTORY, "vix_close")
+    lv, vs, vx = [], [], []
+    for _, r in d.iterrows():
+        on = r["listing_date"]
+        if pd.isna(on):
+            lv.append(None), vs.append(None), vx.append(None)
+            continue
+        a, b = pe_at(pe, on)
+        lv.append(a), vs.append(b), vx.append(vix_at(vix, on))
+    d["nifty_pe_at_listing"] = lv
+    d["nifty_pe_vs_10y_median"] = vs
+    d["india_vix_at_listing"] = vx
+
     # --- 2.3 RHP fields, matched on normalised company name
     rhp = rhp_table()
     rhp["_n"] = rhp["company"].map(dataio.norm_name)
@@ -342,8 +452,40 @@ def build(write: bool = True) -> pd.DataFrame:
 
     ph = promoter_holding_from_aggregator()
     if len(ph):
+        # The aggregator carries 2861 rows spanning mainboard, SME and FPOs, so a
+        # normalised name can collide across them. Where both sides have a listing date
+        # the pair (name, date) is used; where the aggregator has no date, the name alone
+        # is allowed, because refusing it would drop real matches for an absent field
+        # rather than for a disagreement.
         ph["_n"] = ph["company"].map(dataio.norm_name)
-        d = d.merge(ph.drop(columns=["company"]), on="_n", how="left")
+        dated = ph[ph["listing_date_agg"].notna()].copy()
+        dated["_k"] = (dated["_n"] + "|"
+                       + dated["listing_date_agg"].dt.strftime("%Y-%m-%d"))
+        dated = dated.drop_duplicates("_k")
+        und = ph[ph["listing_date_agg"].isna()].drop_duplicates("_n")
+        d["_k"] = (d["_n"] + "|"
+                   + pd.to_datetime(d["listing_date"], errors="coerce")
+                   .dt.strftime("%Y-%m-%d"))
+        cols = ["promoter_holding_pre_pct_agg", "promoter_holding_post_pct_agg",
+                "promoter_dilution_pp_agg"]
+        d = d.merge(dated[["_k"] + cols], on="_k", how="left")
+        # Second pass, name only, filling ONLY what the dated join left empty.
+        fb = d.merge(und[["_n"] + cols], on="_n", how="left", suffixes=("", "_nm"))
+        for c in cols:
+            d[c] = d[c].where(d[c].notna(), fb[f"{c}_nm"])
+        # Third pass: a name match whose dates disagree is still the same company far more
+        # often than not in this file, so it fills a gap but is FLAGGED, never silently
+        # merged with the dated matches.
+        any_nm = ph.drop_duplicates("_n")[["_n"] + cols]
+        fb2 = d.merge(any_nm, on="_n", how="left", suffixes=("", "_any"))
+        d["promoter_holding_match"] = np.where(
+            d["promoter_holding_post_pct_agg"].notna(), "name+listing_date", None)
+        for c in cols:
+            fill = d[c].isna() & fb2[f"{c}_any"].notna()
+            d.loc[fill, c] = fb2.loc[fill, f"{c}_any"]
+            if c == "promoter_holding_post_pct_agg":
+                d.loc[fill, "promoter_holding_match"] = "name_only_dates_differ"
+        d = d.drop(columns=["_k"])
 
     # --- 2.4i anchor
     anc = anchor_table()
@@ -492,6 +634,52 @@ def self_test() -> int:
             'blank & filled.notna()' in inspect.getsource(_fill_recovered_symbols))
         chk("only symbols the bhavcopy confirmed are attached",
             "bhavcopy_confirmed" in inspect.getsource(_fill_recovered_symbols))
+
+    print(chr(10) + "[3c] Nifty P/E and India VIX")
+    pe = _series(PE_HISTORY, "pe")
+    vix = _series(VIX_HISTORY, "vix_close")
+    if pe.empty:
+        print("  (no P/E history on disk - skipped)")
+    else:
+        chk("the P/E series reaches back before 2001, so a 2010 listing can have a "
+            "real ten-year median", pe.index.min() <= pd.Timestamp("2001-01-01"),
+            pe.index.min())
+        lvl, rel = pe_at(pe, pd.Timestamp("2020-01-15"))
+        chk("a listing with ten full years behind it gets both numbers",
+            lvl is not None and rel is not None, (lvl, rel))
+        lvl2, rel2 = pe_at(pe, pe.index.min() + pd.DateOffset(years=2))
+        chk("a listing with only two years behind it gets the LEVEL but no median",
+            lvl2 is not None and rel2 is None, (lvl2, rel2))
+        chk("and a date past the end of the series gets neither",
+            pe_at(pe, pe.index.max() + pd.Timedelta(days=30)) == (None, None))
+    if vix.empty:
+        print("  (no VIX history on disk - skipped)")
+    else:
+        # MEASURED, not assumed. India VIX the INDEX began in 2008, but NSE Indices'
+        # historical table serves it only from 2018: the same endpoint returns 0 rows for
+        # 2010, 2015 and 2017 with HTTP 200 and no error. So this variable covers 2018
+        # onward and is NULL before - a source limit, stated, not a gap to fill.
+        chk("the VIX series begins in 2018, which is as far back as NSE serves it",
+            pd.Timestamp("2018-01-01") <= vix.index.min() <= pd.Timestamp("2018-01-05"),
+            vix.index.min())
+        chk("so a pre-2018 listing has no VIX, by source limit not by omission",
+            vix_at(vix, pd.Timestamp("2015-06-01")) is None)
+        chk("a date before the series is NULL, not the first value carried back",
+            vix_at(vix, vix.index.min() - pd.Timedelta(days=5)) is None)
+        chk("a date inside it is a number",
+            vix_at(vix, pd.Timestamp("2020-01-15")) is not None)
+
+    print(chr(10) + "[3d] day-1 turnover reached the feature table")
+    if (DATA / "day1_turnover.csv").exists():
+        chk("the multiple is joined in", "turnover_x_issue_size" in d.columns)
+        if "turnover_x_issue_size" in d.columns:
+            chk("on a useful share of rows",
+                d["turnover_x_issue_size"].notna().sum() > 300,
+                int(d["turnover_x_issue_size"].notna().sum()))
+            chk("and the exchange it came from travels with it",
+                "turnover_exchange" in d.columns)
+            chk("no row carries a zero where the fetch found nothing",
+                not (d["turnover_x_issue_size"] == 0).any())
 
     print(chr(10) + "[4] missing is never zero")
     chk("a sector with no index keeps a REASON, not a blank",

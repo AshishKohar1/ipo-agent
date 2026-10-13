@@ -86,13 +86,24 @@ def candidates(d: pd.DataFrame) -> list[str]:
     skip = {"company", "symbol", "listing_date", "listing_date_t", "y", "year",
             "excess_corrected_pp", "H_label_corrected", "is_sme",
             "sector_index", "nse_industry", "sector_index_missing_reason",
-            "anchor_is_recent_cohort"}
+            "anchor_is_recent_cohort",
+            # Facts about OUR data collection, not about the company. Same reason the six
+            # msci_* completeness metrics are excluded: a variable that says how well we
+            # fetched something is a variable about this repository.
+            "turnover_exchange", "turnover_both_exchanges", "promoter_holding_match"}
     out = []
     for c in d.columns:
         if c in skip or c.endswith("_status"):
             continue
-        s = pd.to_numeric(d[c], errors="coerce")
-        if s.notna().sum() < 30 or s.nunique(dropna=True) < 2:
+        col = d[c]
+        # A boolean column reaches np.quantile as a bool dtype and raises there -
+        # "numpy boolean subtract" - which killed a whole run partway through and left a
+        # STALE windows file on disk that read exactly like a finished one. Anything that
+        # is not numeric after coercion is skipped here instead.
+        if col.dtype == bool:
+            continue
+        v = pd.to_numeric(col, errors="coerce").astype(float)
+        if v.notna().sum() < 30 or v.nunique(dropna=True) < 2:
             continue
         out.append(c)
     return out
@@ -138,7 +149,7 @@ def measure(d: pd.DataFrame, var: str, tr_years: list[int], test: int) -> dict:
     if len(te) == 0:
         res["note"] = "no test rows"
         return res
-    edges = SC.bin_edges(tr[var])
+    edges = SC.bin_edges(pd.to_numeric(tr[var], errors="coerce").astype(float))
     btr = SC.apply_bins(tr[var], edges)
     woe, iv = SC.woe_table(btr, tr["y"])
     if not woe:
@@ -282,6 +293,9 @@ def main(write: bool = True) -> dict:
     cls_emb = classify(emb[emb["scheme"] == "A"])
 
     if write:
+        # Written only once every scheme has completed. A crash partway used to leave the
+        # PREVIOUS run's windows file on disk, which reads exactly like a finished one -
+        # and I read it and nearly reported its numbers as this run's.
         REPORT.parent.mkdir(parents=True, exist_ok=True)
         L = [f"# Model H — variable stability ({pd.Timestamp.now():%Y-%m-%d})", "",
              "Analysis only. **No variable set is chosen here, no window is chosen, and "
@@ -381,7 +395,7 @@ def self_test() -> int:
     print(chr(10) + "[4] bins and WoE come from the TRAINING fold only")
     src = __import__("inspect").getsource(measure)
     chk("edges are derived from tr, never from the whole frame",
-        "SC.bin_edges(tr[var])" in src and "bin_edges(d[" not in src)
+        "SC.bin_edges(pd.to_numeric(tr[var]" in src and "bin_edges(d[" not in src)
     chk("WoE is derived from the training bins",
         "SC.woe_table(btr, tr[" in src)
     chk("an unseen test bin scores 0 rather than being dropped",
@@ -429,6 +443,19 @@ def self_test() -> int:
         th["label"] == "NOISE", th.to_dict())
     chk("and the table carries the denominator, so 4 cannot read as 4 of 14",
         th["dirs_measured"] == 4 and th["windows"] == 14, th.to_dict())
+
+    print(chr(10) + "[5b] a non-numeric column cannot kill the run")
+    bl = pd.DataFrame({"year": [2010] * 40 + [2011] * 40,
+                       "y": ([1, 0] * 20) * 2,
+                       "flag": pd.Series([True, False] * 40),
+                       "text": ["nse"] * 80,
+                       "good": list(range(80))})
+    cands = candidates(bl)
+    chk("a bool column is not offered as a candidate", "flag" not in cands, cands)
+    chk("nor is a text column", "text" not in cands, cands)
+    chk("but a real numeric one is", "good" in cands, cands)
+    m2 = measure(bl, "good", [2010], 2011)
+    chk("and measuring it does not raise", m2["iv"] is not None, m2)
 
     print(chr(10) + "[6] it fits no final model and gives no advice")
     # The scan EXCLUDES this function's own source. Every earlier version of a check like

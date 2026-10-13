@@ -36,6 +36,7 @@ import sys as _sys
 if hasattr(_sys.stdout, "reconfigure"):
     _sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import argparse
+import inspect
 import re
 import sys
 from pathlib import Path
@@ -46,6 +47,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import dataio                                                  # noqa: E402
+import model_h_sources as SRC   # noqa: E402  - one pause rule, not a second copy
 
 DATA = ROOT / "data"
 OUT = DATA / "day1_turnover.csv"
@@ -179,6 +181,13 @@ def build(limit: int | None = None, cache_only: bool = False) -> pd.DataFrame:
     f = LP.Fetcher()
     rows = []
     for i, r in enumerate(pend, 1):
+        # The live path owns NSE during the HDFIRE window. The first version of this
+        # module had NO pause check: it happened to finish at 04:20 IST on 13 Oct, six
+        # hours before the window opened, so it respected the window by accident of
+        # timing. A politeness rule that holds only because a job started early is not a
+        # rule, and the next run of this - after the user fills missing_symbols.csv -
+        # would not have been so lucky.
+        SRC.wait_if_paused()
         sym, isin = str(r["symbol"]), r.get("isin")
         day = pd.Timestamp(r["listing_date"])
         got = {}
@@ -301,6 +310,21 @@ def self_test() -> int:
         "LP.Fetcher()" in body and "LP._unzip_csv" in body and "LP.NSE_OLD" in body)
     chk("and the raw cache is a SEPARATE directory from the normalised one",
         "bhavcopy_raw_cache" in body and RAW_CACHE.name != "bhavcopy_cache")
+
+    print(chr(10) + "[2b] it pauses when the live path owns NSE")
+    chk("the build loop asks before every symbol",
+        "SRC.wait_if_paused()" in inspect.getsource(build))
+    chk("and it uses the SAME pause rule as the rest of Phase 2, not a copy",
+        SRC.paused_now(pd.Timestamp("2026-10-13 11:00"))[0]
+        and not SRC.paused_now(pd.Timestamp("2026-10-13 04:00"))[0])
+    if OUT.exists():
+        _d = pd.read_csv(OUT)
+        _t = pd.to_datetime(_d["fetched_at_ist"], errors="coerce")
+        _h = _t.dt.hour * 100 + _t.dt.minute
+        _in = ((_t.dt.date.astype(str).isin(SRC.PRIORITY_DATES))
+               & (((_h >= 1030) & (_h < 1630)) | ((_h >= 1915) & (_h < 2000))))
+        chk("and nothing on disk was fetched inside a pause window",
+            int(_in.sum()) == 0, int(_in.sum()))
 
     print(chr(10) + "[3] the multiple is NULL unless both ends exist")
     sizes = issue_sizes()
