@@ -2,7 +2,7 @@
 
 Does NSE's `ipo-active-category` publish during the bidding day, or only at 19:00? Subjects: **HDFIRE** (EQ, mainboard) and **RAVITA** (SME, control), both bidding 2026-10-13 to 2026-10-15, confirmed from NSE's own calendar.
 
-`16` rows recorded.
+`20` rows recorded.
 
 ## Every poll, as recorded
 
@@ -24,6 +24,10 @@ Does NSE's `ipo-active-category` publish during the bidding day, or only at 19:0
 | 2026-10-13 | 2026-10-13 15:01:47 | 1501 | HDFIRE | chittorgarh | 2.02x | — | 4.63x | 2.06x | nan | nan |
 | 2026-10-13 | 2026-10-13 15:01:47 | 1501 | RAVITA | nse_active_category | 0.00x | — | — | — | Updated as on null | False |
 | 2026-10-13 | 2026-10-13 15:01:47 | 1501 | RAVITA | chittorgarh | — | — | — | — | nan | nan |
+| 2026-10-13 | 2026-10-13 17:31:43 | 1731 | HDFIRE | nse_active_category | 4.62x | 1.04x | 12.52x | 3.78x | Updated as on 13-Oct-2026 17:00:00 | True |
+| 2026-10-13 | 2026-10-13 17:31:43 | 1731 | HDFIRE | chittorgarh | 2.02x | — | 4.63x | 2.06x | nan | nan |
+| 2026-10-13 | 2026-10-13 17:31:43 | 1731 | RAVITA | nse_active_category | 0.00x | — | — | — | Updated as on null | False |
+| 2026-10-13 | 2026-10-13 17:31:43 | 1731 | RAVITA | chittorgarh | — | — | — | — | nan | nan |
 
 ## Did NSE's updateTime advance within a day?
 
@@ -31,7 +35,7 @@ This is the whole test. An advancing `updateTime` means NSE publishes intraday a
 
 | trading date | symbol | distinct NSE updateTimes | values |
 |---|---|---|---|
-| 2026-10-13 | HDFIRE | **4** | Updated as on null; Updated as on 13-Oct-2026 10:57:00; Updated as on 13-Oct-2026 12:57:00; Updated as on 13-Oct-2026 14:57:00 |
+| 2026-10-13 | HDFIRE | **5** | Updated as on null; Updated as on 13-Oct-2026 10:57:00; Updated as on 13-Oct-2026 12:57:00; Updated as on 13-Oct-2026 14:57:00; Updated as on 13-Oct-2026 17:00:00 |
 | 2026-10-13 | RAVITA | **1** | Updated as on null |
 
 ## NSE versus Chittorgarh, per poll
@@ -46,12 +50,14 @@ This is the whole test. An advancing `updateTime` means NSE publishes intraday a
 | 2026-10-13 | 1301 | RAVITA | 0.00x | — | — |
 | 2026-10-13 | 1501 | HDFIRE | 3.66x | 2.02x | +1.64x (+81.2%) |
 | 2026-10-13 | 1501 | RAVITA | 0.00x | — | — |
+| 2026-10-13 | 1731 | HDFIRE | 4.62x | 2.02x | +2.60x (+128.5%) |
+| 2026-10-13 | 1731 | RAVITA | 0.00x | — | — |
 
 ## 15:00 to final growth (H23's unmeasured quantity)
 
 | trading date | symbol | 15:00 Total | last poll Total | growth |
 |---|---|---|---|---|
-| 2026-10-13 | HDFIRE | — | 3.66x | — |
+| 2026-10-13 | HDFIRE | — | 4.62x | — |
 | 2026-10-13 | RAVITA | — | 0.00x | — |
 
 ## Verdict on H22
