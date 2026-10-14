@@ -1,6 +1,6 @@
 # Capture audit
 
-Window: the last 4 days, weekdays only. Generated 2026-10-14 19:32 IST.
+Window: the last 4 days, weekdays only. Generated 2026-10-14 23:48 IST.
 
 **0 missed 15:00 leg(s), 3 missed day-end leg(s).**
 
@@ -27,7 +27,7 @@ A gap means the job left *no attempt at all* — an infrastructure failure. A jo
 ### 2026-10-14
 
 * listing prices — no live prediction is awaiting an outcome
-* index closes — 15 closes, 0 NULL with a reason
+* index closes — all already captured
 
 ## Not recoverable, by nature
 
