@@ -55,3 +55,7 @@ trading_date,polled_at_ist,nominal_slot,symbol,series,source,total_x,qib_x,hni_x
 2026-10-14,2026-10-14 17:31:40.459176,1731,HDFIRE,EQ,chittorgarh,13.02,1.43,36.96,9.43,,,
 2026-10-14,2026-10-14 17:31:40.459176,1731,RAVITA,SME,nse_active_category,0.0,0.0,0.0,,Updated as on 14-Oct-2026 17:00:00,False,Total is 0.0 - nothing published yet
 2026-10-14,2026-10-14 17:31:40.459176,1731,RAVITA,SME,chittorgarh,,,,,,,"ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connecti"
+2026-10-14,2026-10-14 18:31:09.011228,1831,HDFIRE,EQ,nse_active_category,16.495074615813735,1.4922371645603616,45.039750722532325,11.332041444074816,Updated as on 14-Oct-2026 17:00:00,True,
+2026-10-14,2026-10-14 18:31:09.011228,1831,HDFIRE,EQ,chittorgarh,16.56,1.49,48.77,11.43,,,
+2026-10-14,2026-10-14 18:31:09.011228,1831,RAVITA,SME,nse_active_category,0.0,0.0,0.0,,Updated as on 14-Oct-2026 17:00:00,False,Total is 0.0 - nothing published yet
+2026-10-14,2026-10-14 18:31:09.011228,1831,RAVITA,SME,chittorgarh,0.82,1.05,0.63,0.77,,,
