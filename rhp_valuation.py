@@ -386,7 +386,8 @@ def promoter_crosscheck(write: bool = True) -> pd.DataFrame:
     return out
 
 
-def review_sheet(write: bool = True) -> pd.DataFrame:
+def review_sheet(write: bool = True,
+                 version: str | None = None) -> pd.DataFrame:
     """reports/rhp_valuation_review.csv - one row per extracted value, so any number can
     be checked against the page it came from.
 
@@ -396,7 +397,8 @@ def review_sheet(write: bool = True) -> pd.DataFrame:
     """
     if not VALUES.exists():
         return pd.DataFrame()
-    from extract.valuation import VALUATION_VERSION as V
+    from extract.valuation import VALUATION_VERSION
+    V = version or VALUATION_VERSION
     d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
     d = d[(d["extractor_version"].astype(str) == V) & (d["status"] == "ok")]
     f = pd.read_csv(FETCH_LOG, low_memory=False)
@@ -417,11 +419,16 @@ def review_sheet(write: bool = True) -> pd.DataFrame:
     return out
 
 
-def coverage() -> pd.DataFrame:
+def coverage(version: str | None = None) -> pd.DataFrame:
     """variable | rows | % | first year | withheld count and top reason (Task 1.5)."""
     if not VALUES.exists():
         return pd.DataFrame()
-    from extract.valuation import VALUATION_VERSION as V
+    # An explicit version lets a FINISHED pass be reported on while a newer one is still
+    # running. Without it the table reads off the version the code currently declares,
+    # which is zero rows the moment the extractor is bumped - exactly when somebody wants
+    # to see what the completed pass produced.
+    from extract.valuation import VALUATION_VERSION
+    V = version or VALUATION_VERSION
     d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
     d = d[d["extractor_version"].astype(str) == V]
     n_docs = d["company"].nunique()
@@ -567,6 +574,8 @@ if __name__ == "__main__":
     ap.add_argument("--found-table", action="store_true")
     ap.add_argument("--coverage", action="store_true")
     ap.add_argument("--review", action="store_true")
+    ap.add_argument("--version", help="report on this extractor version "
+                                      "instead of the current one")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
@@ -578,9 +587,9 @@ if __name__ == "__main__":
     if a.stage == "extract":
         extract(limit=a.limit, deadline=a.deadline)
     if a.coverage:
-        print(coverage().to_string(index=False))
+        print(coverage(a.version).to_string(index=False))
     if a.review:
-        r = review_sheet()
+        r = review_sheet(version=a.version)
         print(f"{REVIEW.relative_to(ROOT)}: {len(r)} rows, "
               f"{r['company'].nunique() if len(r) else 0} companies")
         x = promoter_crosscheck()

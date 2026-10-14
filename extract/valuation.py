@@ -52,7 +52,10 @@ MAX_PEERS = 12
 #   1.1.0  financials narrowed by a text pre-scan; peer role order taken from table
 #          columns rather than line-joined text; TOC and offset probes read in one open
 #   1.2.0  promoter pre-/post-offer shareholding, via extract/capital.py
-VALUATION_VERSION = "1.2.0"
+#   1.3.0  FIXED: the 1.2b financials block had raised PatternError on every document
+#          since the text pre-scan was added, producing zero values for revenue, EBITDA,
+#          PAT, borrowings, cash, cash-from-operations and capex
+VALUATION_VERSION = "1.3.0"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
@@ -784,7 +787,14 @@ def financials(doc: Doc) -> list[Value]:
     # labels being looked for. On a 500-page prospectus this is the difference between
     # the batch finishing overnight and not finishing.
     texts = page_texts(doc.path, a, b)
-    want = re.compile("|".join(f"(?:{pat})" for pat in FIN_ROWS.values()))
+    # `(?i)` is a GLOBAL flag: Python rejects it anywhere but the start of a pattern.
+    # Each FIN_ROWS pattern carries its own, so joining them put `(?i)` inside a group and
+    # every call raised PatternError - on all 412 documents. `extract()` caught it and
+    # recorded `financials_group: unreadable`, so nothing crashed and nothing was
+    # fabricated, but the whole 1.2b block produced zero values and I reported extraction
+    # quality without reading the `_group` rows that said so.
+    want = re.compile("|".join(f"(?:{pat.replace('(?i)', '')})"
+                               for pat in FIN_ROWS.values()), re.I)
     pages = [i for i in sorted(texts)
              if any(want.search(ln) for ln in (texts[i] or "").splitlines())]
     if not pages:
