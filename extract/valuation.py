@@ -55,7 +55,10 @@ MAX_PEERS = 12
 #   1.3.0  FIXED: the 1.2b financials block had raised PatternError on every document
 #          since the text pre-scan was added, producing zero values for revenue, EBITDA,
 #          PAT, borrowings, cash, cash-from-operations and capex
-VALUATION_VERSION = "1.3.0"
+#   1.4.0  the money unit is carried forward from the head of a statement instead of
+#          being required on each page, and the page it came from is recorded; a header
+#          cell is only read as a fiscal year if the year is plausible
+VALUATION_VERSION = "1.4.0"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
@@ -286,7 +289,12 @@ def _year_columns(tbl) -> dict[int, int]:
             m = FY_HDR.search(c)
             if m:
                 y = int(m.group(1))
-                out[i] = 2000 + y if y < 100 else y
+                y = 2000 + y if y < 100 else y
+                # A header cell can carry a page number or a note reference that looks
+                # like a year: the first run reported "fiscal 2031 column present but
+                # empty". Anything outside a plausible range is not a year.
+                if 1990 <= y <= 2030:
+                    out[i] = y
     return out
 
 
@@ -805,9 +813,24 @@ def financials(doc: Doc) -> list[Value]:
     tabs = {}
     for i in pages[:12]:
         tabs.update(page_tables(doc.path, i, i))
+    # The unit phrase - "(₹ in millions)" - is printed once at the head of a statement,
+    # not repeated on every page of it. Requiring it on the SAME page withheld 7 of 13
+    # financial rows in the first spot-check: rule 3 behaving correctly but scoped too
+    # tightly. It is now carried forward from the nearest PRECEDING page in the section
+    # that states one, and the page it came from is recorded on the row - because a unit
+    # inherited from two pages back is a weaker claim than one in the same caption, and
+    # the reader should be able to see which they have.
+    unit_at: dict[int, tuple] = {}
+    carried = (None, None, None)
+    for idx in sorted(texts):
+        m, phrase = _unit_of(texts.get(idx, ""))
+        if m is not None:
+            carried = (m, phrase, idx)
+        unit_at[idx] = carried
+
     for idx in sorted(tabs):
         printed = doc.index_to_printed(idx)
-        mult, unit_phrase = _unit_of(texts.get(idx, ""))
+        mult, unit_phrase, unit_page = unit_at.get(idx, (None, None, None))
         for tbl in tabs[idx] or []:
             if not tbl or len(tbl) < 2:
                 continue
@@ -821,7 +844,8 @@ def financials(doc: Doc) -> list[Value]:
                     # lakhs as crore is a 100x error that looks like a plausible number.
                     out.append(_v(doc, f"{base}_fy1", value=None, status="not_found",
                                   page=printed, pdf_page_index=idx,
-                                  note="withheld: the table states no money unit",
+                                  note="withheld: no money unit stated on this page or "
+                                       "any earlier page of the section",
                                   missing_reason="present_but_unparsed"))
                     done.add(base)
                     continue
@@ -832,7 +856,10 @@ def financials(doc: Doc) -> list[Value]:
                 for v in vals:
                     if v.value is not None:
                         v.value_crore = round(v.value * mult, 4)
-                        v.note = f"{v.note}; unit {unit_phrase} -> crore x{mult}"
+                        where = ("same page" if unit_page == idx
+                                 else f"page {doc.index_to_printed(unit_page)}")
+                        v.note = (f"{v.note}; unit {unit_phrase} from {where} "
+                                  f"-> crore x{mult}")
                 out += vals
                 done.add(base)
     del tabs, texts
