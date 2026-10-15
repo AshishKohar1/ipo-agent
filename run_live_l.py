@@ -100,33 +100,73 @@ def nse_open_ipos(sess) -> tuple[list[dict], str]:
 
 
 def nse_subscription(sess, symbol: str) -> dict:
-    """Category-wise subscription from NSE's official active-category API."""
+    """Category-wise subscription from NSE's official active-category API.
+
+    **This read field names NSE does not serve, and so had never once succeeded.** It
+    looked for `data`, `subscriptionTimes`, `noOfshareBid` and `noOfSharesOffered`; NSE
+    serves `dataList`, `noOfTotalMeant`, `noOfSharesBid` and `noOfShareOffered` - note
+    `noOfSharesBid` against `noOfshareBid`, and `noOfShareOffered` against
+    `noOfSharesOffered`. It returned `no category rows` every time, the live leg fell back
+    to Chittorgarh, and the row was logged `single_source_unverified (H14)`. The official
+    primary source under H22 was never actually being used. Found by cross-checking the
+    HD Fire Protect screenshot against NSE on 16 Oct 2026.
+
+    Categories are now selected by **`srNo`**, which is a stable key, rather than by
+    substring. Substring matching also had its own bug: NSE serves the combined NII (2)
+    AND its two sub-buckets (2.1 above Rs 10 lakh, 2.2 Rs 2-10 lakh), all three of whose
+    names contain "Non Institutional", and the branch assigned on every match - so the
+    LAST one won and `hni_x` was the Rs 2-10 lakh bucket. On HD Fire that is 137.28
+    against a combined NII of 203.21. `hni_x` is the combined figure.
+    """
     try:
         r = sess.get("https://www.nseindia.com/api/ipo-active-category",
                      params={"symbol": symbol}, timeout=30)
         if r.status_code != 200:
             return {"ok": False, "why": f"HTTP {r.status_code}"}
-        rows = (r.json() or {}).get("data") or r.json() or []
-        got = {}
-        for d in (rows if isinstance(rows, list) else []):
-            cat = str(d.get("category", "")).upper()
-            x = d.get("noOfshareBid") and d.get("noOfSharesOffered")
-            sub = d.get("subscriptionTimes") or d.get("subscription")
-            if sub is None and x:
-                sub = float(d["noOfshareBid"]) / float(d["noOfSharesOffered"])
-            if sub is None:
+        j = r.json() or {}
+        rows = j.get("dataList") or j.get("data") or []
+        if not isinstance(rows, list):
+            return {"ok": False, "why": "dataList is not a list"}
+
+        def times(d):
+            """The 'number of times' for one category row, or None."""
+            v = d.get("noOfTotalMeant") or d.get("subscriptionTimes")
+            try:
+                return float(str(v).strip())
+            except (TypeError, ValueError):
+                pass
+            bid, off = d.get("noOfSharesBid"), d.get("noOfShareOffered")
+            try:
+                bid, off = float(str(bid)), float(str(off))
+                return bid / off if off else None
+            except (TypeError, ValueError):
+                return None
+
+        by_sr, total = {}, None
+        for d in rows:
+            sr = str(d.get("srNo") or "").strip()
+            cat = str(d.get("category") or "").strip().upper()
+            v = times(d)
+            if v is None:
                 continue
-            sub = float(sub)
-            if "QIB" in cat or "QUALIFIED" in cat:
-                got["qib_x"] = sub
-            elif "NON INST" in cat or "NII" in cat or "HNI" in cat:
-                got["hni_x"] = sub
-            elif "RETAIL" in cat or "INDIVIDUAL" in cat:
-                got["rii_x"] = sub
-            elif cat.startswith("TOTAL"):
-                got["total_x"] = sub
+            if cat == "TOTAL":
+                total = v
+            elif sr:
+                by_sr[sr] = v
+        got = {}
+        for key, sr in (("qib_x", "1"), ("hni_x", "2"), ("rii_x", "3"), ("emp_x", "4")):
+            if sr in by_sr:
+                got[key] = by_sr[sr]
+        # The NII sub-buckets are carried for the DISPLAYED demand profile only. They are
+        # never features (H3), and `hni_x` stays the combined figure.
+        for key, sr in (("hni_above_10l_x", "2.1"), ("hni_2l_to_10l_x", "2.2")):
+            if sr in by_sr:
+                got[key] = by_sr[sr]
+        if total is not None:
+            got["total_x"] = total
         if not got:
-            return {"ok": False, "why": "no category rows"}
+            return {"ok": False, "why": "no category rows carried a usable number"}
+        got["nse_update_time"] = j.get("updateTime")
         got["source"] = "nse_official"
         got["ok"] = True
         return got
