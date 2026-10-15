@@ -142,9 +142,40 @@ Content-Type: application/json
 | 4 | HDFIRE poll AM | `30 5,7 13-15 10 *` | 11:00 / 13:00 | `{"ref":"main","inputs":{"mode":"poll"}}` |
 | 5 | HDFIRE poll PM 1 | `31 9 13-15 10 *` | 15:01 | `{"ref":"main","inputs":{"mode":"poll"}}` |
 | 6 | HDFIRE poll PM 2 | `1 12 13-15 10 *` | 17:31 | `{"ref":"main","inputs":{"mode":"poll"}}` |
+| 7 | **IPO monthly retrain** | `25 2 1 * *` | **07:55 on the 1st** | `{"ref":"main","inputs":{"mode":"retrain"}}` |
 
 **Jobs 1 and 2 are set up and live.** Job 3 is new and matters more than it looks
 — see below. Jobs 4–6 are the HDFIRE test and can be deleted after 15 October.
+
+#### Job 7 — IPO monthly retrain (new, 2026-10-16)
+
+This replaces the `ipo-retrain-monthly` Claude routine (6b). One job, once a month.
+
+| field | value |
+|---|---|
+| Title | `IPO monthly retrain` |
+| URL | `https://api.github.com/repos/AshishKohar1/ipo-agent/actions/workflows/live-model-l.yml/dispatches` |
+| Method | `POST` |
+| Schedule | **custom / expert**, cron `25 2 1 * *` |
+| Time zone | **UTC** — 02:25 UTC on the 1st is **07:55 IST** |
+| Headers | the same four as every other job above |
+| Body | `{"ref":"main","inputs":{"mode":"retrain"}}` |
+| Expect | **HTTP 204**, empty body |
+
+**The input value is verified.** `retrain` is in the workflow's `workflow_dispatch`
+options list AND has a branch in the `case` statement — both were checked
+programmatically, because an option with no branch runs nothing and exits 0, which looks
+green. A dispatch body naming a mode that is not in the options list is rejected by the
+API with HTTP 422, so a typo fails loudly rather than silently.
+
+Why 02:25 UTC and not a round hour: the minute is deliberately off the hour, like the
+other jobs, so the request does not land in cron-job.org's own busiest second. 07:55 IST
+on the 1st also means the report is waiting before the market opens on the first trading
+day of the month.
+
+The run itself **applies nothing** — no threshold is changed and no challenger promoted.
+It emails `IPO decision - RETRAIN YYYY-MM: no flags` or `... FLAG <rules>`, and it is
+idempotent per month, so a duplicate fire does not send twice.
 
 #### Why the HDFIRE polls need three jobs and not one
 
