@@ -487,6 +487,80 @@ def _pending_predictions() -> pd.DataFrame:
     return pred[~src.str.contains("REHEARSAL", case=False, na=False)]
 
 
+
+def resolve_from_nse(ipo_name: str, around=None) -> dict:
+    """`{symbol, isin, source, how}` for an IPO that is NOT yet in the master.
+
+    **Why this is needed.** The listing-day capture matches a pending prediction by ISIN,
+    looked up in `master_with_symbols.csv`. A brand-new IPO is not in that file - it is
+    built from past issues - and the prediction row carries no symbol column. HD Fire
+    Protect's 15 Oct prediction therefore resolved no ISIN, no symbol and no BSE code, so
+    `find()` received all-None and the IPO would have landed in `missed` on its own
+    listing day. The one prediction the live system has made would silently never have
+    been scored.
+
+    **Name AND date must agree (H28).** Name similarity alone is forbidden, and it is
+    forbidden here too: the normalised company name must match exactly AND the issue's
+    end date must fall within four days of `around`. Either alone is refused. NSE's own
+    issue records are the source, so this is not a guess about which company is which -
+    it is NSE's own symbol for the issue that closed on that date.
+    """
+    import dataio as _d
+    want = _d.norm_name(ipo_name)
+    if not want:
+        return {"symbol": None, "isin": None, "source": None, "how": "no usable name"}
+    try:
+        import requests
+        UA = {"User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                             "AppleWebKit/537.36 (KHTML, like Gecko) "
+                             "Chrome/129.0.0.0 Safari/537.36"),
+              "Accept": "application/json, text/plain, */*",
+              "Accept-Language": "en-US,en;q=0.9"}
+        sess = requests.Session()
+        sess.headers.update(UA)
+        sess.get("https://www.nseindia.com/market-data/all-upcoming-issues-ipo",
+                 timeout=30)
+        hits = []
+        for url, nk, dk in (
+                ("https://www.nseindia.com/api/public-past-issues", "company",
+                 "ipoEndDate"),
+                ("https://www.nseindia.com/api/all-upcoming-issues?category=ipo",
+                 "companyName", "issueEndDate")):
+            try:
+                j = sess.get(url, timeout=30).json()
+            except Exception:                                  # noqa: BLE001
+                continue
+            rows = j if isinstance(j, list) else (j.get("data") or j.get("dataList") or [])
+            for r in rows:
+                if _d.norm_name(r.get(nk)) != want:
+                    continue
+                end = pd.to_datetime(r.get(dk), errors="coerce", dayfirst=True)
+                if around is not None and pd.notna(end):
+                    if abs((end - pd.Timestamp(around).normalize()).days) > 4:
+                        continue
+                elif around is not None:
+                    continue
+                ed = end.date() if pd.notna(end) else "?"
+                ad = pd.Timestamp(around).date() if around is not None else "?"
+                hits.append({
+                    "symbol": r.get("symbol"), "isin": r.get("isin") or None,
+                    "source": url,
+                    "how": ("NSE issue record: the normalised name matched exactly AND "
+                            "the issue end date " + str(ed) + " is within 4 days of "
+                            + str(ad))})
+        syms = {h["symbol"] for h in hits if h.get("symbol")}
+        if len(syms) == 1:
+            return hits[0]
+        if not syms:
+            return {"symbol": None, "isin": None, "source": None,
+                    "how": "no NSE issue record matched on BOTH name and date"}
+        return {"symbol": None, "isin": None, "source": None,
+                "how": f"refused: {len(syms)} different symbols matched ({sorted(syms)})"}
+    except Exception as e:                                     # noqa: BLE001
+        return {"symbol": None, "isin": None, "source": None,
+                "how": f"{type(e).__name__}: {e}"}
+
+
 def capture_listing_day(day=None, catch_up: bool = False) -> dict:
     """Capture the listing-day price for anything listing on `day`, and score (2e) any
     prediction it settles.
@@ -534,9 +608,22 @@ def capture_listing_day(day=None, catch_up: bool = False) -> dict:
     rows = []
     for r in pend.itertuples():
         isin = str(getattr(r, "isin", "") or "").upper()
+        if isin in ("", "NAN", "NONE"):
+            isin = ""
         mr = by_isin.get(isin)
         symbol = getattr(mr, "symbol", None) if mr is not None else None
         code = getattr(mr, "bse_code", None) if mr is not None else None
+        resolved = None
+        if symbol is None and not isin:
+            # A brand-new IPO is not in the master. Ask NSE for its own symbol for the
+            # issue that closed on this prediction's date - name AND date must agree.
+            resolved = resolve_from_nse(str(r.ipo), getattr(r, "logged_at_ist", None)
+                                        or day)
+            symbol = resolved.get("symbol")
+            isin = (resolved.get("isin") or "").upper()
+            out.setdefault("resolved_from_nse", []).append(
+                {"ipo": str(r.ipo), "symbol": symbol, "isin": isin or None,
+                 "how": resolved.get("how")})
         offer = pd.to_numeric(pd.Series([getattr(mr, "Offer Price", None)
                                          if mr is not None else None]),
                               errors="coerce").iloc[0]
