@@ -23,7 +23,7 @@ Keying by IPO and date rather than by run is what makes the second attempt of th
 to tell "already delivered" from "never delivered". A per-day marker alone would not: two
 IPOs can close on the same date, one covered by an earlier send and one added later.
 
-Append-only, like every other log here (rule 10). A re-send is a new row, never an edit, so
+Append-only, like every other log here (rule 11). A re-send is a new row, never an edit, so
 the file is also the delivery history.
 
     python sent_markers.py --show

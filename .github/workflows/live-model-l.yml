@@ -102,7 +102,7 @@ on:
         # choosing one ran nothing and exited 0 - a green run that did no work. `rehearse`
         # is gone (it never meant anything); the other two now run something, and an
         # unmatched mode exits 1.
-        options: [email, final, listing, audit, catch-up, test-email, poll, dry-run, probe]
+        options: [email, final, listing, audit, catch-up, test-email, poll, dry-run, probe, retrain]
 
 concurrency:
   # One live job at a time. Two runs appending to predictions_log.csv concurrently would
@@ -221,6 +221,12 @@ jobs:
           case "${{ steps.which.outputs.mode }}" in
             email)    python send_daily_email.py ;;
             listing)  python listing_prices.py --capture-listing-day ;;
+            retrain)  # 6b. The monthly review that replaces the ipo-retrain-monthly
+                      # Claude routine: thresholds re-derived walk-forward, delivered
+                      # against promised, the tripwire (H19 + H24), the drift guard, the
+                      # trailing-12m IPO count, and the predictions_log header guard.
+                      # It NEVER applies a threshold - it reports and emails.
+                      python retrain_review.py --email ;;
             final)    # Priority 1d: recover a day lost to an infrastructure fault
                       # BEFORE today's capture, so a gap does not compound. Listing
                       # prices and index closes are both readable from an archive; final
@@ -234,7 +240,26 @@ jobs:
                       # Syngene's real Rs 295 open reads Rs 147.50 once its 2017 bonus is
                       # applied. Run at 19:30 because the bhavcopy is published after the
                       # close. This also scores (2e) any prediction the label settles.
-                      python listing_prices.py --capture-listing-day ;;
+                      python listing_prices.py --capture-listing-day
+                      # 6a. The HARVEST, formerly the ipo-ingest-outcomes Claude routine.
+                      # It asks NSE's own public-past-issues what has listed - never the
+                      # Chittorgarh night-sweep calendar, which goes stale - requires the
+                      # company NAME and the listing DATE to agree, and is idempotent on
+                      # symbol plus listing date so this deliberately overlapping window
+                      # can run every weekday. It prices NOTHING: prices come only from
+                      # the bhavcopy ON the listing date, captured by the step above.
+                      #
+                      # An ingest failure must NEVER cost us the capture. The capture is
+                      # time-critical and irreplaceable; the harvest can be repeated any
+                      # day. So its exit code is recorded to a file and the run is failed
+                      # at the END, by the "Fail the run if the outcome ingest failed"
+                      # step, after everything has been committed and pushed.
+                      ingest_rc=0
+                      python ingest_outcomes.py --since 2026-10-01 || ingest_rc=$?
+                      echo "$ingest_rc" > "$RUNNER_TEMP/ingest_rc"
+                      if [ "$ingest_rc" -ne 0 ]; then
+                        echo "::warning::outcome ingest FAILED (exit $ingest_rc); the day-end capture itself succeeded and this run will be failed at the end"
+                      fi ;;
             audit)    # Priority 1e. Exits 1 on an open gap, so the run goes red and the
                       # gap is visible without anybody reading a report.
                       python capture_audit.py --audit --days 7 ;;
@@ -253,6 +278,18 @@ jobs:
                       python run_live_l.py ;;
             *)        echo "::error::mode '${{ steps.which.outputs.mode }}' has no branch here. A dispatch option with no branch runs nothing and exits 0, which looks green."
                       exit 1 ;;
+          esac
+
+      - name: Outcome ingest line in the run summary
+        if: always() && steps.which.outputs.mode == 'final'
+        run: |
+          # 6a: the ingest gets its OWN line, whatever happened, so a failure is visible
+          # without reading the log.
+          rc="$(cat "$RUNNER_TEMP/ingest_rc" 2>/dev/null || echo missing)"
+          case "$rc" in
+            0)       echo "- **Outcome ingest**: OK" >> "$GITHUB_STEP_SUMMARY" ;;
+            missing) echo "- **Outcome ingest**: the run did not reach the ingest step" >> "$GITHUB_STEP_SUMMARY" ;;
+            *)       echo "- **Outcome ingest**: **FAILED** (exit $rc). The day-end capture itself succeeded; this run is failed deliberately so the failure is not lost." >> "$GITHUB_STEP_SUMMARY" ;;
           esac
 
       - name: Commit whatever was produced
@@ -322,6 +359,19 @@ jobs:
             echo "Check reports/live/$(TZ=Asia/Kolkata date +%F).md for what it would have said."
           } >> "$GITHUB_STEP_SUMMARY"
           exit 1
+
+      - name: Fail the run if the outcome ingest failed
+        # 6a. LAST, and `always()`, so the capture is committed and pushed first. The
+        # harvest failing is not allowed to cost us the capture, but it is not allowed to
+        # pass unnoticed either - the run goes red and the summary line says why.
+        if: always() && steps.which.outputs.mode == 'final'
+        run: |
+          rc="$(cat "$RUNNER_TEMP/ingest_rc" 2>/dev/null || echo 0)"
+          if [ "$rc" != "0" ] && [ "$rc" != "missing" ]; then
+            echo "::error::outcome ingest exited $rc. The day-end capture succeeded and is committed; this failure is the harvest only."
+            exit 1
+          fi
+          echo "outcome ingest status: $rc"
 
       - name: Summarise for the run log
         if: always()

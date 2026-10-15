@@ -730,7 +730,7 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
 
     if final:
         # Task 6. The final figure goes to its OWN file, keyed to the 15:00 prediction.
-        # The prediction row is never rewritten (rule 10) - overwriting `total_x` with the
+        # The prediction row is never rewritten (rule 11) - overwriting `total_x` with the
         # final figure would destroy the only record of what the decision was taken on,
         # which is the one number the email backtest depends on.
         finals = []
@@ -1088,7 +1088,7 @@ def self_test() -> int:
     for c in ("would_L1_fire_on_final", "would_L2_fire_on_final", "sub_total_final"):
         chk(f"{c} is a finals column", c in _PL.FINAL_COLS)
     fsrc = inspect.getsource(_PL.log_final_subscription)
-    chk("the finals writer only ever APPENDS (rule 10)",
+    chk("the finals writer only ever APPENDS (rule 11)",
         'mode="a"' in fsrc and "_append(" not in fsrc)
 
     print("\n[10] Task 1: the day-end leg is idempotent on its trading date")

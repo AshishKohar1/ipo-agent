@@ -108,12 +108,77 @@ def save_state(when: pd.Timestamp, n: int) -> None:
 
 
 # ---------------------------------------------------------------- calendar
+# The NSE series that are equity. EQ is mainboard, SME and ST are the SME platforms, and
+# BE is the trade-for-trade settlement series a small listing often starts in. N0/N1/N2 are
+# DEBT and are not IPOs for this project's purposes.
+EQUITY_SERIES = {"EQ", "BE", "SM", "SME", "ST", "MT"}
+
+
+def newly_listed_nse(since: pd.Timestamp, until=None,
+                     past: pd.DataFrame | None = None) -> pd.DataFrame:
+    """IPOs that LISTED in `(since, until]`, from **NSE's own past-issues record**.
+
+    This replaces the Chittorgarh harvest as the source of what has listed (6a). That
+    harvest is a night-sweep snapshot and it goes stale: it records `listed_on` only for
+    companies the sweep happened to cover, so a listing it had not yet seen was invisible
+    to the ingest no matter how long ago it happened. NSE's `public-past-issues` is the
+    exchange's own list of issues and carries `listingDate` directly, so "what listed in
+    this window" is answered by the authority rather than inferred from a cache.
+
+    Rows whose `listingDate` NSE has not published yet (it serves "-") are skipped, not
+    guessed: an issue that has closed but not listed has no listing date, and inventing
+    one would put a price lookup on the wrong day.
+    """
+    past = nse_past_issues() if past is None else past
+    if past is None or past.empty:
+        return pd.DataFrame()
+    since = pd.Timestamp(since).normalize()
+    until = pd.Timestamp(until).normalize() if until is not None else None
+    d = past.copy()
+    d = d[d["nse_listing"].notna()]
+    m = d["nse_listing"] > since
+    if until is not None:
+        m &= d["nse_listing"] <= until
+    out = d[m].copy()
+    if out.empty:
+        return pd.DataFrame()
+    # NSE's past-issues list is not only equity IPOs. It carries debt issues too, under
+    # series N0/N1/N2 and repeated once per tranche - the 1-16 Oct window returned seven
+    # rows for IIFL Finance's NCD alone. Ingesting those would put bond series into the
+    # training set as if they were IPOs. So the equity series are allow-listed, and
+    # everything dropped is COUNTED and reported by series rather than silently filtered.
+    out["nse_type"] = out["nse_type"].astype(str).str.upper().str.strip()
+    dropped = out[~out["nse_type"].isin(EQUITY_SERIES)]
+    if len(dropped):
+        by = dropped.groupby("nse_type")["nse_company"].nunique().to_dict()
+        print("  dropped %d non-equity row(s) by series: %s"
+              % (len(dropped), by))
+    out = out[out["nse_type"].isin(EQUITY_SERIES)].copy()
+    if out.empty:
+        return pd.DataFrame()
+    # One row per symbol per listing date. A tranche repeat is not a second listing.
+    before = len(out)
+    out = out.drop_duplicates(subset=["nse_symbol", "nse_listing"])
+    if len(out) < before:
+        print("  collapsed %d duplicate tranche row(s)" % (before - len(out)))
+    out = out.rename(columns={"nse_company": "ipo", "nse_listing": "listing_date",
+                              "nse_symbol": "symbol", "nse_type": "nse_type"})
+    for c in ("issue_size_cr", "price_band", "offer_price_cg", "total_subscription_x",
+              "qib_x", "nii_x", "retail_x", "url"):
+        if c not in out.columns:
+            out[c] = None
+    keep = ["ipo", "listing_date", "symbol", "nse_type", "issue_size_cr", "price_band",
+            "offer_price_cg", "total_subscription_x", "qib_x", "nii_x", "retail_x", "url"]
+    return out[[c for c in keep if c in out.columns]].reset_index(drop=True)
+
+
 def newly_listed(since: pd.Timestamp) -> pd.DataFrame:
     """IPOs whose listing date falls after `since`, from the Chittorgarh harvest.
 
-    The harvest already records `listed_on` per company and is refreshed by the night
-    sweep, so no extra request is needed to find them. When the sweep has not run, this
-    returns empty and says so rather than guessing at a calendar.
+    **Superseded by `newly_listed_nse` for the live ingest (6a).** Kept because the
+    historical rows in `data/new_listings.csv` were harvested through it and the
+    subscription columns it carries have no NSE equivalent, so it is still the only way to
+    read those back. It is no longer the source of WHAT HAS LISTED.
     """
     p = ROOT / "data" / "chittorgarh_backfill.csv"
     if not p.exists():
@@ -425,16 +490,48 @@ def fix_segments_from_nse(dry: bool = False) -> pd.DataFrame:
     return d
 
 
-def main(since: str | None = None, dry: bool = False) -> pd.DataFrame:
+def main(since: str | None = None, dry: bool = False, until: str | None = None,
+         source: str = "nse") -> pd.DataFrame:
+    """Harvest IPOs that listed in the window and append them to new_listings.csv.
+
+    `source="nse"` (the default, 6a) asks NSE's own past-issues record what listed.
+    `source="chittorgarh"` is the old night-sweep path, kept only for reading history
+    back - it goes stale and a listing the sweep had not covered was invisible to the
+    ingest however long ago it happened.
+    """
     start = pd.Timestamp(since) if since else last_run()
     now = pd.Timestamp.now()
-    print(f"ingesting IPOs listed after {start.date()}")
+    print(f"ingesting IPOs listed after {start.date()}"
+          + (f" and up to {pd.Timestamp(until).date()}" if until else "")
+          + f", source={source}")
 
-    cand = newly_listed(start)
-    print(f"  {len(cand)} newly listed found in the harvest")
+    cand = (newly_listed_nse(start, until) if source == "nse"
+            else newly_listed(start))
+    print(f"  {len(cand)} newly listed found via {source}")
+    # IDEMPOTENT: a symbol+listing-date already in new_listings.csv is not re-ingested.
+    # The 19:30 leg runs every weekday over a window that deliberately overlaps, so
+    # without this the same listing would be appended once per run.
+    if len(cand) and NEW_LISTINGS.exists():
+        try:
+            have = pd.read_csv(NEW_LISTINGS, keep_default_na=False, na_values=[""])
+            seen = set()
+            for c in ("symbol", "ipo"):
+                if c in have.columns and "listing_date" in have.columns:
+                    seen |= {(str(a).strip().upper(), str(b)[:10])
+                             for a, b in zip(have[c], have["listing_date"])}
+            before = len(cand)
+            key_sym = cand["symbol"] if "symbol" in cand.columns else cand["ipo"]
+            cand = cand[[(str(a).strip().upper(), str(b)[:10]) not in seen
+                         for a, b in zip(key_sym,
+                                         pd.to_datetime(cand["listing_date"],
+                                                        errors="coerce"))]]
+            if len(cand) < before:
+                print(f"  {before - len(cand)} already ingested, skipped (idempotent)")
+        except Exception as e:                                 # noqa: BLE001
+            print(f"  NOTE could not read {NEW_LISTINGS.name} for the idempotency "
+                  f"check: {type(e).__name__}: {e}")
     if not len(cand):
-        print("  nothing to ingest. (If the Chittorgarh sweep has not run, this is why — "
-              "no calendar is guessed at.)")
+        print("  nothing new to ingest.")
         if not dry:
             save_state(now, 0)
         return pd.DataFrame()
@@ -449,7 +546,19 @@ def main(since: str | None = None, dry: bool = False) -> pd.DataFrame:
     sym["norm"] = sym["company"].str.lower().str.replace(r"[^a-z0-9]", "", regex=True)
     rows, last = [], 0.0
     for r in cand.itertuples():
-        res = SY.resolve(str(r.ipo), getattr(r, "isin", None))
+        # When the harvest row already carries NSE's own symbol for the issue, USE IT.
+        # `SY.resolve` searches master_with_symbols.csv and NSE_EQUITY_L.csv, which are
+        # built from issues that have already settled - so for a listing from the last
+        # fortnight it finds nothing, and all 15 of the 1-16 Oct listings came back
+        # UNRESOLVED while the symbol sat in the row being passed in. The exchange's own
+        # record of the issue outranks our two caches of it.
+        from_harvest = str(getattr(r, "symbol", "") or "").strip()
+        if from_harvest and from_harvest.lower() not in ("nan", "none"):
+            res = {"symbol": from_harvest, "isin": getattr(r, "isin", None),
+                   "source": "NSE public-past-issues (the harvest row itself)",
+                   "note": "symbol taken from NSE's own record of the issue"}
+        else:
+            res = SY.resolve(str(r.ipo), getattr(r, "isin", None))
         symbol, isin = res["symbol"], res["isin"]
         if symbol is None:
             print(f"  {str(r.ipo)[:34]:36s} {'-':12s} UNRESOLVED - {res['note'][:90]}")
@@ -519,6 +628,11 @@ if __name__ == "__main__":
     os.chdir(ROOT)
     ap = argparse.ArgumentParser()
     ap.add_argument("--since", default=None)
+    ap.add_argument("--until", default=None)
+    ap.add_argument("--source", default="nse", choices=["nse", "chittorgarh"],
+                    help="where to ask WHAT HAS LISTED. 'nse' (default, 6a) reads NSE's "
+                         "own public-past-issues; 'chittorgarh' is the stale night-sweep "
+                         "path and is kept only for reading history back")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--fix-segments", action="store_true",
                     help="rule 6: set segment from NSE securityType")
@@ -531,4 +645,4 @@ if __name__ == "__main__":
     elif a.backfill_prices:
         backfill_prices(a.dry_run)
     else:
-        main(a.since, a.dry_run)
+        main(a.since, a.dry_run, a.until, a.source)

@@ -217,7 +217,7 @@ def log_final_subscription(prediction_id: str, ipo: str, isin: str | None, date,
     """Task 6. Append the FINAL subscription beside the 15:00 figure the decision used.
 
     Appends to `data/final_subscription.csv`. **The prediction row is never touched**
-    (rule 10) - this is a second record keyed to `prediction_id`, exactly like an outcome
+    (rule 11) - this is a second record keyed to `prediction_id`, exactly like an outcome
     row.
 
     `would_L*_fire_on_final` is the counterfactual the whole 3pm-understatement question
