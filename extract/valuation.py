@@ -66,13 +66,32 @@ MAX_PEERS = 12
 #          Structure build-up table as well as from a sentence, and no longer takes the
 #          LARGEST number on the line - on a row that prints both a share count and the
 #          aggregate rupee capital, the largest is the rupee figure.
-VALUATION_VERSION = "1.5.0"
+#   1.6.0  THREE FAMILIES OF WRONG VALUE in the Basis block, found by hand-validating one
+#          document before the pass. All three were present from 1.0.0 onwards:
+#            (a) a hyphenated fiscal-year label leaked its second half into the values -
+#                "FY 2020-21 4.92 4.92 3" was read as EPS 21.00 instead of 4.92, because
+#                YEAR_LABEL matched only "FY 2020" and the remainder began "-21";
+#            (b) the rightward probe for a split merged cell could land on the WEIGHT
+#                column - "FY 2008-09 | 10.99 | 3" was read as RoNW 3.00;
+#            (c) a stub period was stored as a fiscal year - "September 30, 2021 3.71",
+#                a six-month figure the document itself prints as "not annualised", was
+#                stored as fiscal 2021 and collided with the real FY2021 row.
+#          A hyphenated label now also resolves to the LATER year: Indian "FY 2020-21"
+#          ends on 31 March 2021, and it was being recorded as fiscal 2020.
+VALUATION_VERSION = "1.6.0"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
 STUB = re.compile(r"(?i)(?:six|nine|three|6|9|3)[\s-]*month|period\s+ended|stub")
 FACE_VALUE = re.compile(r"(?i)face\s*value")
-UNIT_LINE = re.compile(r"\(\s*(?:₹|`|RS\.?|INR)?\s*in\s*" + MONEY_UNIT_RE + r"[^)]*\)", re.I)
+# "(Amt Rs in Lakhs)", "(₹ in millions)", "(Rs. in crore)", "(in ₹ lakhs)". The first
+# version required the currency to follow the opening bracket immediately, so Uma
+# Exports' "(Amt Rs in Lakhs)" was not a unit at all and every money row on those pages
+# was withheld for want of one - a correct refusal under rule 3, caused by the pattern
+# rather than by the document. Filler before "in" is now allowed, and the currency may
+# sit on either side of it.
+UNIT_LINE = re.compile(r"\([^)]{0,24}?\bin\b\s*(?:₹|`|rs\.?|inr)?\s*"
+                       + MONEY_UNIT_RE + r"[^)]*\)", re.I)
 UNIT_MULT = {"crore": 1.0, "crores": 1.0, "cr": 1.0, "lakh": 0.01, "lakhs": 0.01,
              "lac": 0.01, "lacs": 0.01, "million": 0.1, "millions": 0.1, "mn": 0.1,
              "thousand": 1e-5, "thousands": 1e-5}
@@ -138,10 +157,53 @@ def _col_headers(rows: list[list[str]], upto: int = 6) -> dict[int, str]:
     return {i: " ".join(v).upper() for i, v in out.items()}
 
 
+# "FY 2020-21", "2020-2021", "FY2020-21": an Indian fiscal year written as a span. The
+# whole label must be consumed, because matching only "FY 2020" leaves a remainder that
+# starts "-21", and that 21 was then read as the first metric value. The fiscal year is
+# the LATER one - FY 2020-21 ends on 31 March 2021.
+FY_SPAN = re.compile(r"(?i)(?:fy|fiscal|financial\s+year)?\s*(20\d{2})\s*[-\u2013]\s*"
+                     r"(20\d{2}|\d{2})\b")
+# A period that is NOT a full fiscal year. The RHPs print these in the same block as the
+# fiscal years - "September 30, 2021 3.71 3.71 -" - and each carries a note saying the
+# figure is not annualised. Storing one as a fiscal year is a period mismatch (rule 3),
+# and it also collides with the real row for that year.
+STUB_LABEL = re.compile(r"(?i)(?:six|nine|three|6|9|3)[\s-]*month"
+                        r"|period\s+ended"
+                        # ANY month other than March beside a year, with or without a
+                        # day. An Indian fiscal year ends on 31 March, so "SEPT 2021" or
+                        # "April 30, 2024" is by definition an interim period - and a
+                        # column header often gives the month with no day at all.
+                        r"|\b(?:jan|feb|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?"
+                        r"\s*\d{0,2}\s*,?\s*20\d\d"
+                        r"|\b31\s*(?:st)?\s*(?:december|september|june)\b")
+STUB_YEAR = -2                       # distinct from -1, which means weighted average
+
+
+def _span_year(cell: str) -> tuple[int | None, int]:
+    """`(fiscal year, end offset of the whole label)` for a hyphenated span, else
+    `(None, 0)`."""
+    m = FY_SPAN.match((cell or "").strip())
+    if not m:
+        return None, 0
+    a, b = m.group(1), m.group(2)
+    y = int(b) if len(b) == 4 else int(a[:2] + b)
+    # "2020-21" -> 2021. A span that does not advance by exactly one year is not a
+    # fiscal span, so it is left to the ordinary matcher.
+    if y - int(a) != 1:
+        return None, 0
+    return (y if 1990 <= y <= 2030 else None), m.end()
+
+
 def _year_of(cell: str) -> int | None:
-    if WEIGHTED.search(cell or ""):
+    c = (cell or "").strip()
+    if WEIGHTED.search(c):
         return -1
-    m = YEAR_LABEL.search(cell or "")
+    if STUB_LABEL.search(c):
+        return STUB_YEAR
+    y, _ = _span_year(c)
+    if y is not None:
+        return y
+    m = YEAR_LABEL.search(c)
     if not m:
         return None
     y = int(m.group(1))
@@ -199,14 +261,34 @@ def read_year_rows(rows: list[tuple[int, list[str]]]) -> dict:
             if y is None:
                 break
             line = _line_for(jcs)
+            if y == STUB_YEAR:
+                # A stub row sits INSIDE the run, so the run must not end here - the
+                # fiscal-year rows below it are still wanted. The row itself is skipped.
+                run += 1
+                j += 1
+                continue
+            # The last numeric cell of a weighted-average block is the WEIGHT (1, 2, 3),
+            # not a metric. The rightward probe below used to land on it: "FY 2008-09 |
+            # 10.99 | 3" was stored as RoNW 3.00 on three documents. Its column is found
+            # once per row and excluded.
+            nums = [k for k, c in enumerate(jcs) if num(c) is not None]
+            weight_col = None
+            if nums:
+                lv = num(jcs[nums[-1]])
+                if lv is not None and float(lv).is_integer() and 0 < lv <= 5:
+                    weight_col = nums[-1]
             for ci, metric in roles.items():
                 val = num(jcs[ci]) if ci < len(jcs) else None
+                if val is not None and ci == weight_col:
+                    val = None      # the header lines up with the weight: refuse it
                 if val is None:
                     # The value may sit one or two columns right of its header when
                     # pdfplumber splits a merged cell. Only a numeric cell within two
-                    # columns is accepted, and never one that belongs to another metric.
+                    # columns is accepted, never one that belongs to another metric, and
+                    # never the weight column.
                     for k in (ci + 1, ci + 2):
-                        if k < len(jcs) and k not in roles and num(jcs[k]) is not None:
+                        if (k < len(jcs) and k not in roles and k != weight_col
+                                and num(jcs[k]) is not None):
                             val = num(jcs[k])
                             break
                 if val is not None:
@@ -268,14 +350,23 @@ def read_year_lines(texts: dict[int, str]) -> dict:
             if not order:
                 continue
             y = _year_of(ln.split("(")[0][:40])
+            if y == STUB_YEAR:
+                continue            # a six-month figure is not a fiscal year
             if y is None:
                 # A run ends at the first non-year line, so a later unrelated paragraph
                 # cannot contribute numbers to the series.
                 if re.match(r"(?i)^(?:\d+[.)]|note|source|\(\d+\))", ln):
                     order = []
                 continue
-            lab = YEAR_LABEL.search(ln)
-            rest = ln[lab.end():] if (lab and y > 0) else ln
+            # The label is stripped by the SAME matcher that identified the year, so a
+            # hyphenated span is consumed whole. Stripping only "FY 2020" out of
+            # "FY 2020-21 4.92 4.92 3" left "-21 ..." and the 21 became the EPS.
+            _, span_end = _span_year(ln.strip())
+            if span_end:
+                rest = ln.strip()[span_end:]
+            else:
+                lab = YEAR_LABEL.search(ln)
+                rest = ln[lab.end():] if (lab and y > 0) else ln
             if y == -1:
                 rest = re.sub(r"(?i)^\s*weighted\s*average", "", ln)
             ns = _numbers(rest)[:len(order)]
@@ -293,6 +384,11 @@ def _year_columns(tbl) -> dict[int, int]:
         for i, c in enumerate(cs):
             if WEIGHTED.search(c):
                 out[i] = -1
+                continue
+            if STUB_LABEL.search(c):
+                # An interim column, e.g. "Year ended September 30, 2021". Left out of
+                # the map entirely so no fiscal year can resolve to it - the same guard
+                # the text reader applies, for the same reason.
                 continue
             m = FY_HDR.search(c)
             if m:
@@ -779,8 +875,11 @@ FIN_ROWS = {
     "ebitda": r"(?i)^EBITDA",
     # PAT must never match "profit BEFORE tax" - an earlier version did, and reported a
     # PBT of Rs 2,035 million as PAT.
+    # "before" of ANY kind disqualifies the row, not just "before tax". Uma Exports
+    # prints "Profit/(Loss) Before Exceptional Items and Tax", which the narrower
+    # lookahead let through - and a profit before exceptional items is not PAT.
     "pat": r"(?i)^(?:net\s+)?profit\s*(?:/\s*\(loss\))?\s*(?:for\s+the\s+"
-           r"(?:year|period)\s*)?(?:after\s+tax|attributable)?(?!.*before\s+tax)",
+           r"(?:year|period)\s*)?(?:after\s+tax|attributable)?(?!.*\bbefore\b)",
     "borrowings": r"(?i)^(?:total\s+)?borrowings",
     "cash": r"(?i)^cash\s+and\s+cash\s+equivalents",
     "cfo": r"(?i)net\s+cash\s+(?:flow\s+)?(?:generated\s+)?from\s+operating",
@@ -799,41 +898,78 @@ FIN_SKIP_LINE = re.compile(r"(?i)^\s*(?:note|source|annexure|schedule)\b")
 # header, after which the next labelled row's numbers would be zipped to the wrong years.
 # Two guards, both cheap: prose verbs, and a decimal number (a column header carries
 # years and nothing else; a sentence carries percentages and amounts).
+# A year list written as prose: "2021, 2020 and 2019". The comma must be followed by a
+# space and another year for this to fire, so "March 31, 2021 March 31, 2020" - where the
+# comma belongs to the date - is still a header.
+CAPTION_SEP = re.compile(r"(?i)20\d\d\s*(?:,\s*(?=20\d\d)|and\s+20\d\d)")
 PROSE_CUE = re.compile(r"(?i)\b(?:increased|decreased|declined|grew|compared|respectively"
                        r"|whereas|primarily|because|due\s+to|was|were|is|are|has|have"
                        r"|had|we|our|which|represent(?:s|ed)?)\b")
 DECIMAL_NUM = re.compile(r"\d\.\d")
 
 
-def _fin_year_order(line: str) -> list[int]:
-    """The fiscal years a header line names, LEFT TO RIGHT, or `[]`.
+def _fin_year_order(line: str) -> list[int | None]:
+    """The header's COLUMNS, left to right: a fiscal year, or `None` for a stub column.
 
     The restated statements put years in COLUMNS - the reverse of the Basis tables, where
-    the years are in rows. So the header is one line carrying two or three year labels and
-    each data row carries one number per year, and POSITION is the only link between them.
-    A line is therefore only accepted as a header when it names at least two distinct
-    plausible years, reads like a header rather than a sentence, and carries no decimal
-    number of its own.
+    the years are in rows. So the header is one line carrying the period labels and each
+    data row carries one number per column, and POSITION is the only link between them.
+
+    **The columns must be counted, not de-duplicated.** An interim period is routinely
+    printed alongside the full years and lands on the same calendar year as the newest of
+    them - "SEPT 2021 2021 2020 2019", "2024 2024 2023 2022". A first version treated the
+    header as a SET of years, collapsed the repeat to three, found three numbers on the
+    row and zipped them - shifting every value by one year. Garuda's FY2024 borrowings of
+    10.75 were reported as 10.40, which is the interim figure. A wrong value, produced by
+    the very reader meant to fix a missing one.
+
+    So a repeated year is kept as its own column and marked a stub where the header says
+    so. Where a year repeats and NOTHING in the header marks either column as an interim
+    period, the header is refused: which column is which cannot be established, and under
+    rule 3 that is a withhold rather than a guess.
+
+    A line is only a header at all if it names at least two year tokens, reads like a
+    header rather than a sentence, and carries no decimal number of its own.
     """
     if not line or PROSE_CUE.search(line) or DECIMAL_NUM.search(line):
         return []
-    ys, seen = [], set()
+    # "Consolidated Financial Information as at and for the Fiscals 2021, 2020 and 2019"
+    # is a CAPTION, not a column header: it lists the years in prose, separated by commas
+    # and "and", and it names three of them while the table below has four columns. Read
+    # as a header it made the row counts disagree and withheld every money row on the
+    # page. A header separates its columns by whitespace, never by a comma or "and".
+    if CAPTION_SEP.search(line):
+        return []
+    cols: list[int | None] = []
+    prev_end = 0
     for m in YEAR_LABEL.finditer(line):
         y = int(m.group(1))
-        if 1990 <= y <= 2030 and y not in seen:
-            seen.add(y)
-            ys.append(y)
-    return ys if len(ys) >= 2 else []
+        if not 1990 <= y <= 2030:
+            continue
+        # The text between the previous column and this year token describes THIS column.
+        lead = line[prev_end:m.end()]
+        cols.append(None if STUB_LABEL.search(lead) else y)
+        prev_end = m.end()
+    if len(cols) < 2:
+        return []
+    real = [c for c in cols if c is not None]
+    if len(real) != len(set(real)):
+        return []            # an unmarked repeated year: refuse the header
+    return cols
 
 
-def _fin_values_on(line: str, years: list[int]) -> tuple[list[float] | None, str]:
-    """`(one value per fiscal-year column, in the header's order)` or `(None, why not)`."""
+def _fin_values_on(line: str, years: list[int | None]) -> tuple[list[float] | None, str]:
+    """`(one value per column, in the header's order)` or `(None, why not)`.
+
+    Counted against EVERY column including the stub ones, because the row prints a number
+    in each. The stub values are dropped by the caller after the positions line up.
+    """
     ns = _numbers(line)
     if len(ns) == len(years):
         return ns, ""
     if len(ns) < len(years):
         return None, (f"withheld: the row prints {len(ns)} numbers for "
-                      f"{len(years)} fiscal-year columns")
+                      f"{len(years)} period columns")
     # ONE column, not a run. A note reference is a single column; a loop that kept
     # dropping small leading integers until the count fitted turned "1,1 2,2 3,3 4,4 5,5"
     # into a clean three-year series, which is reshaping data until it agrees - exactly
@@ -842,7 +978,7 @@ def _fin_values_on(line: str, years: list[int]) -> tuple[list[float] | None, str
             and float(ns[0]).is_integer()):
         return ns[1:], ""
     return None, (f"withheld: the row prints {len(ns)} numbers for {len(years)} "
-                  f"fiscal-year columns and the surplus is not a note reference")
+                  f"period columns and the surplus is not a note reference")
 
 
 def read_fin_lines(texts: dict[int, str]) -> dict:
@@ -871,7 +1007,12 @@ def read_fin_lines(texts: dict[int, str]) -> dict:
             if not years or hit in found or FIN_SKIP_LINE.match(ln):
                 continue
             vals, why = _fin_values_on(ln, years)
-            found[hit] = (idx, ln, dict(zip(years, vals)) if vals else None, header, why)
+            # Only the full-year columns survive. A stub column's number is read solely
+            # so that the positions line up, and is then discarded - it is a six-month or
+            # one-month figure and the document says so.
+            by_year = ({y: v for y, v in zip(years, vals) if y is not None}
+                       if vals else None)
+            found[hit] = (idx, ln, by_year, header, why)
     return found
 
 
@@ -916,6 +1057,40 @@ def _fin_rows_from_lines(doc, found: dict, unit_at: dict, done: set) -> list[Val
                           else "present_but_unparsed"))
         done.add(base)
     return out
+
+
+# The RHP prints a weighted-average EPS and RoNW alongside the three fiscal years, and
+# the weights it uses are 3, 2, 1 - most recent year heaviest. That makes the stated
+# average a CHECKSUM over the three years rather than a fourth datum: if the three are
+# read correctly, (3*fy1 + 2*fy2 + 1*fy3) / 6 must reproduce it.
+#
+# It is the strongest validation available in this block, because it does not depend on
+# the parse that produced the numbers - and it is what proved the hyphenated-label fix.
+# Uma Exports read EPS 3.71 / 21.00 / 20.00 against a stated 3.73 before it, and
+# 4.92 / 3.30 / 1.02 after, which reproduces 3.73 exactly.
+WEIGHTS_321 = (3, 2, 1)
+CHECK_TOL_PCT = 2.0
+
+
+def weighted_checks(out: list) -> list[tuple]:
+    """`[(metric, recomputed, stated, gap %, agrees, the row it came from)]`.
+
+    A disagreement is REPORTED, never corrected. Which of the four numbers is wrong
+    cannot be known from the arithmetic alone, so the row carries the gap and the reader
+    decides; a metric whose check fails should not be trusted in a ratio.
+    """
+    by = {v.variable: v for v in out if v.value is not None and v.status == "ok"}
+    rows = []
+    for metric in ("eps_basic", "eps_diluted", "ronw"):
+        w = by.get(metric + "_weighted")
+        ys = [by.get(f"{metric}_fy{i}") for i in (1, 2, 3)]
+        if w is None or any(y is None for y in ys) or abs(w.value) < 1e-9:
+            continue
+        calc = sum(k * y.value for k, y in zip(WEIGHTS_321, ys)) / sum(WEIGHTS_321)
+        gap = 100 * abs(calc - w.value) / abs(w.value)
+        rows.append((metric, round(calc, 4), w.value, round(gap, 3),
+                     gap <= CHECK_TOL_PCT, w))
+    return rows
 
 
 def financials(doc: Doc) -> list[Value]:
@@ -1138,4 +1313,13 @@ def extract(doc: Doc) -> list[Value]:
             out.append(_v(doc, f"{fn.__name__}_group", value=None, status="unreadable",
                           note=f"{type(e).__name__}: {str(e)[:120]}",
                           missing_reason="present_but_unparsed"))
+    # The stated weighted average is a checksum over the three fiscal years.
+    for metric, calc, stated, gap, agrees, src in weighted_checks(out):
+        verdict = "reconciles" if agrees else "DOES NOT reconcile"
+        out.append(_v(doc, metric + "_weighted_check", value=gap,
+                      original_unit="percent gap", page=src.page,
+                      pdf_page_index=src.pdf_page_index, source_text=src.source_text,
+                      status="ok",
+                      note=(f"(3*fy1+2*fy2+1*fy3)/6 = {calc} against the stated "
+                            f"{stated}: {verdict} within {CHECK_TOL_PCT}%")))
     return out

@@ -36,6 +36,7 @@ import argparse
 import gc
 import hashlib
 import inspect
+import re
 import sys
 import time
 from pathlib import Path
@@ -517,6 +518,53 @@ def self_test() -> int:
         fsrc.index("page_tables") < fsrc.index("read_fin_lines"))
     chk("a missing unit no longer marks the row done, so the text reader still sees it",
         "NOT marked done" in fsrc)
+
+    print(chr(10) + "[1a4] the four WRONG-VALUE families found by hand-validation")
+    from extract.valuation import (_year_of, _span_year, _unit_of, read_year_lines,
+                                   STUB_YEAR, FIN_ROWS, _fin_year_order)
+    # (a) a hyphenated fiscal-year label leaked its second half into the values
+    chk("FY 2020-21 resolves to the LATER year, 2021", _year_of("FY 2020-21") == 2021)
+    chk("and the whole label is consumed, not just 'FY 2020'",
+        _span_year("FY 2020-21")[1] == len("FY 2020-21"))
+    got = read_year_lines({9: "Fiscal Basic EPS Diluted EPS Weight" + chr(10)
+                           + "FY 2020-21 4.92 4.92 3" + chr(10)
+                           + "FY 2019-20 3.30 3.30 2"})
+    chk("so the EPS is 4.92, not the 21 out of '2020-21'",
+        got["eps_basic"][2021][0] == 4.92, got.get("eps_basic"))
+    chk("and the older year lands on 2020 with 3.30",
+        got["eps_basic"][2020][0] == 3.30, got.get("eps_basic"))
+    # (b) the weight column read as the metric
+    rsrc = inspect.getsource(__import__("extract.valuation", fromlist=["x"])
+                             .read_year_rows)
+    chk("a trailing small integer is identified as the WEIGHT column",
+        "weight_col" in rsrc and "0 < lv <= 5" in rsrc)
+    chk("the rightward probe can never land on it", "k != weight_col" in rsrc)
+    chk("nor can a header that lines up with it", "ci == weight_col" in rsrc)
+    # (c) a stub period stored as a fiscal year
+    chk("September 30 is a stub, not fiscal 2021",
+        _year_of("September 30, 2021") == STUB_YEAR)
+    chk("a bare month label is a stub too", _year_of("SEPT 2021") == STUB_YEAR)
+    chk("but 31 March IS the fiscal year end", _year_of("March 31, 2023") == 2023)
+    chk("a stub row does not end the run, it is skipped",
+        "the run must not end here" in rsrc)
+    # (d) a repeated year in a financials header
+    chk("a stub column is counted and marked, not collapsed",
+        _fin_year_order("SEPT 2021 2021 2020 2019") == [None, 2021, 2020, 2019])
+    chk("an UNMARKED repeated year refuses the header rather than shifting the years",
+        _fin_year_order("2024 2024 2023 2022") == [])
+    chk("a prose caption listing years is not a column header",
+        _fin_year_order("Financial Information for the Fiscals 2021, 2020 and 2019") == [])
+    # the unit phrase as documents actually write it
+    chk("'(Amt Rs in Lakhs)' is a unit", _unit_of("(Amt Rs in Lakhs)")[0] == 0.01)
+    chk("so is '(in Rs lakhs)' with the currency after 'in'",
+        _unit_of("(in Rs lakhs)")[0] == 0.01)
+    chk("a line with no unit is still no unit", _unit_of("Particulars 2024")[0] is None)
+    # PAT is never a 'before' line
+    chk("'Profit before exceptional items and tax' is NOT PAT",
+        not re.search(FIN_ROWS["pat"],
+                      "Profit/(Loss) Before Exceptional Items and Tax 1,220.55"))
+    chk("'Profit for the year' IS PAT",
+        bool(re.search(FIN_ROWS["pat"], "Profit/(Loss) for the Year 1,218.47")))
 
     print(chr(10) + "[1a3] the 1.2c share count is the count, not the rupee aggregate")
     row = ("D) Issued, subscribed and paid-up Equity Share capital after the Offer "
