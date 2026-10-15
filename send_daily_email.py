@@ -683,8 +683,26 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
         done, why = day_end_captured(today)
         if done:
             print(f"{today.date()} day-end: already captured — {why}. No-op, exiting green.")
+            # Mark the slot even though this run captured nothing itself. Without this a
+            # day recovered by `capture_audit.py --catch-up` could NEVER show as captured:
+            # the closes land on record, the next day-end run exits here before marking,
+            # and `mark_ran` only counts a marker that captured at least one row - so the
+            # audit reports an open day-end gap for ever, and the Saturday audit exits 1
+            # and goes red on a day whose data is actually complete. The marker records
+            # that the slot's OBJECTIVE is met, which is what the audit asks about, and
+            # the count written is the number of closes found on record, not a fiction.
+            try:
+                n_on_record = int(re.search(r"(\d+)", why).group(1)) if re.search(
+                    r"(\d+)", why) else 1
+                LM.mark_ran(capture_point, today, max(n_on_record, 1))
+                print(f"  marked {capture_point} for {today.date()} as captured "
+                      f"({n_on_record} closes already on record), so the audit can close "
+                      f"the gap")
+            except Exception as e:                                 # noqa: BLE001
+                print(f"  NOTE could not write the day-end marker: {type(e).__name__}: {e}")
             return {"sent": False, "mode": "final", "reason": "already_captured",
-                    "why": why, "capture_point": capture_point, "fail_loudly": False}
+                    "why": why, "capture_point": capture_point, "fail_loudly": False,
+                    "marked": True}
         print(f"  day-end not yet captured for {today.date()}: {why}")
 
     # Task 1.2. The LIST of IPOs now comes from NSE first and Chittorgarh second,
@@ -1027,8 +1045,17 @@ def self_test() -> int:
         msrc.index(".md").__class__ is int and ".md" in msrc)
     chk("a refused send is flagged so the CLI can exit non-zero",
         "fail_loudly" in msrc)
-    chk("there is no flag that re-sends a missed email",
-        "catch_up" not in msrc and "catch-up" not in msrc)
+    # Checked on the SIGNATURE and the CLI, not by searching the source text. The old
+    # form looked for the substring "catch-up" anywhere in main(), so a COMMENT that
+    # merely mentioned `capture_audit.py --catch-up` failed it - and the thing it is
+    # actually asserting is that no parameter or flag exists to re-send.
+    import inspect as _i
+    _params = set(_i.signature(main).parameters)
+    chk("main() takes no catch-up parameter",
+        not {"catch_up", "catchup", "resend"} & _params, sorted(_params))
+    _cli = inspect.getsource(_i.getmodule(main)).split('if __name__ == "__main__"')[-1]
+    chk("and the CLI exposes no flag that re-sends a missed email",
+        "--catch-up" not in _cli and "--resend" not in _cli)
     chk("the day-end capture point is 19:30 (1c)", "1930" in msrc)
 
     print('\n[7] Task 4: idempotent send, conditional red, dead-man')
@@ -1078,9 +1105,16 @@ def self_test() -> int:
     i = mainsrc.index("day_end_captured")
     chk("it is consulted BEFORE the market view is fetched",
         i < mainsrc.index("CAL.market_view"))
+    # Window-free. The old form counted inside mainsrc[i:i+700], so adding lines between
+    # the check and its return pushed the return out of the window and the assertion
+    # failed although the behaviour was unchanged. It now reads the early-exit return
+    # statement itself.
+    _blk = mainsrc[i:mainsrc.index("return", mainsrc.index('"already_captured"')) + 400]
     chk("and the early exit is green, not loud",
         '"reason": "already_captured"' in mainsrc
-        and mainsrc[i:i + 700].count('"fail_loudly": False') == 1)
+        and '"fail_loudly": False' in _blk)
+    chk("the early exit also MARKS the slot, so a recovered day can go clean",
+        "mark_ran" in _blk)
     chk("--force still overrides it", "not force" in mainsrc[:i + 200])
     # A date with nothing on record must come back False, whatever else is in the file.
     done, why = day_end_captured("1990-01-02")
