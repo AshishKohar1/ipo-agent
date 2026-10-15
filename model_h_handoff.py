@@ -117,16 +117,35 @@ def write_missing_rhps() -> int:
         prog["_n"] = prog["company"].map(dataio.norm_name)
         why = {r["_n"]: f"{r.get('status')}: {str(r.get('next_step'))[:150]}"
                for _, r in prog.iterrows()}
+    # 15 of the 81 rows had NO company name, only a symbol: `targets()` maps symbol to
+    # company through `master_with_symbols.csv`, and these symbols were RECOVERED after
+    # that file was built, so they are not in it. The name is on record in
+    # `recovered_symbols.csv` (the master's own name for the row), and a handoff row that
+    # asks the user to find a prospectus while naming only a ticker is a row they cannot
+    # act on.
+    rec = {}
+    rp = ROOT / "data" / "recovered_symbols.csv"
+    if rp.exists():
+        d_rec = pd.read_csv(rp)
+        rec = {str(x).upper(): c for x, c in zip(d_rec["symbol"], d_rec["company"])
+               if pd.notna(c)}
     rows = []
     for _, r in miss.iterrows():
-        n = dataio.norm_name(r["company"]) if pd.notna(r["company"]) else ""
+        name = r["company"]
+        from_rec = ""
+        if pd.isna(name):
+            name = rec.get(str(r.get("symbol")).upper())
+            from_rec = (" (name taken from recovered_symbols.csv - the master's own name "
+                        "for this row; the listed entity may be named differently)"
+                        if name else "")
+        n = dataio.norm_name(name) if pd.notna(name) else ""
         rows.append({
-            "company": r["company"],
+            "company": name,
             "listing_date": str(r.get("listing_date"))[:10],
             "symbol": r.get("symbol"),
             "rhp_url": "",
             "notes": why.get(n, "no SEBI URL on record for this IPO; the resolver never "
-                                "matched a full prospectus to it"),
+                                "matched a full prospectus to it") + from_rec,
         })
     MANUAL.mkdir(parents=True, exist_ok=True)
     d = pd.DataFrame(rows, columns=RHP_COLS)

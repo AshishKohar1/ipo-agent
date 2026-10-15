@@ -1,8 +1,8 @@
 company,listing_date,symbol,rhp_url,notes
 A2Z Infra Engineering Ltd,2010-12-23,A2ZINFRA,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
-,2011-05-27,AANJANEYA,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
-,2018-02-26,ASTERDM,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
-,2010-07-28,ASTERSILI,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
+Dr. Datsons Labs Ltd,2011-05-27,AANJANEYA,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
+Aster DM Healthcare Ltd,2018-02-26,ASTERDM,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
+Shri Aster Silicates Limited,2010-07-28,ASTERSILI,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
 Bajaj Consumer Care Limited,2010-08-18,BAJAJCON,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 BSE Ltd (Bombay Stock Exchange),2017-02-03,BSE,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 Capacit'e Infraprojects Ltd,2017-09-25,CAPACITE,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
@@ -21,12 +21,12 @@ H.G. Infra Engineering Ltd,2018-03-09,HGINFRA,,source_unresolved: Not present in
 IL&FS Transportation Networks Limited,2010-03-30,IL&FSTRANS,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 Imagicaaworld Entertainment Ltd,2015-04-06,IMAGICAA,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 Indus Towers Ltd,2012-12-28,INDUSTOWER,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
-,2016-04-04,INFIBEAM,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
+Infibeam Avenues Ltd,2016-04-04,INFIBEAM,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
 Jupiter Wagons Ltd,2010-10-18,JWL,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 L&T Finance Holdings Ltd,2011-08-12,LTF,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
-,2016-07-21,LTI,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
+LTIMindtree Ltd,2016-07-21,LTI,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
 MBL Infrastructure Limited,2010-01-11,MBLINFRA,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
-,2010-10-05,MICROSEC,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
+Sastasundar Ventures Ltd,2010-10-05,MICROSEC,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
 MOIL Ltd,2010-12-15,MOIL,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 NBCC (India) Ltd,2012-04-12,NBCC,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 Prestige Estates Projects Ltd,2010-10-27,PRESTIGE,,"not_a_prospectus: SEBI holds a document under this name but it is not the full prospectus (addendum / corigendum / scanned cover). Needs the correct PDF, by hand if nec"
@@ -34,11 +34,11 @@ Rites Ltd,2018-07-03,RITES,,source_unresolved: Not present in SEBI's public-issu
 Ravikumar Distilleries Ltd,2010-12-27,RKDL,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 Sea TV Network Ltd,2010-10-14,SEATV,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
 Setubandhan Infrastructure Ltd,2011-10-04,SETUINFRA,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
-,2010-04-09,SGJHL,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
+Shree Ganesh Jewellery House (I) Limited,2010-04-09,SGJHL,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
 Shah Metacorp Ltd,2010-10-27,SHAH,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 SJVN Limited,2010-05-20,SJVN,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
-,2010-08-16,SKSMICRO,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
+Bharat Financial Inclusion Limited,2010-08-16,SKSMICRO,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
 S P Apparels Ltd,2016-08-12,SPAL,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
-,2011-03-11,SUDAR,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
+Sudar Industries Ltd,2011-03-11,SUDAR,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it (name taken from recovered_symbols.csv - the master's own name for this row; the listed entity may be named differently)
 Thangamayil Jewellery Limited,2010-02-19,THANGAMAYL,,source_unresolved: Not present in SEBI's public-issues listing under any name we know. Likely predates SEBI's online archive or was a smaller issue it does not hold. Nee
 Va Tech Wabag Ltd,2010-10-13,WABAG,,no SEBI URL on record for this IPO; the resolver never matched a full prospectus to it
