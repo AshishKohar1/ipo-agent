@@ -1517,3 +1517,41 @@ Verified after the repair: `PL.load()` 6 rows x 36 columns, `PL.verify_append_on
 predictions 0 outcomes 0 duplicates 0 orphans, `listing_prices._pending_predictions()`
 returns its 1 pending row, `ingest_outcomes` reads through `load()` and `scored()`.
 `check_env.py` 15/15.
+
+### H40 — H22 is CONFIRMED: NSE first for the live figure, Chittorgarh as fallback (2026-10-16)
+
+The HDFIRE intraday test (Task 9) set the rule in advance: confirm H22 if NSE's
+`updateTime` advances within a bidding day, otherwise reduce NSE to an archival role. It
+advances three to five times a day. Every other measure agrees.
+
+| test | NSE `ipo-active-category` | Chittorgarh dashboard |
+|---|---|---|
+| `updateTime` advances intraday | yes, about every 2 hours | publishes no timestamp |
+| polls returning a Total | **25 of 25** | 15 of 25 |
+| carried the issue on closing day | yes | **no — 0 of 8** |
+| lagged the other source | no | yes, at every comparable poll |
+| category detail | QIB, NII + both sub-buckets, Retail, Employees, Total | Total + three categories |
+
+**The caveat matters more than the verdict.** H22 was already the written policy and it was
+not being honoured — not because NSE failed, but because our own client could not read its
+payload. `run_live_l.nse_subscription` looked for `data`, `subscriptionTimes`,
+`noOfshareBid` and `noOfSharesOffered`; NSE serves `dataList`, `noOfTotalMeant`,
+`noOfSharesBid` and `noOfShareOffered`. It returned "no category rows" on every call, the
+live leg fell back to Chittorgarh, and the row was logged `single_source_unverified (H14)`.
+So **every prediction this system has made used the fallback source**, while the report
+said the primary was NSE.
+
+What it cost on HDFIRE: the 15:00 email decided on 85.12x from Chittorgarh when NSE's
+14:57 publication already said **99.26x**. Both thresholds were cleared more than twice
+over, so the verdict was right and nothing was lost. On a borderline IPO this is precisely
+the failure that would have cost a qualifying bid.
+
+Fixed on 16 Oct: categories are selected by `srNo`, a stable key, which also removes a
+second latent bug — NSE serves the combined NII (`srNo 2`) and both sub-buckets (2.1 above
+Rs 10 lakh, 2.2 Rs 2–10 lakh), all three containing "Non Institutional", and the old branch
+assigned on every match so the LAST won: `hni_x` was the Rs 2–10 lakh bucket (137.28 on
+HDFIRE) rather than the combined NII (203.21). The sub-buckets are now carried separately
+for the DISPLAYED profile only, never as features (H3).
+
+H22 is confirmed, and as of 16 Oct 2026 it is being honoured for the first time. The next
+live run is the first that will log `nse_official` as the source.
