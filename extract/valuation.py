@@ -78,7 +78,13 @@ MAX_PEERS = 12
 #                stored as fiscal 2021 and collided with the real FY2021 row.
 #          A hyphenated label now also resolves to the LATER year: Indian "FY 2020-21"
 #          ends on 31 March 2021, and it was being recorded as fiscal 2020.
-VALUATION_VERSION = "1.6.0"
+#   1.7.0  promoter pre-/post-offer shareholding read from TEXT - the capital-structure
+#          tables are unruled too, and the table-only reader produced a promoter
+#          percentage on ZERO of 412 documents. The Capital Structure pages are now read
+#          once and shared between the share-count and promoter readers rather than
+#          twice, and capital.py pre-scans the text before extracting any table;
+#          together those were 29 of the 53 seconds one document took.
+VALUATION_VERSION = "1.7.0"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
@@ -901,7 +907,10 @@ FIN_SKIP_LINE = re.compile(r"(?i)^\s*(?:note|source|annexure|schedule)\b")
 # A year list written as prose: "2021, 2020 and 2019". The comma must be followed by a
 # space and another year for this to fire, so "March 31, 2021 March 31, 2020" - where the
 # comma belongs to the date - is still a header.
-CAPTION_SEP = re.compile(r"(?i)20\d\d\s*(?:,\s*(?=20\d\d)|and\s+20\d\d)")
+# A year followed by "and" is prose, whatever comes between: Garuda's financials carry
+# the sentence "...as at March 31, 2023, and March 31,2022." directly above the rows, and
+# read as a header it offered two columns against a row printing four numbers.
+CAPTION_SEP = re.compile(r"(?i)20\d\d\s*,?\s*(?:and|&)\b")
 PROSE_CUE = re.compile(r"(?i)\b(?:increased|decreased|declined|grew|compared|respectively"
                        r"|whereas|primarily|because|due\s+to|was|were|is|are|has|have"
                        r"|had|we|our|which|represent(?:s|ed)?)\b")
@@ -1248,7 +1257,7 @@ def _post_issue_count(doc, texts: dict[int, str]):
     return None
 
 
-def shares_post_issue(doc: Doc) -> list[Value]:
+def shares_post_issue(doc: Doc, texts=None) -> list[Value]:
     rng, how = find(doc, "capital")
     if not rng:
         return [_miss(doc, "shares_outstanding_post_issue",
@@ -1258,9 +1267,11 @@ def shares_post_issue(doc: Doc) -> list[Value]:
     # Twelve pages, not eight. The Capital Structure build-up is routinely preceded by the
     # authorised/issued history table and the notes to it, and the "after the Offer" row
     # sat past page eight in the documents that came back empty.
-    texts = page_texts(doc.path, a, min(b, a + 12))
+    own = texts is None
+    texts = page_texts(doc.path, a, min(b, a + 12)) if own else texts
     best = _post_issue_count(doc, texts)
-    del texts
+    if own:
+        del texts
     if best is None:
         return [_miss(doc, "shares_outstanding_post_issue",
                       "no line in Capital Structure states the post-issue share count")]
@@ -1274,7 +1285,7 @@ def shares_post_issue(doc: Doc) -> list[Value]:
                pdf_page_index=i, source_text=line, status="ok", note=how)]
 
 
-def promoter_shareholding(doc: Doc) -> list[Value]:
+def promoter_shareholding(doc: Doc, texts=None) -> list[Value]:
     """Promoter and promoter-group % before and after the offer, from Capital Structure.
 
     This calls `extract/capital.py` rather than reimplementing it. That module already
@@ -1290,7 +1301,7 @@ def promoter_shareholding(doc: Doc) -> list[Value]:
     from . import capital
     want = {"promoter_pre_pct", "promoter_post_pct", "promoter_change_pp"}
     out = []
-    for v in capital.extract(doc):
+    for v in capital.extract(doc, texts=texts):
         if v is None or v.variable not in want:
             continue
         # Re-stamped with THIS module's version, because this pipeline's output file is
@@ -1305,14 +1316,28 @@ def promoter_shareholding(doc: Doc) -> list[Value]:
 def extract(doc: Doc) -> list[Value]:
     """Everything 1.2 asks for. Each group opens and closes the PDF itself, so peak
     memory is one section's tables rather than the whole document."""
+    # The Capital Structure pages feed BOTH the share count and the promoter row, and
+    # they were being read twice - 29 of the 53 seconds one document took. Read once here
+    # and handed to both. A failure to locate the section is not fatal: each block still
+    # calls `find` itself and reports its own miss.
+    cap_texts = None
+    try:
+        rng, _ = find(doc, "capital")
+        if rng:
+            ca, cb = rng
+            cap_texts = page_texts(doc.path, ca, min(cb, ca + 20))
+    except Exception:                                          # noqa: BLE001
+        cap_texts = None
     out = []
     for fn in (basis, financials, shares_post_issue, promoter_shareholding):
         try:
-            out += fn(doc)
+            out += (fn(doc, texts=cap_texts)
+                    if fn in (shares_post_issue, promoter_shareholding) else fn(doc))
         except Exception as e:                                 # noqa: BLE001
             out.append(_v(doc, f"{fn.__name__}_group", value=None, status="unreadable",
                           note=f"{type(e).__name__}: {str(e)[:120]}",
                           missing_reason="present_but_unparsed"))
+    del cap_texts
     # The stated weighted average is a checksum over the three fiscal years.
     for metric, calc, stated, gap, agrees, src in weighted_checks(out):
         verdict = "reconciles" if agrees else "DOES NOT reconcile"

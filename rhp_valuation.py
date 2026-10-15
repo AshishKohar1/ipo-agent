@@ -582,6 +582,32 @@ def self_test() -> int:
     chk("and the aggregate is reconciled at the stated face value where both are printed",
         "do not reconcile" in scsrc)
 
+    print(chr(10) + "[1a5] promoter shareholding, read from text under tight conditions")
+    from extract import capital as CAP
+    row = "Promoter and Promoter Group 1,23,45,678 100.00 98,76,543 73.50"
+    chk("the promoter row is recognised by its label",
+        bool(CAP.PROMOTER_LABEL.match(row)))
+    chk("only the PERCENTAGES are picked out, not the share counts",
+        CAP._pct_like(row) == [100.0, 73.5], CAP._pct_like(row))
+    chk("a share count can never pass the percentage filter",
+        CAP._pct_like("1,23,45,678 98,76,543") == [])
+    chk("a row with only one percentage is not enough",
+        len(CAP._pct_like("Promoter A 50,00,000 40.50")) == 1)
+    csrc = inspect.getsource(CAP.promoter_from_text)
+    chk("exactly two percentages are required, never 'first and last' of many",
+        "len(pcts) != 2" in csrc)
+    chk("the page must state BOTH a pre- and a post-offer column",
+        "PREPOST_CUE.search(t) and POSTPRE_CUE.search(t)" in csrc)
+    chk("a bare 'Total' only counts inside a promoter block",
+        "in_promoter_block and TOTAL_LABEL" in csrc)
+    chk("and the block ends at the public-shareholder rows",
+        "public" in csrc and "in_promoter_block = False" in csrc)
+    chk("a post-offer figure higher than the pre-offer one is FLAGGED, not dropped",
+        "unusual" in csrc)
+    esrc2 = inspect.getsource(CAP.extract)
+    chk("the table reader keeps precedence over the text reader",
+        'if "promoter_post_pct" not in found' in esrc2)
+
     print(chr(10) + "[1b] the extract stage holds one document at a time")
     esrc = inspect.getsource(extract)
     chk("the Doc and its values are deleted before the next document",
