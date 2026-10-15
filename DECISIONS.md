@@ -1414,3 +1414,58 @@ model would effectively be judged on the subset where it has the most data — w
 same error as choosing a threshold after seeing the result. The 2021–2025 block is there to
 show whether the pooled number is being held down by the thin early years, and that is all
 it may be used for.
+
+### H38 — BSE's `IndustryNew` is accepted as a second source for the NSE sector (2026-10-15)
+
+**This reverses the 13 Oct rejection of BSE, and the rejection was my error.**
+
+That test compared BSE's `Sector` field against NSE's `Industry`, got 11 of 22, and
+concluded BSE's scheme sat at a different rung of the ladder. The conclusion about `Sector`
+was right; using it as the test was wrong. BSE serves four levels and **`IndustryNew`** is
+the sector level — the same rung as the `Industry` column in NSE's index-constituent files.
+The 13 Oct report listed `IndustryNew` in its own table and never tested it.
+
+Re-measured on the 2019+ population the user asked for: 104 symbols that listed in 2019 or
+later, whose NSE `Industry` is already on disk, and for which a scrip code exists in the
+cached bhavcopies. All 104 fetches returned 200.
+
+| BSE field | agrees with NSE `Industry` | agreement |
+|---|---|---|
+| **`IndustryNew`** | **104 of 104** | **100%** |
+| `Sector` | 53 of 104 | 51% |
+| `IGroup` | 9 of 104 | 9% |
+| `ISubGroup` | 0 of 104 | 0% |
+
+Before punctuation is normalised it reads 103 of 104: NSE prints "Media Entertainment &
+Publication" and BSE "Media, Entertainment & Publication". One comma.
+
+**So `IndustryNew` is a drop-in and is used to fill `nse_industry`.** The user's condition
+was "if identical, fill with provenance and shrink the file; if not, stop and tell me", and
+identical is what it is.
+
+**The constraints on the fill, which are what make this safe rather than convenient:**
+
+1. **Only `IndustryNew` is read.** `bse_sector_fill.py` asserts that `Sector`, `IGroup` and
+   `ISubGroup` are never read as the industry. Filling from `Sector` would write "Consumer
+   Discretionary" where `SECTOR_TO_INDEX` expects "Consumer Durables" — half the rows
+   silently **wrong** rather than missing, which is exactly what hard rule 1 exists to stop.
+2. **An NSE reading is never overwritten.** An official NSE constituent file outranks a
+   second source that merely agrees with it 104 times out of 104. BSE only fills blanks.
+3. **No request is made to discover a scrip code.** Codes come from the bhavcopies already
+   cached in `data/`. A symbol with no cached code stays in the manual file for the user.
+4. **Provenance per H26 on every filled row** — endpoint, scrip code, fetch time — and
+   `source` reads `bseindia ComHeadernew IndustryNew`, so a filled row is never
+   indistinguishable from an NSE-sourced one.
+5. **3 s between requests** (rule 9), and `--validate` re-measures the agreement at any
+   time rather than trusting this one measurement for ever.
+
+**This is a second source, not a reconciliation.** Where NSE already states the industry,
+BSE is not consulted; where it does not, there is nothing to reconcile against. So the
+filled rows are single-source and must not be described as reconciled under hard rule 2.
+They are not a *forced* mapping either — no crosswalk of ours is involved, which is the
+thing H18's "never force a mapping" forbids. The vocabulary arrives already in NSE's words.
+
+**Still blocked, and not worked around:** NSE's own four-level classification per symbol
+from `api/quote-equity` returns HTTP 403 on all 258 symbols tried. The comparison above can
+therefore only be made at the one rung NSE publishes in its constituent files — and that is
+the rung `IndustryNew` matches.
