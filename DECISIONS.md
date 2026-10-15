@@ -1555,3 +1555,42 @@ for the DISPLAYED profile only, never as features (H3).
 
 H22 is confirmed, and as of 16 Oct 2026 it is being honoured for the first time. The next
 live run is the first that will log `nse_official` as the source.
+
+### H41 — both Claude routines are replaced, and the user deletes them, not me (2026-10-16)
+
+The two surviving app routines now have GitHub Actions equivalents (6a, 6b):
+
+| routine | replacement |
+|---|---|
+| `ipo-ingest-outcomes` | a step inside `mode=final`, the 19:30 day-end leg |
+| `ipo-retrain-monthly` | `mode=retrain`, driven by cron-job.org job 7 (`25 2 1 * *` UTC) |
+
+**Nothing is deleted yet and I delete nothing.** The user's conditions, recorded so the
+decision is not re-litigated later:
+
+1. the ingest has run inside the day-end capture on **three consecutive weekdays** with no
+   error, and
+2. **one `retrain` run matches** the routine's last output.
+
+The checklist lives in `PROGRESS.md` with the rows to tick. Until both are met the routine
+and the workflow run in parallel; both legs are idempotent — the ingest on symbol plus
+listing date, the retrain on the calendar month — so the overlap duplicates nothing and
+sends nothing twice.
+
+**Why parallel running is the right shape here rather than a cutover.** The ingest is the
+only job that notices an IPO the user never bid on, so a silent failure costs training rows
+that cannot be recovered later from any source. Running both until the replacement has
+three clean days in a row makes that failure visible while the old path is still catching
+what it would have missed.
+
+**The engines stay.** `ingest_outcomes.py` and `retrain_l.py` are what the workflow calls.
+Deleting the ROUTINES does not touch them, and that distinction is worth stating because
+"decommission the retrain" could easily be read as deleting `retrain_l.py`, which would
+remove the champion/challenger comparison, the PSI monitor, the 25% drift guard and the H19
+tripwire in one go.
+
+First evidence on the record: dispatch run `38824059003` (16 Oct 2026) produced
+`IPO decision - RETRAIN 2026-10: no flags` with all eleven checks passing — L1 90.2% on 214
+fires against a 90% promise, L2 80.8% on 156 against 80%, both H19 counts at 1 of 2,
+threshold drift 0.0%, champion kept on both targets, 113 IPOs in the trailing 12 months,
+and the predictions_log header at 36 of 36.

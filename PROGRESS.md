@@ -532,6 +532,63 @@ one badly.
 
 ---
 
+## Decommissioning the two Claude routines (6d, H41) — 2026-10-16
+
+Both routines now have a GitHub Actions equivalent. **Neither is deleted yet, and I have
+not deleted anything.** Deletion is the user's action, after the two conditions below are
+met. Until then the routine and the workflow run in parallel; both are idempotent, so the
+overlap duplicates nothing.
+
+| routine | replaced by | how to run it manually |
+|---|---|---|
+| `ipo-ingest-outcomes` | a step inside `mode=final` (the 19:30 day-end leg) | dispatch `final` |
+| `ipo-retrain-monthly` | `mode=retrain`, plus cron-job.org job 7 | dispatch `retrain` |
+
+### The two conditions, verbatim
+
+**(a) The ingest has run inside the day-end capture on three consecutive weekdays with no
+error.** Tick a row only when the run was green AND the summary line read
+`- **Outcome ingest**: OK`. A green run whose summary says the ingest failed does not
+count — the run is deliberately failed at the end in that case, so it will not be green
+anyway.
+
+| # | weekday | run id | summary line | counts |
+|---|---|---|---|---|
+| 1 | | | | |
+| 2 | | | | |
+| 3 | | | | |
+
+**(b) One `retrain` run matches the routine's last output.** Compare
+`reports/retrain/YYYY-MM.md` against what `ipo-retrain-monthly` last produced.
+
+| field | routine's last output | workflow run | agree |
+|---|---|---|---|
+| L1 delivered / promise | | 90.2% on 214 fires / 90% | |
+| L2 delivered / promise | | 80.8% on 156 fires / 80% | |
+| L1 / L2 H19 consecutive count | | 1 / 1, trigger at 2 | |
+| threshold drift | | 0.0% | |
+| champion decision, both targets | | KEEP champion | |
+| trailing-12m IPO count | | 113 | |
+
+The 2026-10 workflow column is already filled from dispatch run **38824059003**
+(16 Oct 2026, subject `IPO decision - RETRAIN 2026-10: no flags`). The routine's column is
+for the user to fill from its last run, because I cannot read the routine's output.
+
+### What deletion looks like, when both conditions are met
+
+1. Delete `ipo-ingest-outcomes` and `ipo-retrain-monthly` in the Claude app.
+2. Leave cron-job.org job 7 in place — it is what drives the replacement.
+3. `ingest_outcomes.py` and `retrain_l.py` **stay in the repo**. They are the engines the
+   workflow calls, not the routines.
+
+### If something is wrong after deletion
+
+Both modes are dispatchable by hand at any time, and `ingest_outcomes.py --since` /
+`retrain_review.py --force` re-run either leg locally. Nothing about deletion is hard to
+reverse: re-creating a routine costs minutes, and the data paths are unchanged.
+
+---
+
 ## Queued for after 15 Oct (live-path freeze)
 
 Nothing here is a defect in behaviour. They are comment and citation fixes in files frozen
@@ -543,6 +600,223 @@ The frozen set is pinned in `.live-path`. Check compliance with:
 ```bash
 git diff --name-only 3ae17ab | grep -xF -f .live-path
 ```
+
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
+
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
+
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
+
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
+
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
+
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
+
+### Task 5: the remaining 229 corrected rows (night batch, H9)
+
+262 of 491 rows have a corrected buy-and-hold target, priced from bhavcopies already on
+disk. The other 229 need roughly 375 date-fetches at 3 s apart, and `_raw_price` walks up
+to 7 days forward past holidays, so the real figure is higher. Measured rate during the
+attempt: about 6 fetches in several minutes. That is hours, which makes it a night batch
+and not a session task.
+
+```bash
+python model_h_targets.py --build --horizon 1y     # resumable; omit --cache-only
+python model_h_targets.py --build --horizon 3y
+python model_h_targets.py --effects --horizon 1y
+```
+
+It is resumable and append-only per 20 rows, safe to kill. **Before trusting the output,
+check that `method` no longer says `[CACHE-ONLY RUN]` on the rows you are reading** — that
+marker exists so a partial run cannot pass as a complete one.
+
+**Expect it to change almost nothing.** On the 262 rows already done the median delta is
+**0.0pp** and there were 3 label flips, because `run_overnight.py:282` passes
+`auto_adjust=True` and yfinance was already folding splits and dividends in. The reason to
+finish it is provenance — every value re-derivable from a bhavcopy and an NSE
+corporate-action record with a SHA-256 — not a correction to the numbers.
+
+Also still open: the 3y horizon has no corporate actions collected yet
+(`--actions --horizon 3y`, 331 windows, ~17 min), and `delisted_or_suspended` cannot be
+measured from a cache-only run at all — every missing end price there was a missing file.
+The stored build's figures are 3 (1y) and 1 (3y); confirming them needs the full fetch.
+
+---
 
 ### Task 5: the remaining 229 corrected rows (night batch, H9)
 
