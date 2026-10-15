@@ -2,7 +2,7 @@
 
 Does NSE's `ipo-active-category` publish during the bidding day, or only at 19:00? Subjects: **HDFIRE** (EQ, mainboard) and **RAVITA** (SME, control), both bidding 2026-10-13 to 2026-10-15, confirmed from NSE's own calendar.
 
-`88` rows recorded.
+`92` rows recorded.
 
 ## Every poll, as recorded
 
@@ -96,6 +96,10 @@ Does NSE's `ipo-active-category` publish during the bidding day, or only at 19:0
 | 2026-10-15 | 2026-10-15 17:31:55 | 1731 | HDFIRE | chittorgarh | — | — | — | — | nan | nan |
 | 2026-10-15 | 2026-10-15 17:31:55 | 1731 | RAVITA | nse_active_category | 0.00x | 0.00x | 0.00x | — | Updated as on 15-Oct-2026 16:57:00 | False |
 | 2026-10-15 | 2026-10-15 17:31:55 | 1731 | RAVITA | chittorgarh | 1.55x | 1.33x | 2.23x | 1.38x | nan | nan |
+| 2026-10-15 | 2026-10-15 18:18:48 | 1818 | HDFIRE | nse_active_category | 131.70x | 256.65x | 137.28x | 30.49x | Updated as on 15-Oct-2026 18:12:00 | True |
+| 2026-10-15 | 2026-10-15 18:18:48 | 1818 | HDFIRE | chittorgarh | — | — | — | — | nan | nan |
+| 2026-10-15 | 2026-10-15 18:18:48 | 1818 | RAVITA | nse_active_category | 0.00x | 0.00x | 0.00x | — | Updated as on 15-Oct-2026 16:57:00 | False |
+| 2026-10-15 | 2026-10-15 18:18:48 | 1818 | RAVITA | chittorgarh | 1.55x | 1.33x | 2.23x | 1.38x | nan | nan |
 
 ## Did NSE's updateTime advance within a day?
 
@@ -107,7 +111,7 @@ This is the whole test. An advancing `updateTime` means NSE publishes intraday a
 | 2026-10-13 | RAVITA | **1** | Updated as on null |
 | 2026-10-14 | HDFIRE | **5** | Updated as on 14-Oct-2026 10:57:00; Updated as on 14-Oct-2026 12:57:00; Updated as on 14-Oct-2026 14:57:00; Updated as on 14-Oct-2026 15:57:00; Updated as on 14-Oct-2026 17:00:00 |
 | 2026-10-14 | RAVITA | **5** | Updated as on 14-Oct-2026 10:57:00; Updated as on 14-Oct-2026 12:57:00; Updated as on 14-Oct-2026 15:00:00; Updated as on 14-Oct-2026 15:57:00; Updated as on 14-Oct-2026 17:00:00 |
-| 2026-10-15 | HDFIRE | **5** | Updated as on 15-Oct-2026 10:57:00; Updated as on 15-Oct-2026 12:57:00; Updated as on 15-Oct-2026 14:57:00; Updated as on 15-Oct-2026 15:42:00; Updated as on 15-Oct-2026 17:27:00 |
+| 2026-10-15 | HDFIRE | **6** | Updated as on 15-Oct-2026 10:57:00; Updated as on 15-Oct-2026 12:57:00; Updated as on 15-Oct-2026 14:57:00; Updated as on 15-Oct-2026 15:42:00; Updated as on 15-Oct-2026 17:27:00; Updated as on 15-Oct-2026 18:12:00 |
 | 2026-10-15 | RAVITA | **5** | Updated as on 15-Oct-2026 10:57:00; Updated as on 15-Oct-2026 13:00:00; Updated as on 15-Oct-2026 15:00:00; Updated as on 15-Oct-2026 15:42:00; Updated as on 15-Oct-2026 16:57:00 |
 
 ## NSE versus Chittorgarh, per poll
@@ -158,6 +162,8 @@ This is the whole test. An advancing `updateTime` means NSE publishes intraday a
 | 2026-10-15 | 1543 | RAVITA | 0.00x | 1.55x | -1.55x (-100.0%) |
 | 2026-10-15 | 1731 | HDFIRE | 131.70x | — | — |
 | 2026-10-15 | 1731 | RAVITA | 0.00x | 1.55x | -1.55x (-100.0%) |
+| 2026-10-15 | 1818 | HDFIRE | 131.70x | — | — |
+| 2026-10-15 | 1818 | RAVITA | 0.00x | 1.55x | -1.55x (-100.0%) |
 
 ## 15:00 to final growth (H23's unmeasured quantity)
 
