@@ -83,3 +83,7 @@ trading_date,polled_at_ist,nominal_slot,symbol,series,source,total_x,qib_x,hni_x
 2026-10-15,2026-10-15 15:43:49.222849,1543,HDFIRE,EQ,chittorgarh,,,,,,,not on the Chittorgarh dashboard
 2026-10-15,2026-10-15 15:43:49.222849,1543,RAVITA,SME,nse_active_category,0.0,0.0,0.0,,Updated as on 15-Oct-2026 15:42:00,False,Total is 0.0 - nothing published yet
 2026-10-15,2026-10-15 15:43:49.222849,1543,RAVITA,SME,chittorgarh,1.55,1.33,2.23,1.38,,,
+2026-10-15,2026-10-15 17:31:55.335946,1731,HDFIRE,EQ,nse_active_category,131.70100804039328,256.6520669231262,137.27876929931912,30.49388278192246,Updated as on 15-Oct-2026 17:27:00,True,
+2026-10-15,2026-10-15 17:31:55.335946,1731,HDFIRE,EQ,chittorgarh,,,,,,,not on the Chittorgarh dashboard
+2026-10-15,2026-10-15 17:31:55.335946,1731,RAVITA,SME,nse_active_category,0.0,0.0,0.0,,Updated as on 15-Oct-2026 16:57:00,False,Total is 0.0 - nothing published yet
+2026-10-15,2026-10-15 17:31:55.335946,1731,RAVITA,SME,chittorgarh,1.55,1.33,2.23,1.38,,,
