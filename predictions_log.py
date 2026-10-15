@@ -16,6 +16,7 @@ from __future__ import annotations
 import hashlib
 import os
 from pathlib import Path
+import csv
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
@@ -65,7 +66,92 @@ def prediction_id(ipo: str, isin: str | None, capture_point, when) -> str:
     return hashlib.sha1(key.encode("utf-8")).hexdigest()[:16]
 
 
+def header_on_disk() -> list[str]:
+    """The column names the file actually starts with, or `[]` if there is no file."""
+    if not LOG.exists():
+        return []
+    with LOG.open("r", encoding="utf-8", newline="") as f:
+        line = f.readline()
+    return next(csv.reader([line.rstrip("\r\n")])) if line else []
+
+
+class SchemaMismatch(RuntimeError):
+    """The file's header and `COLS` disagree, so a row would be written misaligned."""
+
+
+def check_header(where: str = "") -> None:
+    """Fail LOUDLY if the file header and COLS differ.
+
+    Why this exists: four columns (`sub_*_1500`) were added to COLS and the file on disk
+    was never migrated, so it carried a 32-column header above a 36-column row. Nothing
+    complained. `pandas.read_csv` took the first line as the names and the wider row was
+    then read with its last four values under no name at all - a silent misalignment in
+    the only record of what the live model actually decided.
+
+    An append is the dangerous direction: `to_csv(mode="a")` writes no header when the
+    file exists, so a widened COLS appends wider rows under the old header indefinitely.
+    This is therefore checked on every append AND every read, and in the pre-flight gate.
+    """
+    if not LOG.exists():
+        return
+    have = header_on_disk()
+    if have == list(COLS):
+        return
+    missing = [c for c in COLS if c not in have]
+    extra = [c for c in have if c not in COLS]
+    raise SchemaMismatch(
+        f"predictions_log.csv header has {len(have)} columns, COLS has {len(COLS)}"
+        f"{' (' + where + ')' if where else ''}. "
+        f"missing from the file: {missing or 'none'}; "
+        f"on the file but not in COLS: {extra or 'none'}. "
+        f"Run `python predictions_log.py --repair-header` if the new columns are appended "
+        f"at the END and every existing row is therefore still correctly aligned; "
+        f"otherwise the rows need migrating, not the header.")
+
+
+def repair_header() -> dict:
+    """Rewrite the HEADER LINE ONLY to the current `COLS`. Data rows are not touched.
+
+    This is a header correction, not a data edit, and that distinction is the whole point
+    (H39): the four new columns are appended at the END of COLS, so every existing 32-field
+    row is still correctly aligned under the first 32 names and simply reads the four new
+    ones as blank. No value changes meaning.
+
+    It proves that rather than asserting it: every data row's bytes are hashed before and
+    after, and the function refuses to write if any hash moves. It also refuses outright if
+    the file's existing names are not a PREFIX of COLS, because then the columns were
+    reordered or renamed and rewriting the header would silently relabel real data.
+    """
+    import hashlib
+    raw = LOG.read_bytes()
+    cut = raw.index(b"\n")
+    old_head, body = raw[:cut], raw[cut + 1:]
+    eol = b"\r\n" if old_head.endswith(b"\r") else b"\n"
+    have = next(csv.reader([old_head.decode("utf-8").rstrip("\r\n")]))
+    if have == list(COLS):
+        return {"changed": False, "why": "the header already matches COLS"}
+    if have != list(COLS)[:len(have)]:
+        raise SchemaMismatch(
+            f"refusing to rewrite the header: the names on disk are not a prefix of COLS, "
+            f"so columns were reordered or renamed and the DATA needs migrating. "
+            f"on disk: {have}")
+    before = [hashlib.sha256(ln).hexdigest() for ln in body.split(b"\n") if ln.strip()]
+    new_head = ",".join(COLS).encode("utf-8")
+    LOG.write_bytes(new_head + eol + body)
+    after_body = LOG.read_bytes()[len(new_head) + len(eol):]
+    after = [hashlib.sha256(ln).hexdigest() for ln in after_body.split(b"\n")
+             if ln.strip()]
+    if before != after:
+        LOG.write_bytes(raw)
+        raise SchemaMismatch("a data row changed during the header repair; reverted")
+    return {"changed": True, "old_columns": len(have), "new_columns": len(COLS),
+            "added": [c for c in COLS if c not in have],
+            "data_rows": len(before), "row_hashes_identical": before == after,
+            "body_sha256": hashlib.sha256(body).hexdigest()}
+
+
 def _append(row: dict) -> None:
+    check_header("before appending")
     df = pd.DataFrame([{c: row.get(c) for c in COLS}], columns=COLS)
     df.to_csv(LOG, mode="a", header=not LOG.exists(), index=False, encoding="utf-8")
 
@@ -199,6 +285,7 @@ def log_outcome(prediction_id: str, ipo: str, listing_date, listing_gain_pct: fl
 def load() -> pd.DataFrame:
     if not LOG.exists():
         return pd.DataFrame(columns=COLS)
+    check_header("on load")
     return pd.read_csv(LOG, keep_default_na=False, na_values=[""])
 
 
@@ -231,5 +318,20 @@ def verify_append_only() -> dict:
 
 
 if __name__ == "__main__":
+    import argparse
     import json
-    print(json.dumps(verify_append_only(), indent=2))
+    ap = argparse.ArgumentParser(description="predictions_log maintenance")
+    ap.add_argument("--repair-header", action="store_true",
+                    help="rewrite the HEADER LINE ONLY to the current COLS. Refuses if "
+                         "the names on disk are not a prefix of COLS, and reverts if any "
+                         "data row's bytes change.")
+    ap.add_argument("--check-header", action="store_true",
+                    help="fail if the file header and COLS disagree")
+    a = ap.parse_args()
+    if a.repair_header:
+        print(json.dumps(repair_header(), indent=2))
+    elif a.check_header:
+        check_header("cli")
+        print(f"ok: {len(header_on_disk())} columns, matching COLS")
+    else:
+        print(json.dumps(verify_append_only(), indent=2))

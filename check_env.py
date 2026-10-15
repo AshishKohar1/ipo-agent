@@ -212,6 +212,23 @@ def _():
     return f"search HTTP {r.status_code}, Nifty last {n['Close'].iloc[-1]:,.0f}"
 
 
+@check("predictions_log.csv header matches COLS")
+def _():
+    """A schema change must never again ship without migrating the header.
+
+    Four columns were added to COLS and the file was never migrated, so it carried a
+    32-column header above a 36-column row and nothing complained: `to_csv(mode="a")`
+    writes no header when the file exists, so every later append was wider than the names
+    above it. The only record of what the live model decided was silently misaligned.
+    """
+    import predictions_log as PL
+    have = PL.header_on_disk()
+    if not have:
+        return "no log yet"
+    PL.check_header("preflight")
+    return f"{len(have)} columns, matching COLS"
+
+
 @check("working dir writable")
 def _():
     p = ROOT / ".check_env_write_test"

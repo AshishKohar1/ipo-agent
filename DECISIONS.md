@@ -1469,3 +1469,51 @@ thing H18's "never force a mapping" forbids. The vocabulary arrives already in N
 from `api/quote-equity` returns HTTP 403 on all 258 symbols tried. The comparison above can
 therefore only be made at the one rung NSE publishes in its constituent files — and that is
 the rung `IndustryNew` matches.
+
+### H39 — the predictions_log header was repaired; the DATA was not edited (2026-10-16)
+
+**Approved by the user on 16 Oct 2026. This is a header correction, and the distinction
+from a data edit is the whole point.**
+
+**What was wrong.** `COLS` gained four columns — `sub_total_1500`, `sub_qib_1500`,
+`sub_hni_1500`, `sub_rii_1500` — and `data/predictions_log.csv` was never migrated. The
+file carried a **32-column header above a 36-column row** (HD Fire Protect, 14:47 IST on
+15 Oct). Nothing complained, and that is the serious part: `to_csv(mode="a")` writes no
+header when the file already exists, so every later append would have been wider than the
+names above it, indefinitely. `pandas.read_csv` takes the first line as the names, so the
+HD Fire row's last four values sat under no name at all — a silent misalignment in the
+only record of what the live model actually decided.
+
+**Why rewriting the header is legitimate here, and would not always be.** The four new
+columns are appended at the **END** of `COLS`. So every existing 32-field row is still
+correctly aligned under the first 32 names and simply reads the four new ones as blank.
+No value changes meaning, and no row moves. `repair_header()` **refuses outright** if the
+names on disk are not a PREFIX of `COLS`, because then the columns were reordered or
+renamed and rewriting the header would silently relabel real data — in that case the rows
+need migrating, not the header.
+
+**Proof, not assertion.** Every data row's bytes were hashed before and after, and the
+function reverts the file if any hash moves:
+
+| | before | after |
+|---|---|---|
+| header columns | 32 | 36 |
+| data rows | 6 | 6 |
+| body SHA-256 | `3ff8ed35…a737f25b` | `3ff8ed35…a737f25b` |
+| all six row hashes | — | identical |
+| line endings | CRLF | CRLF |
+
+The HD Fire row now reads its 15:00 split correctly — total 85.1185, QIB 120.398,
+HNI 120.158, RII 25.535 — and the five older rows read the four new columns as blank.
+
+**The guard, so this cannot happen again.** `check_header()` raises `SchemaMismatch` when
+the file header and `COLS` disagree. It runs on **every append** and **every read**
+(`_append`, `load`), and as a **pre-flight check** in `check_env.py`, which must pass
+before any overnight or live run. The append direction is the dangerous one, so it is
+checked there first. A schema change now cannot ship without migrating the header: the
+pre-flight gate fails, and so does the next read.
+
+Verified after the repair: `PL.load()` 6 rows x 36 columns, `PL.verify_append_only()` 6
+predictions 0 outcomes 0 duplicates 0 orphans, `listing_prices._pending_predictions()`
+returns its 1 pending row, `ingest_outcomes` reads through `load()` and `scored()`.
+`check_env.py` 15/15.
