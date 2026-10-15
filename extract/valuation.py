@@ -58,7 +58,15 @@ MAX_PEERS = 12
 #   1.4.0  the money unit is carried forward from the head of a statement instead of
 #          being required on each page, and the page it came from is recorded; a header
 #          cell is only read as a fiscal year if the year is plausible
-VALUATION_VERSION = "1.4.0"
+#   1.5.0  1.2b reads the restated financials from TEXT lines as well as tables, because
+#          the statements in this document family are UNRULED - pdfplumber returns a
+#          header fragment and no data rows, so all 28 financial rows reported "no table
+#          in the financial section carries this row". Same root cause, and same remedy,
+#          as the Basis block. 1.2c reads the post-issue share count from the Capital
+#          Structure build-up table as well as from a sentence, and no longer takes the
+#          LARGEST number on the line - on a row that prints both a share count and the
+#          aggregate rupee capital, the largest is the rupee figure.
+VALUATION_VERSION = "1.5.0"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
@@ -780,6 +788,136 @@ FIN_ROWS = {
 }
 
 
+# A note-reference column ("Revenue from operations 21 12,345 10,234 8,123") sits between
+# the label and the first value. Anything that small is not a money figure in a restated
+# statement printed in millions or lakhs, so a leading run of small integers may be
+# dropped - but only when dropping it makes the count match the years EXACTLY. Otherwise
+# the row is withheld (rule 3) rather than reshaped until it fits.
+NOTE_REF_MAX = 1000.0
+FIN_SKIP_LINE = re.compile(r"(?i)^\s*(?:note|source|annexure|schedule)\b")
+# A sentence in the MD&A can name two fiscal years and would then be read as a column
+# header, after which the next labelled row's numbers would be zipped to the wrong years.
+# Two guards, both cheap: prose verbs, and a decimal number (a column header carries
+# years and nothing else; a sentence carries percentages and amounts).
+PROSE_CUE = re.compile(r"(?i)\b(?:increased|decreased|declined|grew|compared|respectively"
+                       r"|whereas|primarily|because|due\s+to|was|were|is|are|has|have"
+                       r"|had|we|our|which|represent(?:s|ed)?)\b")
+DECIMAL_NUM = re.compile(r"\d\.\d")
+
+
+def _fin_year_order(line: str) -> list[int]:
+    """The fiscal years a header line names, LEFT TO RIGHT, or `[]`.
+
+    The restated statements put years in COLUMNS - the reverse of the Basis tables, where
+    the years are in rows. So the header is one line carrying two or three year labels and
+    each data row carries one number per year, and POSITION is the only link between them.
+    A line is therefore only accepted as a header when it names at least two distinct
+    plausible years, reads like a header rather than a sentence, and carries no decimal
+    number of its own.
+    """
+    if not line or PROSE_CUE.search(line) or DECIMAL_NUM.search(line):
+        return []
+    ys, seen = [], set()
+    for m in YEAR_LABEL.finditer(line):
+        y = int(m.group(1))
+        if 1990 <= y <= 2030 and y not in seen:
+            seen.add(y)
+            ys.append(y)
+    return ys if len(ys) >= 2 else []
+
+
+def _fin_values_on(line: str, years: list[int]) -> tuple[list[float] | None, str]:
+    """`(one value per fiscal-year column, in the header's order)` or `(None, why not)`."""
+    ns = _numbers(line)
+    if len(ns) == len(years):
+        return ns, ""
+    if len(ns) < len(years):
+        return None, (f"withheld: the row prints {len(ns)} numbers for "
+                      f"{len(years)} fiscal-year columns")
+    # ONE column, not a run. A note reference is a single column; a loop that kept
+    # dropping small leading integers until the count fitted turned "1,1 2,2 3,3 4,4 5,5"
+    # into a clean three-year series, which is reshaping data until it agrees - exactly
+    # what rule 3 exists to stop.
+    if (len(ns) - len(years) == 1 and abs(ns[0]) < NOTE_REF_MAX
+            and float(ns[0]).is_integer()):
+        return ns[1:], ""
+    return None, (f"withheld: the row prints {len(ns)} numbers for {len(years)} "
+                  f"fiscal-year columns and the surplus is not a note reference")
+
+
+def read_fin_lines(texts: dict[int, str]) -> dict:
+    """`{base: (page_idx, row line, {year: value} | None, header line, why withheld)}`.
+
+    The year order carries forward across the pages of one statement, because a restated
+    statement that runs over four pages prints its column header once. A page that states
+    its own header replaces the carried one. The header line is returned alongside every
+    value so that the positional zip can be audited from the row itself (rule 2) - a value
+    whose header cannot be seen is a value nobody can check.
+    """
+    found: dict = {}
+    years: list[int] = []
+    header = ""
+    for idx in sorted(texts):
+        for raw in (texts[idx] or "").splitlines():
+            ln = re.sub(r"\s+", " ", raw).strip()
+            if not ln:
+                continue
+            hit = next((b for b, pat in FIN_ROWS.items() if re.search(pat, ln)), None)
+            if hit is None:
+                ys = _fin_year_order(ln)
+                if ys:
+                    years, header = ys, ln
+                continue
+            if not years or hit in found or FIN_SKIP_LINE.match(ln):
+                continue
+            vals, why = _fin_values_on(ln, years)
+            found[hit] = (idx, ln, dict(zip(years, vals)) if vals else None, header, why)
+    return found
+
+
+def _fin_rows_from_lines(doc, found: dict, unit_at: dict, done: set) -> list[Value]:
+    out = []
+    for base, (idx, line, by_year, header, why) in found.items():
+        if base in done:
+            continue
+        printed = doc.index_to_printed(idx)
+
+        def withhold(note: str) -> Value:
+            return _v(doc, f"{base}_fy1", value=None, status="not_found", page=printed,
+                      pdf_page_index=idx, source_text=line, note=note,
+                      missing_reason="present_but_unparsed")
+
+        if by_year is None:
+            out.append(withhold(f"{why}; header was: {header[:80]}"))
+            done.add(base)
+            continue
+        if STUB.search(line):
+            out.append(withhold("withheld: the row covers a stub period, not a full year"))
+            done.add(base)
+            continue
+        mult, phrase, unit_page = unit_at.get(idx, (None, None, None))
+        if mult is None:
+            out.append(withhold("withheld: no money unit stated on this page or any "
+                                "earlier page of the section"))
+            done.add(base)
+            continue
+        where = ("same page" if unit_page == idx
+                 else f"page {doc.index_to_printed(unit_page)}")
+        for n, y in enumerate(sorted(by_year, reverse=True)[:3], 1):
+            val = by_year[y]
+            out.append(_v(doc, f"{base}_fy{n}", value=val, original_unit=phrase,
+                          value_crore=round(val * mult, 4) if val is not None else None,
+                          page=printed, pdf_page_index=idx, source_text=line,
+                          status="ok" if val is not None else "not_found",
+                          note=(f"fiscal {y}, text line (the table is unruled); "
+                                f"header: {header[:80]}; unit {phrase} from {where} "
+                                f"-> crore x{mult}"),
+                          missing_reason="" if val is not None
+                          else "present_but_unparsed"))
+        done.add(base)
+    return out
+
+
 def financials(doc: Doc) -> list[Value]:
     rng, how = find(doc, "financials")
     if not rng:
@@ -842,12 +980,9 @@ def financials(doc: Doc) -> list[Value]:
                 if mult is None:
                     # Rule 3: a money figure with no stated unit is withheld. Reading
                     # lakhs as crore is a 100x error that looks like a plausible number.
-                    out.append(_v(doc, f"{base}_fy1", value=None, status="not_found",
-                                  page=printed, pdf_page_index=idx,
-                                  note="withheld: no money unit stated on this page or "
-                                       "any earlier page of the section",
-                                  missing_reason="present_but_unparsed"))
-                    done.add(base)
+                    # NOT marked done - the text reader below may find the same row on a
+                    # page the carried unit does reach, and a withheld row here would
+                    # otherwise mask a readable one there.
                     continue
                 vals = _row_series(doc, tbl, printed, idx, re.compile(pat), base,
                                    unit_phrase or "unknown")
@@ -862,15 +997,82 @@ def financials(doc: Doc) -> list[Value]:
                                   f"-> crore x{mult}")
                 out += vals
                 done.add(base)
-    del tabs, texts
+    del tabs
+    # The TEXT reader runs for whatever the tables did not yield. In this document family
+    # that is nearly everything: the restated statements are unruled, so `_year_columns`
+    # finds no header and `_row_series` is never reached. The table reader stays ahead of
+    # it because a cell boundary is stronger evidence than a position on a line.
+    out += _fin_rows_from_lines(doc, read_fin_lines(texts), unit_at, done)
+    del texts
     for base in FIN_ROWS:
         if base not in done:
             out.append(_miss(doc, f"{base}_fy1",
-                             "no table in the financial section carries this row"))
+                             "neither a table nor a text line in the financial section "
+                             "carries this row under a fiscal-year header"))
     return out
 
 
 # ------------------------------------------------------------------ 1.2c share count
+POST_ISSUE = re.compile(
+    r"(?i)(?:"
+    r"(?:after|post)[\s-]*(?:the\s*)?(?:offer|issue|ipo)"
+    r"|(?:issued,?\s*subscribed\s*and\s*paid[\s-]*up).{0,60}?(?:after|post)"
+    r")")
+# "123,456,789 Equity Shares of face value Rs 10 each" - the count is the number ADJACENT
+# to "Equity Shares". The same row usually also prints the aggregate rupee capital, which
+# is larger, so the previous `max()` took the money figure and called it a share count.
+COUNT_ADJ = re.compile(r"([\d,]{5,})\s*(?:fully\s+paid[\s-]*up\s*)?(?:equity\s+)?shares",
+                       re.I)
+FACE_EACH = re.compile(r"(?i)(?:face\s*value\s*(?:of)?\s*)?(?:\u20b9|rs\.?|inr)\s*"
+                       r"([\d,]+(?:\.\d+)?)\s*(?:each|per\s+equity\s+share)")
+
+
+def _post_issue_count(doc, texts: dict[int, str]):
+    """`(count|None, page index, quoted line, how)` or `None` if no such line exists.
+
+    A wrapped row is read with the next line joined on, because the Capital Structure
+    build-up routinely breaks "D) Issued, subscribed and paid-up Equity Share capital
+    after the Offer" from its figures.
+    """
+    for i, t in sorted(texts.items()):
+        lines = [re.sub(r"\s+", " ", x).strip() for x in (t or "").splitlines()]
+        for n, ln in enumerate(lines):
+            if not ln or not POST_ISSUE.search(ln):
+                continue
+            joined = ln if COUNT_ADJ.search(ln) else " ".join(lines[n:n + 2]).strip()
+            adj = [num(m.group(1)) for m in COUNT_ADJ.finditer(joined)]
+            adj = [v for v in adj if v is not None and v > 1e5]
+            if adj:
+                how = "post-issue equity share count from Capital Structure"
+                fv = FACE_EACH.search(joined)
+                big = [v for v in _numbers(joined) if v is not None and v > adj[0]]
+                if fv and big:
+                    want = adj[0] * (num(fv.group(1)) or 0)
+                    near = [v for v in big if want and abs(v - want) / want < 0.02]
+                    how += (f"; cross-checks against the aggregate capital at a face "
+                            f"value of {fv.group(1)}" if near else
+                            "; the aggregate capital on the row does NOT reconcile at "
+                            "the stated face value")
+                    if not near:
+                        return None, i, joined[:300], (
+                            "withheld: the count and the aggregate rupee capital on this "
+                            "row do not reconcile at the stated face value")
+                return adj[0], i, joined[:300], how
+            # A number is present but not adjacent to "Equity Shares": that is the case
+            # the old reader guessed at. Withheld, with the line, rather than guessed.
+            other = [v for v in _numbers(joined) if v is not None and v > 1e5]
+            if len(other) == 1:
+                return other[0], i, joined[:300], (
+                    "post-issue share count from Capital Structure; the row prints one "
+                    "large number and it is not adjacent to the words 'Equity Shares'")
+            if other:
+                return None, i, joined[:300], (
+                    f"withheld: the row prints {len(other)} large numbers and none is "
+                    f"adjacent to the words 'Equity Shares', so which one is the share "
+                    f"count cannot be established")
+    return None
+
+
 def shares_post_issue(doc: Doc) -> list[Value]:
     rng, how = find(doc, "capital")
     if not rng:
@@ -878,29 +1080,23 @@ def shares_post_issue(doc: Doc) -> list[Value]:
                       "the Capital Structure section could not be located",
                       "section_not_found")]
     a, b = rng
-    texts = page_texts(doc.path, a, min(b, a + 8))
-    pat = re.compile(r"(?i)(?:equity shares? )?(?:outstanding )?(?:after|post)[\s-]*"
-                     r"(?:the\s*)?(?:offer|issue)")
-    best = None
-    for i, t in sorted(texts.items()):
-        for ln in (t or "").splitlines():
-            if not pat.search(ln):
-                continue
-            cand = [v for v in (num(x) for x in re.findall(r"[\d,]{5,}", ln))
-                    if v is not None and v > 1e5]
-            if cand:
-                best = (max(cand), i, ln)
-                break
-        if best:
-            break
+    # Twelve pages, not eight. The Capital Structure build-up is routinely preceded by the
+    # authorised/issued history table and the notes to it, and the "after the Offer" row
+    # sat past page eight in the documents that came back empty.
+    texts = page_texts(doc.path, a, min(b, a + 12))
+    best = _post_issue_count(doc, texts)
     del texts
-    if not best:
+    if best is None:
         return [_miss(doc, "shares_outstanding_post_issue",
                       "no line in Capital Structure states the post-issue share count")]
-    return [_v(doc, "shares_outstanding_post_issue", value=best[0],
-               original_unit="shares", page=best[1] - doc.offset,
-               pdf_page_index=best[1], source_text=best[2], status="ok",
-               note="post-issue equity share count from Capital Structure")]
+    val, i, line, how = best
+    if val is None:
+        return [_v(doc, "shares_outstanding_post_issue", value=None, status="not_found",
+                   page=i - doc.offset, pdf_page_index=i, source_text=line, note=how,
+                   missing_reason="present_but_unparsed")]
+    return [_v(doc, "shares_outstanding_post_issue", value=val,
+               original_unit="shares", page=i - doc.offset,
+               pdf_page_index=i, source_text=line, status="ok", note=how)]
 
 
 def promoter_shareholding(doc: Doc) -> list[Value]:

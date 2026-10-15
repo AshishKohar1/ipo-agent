@@ -474,6 +474,66 @@ def self_test() -> int:
     chk("the found/not-found table covers every listing year",
         len(g) >= 15 and g["ipos"].sum() == n_t, (len(g), int(g["ipos"].sum())))
 
+    print(chr(10) + "[1a2] the 1.2b text reader zips rows to the right fiscal year")
+    from extract.valuation import (read_fin_lines, _fin_year_order, _fin_values_on,
+                                   POST_ISSUE, COUNT_ADJ)
+    hdr = "Particulars Fiscal 2024 Fiscal 2023 Fiscal 2022"
+    chk("a header line gives the year order left to right",
+        _fin_year_order(hdr) == [2024, 2023, 2022], _fin_year_order(hdr))
+    chk("a single year is not a header", _fin_year_order("Fiscal 2024") == [])
+    prose = "Revenue increased from fiscal 2021 to fiscal 2023"
+    chk("a SENTENCE naming two years is not read as a header",
+        _fin_year_order(prose) == [], prose)
+    chk("nor is a line carrying a decimal number",
+        _fin_year_order("Fiscal 2024 Fiscal 2023 12.5") == [])
+    page = {7: hdr + chr(10) + "(Rs in millions)" + chr(10)
+            + "Revenue from operations 12,345 10,234 8,123" + chr(10)
+            + "Profit for the year after tax (1,200) 900 800"}
+    got = read_fin_lines(page)
+    chk("the newest year takes the leftmost column",
+        got["revenue"][2] == {2024: 12345.0, 2023: 10234.0, 2022: 8123.0},
+        got.get("revenue"))
+    chk("a bracketed figure is read as negative",
+        got["pat"][2][2024] == -1200.0, got.get("pat"))
+    chk("the header line is carried onto the row so the zip can be audited",
+        got["revenue"][3] == hdr)
+    chk("a leading note reference is dropped only when the count then lands exactly",
+        _fin_values_on("Revenue from operations 21 12,345 10,234 8,123",
+                       [2024, 2023, 2022])[0] == [12345.0, 10234.0, 8123.0])
+    v, why = _fin_values_on("Revenue from operations 12,345 10,234", [2024, 2023, 2022])
+    chk("too few numbers for the columns is WITHHELD, not padded", v is None and why)
+    v, why = _fin_values_on("Revenue 1,1 2,2 3,3 4,4 5,5", [2024, 2023, 2022])
+    chk("a surplus of more than one column is WITHHELD, never trimmed until it fits",
+        v is None and why, v)
+    v, why = _fin_values_on("Revenue from operations 12,345 10,234 8,123 45.2",
+                            [2024, 2023, 2022])
+    chk("a TRAILING surplus (a growth column) is WITHHELD too", v is None and why, v)
+    chk("a large leading number is never mistaken for a note reference",
+        _fin_values_on("Revenue 99,999 12,345 10,234 8,123",
+                       [2024, 2023, 2022])[0] is None)
+    fsrc = inspect.getsource(__import__("extract.valuation", fromlist=["financials"])
+                             .financials)
+    chk("the table reader still runs before the text reader",
+        fsrc.index("page_tables") < fsrc.index("read_fin_lines"))
+    chk("a missing unit no longer marks the row done, so the text reader still sees it",
+        "NOT marked done" in fsrc)
+
+    print(chr(10) + "[1a3] the 1.2c share count is the count, not the rupee aggregate")
+    row = ("D) Issued, subscribed and paid-up Equity Share capital after the Offer "
+           "123,456,789 Equity Shares of face value Rs 10 each 1,234,567,890")
+    chk("the post-issue row is recognised", bool(POST_ISSUE.search(row)))
+    chk("the number ADJACENT to 'Equity Shares' is the share count",
+        [m.group(1) for m in COUNT_ADJ.finditer(row)][0] == "123,456,789")
+    scsrc = inspect.getsource(__import__("extract.valuation", fromlist=["x"])
+                              ._post_issue_count)
+    chk("the largest number on the row is never taken", "max(" not in scsrc)
+    chk("a wrapped row is read with the following line joined on",
+        "lines[n:n + 2]" in scsrc)
+    chk("two large numbers and no 'Equity Shares' anchor is WITHHELD",
+        "cannot be established" in scsrc)
+    chk("and the aggregate is reconciled at the stated face value where both are printed",
+        "do not reconcile" in scsrc)
+
     print(chr(10) + "[1b] the extract stage holds one document at a time")
     esrc = inspect.getsource(extract)
     chk("the Doc and its values are deleted before the next document",
