@@ -1,6 +1,6 @@
 # Capture audit
 
-Window: the last 4 days, weekdays only. Generated 2026-10-16 05:03 IST.
+Window: the last 4 days, weekdays only. Generated 2026-10-16 19:31 IST.
 
 **Every weekday in the window produced a capture.**
 
@@ -11,6 +11,7 @@ A gap means the job left *no attempt at all* — an infrastructure failure. A jo
 | 2026-10-13 | 1 | 1 |
 | 2026-10-14 | 1 | 1 |
 | 2026-10-15 | 1 | 1 |
+| 2026-10-16 | 1 | 1 |
 
 ## What catch-up recovered
 
