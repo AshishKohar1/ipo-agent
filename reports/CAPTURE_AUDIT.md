@@ -1,6 +1,6 @@
 # Capture audit
 
-Window: the last 4 days, weekdays only. Generated 2026-10-16 19:31 IST.
+Window: the last 4 days, weekdays only. Generated 2026-10-16 23:18 IST.
 
 **Every weekday in the window produced a capture.**
 
