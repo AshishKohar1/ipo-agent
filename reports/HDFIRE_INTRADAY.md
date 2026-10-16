@@ -177,77 +177,18 @@ This is the whole test. An advancing `updateTime` means NSE publishes intraday a
 | 2026-10-15 | 2134 | HDFIRE | 131.70x | — | — |
 | 2026-10-15 | 2134 | RAVITA | 0.00x | 1.70x | -1.70x (-100.0%) |
 
-## Update frequency per source
+## 15:00 to final growth (H23's unmeasured quantity)
 
-| source | how often it actually moves | completeness over the three days |
-|---|---|---|
-| NSE `ipo-active-category` | `updateTime` advances about every **two hours** while bidding is open — 10:57, 12:57, 14:57 — then again late (15:42 / 15:57) and settles in the evening: 17:00 on days 1 and 2, then 17:27 → 18:12 → **19:00** on the closing day | **25 of 25** polls returned a Total |
-| Chittorgarh dashboard | irregular; it lags NSE at every comparable poll and stops carrying the issue entirely on the closing day | **15 of 25** polls returned a Total; **0 of 8** on 15 Oct ("not on the Chittorgarh dashboard") |
-
-NSE is both the more timely and the more complete source, on every measure, on every day.
-
-## 15:00 to final growth (H23's measured quantity)
-
-The final Total is NSE's own closing figure, **131.7012200325594** (`updateTime` 19:00 on
-15 Oct), independently corroborated by the user's Chittorgarh screenshot to 0.0219%.
-
-| basis for the 15:00 figure | 15:00 Total | final Total | growth | understated by |
+| trading date | symbol | 15:00 Total | last poll Total | growth |
 |---|---|---|---|---|
-| **what the email actually used** (Chittorgarh, 85.1185x) | 85.1185x | 131.7012x | **1.5473x** | **54.7%** |
-| what NSE was serving at 14:57 (99.2622x) | 99.2622x | 131.7012x | 1.3268x | 32.7% |
-
-Per category, where the 15:00 split exists:
-
-| category | 15:00 (Chittorgarh) | final (NSE) | growth |
-|---|---|---|---|
-| Total | 85.1185 | 131.7012 | 1.5473x |
-| QIB | 120.3980 | 256.6521 | 2.1317x |
-| HNI / NII | 120.1580 | 203.2051 | 1.6911x |
-| Retail | 25.5348 | 30.4943 | 1.1942x |
-
-The per-category rows mix two definitions — the 15:00 split is Chittorgarh's and the final
-is NSE's combined NII (`srNo 2`) — so only the Total line is strictly like-for-like.
-
-## Did the 15 October email go out on time, with the right verdict?
-
-| question | answer |
-|---|---|
-| sent | **yes**, 2026-10-15 **14:46:14 IST** |
-| inside the permitted 14:00–16:00 window (E1) | yes, with 74 minutes to the 16:00 broker cutoff |
-| subject | `IPO decision - HD Fire Protect: L1 BID, L2 BID` |
-| figure used | Total **85.12x**, from Chittorgarh |
-| L1 | **BID** — 85.12x ≥ 28.39x |
-| L2 | **BID** — 85.12x ≥ 54.02x |
-| would either verdict change on the final figure? | **no** — 131.70x clears both |
-| marker | `decision delivered`, capture point 1500 |
-
-So the verdict was right and timely. But it was reached on a figure **14 points lower
-than the official one available at that moment**: NSE's 14:57 publication already said
-99.26x. The cause is the defect in `run_live_l.nse_subscription` — it read field names NSE
-does not serve, returned "no category rows" every time, and the leg fell back to
-Chittorgarh and logged `single_source_unverified (H14)`. On this IPO the understatement
-cost nothing, because both thresholds were cleared more than twice over. On a borderline
-IPO it is exactly the failure that would have cost a qualifying bid.
+| 2026-10-13 | HDFIRE | — | 4.62x | — |
+| 2026-10-13 | RAVITA | — | 0.00x | — |
+| 2026-10-14 | HDFIRE | — | 16.50x | — |
+| 2026-10-14 | RAVITA | — | 0.00x | — |
+| 2026-10-15 | HDFIRE | — | 131.70x | — |
+| 2026-10-15 | RAVITA | — | 0.00x | — |
 
 ## Verdict on H22
 
-**CONFIRM H22.** NSE first for the live figure, Chittorgarh as fallback.
+**Not yet decided — this is filled in after 15 October.** The decision rule: if `updateTime` advances within a bidding day on HDFIRE, confirm H22 and let NSE carry the live 15:00 decision. If it does not, H22 is reduced to an archival and verification role and Chittorgarh stays primary for the live figure. The freshness gate already makes either outcome safe.
 
-The decision rule set before the test was: confirm if `updateTime` advances within a
-bidding day. It does — three to five times a day, as the table above shows. Every other
-measure points the same way:
-
-| test | NSE | Chittorgarh |
-|---|---|---|
-| `updateTime` advances intraday | yes, ~2-hourly | n/a (publishes no timestamp) |
-| polls returning a Total | 25 / 25 | 15 / 25 |
-| carried the issue on closing day | yes | **no**, 0 / 8 |
-| lagged the other source at comparable polls | no | yes, at every one |
-| category detail | QIB, NII and both NII sub-buckets, Retail, Employees, Total | Total and three categories |
-
-**The caveat that matters more than the verdict.** H22 was already the written policy, and
-it was not being honoured — not because NSE failed, but because our client could not read
-its payload. The policy was right and the implementation was silently wrong for every
-prediction this system has made. H22 is confirmed, and as of 16 Oct 2026 it is being
-honoured for the first time; the next live run is the first that will actually log
-`nse_official` as the source.
