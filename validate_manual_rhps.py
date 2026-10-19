@@ -42,6 +42,32 @@ OFFICIAL_HOSTS = {
     "nseindia.com", "www.nseindia.com",
     "nsearchives.nseindia.com", "archives.nseindia.com",
 }
+# H42. The user authorised these two specific documents on 2026-10-19, by company, after
+# seeing that neither is on SEBI. They are NOT a general relaxation of hard rule 3: the
+# allow-list is keyed on the COMPANY, so a different issuer's own website is still refused
+# and a new Drive link is still refused. Every other condition still applies in full - the
+# document must still pass `_verify_is_prospectus`, and its source flag records that it did
+# not come from the regulator.
+AUTHORISED_NON_OFFICIAL = {
+    "allied blenders and distillers limited": "issuer_site",
+    "sri lotus developers & realty ltd": "user_supplied_drive_link",
+}
+
+
+def drive_direct(url: str) -> str:
+    """A Google Drive *viewer* link rewritten to its direct-download form.
+
+    `/file/d/<id>/view` renders a viewer page, not the PDF, so fetching the link as given
+    returns HTML. The id is the document; `uc?export=download&id=<id>` is the same file
+    without the viewer. No login is involved either way - if the file were restricted this
+    returns an HTML sign-in page, which fails the %PDF check and is rejected, which is the
+    correct outcome rather than a workaround.
+    """
+    import re
+    m = re.search(r"/file/d/([A-Za-z0-9_-]{10,})", url) or re.search(r"[?&]id=([A-Za-z0-9_-]{10,})", url)
+    return f"https://drive.google.com/uc?export=download&id={m.group(1)}" if m else url
+
+
 UA = {"User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                      "(KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"),
       "Accept": "application/pdf,*/*"}
@@ -91,33 +117,55 @@ def resolve_pdf(sess, url: str) -> tuple[str, str]:
     return u, "followed the SEBI filing page to its file= document"
 
 
+ATTEMPTS = 3
+
+
 def fetch_to_disk(sess, url: str, dest: Path) -> tuple[bool, str, str, int]:
-    """`(ok, note, sha256, bytes)`. Streams in blocks; never holds the body in memory."""
-    try:
-        r = sess.get(url, headers=UA, timeout=120, stream=True,
-                     allow_redirects=True)
-    except Exception as e:                                     # noqa: BLE001
-        return False, f"{type(e).__name__}: {str(e)[:90]}", "", 0
-    if r.status_code != 200:
-        r.close()
-        return False, f"HTTP {r.status_code}", "", 0
-    h = hashlib.sha256()
-    n = 0
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    with dest.open("wb") as f:
-        for blk in r.iter_content(65536):
-            if blk:
-                h.update(blk)
-                f.write(blk)
-                n += len(blk)
-    r.close()
-    head = dest.open("rb").read(5)
-    if head[:4] != b"%PDF":
-        return False, f"not a PDF (starts {head!r}); {n} bytes", h.hexdigest(), n
-    return True, f"{n} bytes", h.hexdigest(), n
+    """`(ok, note, sha256, bytes)`. Streams in blocks; never holds the body in memory.
+
+    **Retried.** A dropped stream is not a bad document: SEBI closed the connection
+    4,427,992 bytes into a 5.5 MB prospectus on the first run here and the whole job died
+    on the unhandled `ChunkedEncodingError`, losing the ten results already computed.
+    `rhp_valuation.fetch` has had three attempts for exactly this since the first batch;
+    this had none. Three attempts, the politeness gap re-applied before each retry so a
+    retry is never a burst, and the partial file discarded between attempts so a truncated
+    body can never be hashed and accepted.
+    """
+    last = ""
+    for attempt in range(1, ATTEMPTS + 1):
+        h, n = hashlib.sha256(), 0
+        try:
+            r = sess.get(url, headers=UA, timeout=120, stream=True, allow_redirects=True)
+            if r.status_code != 200:
+                r.close()
+                return False, f"HTTP {r.status_code}", "", 0
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            with dest.open("wb") as f:
+                for blk in r.iter_content(65536):
+                    if blk:
+                        h.update(blk)
+                        f.write(blk)
+                        n += len(blk)
+            r.close()
+        except Exception as e:                                 # noqa: BLE001
+            last = f"{type(e).__name__}: {str(e)[:80]}"
+            try:
+                dest.unlink()
+            except OSError:
+                pass
+            if attempt < ATTEMPTS:
+                time.sleep(GAP)
+                continue
+            return False, f"{last} (after {ATTEMPTS} attempts)", "", 0
+        head = dest.open("rb").read(5)
+        if head[:4] != b"%PDF":
+            return False, f"not a PDF (starts {head!r}); {n} bytes", h.hexdigest(), n
+        return True, f"{n} bytes" + (f" on attempt {attempt}" if attempt > 1 else ""), \
+            h.hexdigest(), n
+    return False, last or "unreachable", "", 0
 
 
-def validate(limit: int | None = None) -> pd.DataFrame:
+def validate(limit: int | None = None, resume: bool = True) -> pd.DataFrame:
     import requests
     from fetch_rhp import _verify_is_prospectus
     d = pd.read_csv(MANUAL)
@@ -125,6 +173,20 @@ def validate(limit: int | None = None) -> pd.DataFrame:
         d = d.head(limit)
     sess = requests.Session()
     rows = []
+    # RESUMABLE on company. A verdict already reached is not recomputed - re-fetching a
+    # 677-page prospectus to learn what the file already says is rude to SEBI and slow.
+    if resume and OUT.exists():
+        try:
+            prev = pd.read_csv(OUT)
+            rows = [r for r in prev.to_dict("records")
+                    if str(r.get("verdict") or "") in ("ACCEPT", "REJECT")]
+            done = {str(r["company"]) for r in rows}
+            if done:
+                print(f"  resuming: {len(done)} rows already decided")
+                d = d[~d["company"].astype(str).isin(done)]
+        except Exception as e:                                 # noqa: BLE001
+            print(f"  could not resume ({type(e).__name__}); starting clean")
+            rows = []
     for i, r in enumerate(d.itertuples(), 1):
         url = str(getattr(r, "rhp_url", "") or "").strip()
         comp = str(r.company)
@@ -133,12 +195,16 @@ def validate(limit: int | None = None) -> pd.DataFrame:
                "host": host_of(url), "official_host": is_official(url),
                "fetched": False, "bytes": None, "sha256": "", "pages": None,
                "verified": False, "verdict": "", "reason": "",
-               "pdf_url": "", "resolved_how": ""}
+               "pdf_url": "", "resolved_how": "",
+               "source_flag": "sebi_official", "fetched_at_ist": ""}
         if not url or url.lower() == "nan":
             rec["verdict"], rec["reason"] = "REJECT", "no URL supplied"
             rows.append(rec)
             continue
-        if not rec["official_host"]:
+        auth = AUTHORISED_NON_OFFICIAL.get(comp.strip().lower())
+        if auth:
+            rec["source_flag"] = auth
+        if not rec["official_host"] and not auth:
             # Rule 3. Not fetched at all: the issue is the SOURCE, and fetching it would
             # not change the verdict. A prospectus has to come from the regulator or the
             # exchange, not from the issuer's own CMS or a file-sharing link, because the
@@ -151,7 +217,12 @@ def validate(limit: int | None = None) -> pd.DataFrame:
             print(f"  {i:3d}/{len(d)} {comp[:36]:38s} REJECT  non-official host "
                   f"{rec['host']}")
             continue
-        pdf_url, how = resolve_pdf(sess, url)
+        if auth == "user_supplied_drive_link":
+            url_fetch = drive_direct(url)
+            rec["resolved_how"] = "Drive viewer link rewritten to its direct-download form"
+        else:
+            url_fetch = url
+        pdf_url, how = resolve_pdf(sess, url_fetch)
         rec["pdf_url"], rec["resolved_how"] = pdf_url, how
         if not pdf_url:
             rec["verdict"], rec["reason"] = "REJECT", how
@@ -161,7 +232,8 @@ def validate(limit: int | None = None) -> pd.DataFrame:
             continue
         dest = PDF_DIR / (("".join(c if c.isalnum() else "_" for c in comp))[:70] + ".pdf")
         ok, note, sha, n = fetch_to_disk(sess, pdf_url, dest)
-        rec.update({"fetched": ok, "bytes": n or None, "sha256": sha})
+        rec.update({"fetched": ok, "bytes": n or None, "sha256": sha,
+                    "fetched_at_ist": str(pd.Timestamp.now())})
         if not ok:
             rec["verdict"], rec["reason"] = "REJECT", f"fetch failed: {note}"
             print(f"  {i:3d}/{len(d)} {comp[:36]:38s} REJECT  {note}")
@@ -186,11 +258,18 @@ def validate(limit: int | None = None) -> pd.DataFrame:
                 except OSError:
                     pass
         rows.append(rec)
+        # Written after EVERY row, not at the end. The first run died on row 11 and the
+        # ten verdicts already computed - ten PDFs fetched and opened - went with it.
+        _flush(rows)
         time.sleep(GAP)
     out = pd.DataFrame(rows)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    out.to_csv(OUT, index=False, encoding="utf-8")
+    _flush(rows)
     return out
+
+
+def _flush(rows: list[dict]) -> None:
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_csv(OUT, index=False, encoding="utf-8")
 
 
 def self_test() -> int:
@@ -217,6 +296,22 @@ def self_test() -> int:
     chk("a non-official host is not even fetched",
         "Not fetched - the source is the problem" in src)
 
+    print(chr(10) + "[1b] the two authorised exceptions (H42) are narrow")
+    chk("the allow-list is keyed on the COMPANY, not the host",
+        "allied blenders and distillers limited" in src
+        and "sri lotus developers & realty ltd" in src)
+    chk("so another issuer's own website is still refused",
+        "cms.abdindia.com" not in str(list(AUTHORISED_NON_OFFICIAL)))
+    chk("an authorised document STILL has to pass _verify_is_prospectus",
+        src.count("_verify_is_prospectus(dest.read_bytes()") == 1
+        and "if not rec[\"official_host\"] and not auth" in src)
+    chk("its source flag records that it is not from the regulator",
+        '"issuer_site"' in src and '"user_supplied_drive_link"' in src)
+    chk("a Drive viewer link is rewritten, never logged into",
+        "export=download" in src and "no login is involved" in src.lower())
+    chk("a restricted Drive file fails the %PDF check rather than being worked around",
+        "fails the %PDF check and is rejected" in src)
+
     print(chr(10) + "[2] never trust a URL")
     chk("the PDF magic number is checked", 'head[:4] != b"%PDF"' in src)
     chk("_verify_is_prospectus is the gate", "_verify_is_prospectus(dest.read_bytes()" in src)
@@ -224,6 +319,15 @@ def self_test() -> int:
     chk("the body is streamed, never held whole", "iter_content(65536)" in src)
     chk("a rejected PDF is not kept", "dest.unlink()" in src)
     chk("the politeness gap is at least 3 s (rule 9)", GAP >= 3.0)
+    chk("a dropped stream is retried, not fatal",
+        "ChunkedEncodingError" in src and "ATTEMPTS" in src)
+    chk("and the partial file is discarded between attempts, never hashed",
+        "dest.unlink()" in src and "if attempt < ATTEMPTS" in src)
+    chk("the gap is re-applied before a retry, so a retry is never a burst",
+        "time.sleep(GAP)" in src)
+    chk("verdicts are written after every row, not only at the end", "_flush(rows)" in src)
+    chk("and a decided row is not re-fetched on a resume",
+        'in ("ACCEPT", "REJECT")' in src)
 
     print(chr(10) + "[3] a SEBI filing page is followed to the document")
     chk("a .html filing page is not treated as a failed PDF",
@@ -246,12 +350,14 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--fresh", action="store_true",
+                    help="ignore previous verdicts and re-check every row")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         raise SystemExit(self_test())
     if a.check:
-        d = validate(a.limit)
+        d = validate(a.limit, resume=not a.fresh)
         print()
         print(d["verdict"].value_counts().to_string())
         print(f"written {OUT}")
