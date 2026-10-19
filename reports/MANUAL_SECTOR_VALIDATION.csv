@@ -1,0 +1,65 @@
+company,symbol,listing_date,my_label,nse_industry,verdict,correction_kind,reason
+Euro Pratik Sales Ltd.,EUROPRATIK,9/23/2025,Consumer Durables,Consumer Durables,ACCEPT,exact,exact match to NSE's industry vocabulary
+Dev Accelerator Ltd.,DEVX,9/17/2025,Realty,Realty,ACCEPT,exact,exact match to NSE's industry vocabulary
+Shringar House of Mangalsutra Ltd.,SHRINGARMS,9/17/2025,Consumer Durables,Consumer Durables,ACCEPT,exact,exact match to NSE's industry vocabulary
+Amanta Healthcare Ltd.,AMANTA,9/9/2025,Healthcare,Healthcare,ACCEPT,exact,exact match to NSE's industry vocabulary
+Anlon Healthcare Ltd.,AHCL,9/3/2025,Healthcare,Healthcare,ACCEPT,exact,exact match to NSE's industry vocabulary
+Vikran Engineering Ltd.,VIKRAN,9/3/2025,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Mangal Electrical Industries Ltd.,MEIL,8/28/2025,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Gem Aromatics Ltd,GEMAROMA,8/26/2025,Chemicals,Chemicals,ACCEPT,exact,exact match to NSE's industry vocabulary
+Patel Retail Ltd,PATELRMART,8/26/2025,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Regaal Resources Ltd.,REGAAL,8/20/2025,Agricultural Food & Other Products,Fast Moving Consumer Goods,CORRECTED,finer_rung_to_parent_sector,"a real NSE name, but at the BASIC-INDUSTRY rung; its parent SECTOR is Fast Moving Consumer Goods. Not confirmable from any file here - flagged, vetoable"
+All Time Plastics Ltd.,ALLTIME,8/14/2025,Consumer Durables,Consumer Durables,ACCEPT,exact,exact match to NSE's industry vocabulary
+Highway Infrastructure Ltd.,HILINFRA,8/12/2025,Financial Services,Financial Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+M & B Engineering Ltd,MBEL,8/6/2025,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+National Securities Depository Ltd (NSDL),NSDL,8/6/2025,Financial Services,Financial Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Laxmi India Finance Ltd,LAXMIINDIA,8/5/2025,Financial Services,Financial Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Shanti Gold International Ltd,SHANTIGOLD,8/1/2025,Consumer Durables,Consumer Durables,ACCEPT,exact,exact match to NSE's industry vocabulary
+Brigade Hotel Ventures Limited,BRIGHOTEL,7/31/2025,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Indiqube Spaces Limited,INDIQUBE,7/30/2025,Realty,Realty,ACCEPT,exact,exact match to NSE's industry vocabulary
+Smartworks Coworking Limited,SMARTWORKS,7/17/2025,Realty,Realty,ACCEPT,exact,exact match to NSE's industry vocabulary
+Travel Food Services Limited,TRAVELFOOD,7/14/2025,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Crizac Limited,CRIZAC,7/9/2025,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Indogulf Cropsciences Limited,IGCL,7/3/2025,Chemicals,Chemicals,ACCEPT,exact,exact match to NSE's industry vocabulary
+Sambhv Steel Tubes Limited,SAMBHV,7/2/2025,Metals & Mining,Metals & Mining,ACCEPT,exact,exact match to NSE's industry vocabulary
+Globe Civil Projects Limited,GLOBECIVIL,7/1/2025,Construction,Construction,ACCEPT,exact,exact match to NSE's industry vocabulary
+Kalpataru Limited,KALPATARU,7/1/2025,Realty,Realty,ACCEPT,exact,exact match to NSE's industry vocabulary
+Scoda Tubes Limited,SCODATUBES,6/4/2025,Metals & Mining,Metals & Mining,ACCEPT,exact,exact match to NSE's industry vocabulary
+Prostarm Info Systems Limited,PROSTARM,6/3/2025,Information Technology,Information Technology,ACCEPT,exact,exact match to NSE's industry vocabulary
+Borana Weaves Limited,BORANA,5/27/2025,Textiles,Textiles,ACCEPT,exact,exact match to NSE's industry vocabulary
+Ajax Engineering Limited,AJAXENGG,2/17/2025,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Dr Agarwal's Healthcare Limited,AGARWALEYE,2/4/2025,Healthcare,Healthcare,ACCEPT,exact,exact match to NSE's industry vocabulary
+Stallion India Fluorochem Limited,STALLION,1/23/2025,Chemicals,Chemicals,ACCEPT,exact,exact match to NSE's industry vocabulary
+Laxmi Dental Limited,LAXMIDENTL,1/20/2025,Healthcare,Healthcare,ACCEPT,exact,exact match to NSE's industry vocabulary
+Quadrant Future Tek Limited,QUADFUTURE,1/14/2025,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Indo Farm Equipment Limited,INDOFARM,1/7/2025,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Ventive Hospitality Limited,VENTIVE,12/30/2024,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Carraro India Limited,CARRARO,12/30/2024,Auto Components,Automobile and Auto Components,CORRECTED,same_name_truncated,NSE's sector name is 'Automobile and Auto Components'; the label is that name with its first two words dropped
+Dam Capital Advisors Limited,DAMCAPITAL,12/27/2024,Financial Services,Financial Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Mamata Machinery Limited,MAMATA,12/27/2024,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Sanathan Textiles Limited,SANATHAN,12/27/2024,Textiles,Textiles,ACCEPT,exact,exact match to NSE's industry vocabulary
+Concord Enviro Systems Limited,CEWATER,12/27/2024,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+One Mobikwik Systems Limited,MOBIKWIK,12/18/2024,Financial Services,Financial Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Suraksha Diagnostic Limited,SURAKSHA,12/6/2024,Healthcare,Healthcare,ACCEPT,exact,exact match to NSE's industry vocabulary
+Godavari Biorefineries Limited,GODAVARIB,10/30/2024,Chemicals,Chemicals,ACCEPT,exact,exact match to NSE's industry vocabulary
+Deepak Builders & Engineers India Limited,DBEIL,10/28/2024,Construction,Construction,ACCEPT,exact,exact match to NSE's industry vocabulary
+Garuda Construction and Engineering Limited,GARUDA,10/15/2024,Construction,Construction,ACCEPT,exact,exact match to NSE's industry vocabulary
+Diffusion Engineers Limited,DIFFNKG,10/4/2024,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Manba Finance Limited,MANBA,9/30/2024,Financial Services,Financial Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Arkade Developers Limited,ARKADE,9/24/2024,Realty,Realty,ACCEPT,exact,exact match to NSE's industry vocabulary
+Western Carriers Limited,WCIL,9/24/2024,Transport Services,Services,CORRECTED,finer_rung_to_parent_sector,"a real NSE name, but at the BASIC-INDUSTRY rung; its parent SECTOR is Services. Not confirmable from any file here - flagged, vetoable"
+Tolins Tyres Limited,TOLINS,9/16/2024,Auto Components,Automobile and Auto Components,CORRECTED,same_name_truncated,NSE's sector name is 'Automobile and Auto Components'; the label is that name with its first two words dropped
+Kross Limited,KROSS,9/16/2024,Auto Components,Automobile and Auto Components,CORRECTED,same_name_truncated,NSE's sector name is 'Automobile and Auto Components'; the label is that name with its first two words dropped
+Shree Tirupati Balajee Agro Trading Company Limited,BALAJEE,9/12/2024,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Gala Precision Engineering Limited,GALAPREC,9/9/2024,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Baazar Style Retail Limited,STYLEBAAZA,9/6/2024,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Ecos (India) Mobility & Hospitality Limited,ECOSMOBLTY,9/4/2024,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Orient Technologies Limited,ORIENTTECH,8/28/2024,Information Technology,Information Technology,ACCEPT,exact,exact match to NSE's industry vocabulary
+Interarch Building Products Limited,INTERARCH,8/26/2024,Capital Goods,Capital Goods,ACCEPT,exact,exact match to NSE's industry vocabulary
+Saraswati Saree Depot Limited,SSDL,8/20/2024,Consumer Services,Consumer Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Unicommerce eSolutions Limited,UNIECOM,8/13/2024,Information Technology,Information Technology,ACCEPT,exact,exact match to NSE's industry vocabulary
+Sanstar Limited,SANSTAR,7/26/2024,Agricultural Food & Other Products,Fast Moving Consumer Goods,CORRECTED,finer_rung_to_parent_sector,"a real NSE name, but at the BASIC-INDUSTRY rung; its parent SECTOR is Fast Moving Consumer Goods. Not confirmable from any file here - flagged, vetoable"
+Bansal Wire Industries Limited,BANSALWIRE,7/10/2024,Metals & Mining,Metals & Mining,ACCEPT,exact,exact match to NSE's industry vocabulary
+Vraj Iron & Steel Limited,VRAJ,7/3/2024,Metals & Mining,Metals & Mining,ACCEPT,exact,exact match to NSE's industry vocabulary
+Abans Financial Services Limited,AFSL,12/23/2022,Financial Services,Financial Services,ACCEPT,exact,exact match to NSE's industry vocabulary
+Alivus Life Sciences Limited,ALIVUS,8/6/2021,Healthcare,Healthcare,ACCEPT,exact,exact match to NSE's industry vocabulary
