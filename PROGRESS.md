@@ -554,9 +554,20 @@ anyway.
 
 | # | weekday | run id | summary line | counts |
 |---|---|---|---|---|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
+| 1 | **Fri 16 Oct** | `38942434025` | `outcome ingest status: 0` — "nothing new to ingest", correct (the 14 rows had already been taken) | **YES** |
+| 2 | **Mon 19 Oct** | `39265170800` | `outcome ingest status: 0` — "14 already ingested, skipped (idempotent)", "nothing new to ingest" | **YES** |
+| 3 | Tue 20 Oct | | | pending |
+
+**Status at 19 Oct 2026: 2 of the 3 consecutive weekdays are ticked.** Tuesday 20 Oct is
+the third. Condition (b), the retrain comparison, is filled on the workflow side from
+dispatch run `38824059003`; the routine's column is still for the user.
+
+**Note on the routines, measured rather than assumed (19 Oct).** `ipo-ingest-outcomes` is
+**NOT deleted** — it committed `e5dc68a` at 13:28 IST today, "harvest found nothing new".
+It is running in parallel with the workflow step, which is what H41 intends, and both are
+idempotent so nothing is duplicated. `ipo-retrain-monthly` has **no commit of its own on
+record at any date**; the only matches for that name are my own commit messages mentioning
+it, so either it has never had anything to commit or it is already gone.
 
 **(b) One `retrain` run matches the routine's last output.** Compare
 `reports/retrain/YYYY-MM.md` against what `ipo-retrain-monthly` last produced.
