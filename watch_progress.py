@@ -24,7 +24,11 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 DATA = ROOT / "data"
-PDF_DIR = ROOT / "_local" / "rhp_valuation"
+# BOTH folders. The 38 user-supplied prospectuses validated on 19 Oct land in
+# `rhp_manual`, so counting only `rhp_valuation` reported 416 PDFs against 450 documents
+# in flight - an undercount in the one number this tool exists to show.
+PDF_DIRS = [ROOT / "_local" / "rhp_valuation", ROOT / "_local" / "rhp_manual"]
+PDF_DIR = PDF_DIRS[0]
 FETCH = DATA / "rhp_valuation_fetch.csv"
 VALUES = DATA / "rhp_valuation_values.csv"
 STATE = DATA / ".watch_state.json"
@@ -73,7 +77,7 @@ def chain_processes() -> list[dict]:
 def counts() -> dict:
     import pandas as pd
     from extract.valuation import VALUATION_VERSION as V
-    n_pdf = len(list(PDF_DIR.glob("*.pdf"))) if PDF_DIR.exists() else 0
+    n_pdf = sum(len(list(d.glob("*.pdf"))) for d in PDF_DIRS if d.exists())
     fetched = total = 0
     if FETCH.exists():
         try:
@@ -169,7 +173,9 @@ def main() -> int:
     if eta:
         print(f"  remaining           {eta}")
     print()
-    print(f"  PDF folder          {PDF_DIR}")
+    for d in PDF_DIRS:
+        if d.exists():
+            print(f"  PDF folder          {d}  ({len(list(d.glob('*.pdf')))} files)")
     print(f"  growing file        {VALUES}")
     print("=" * 66)
     other = [p for p in procs if p["stage"] == "?"]
