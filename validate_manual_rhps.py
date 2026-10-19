@@ -240,6 +240,29 @@ def validate(limit: int | None = None, resume: bool = True) -> pd.DataFrame:
         else:
             try:
                 good, why = _verify_is_prospectus(dest.read_bytes(), comp)
+                # A RENAMED company's prospectus carries its FORMER name on the cover, so
+                # the name test fails on a document that is entirely correct. Acutaas
+                # Chemicals was rejected here ("company name not matched in cover,
+                # hits=0") on the RHP filed as Ami Organics - a rename NSE itself records
+                # (AMIORG -> ACUTAAS, 02-JUN-2025) and company_aliases.py already holds.
+                # So a name-only failure is retried against the known aliases. This does
+                # NOT weaken the test: the >=100-page and prospectus-marker checks are
+                # untouched, and the alias has to be on record already - no similarity
+                # matching, which is what H28 forbids.
+                if not good and "name not matched" in str(why).lower():
+                    try:
+                        import company_aliases as CA
+                        for alt in CA.aliases_for(comp):
+                            g2, w2 = _verify_is_prospectus(dest.read_bytes(), alt)
+                            if g2:
+                                good = True
+                                why = (f"{w2}; matched the FORMER name '{alt}' from "
+                                       f"company_aliases (the cover predates the rename)")
+                                rec["source_flag"] = (rec.get("source_flag") or "") \
+                                    + "+verified_under_former_name"
+                                break
+                    except Exception:                          # noqa: BLE001
+                        pass
                 rec["verified"], rec["reason"] = bool(good), why
                 rec["verdict"] = "ACCEPT" if good else "REJECT"
                 import re as _re
@@ -302,9 +325,13 @@ def self_test() -> int:
         and "sri lotus developers & realty ltd" in src)
     chk("so another issuer's own website is still refused",
         "cms.abdindia.com" not in str(list(AUTHORISED_NON_OFFICIAL)))
+    # Checked on the CONTROL FLOW, not by counting calls. The old form required exactly
+    # one call to _verify_is_prospectus, so adding the former-name retry - which calls it
+    # again, more strictly - failed an assertion whose point it does not touch.
     chk("an authorised document STILL has to pass _verify_is_prospectus",
-        src.count("_verify_is_prospectus(dest.read_bytes()") == 1
-        and "if not rec[\"official_host\"] and not auth" in src)
+        'if not rec["official_host"] and not auth' in src
+        and "_verify_is_prospectus" in src
+        and "auth" not in src.split("_verify_is_prospectus")[0].rsplit("if ", 1)[-1])
     chk("its source flag records that it is not from the regulator",
         '"issuer_site"' in src and '"user_supplied_drive_link"' in src)
     chk("a Drive viewer link is rewritten, never logged into",
@@ -319,6 +346,12 @@ def self_test() -> int:
     chk("the body is streamed, never held whole", "iter_content(65536)" in src)
     chk("a rejected PDF is not kept", "dest.unlink()" in src)
     chk("the politeness gap is at least 3 s (rule 9)", GAP >= 3.0)
+    chk("a name-only failure is retried against KNOWN aliases, not similar names",
+        'aliases_for(comp)' in src and '"name not matched" in str(why).lower()' in src)
+    chk("and only a NAME failure is retried - the page count still binds",
+        'if not good and "name not matched"' in src)
+    chk("a document verified under a former name says so on the row",
+        "verified_under_former_name" in src)
     chk("a dropped stream is retried, not fatal",
         "ChunkedEncodingError" in src and "ATTEMPTS" in src)
     chk("and the partial file is discarded between attempts, never hashed",
