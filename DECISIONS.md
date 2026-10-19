@@ -1594,3 +1594,79 @@ First evidence on the record: dispatch run `38824059003` (16 Oct 2026) produced
 fires against a 90% promise, L2 80.8% on 156 against 80%, both H19 counts at 1 of 2,
 threshold drift 0.0%, champion kept on both targets, 113 IPOs in the trailing 12 months,
 and the predictions_log header at 36 of 36.
+
+### H42 — two prospectuses accepted from non-official hosts, by name (2026-10-19)
+
+**Approved by the user on 19 Oct 2026, for two specific documents, after seeing that
+neither is on SEBI.** Hard rule 3 — RHPs come from SEBI for mainboard and BSE SME only —
+is otherwise unchanged.
+
+| company | host | source flag |
+|---|---|---|
+| Allied Blenders and Distillers Limited | `cms.abdindia.com` (the issuer's own CMS) | `issuer_site` |
+| Sri Lotus Developers & Realty Ltd | `drive.google.com` (user-supplied link) | `user_supplied_drive_link` |
+
+**The allow-list is keyed on the COMPANY, not the host**, so a different issuer's website
+and a different Drive link are still refused. Every other condition applies in full: the
+document must pass `_verify_is_prospectus()` — prospectus marker, company name on the
+cover, at least 100 pages — and its URL, host, fetch time and SHA-256 are recorded, with
+the source flag ensuring it is never indistinguishable from a regulator's copy.
+
+No login is involved. A Drive *viewer* link is rewritten to its direct-download form; a
+restricted file returns an HTML sign-in page, fails the `%PDF` check and is rejected, which
+is the correct outcome rather than something to work around.
+
+Allied Blenders verified at **675 pages**, so the issuer's copy is a genuine prospectus.
+
+---
+
+### H43 — P/B: two variables, three routes, and a share count that cannot be trusted whole
+
+**ipo_pb_pre_issue and ipo_pb are different variables and are never interchanged.** The
+pre-issue variant reaches **163 of 399 (41%)**; post-issue reaches 26 (7%).
+
+**What the pre-issue NAV is.** `nav_pre_issue` — the explicit "NAV before the offer" line —
+is extracted on **0 of 399** documents, so it cannot be the input. `nav_fy1`, the most
+recent fiscal year's NAV per share, is on 166 and IS pre-issue book value per share: it is
+struck before the offer by construction. Every row names its input in
+`ipo_pb_pre_issue_input`.
+
+**The three routes for post-issue, in the user's order, with the method on every row:**
+
+| method | status | rows |
+|---|---|---|
+| 1 `rhp_stated_post_issue_nav` | built | 7 |
+| 2 `chittorgarh_kpi` | **NOT fetched** — the 2,861-row harvest carries 50 fields and none is a P/BV or NAV, so this needs a fresh fetch of the KPI pages rather than a read of what we hold. Queued, and every row it would fill says so | 0 |
+| 3 `derived_post_issue_nav` | built | 22 |
+
+Method 1 outranks method 3; where both exist they are cross-checked and a disagreement over
+5% withholds the row and logs both (hard rule 1). Method 3 **ignores issue expenses**, which
+overstates post-issue book value and therefore understates the ratio — stated on every row
+it produces.
+
+**The finding that matters more than the coverage.** Hand-validating three IPOs caught a
+wrong value no coverage table would have shown: Anupam Rasayan's post-issue share count
+reads **220,000**, which gave a book value of Rs 72,023 per share and a P/B of **0.0077**.
+
+So a guard now sits at the derive layer, and it is arithmetic rather than a heuristic:
+selling a slice of a company for Rs N crore implies the company is worth at least Rs N
+crore, so `shares x offer price >= issue size` must hold. **20 of the 153 extracted share
+counts fail it**, some by three orders of magnitude; the 133 that pass sit between 2.0x and
+425x the issue size, median 4.4x, so the test separates cleanly at 1.0.
+
+| | count |
+|---|---|
+| share counts testable against offer price and issue size | 153 |
+| **implausible — market cap below the money raised** | **20** |
+| plausible | 133 |
+
+The guard withholds the derived value and writes the reason and the multiple onto the row.
+**The extractor still produces those 20 bad counts**, and that is recorded here as a defect
+for the next extraction pass rather than hidden: re-running the extractor is a four-hour
+job, and withholding at the derive layer is what protects the ratios today. `fcf_yield` and
+`ipo_ev_ebitda` use the same share count and need the same guard.
+
+**The peer premiums are blocked on data, not code.** `peer_1_pb` is extracted on 15 of 399
+documents, because most RHP peer tables quote P/E, EPS, RoNW and NAV but not P/B.
+
+Never from Tapetide (H36), asserted on the module body.

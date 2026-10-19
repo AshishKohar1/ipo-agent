@@ -76,6 +76,44 @@ def _wide(version: str | None = None):
     return val, pg, src, str(v)
 
 
+# A post-issue share count is only usable if the implied market capitalisation can
+# actually accommodate the money raised. Selling a slice of a company for Rs N crore
+# implies the whole company is worth AT LEAST Rs N crore, so
+#
+#     shares x offer price  >=  issue size
+#
+# is arithmetic, not a heuristic. 20 of the 153 counts the extractor produced fail it, and
+# they fail it enormously: Anupam Rasayan reads 220,000 shares at Rs 555, a market cap of
+# Rs 12.2 crore against a Rs 760 crore issue. Hand-validation found it - the derived P/B
+# came out at 0.0077 off a book value of Rs 72,023 per share - and nothing in the coverage
+# table would have.
+#
+# The 133 that pass sit between 2.0x and 425x the issue size, median 4.4x, so the test
+# separates cleanly at 1.0 and is not tuned to taste.
+#
+# This guards the DERIVE layer. The extractor still produces the bad counts and that is
+# recorded as a defect to fix in the next pass, because re-running it is a four-hour job
+# and withholding the derived value is what protects the ratios today.
+MCAP_FLOOR = 1.0
+
+
+def share_count_plausible(shares, offer_price, issue_size_cr) -> tuple[bool, str, float | None]:
+    """`(ok, why, market cap / issue size)`."""
+    try:
+        sh, p, sz = float(shares), float(offer_price), float(issue_size_cr)
+    except (TypeError, ValueError):
+        return True, "not testable: offer price or issue size missing", None
+    if sh <= 0 or p <= 0 or sz <= 0:
+        return True, "not testable: a non-positive input", None
+    ratio = (sh * p / 1e7) / sz
+    if ratio < MCAP_FLOOR:
+        return False, (f"IMPLAUSIBLE share count: {sh:,.0f} shares at Rs {p:,.0f} is a "
+                       f"post-issue market cap of Rs {sh * p / 1e7:,.1f} cr against an "
+                       f"issue of Rs {sz:,.1f} cr - the company cannot be worth less than "
+                       f"the money it raised"), ratio
+    return True, f"market cap is {ratio:.1f}x the issue size", ratio
+
+
 def _g(row, name):
     if row is None or name not in getattr(row, "index", []):
         return None
@@ -109,6 +147,8 @@ def derive(version: str | None = None) -> pd.DataFrame:
     ms = dataio.load_master_with_symbols()
     price = {str(r["symbol"]): r.get("Offer Price") for _, r in ms.iterrows()
              if pd.notna(r.get("symbol"))}
+    size = {str(r["symbol"]): r.get("Issue_Size(crores)") for _, r in ms.iterrows()
+            if pd.notna(r.get("symbol"))}
     raw = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
     raw = raw[raw["extractor_version"].astype(str) == ver]
     meta = raw.groupby("company").agg(symbol=("symbol", "first"),
@@ -169,6 +209,13 @@ def derive(version: str | None = None) -> pd.DataFrame:
         nw = None if c is None else pd.to_numeric(c.get("net_worth_cr"), errors="coerce")
         fi = None if c is None else pd.to_numeric(c.get("fresh_issue_cr"), errors="coerce")
         sh = _g(r, "shares_outstanding_post_issue")
+        issue_cr = size.get(sym)
+        shares_ok, shares_why, mcap_ratio = share_count_plausible(sh, po, issue_cr)
+        o["post_issue_shares_mcap_over_issue"] = (None if mcap_ratio is None
+                                                  else round(mcap_ratio, 3))
+        o["post_issue_shares_check"] = shares_why
+        if sh is not None and not shares_ok:
+            sh = None          # refuse it; the reason is on the row
         o["pb_method3_net_worth_cr"] = None if nw is None or pd.isna(nw) else float(nw)
         o["pb_method3_fresh_issue_cr"] = None if fi is None or pd.isna(fi) else float(fi)
         o["pb_method3_post_issue_shares"] = sh
@@ -185,12 +232,16 @@ def derive(version: str | None = None) -> pd.DataFrame:
                     f"EXPENSES IGNORED, which overstates book value and so UNDERSTATES "
                     f"this P/B")
         else:
+            if sh is None and not shares_ok:
+                o["pb_method3_reason"] = shares_why
+
             missing = [n for n, x in (("net worth (Chittorgarh)", nw),
                                       ("fresh issue (Chittorgarh)", fi),
                                       ("post-issue shares (RHP)", sh))
                        if x is None or (isinstance(x, float) and pd.isna(x))]
-            o["pb_method3_reason"] = ("missing: " + ", ".join(missing)) if missing \
-                else "non-positive derived book value"
+            if not o.get("pb_method3_reason"):
+                o["pb_method3_reason"] = (("missing: " + ", ".join(missing)) if missing
+                                          else "non-positive derived book value")
 
         # ---------------------------------------------------- choose, and cross-check
         if pb1 is not None and pb3 is not None:
@@ -306,6 +357,19 @@ def self_test() -> int:
     print(chr(10) + "[4] never from Tapetide (H36)")
     body = src.split('"""', 2)[-1]
     chk("no Tapetide call anywhere in the code", "tapetide" not in body.lower())
+
+    print(chr(10) + "[4b] an impossible share count is refused")
+    ok1, why1, r1 = share_count_plausible(220000, 555, 760)
+    chk("220,000 shares at Rs 555 against a Rs 760 cr issue is refused",
+        not ok1 and "IMPLAUSIBLE" in why1, (why1, r1))
+    ok2, why2, r2 = share_count_plausible(100_000_000, 555, 760)
+    chk("a plausible count passes, with the multiple recorded",
+        ok2 and r2 and r2 > 1, (why2, r2))
+    chk("the test is arithmetic, not a tuned threshold", MCAP_FLOOR == 1.0)
+    chk("an untestable row is NOT refused",
+        share_count_plausible(220000, None, 760)[0])
+    chk("the refusal reason is written onto the row",
+        'o["post_issue_shares_check"]' in src)
 
     print(chr(10) + "[5] peer premiums need two peers")
     row = pd.Series({"peer_1_pb": 2.0, "peer_2_pb": 4.0, "peer_3_pb": -1.0})
