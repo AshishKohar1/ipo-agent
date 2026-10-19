@@ -84,7 +84,13 @@ MAX_PEERS = 12
 #          once and shared between the share-count and promoter readers rather than
 #          twice, and capital.py pre-scans the text before extracting any table;
 #          together those were 29 of the 53 seconds one document took.
-VALUATION_VERSION = "1.7.0"
+#   1.8.0  1.2c: the post-issue share count now requires the CAPITAL BUILD-UP context,
+#          not merely a line mentioning "post-issue". 20 of the 153 counts 1.7.0 produced
+#          were impossible - implied market capitalisation below the money raised - and
+#          every one came from a line about something else: an employee reservation cap, a
+#          promoter lock-in row, a pre-IPO placement or preference-share footnote, or the
+#          selling shareholders' OFS size. Not a unit or scale fault.
+VALUATION_VERSION = "1.8.0"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
@@ -1197,11 +1203,46 @@ def financials(doc: Doc) -> list[Value]:
 
 
 # ------------------------------------------------------------------ 1.2c share count
+# The post-issue share count must come from the CAPITAL BUILD-UP row, not from any line
+# that happens to say "post-Issue". The first version accepted the latter and 20 of its
+# 153 values were impossible - the implied market capitalisation came out BELOW the money
+# the IPO raised. The causes were never units or scale; they were four families of line
+# that mention the post-issue capital while counting something else entirely:
+#
+#   employee reservation caps   "The Employee Reservation Portion shall not exceed 5% of
+#                                the post-Issue paid up Equity Share capital" - Brigade
+#                                200,000, Sambhv 500,000, Anupam Rasayan 220,000
+#   promoter lock-in tables     "Name No. of Equity Shares Pre-Offer (%) Post-Offer (%)
+#                                Udaya Kumar Hebbar 212,500 0.17" - one promoter's holding
+#   pre-IPO placements and      "After the Offer [bullet] ... allotted 6,300,000 Equity
+#   preference conversions       Shares to JSW Group Welfare Trust pursuant to a Pre-IPO
+#                                Placement"; CCPS and FRCPS footnotes
+#   selling-shareholder counts  "The Selling Shareholders are offering 5,433,016 Equity
+#                                Shares" - the OFS size, not the total
+#
+# So the line must now carry BOTH the after-the-offer phrase AND a paid-up-capital phrase,
+# in either order and within 90 characters of each other, which is what the build-up row
+# looks like: "D) ISSUED, SUBSCRIBED AND PAID-UP CAPITAL AFTER THE OFFER". And any line
+# matching one of the four families above is refused outright, because a line can satisfy
+# the capital phrasing and still be about the employee quota.
+CAPITAL_PHRASE = r"(?:issued|subscribed|paid[\s-]*up|equity\s+share\s+capital)"
+AFTER_PHRASE = r"(?:after|post)[\s-]*(?:the\s*)?(?:offer|issue|ipo)"
 POST_ISSUE = re.compile(
-    r"(?i)(?:"
-    r"(?:after|post)[\s-]*(?:the\s*)?(?:offer|issue|ipo)"
-    r"|(?:issued,?\s*subscribed\s*and\s*paid[\s-]*up).{0,60}?(?:after|post)"
-    r")")
+    r"(?i)(?:" + CAPITAL_PHRASE + r".{0,90}?" + AFTER_PHRASE
+    + r"|" + AFTER_PHRASE + r".{0,90}?" + CAPITAL_PHRASE + r")")
+# Any of these on the line disqualifies it, however well it matches above.
+NOT_THE_COUNT = re.compile(
+    r"(?i)employee\s+reservation"
+    r"|reservation\s+portion"
+    r"|lock(?:ed)?[\s-]*in"
+    r"|pre[\s-]*ipo\s+placement"
+    r"|preference\s+shares?"
+    r"|\bCCPS\b|\bFRCPS\b|\bOCRPS\b"
+    r"|selling\s+shareholders?\s+(?:are|is|have|has)?\s*offer"
+    r"|pursuant\s+to\s+(?:the\s+)?conversion"
+    r"|no\.?\s*of\s+equity\s+shares\s+pre[\s-]*(?:offer|issue)"
+    r"|shall\s+not\s+exceed"
+    r"|in\s+excess\s+of")
 # "123,456,789 Equity Shares of face value Rs 10 each" - the count is the number ADJACENT
 # to "Equity Shares". The same row usually also prints the aggregate rupee capital, which
 # is larger, so the previous `max()` took the money figure and called it a share count.
@@ -1221,9 +1262,13 @@ def _post_issue_count(doc, texts: dict[int, str]):
     for i, t in sorted(texts.items()):
         lines = [re.sub(r"\s+", " ", x).strip() for x in (t or "").splitlines()]
         for n, ln in enumerate(lines):
-            if not ln or not POST_ISSUE.search(ln):
+            if not ln or not POST_ISSUE.search(ln) or NOT_THE_COUNT.search(ln):
                 continue
             joined = ln if COUNT_ADJ.search(ln) else " ".join(lines[n:n + 2]).strip()
+            if NOT_THE_COUNT.search(joined):
+                # The continuation line can reveal what the first line was really about -
+                # "After the Offer [bullet]" followed by a pre-IPO placement footnote.
+                continue
             adj = [num(m.group(1)) for m in COUNT_ADJ.finditer(joined)]
             adj = [v for v in adj if v is not None and v > 1e5]
             if adj:

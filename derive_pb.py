@@ -95,10 +95,34 @@ def _wide(version: str | None = None):
 # recorded as a defect to fix in the next pass, because re-running it is a four-hour job
 # and withholding the derived value is what protects the ratios today.
 MCAP_FLOOR = 1.0
+MCAP_CEILING = 25.0
 
 
 def share_count_plausible(shares, offer_price, issue_size_cr) -> tuple[bool, str, float | None]:
-    """`(ok, why, market cap / issue size)`."""
+    """`(ok, why, market cap / issue size)`. **Two-sided**, and the ceiling matters as
+    much as the floor.
+
+    The first version of this guard only looked DOWNWARD, and that was a real mistake: it
+    caught the 20 counts that were far too small and waved through a whole second family
+    that is far too LARGE. Those are the aggregate RUPEE capital read as a share count -
+    Gland Pharma "After the Offer 18,381,605,803", which is Rs 18.4 billion of capital,
+    not 18.4 billion shares against the roughly 163 million it has. A one-sided guard
+    reported 133 of 153 values as plausible when the true figure is 121.
+
+    The floor is arithmetic: selling a slice of a company for Rs N crore means the company
+    is worth at least Rs N crore.
+
+    The ceiling has two independent supports and they agree:
+
+      * regulation - SEBI requires a minimum public offer of 10% of post-issue capital for
+        the largest issues and 25% otherwise, so post-issue market capitalisation cannot
+        exceed about 10x the issue size. 25x is two and a half times that headroom, so the
+        test refuses only what no offer structure can produce.
+      * the data - the distribution is bimodal with a gap exactly there. The 90th
+        percentile is 9.7x and the 95th is 55x, with nothing in between.
+
+    So the band is not tuned to taste; anything from 10x to 50x would select the same 121.
+    """
     try:
         sh, p, sz = float(shares), float(offer_price), float(issue_size_cr)
     except (TypeError, ValueError):
@@ -106,11 +130,18 @@ def share_count_plausible(shares, offer_price, issue_size_cr) -> tuple[bool, str
     if sh <= 0 or p <= 0 or sz <= 0:
         return True, "not testable: a non-positive input", None
     ratio = (sh * p / 1e7) / sz
+    mcap = sh * p / 1e7
     if ratio < MCAP_FLOOR:
-        return False, (f"IMPLAUSIBLE share count: {sh:,.0f} shares at Rs {p:,.0f} is a "
-                       f"post-issue market cap of Rs {sh * p / 1e7:,.1f} cr against an "
-                       f"issue of Rs {sz:,.1f} cr - the company cannot be worth less than "
-                       f"the money it raised"), ratio
+        return False, (f"IMPLAUSIBLE share count, TOO SMALL: {sh:,.0f} shares at Rs "
+                       f"{p:,.0f} is a post-issue market cap of Rs {mcap:,.1f} cr against "
+                       f"an issue of Rs {sz:,.1f} cr - the company cannot be worth less "
+                       f"than the money it raised"), ratio
+    if ratio > MCAP_CEILING:
+        return False, (f"IMPLAUSIBLE share count, TOO LARGE: {sh:,.0f} shares at Rs "
+                       f"{p:,.0f} implies a market cap of Rs {mcap:,.0f} cr, {ratio:.0f}x "
+                       f"the Rs {sz:,.1f} cr issue. SEBI's minimum public offer caps that "
+                       f"near 10x, so this is almost certainly the aggregate RUPEE "
+                       f"capital read as a share count"), ratio
     return True, f"market cap is {ratio:.1f}x the issue size", ratio
 
 
@@ -358,14 +389,19 @@ def self_test() -> int:
     body = src.split('"""', 2)[-1]
     chk("no Tapetide call anywhere in the code", "tapetide" not in body.lower())
 
-    print(chr(10) + "[4b] an impossible share count is refused")
+    print(chr(10) + "[4b] the share-count guard is TWO-SIDED")
     ok1, why1, r1 = share_count_plausible(220000, 555, 760)
-    chk("220,000 shares at Rs 555 against a Rs 760 cr issue is refused",
-        not ok1 and "IMPLAUSIBLE" in why1, (why1, r1))
+    chk("too small is refused: Anupam's 220,000 at Rs 555 against a Rs 760 cr issue",
+        not ok1 and "TOO SMALL" in why1, (why1, r1))
+    ok3, why3, r3 = share_count_plausible(18_381_605_803, 1500, 6479)
+    chk("too large is refused: Gland's 18.4bn, which is RUPEE capital not shares",
+        not ok3 and "TOO LARGE" in why3, (why3, round(r3 or 0)))
     ok2, why2, r2 = share_count_plausible(100_000_000, 555, 760)
     chk("a plausible count passes, with the multiple recorded",
-        ok2 and r2 and r2 > 1, (why2, r2))
-    chk("the test is arithmetic, not a tuned threshold", MCAP_FLOOR == 1.0)
+        ok2 and r2 and 1 <= r2 <= MCAP_CEILING, (why2, r2))
+    chk("the floor is arithmetic", MCAP_FLOOR == 1.0)
+    chk("the ceiling is supported by regulation AND by the gap in the data",
+        "minimum public offer" in src and "bimodal" in src)
     chk("an untestable row is NOT refused",
         share_count_plausible(220000, None, 760)[0])
     chk("the refusal reason is written onto the row",

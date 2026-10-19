@@ -109,6 +109,8 @@ def derive(version: str | None = None) -> pd.DataFrame:
     ms = dataio.load_master_with_symbols()
     sym2price = {str(r["symbol"]): r.get("Offer Price") for _, r in ms.iterrows()
                  if pd.notna(r.get("symbol"))}
+    sym2size = {str(r["symbol"]): r.get("Issue_Size(crores)") for _, r in ms.iterrows()
+                if pd.notna(r.get("symbol"))}
     raw = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
     raw = raw[raw["extractor_version"].astype(str) == ver]
     meta = raw.groupby("company").agg(symbol=("symbol", "first"),
@@ -193,10 +195,24 @@ def derive(version: str | None = None) -> pd.DataFrame:
             o["ipo_peg"] = round(o["ipo_pe"] / (g * 100), 4)
 
         # --- 5. EV/EBITDA
+        # The SAME two-sided guard as the P/B module, imported rather than restated so
+        # the two can never drift apart. 32 of the 153 extracted share counts fail it -
+        # 20 too small, 12 the aggregate rupee capital read as shares - and every ratio
+        # below is built on this number, so a wrong one poisons EV/EBITDA and FCF yield
+        # exactly as it poisoned the derived P/B.
+        from derive_pb import share_count_plausible
+        issue_cr = sym2size.get(sym)
+        sh_ok, sh_why, sh_ratio = share_count_plausible(shares, price, issue_cr)
+        o["post_issue_shares_mcap_over_issue"] = (None if sh_ratio is None
+                                                  else round(sh_ratio, 3))
+        o["post_issue_shares_check"] = sh_why
+        if shares is not None and not sh_ok:
+            shares = None
         mcap = round(price * shares / 1e7, 4) if shares else None
         o["market_cap_crore"] = mcap
         if mcap is None:
-            o["ipo_ev_ebitda_reason"] = "post-issue share count not extracted"
+            o["ipo_ev_ebitda_reason"] = (sh_why if (shares is None and not sh_ok)
+                                         else "post-issue share count not extracted")
         elif ebitda is None:
             o["ipo_ev_ebitda_reason"] = "EBITDA not extracted"
         elif ebitda <= 0:
@@ -215,7 +231,8 @@ def derive(version: str | None = None) -> pd.DataFrame:
 
         # --- 6. FCF yield. Sign kept: a cash-burning company has a negative FCF yield.
         if mcap is None:
-            o["fcf_yield_reason"] = "post-issue share count not extracted"
+            o["fcf_yield_reason"] = (sh_why if (shares is None and not sh_ok)
+                                     else "post-issue share count not extracted")
         elif cfo is None or capex is None:
             o["fcf_yield_reason"] = "cash from operations or capex not extracted"
         else:
@@ -323,6 +340,10 @@ def self_test() -> int:
         src and 'value_crore' in src)
     chk("market cap is built in crore from a rupee price and a share count",
         "price * shares / 1e7" in src)
+    chk("and the share count passes the SAME guard the P/B module uses",
+        "from derive_pb import share_count_plausible" in src)
+    chk("a refused count blocks EV/EBITDA and FCF yield, with the reason on the row",
+        'o["post_issue_shares_check"]' in src and "sh_why" in src)
 
     print(chr(10) + "[3] a peer median is a median of at least two peers")
     row = pd.Series({f"peer_{i}_pe": x for i, x in
