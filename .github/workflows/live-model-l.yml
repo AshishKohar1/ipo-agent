@@ -77,19 +77,19 @@ on:
                                 #   listing-day prices
     - cron: "0 5 * * 6"         # 05:00 UTC = 10:30 IST Saturdays — weekly capture audit
     #
-    # Task 9, the HDFIRE intraday test, 13-15 Oct only. Four polls a day.
-    # A BACKSTOP, NOT THE PLAN: measured over nine scheduled runs 2-8 Oct, GitHub's
-    # scheduler was 5h31m to 9h06m late, so a poll meant for 11:00 IST may arrive in the
-    # evening. The real trigger is cron-job.org or a manual dispatch; the poller records
-    # its REAL time either way, so a drifted poll is still usable data. The script exits
-    # immediately outside 13-15 Oct.
-    - cron: "30 5 * * 1-5"      # 05:30 UTC = 11:00 IST — HDFIRE poll 1
-    - cron: "30 7 * * 1-5"      # 07:30 UTC = 13:00 IST — HDFIRE poll 2
-    - cron: "31 9 * * 1-5"      # 09:31 UTC = 15:01 IST — HDFIRE poll 3
-    - cron: "1 12 * * 1-5"      # 12:01 UTC = 17:31 IST — HDFIRE poll 4
-                                #   NOT "0 12", which was the retired 17:30
-                                #   day-end cron - reusing that exact string
-                                #   would look like 17:30 had come back
+    # The four HDFIRE poll crons were REMOVED on 2026-10-19, with the three cron-job.org
+    # poll jobs the user deleted the same day. They were Task 9's intraday test and that
+    # test is finished and reported (reports/HDFIRE_INTRADAY.md, H40 confirming H22).
+    #
+    # `mode=poll` and `hdfire_poll.py` are DELIBERATELY KEPT. The next intraday test needs
+    # no new code, only a window and a cron: the poller already gates itself on its own
+    # date window, records its REAL poll time rather than the nominal slot, and writes
+    # append-only, so re-pointing it at a future IPO is a one-line change. What was retired
+    # is the schedule, not the capability.
+    #
+    # Note for whoever re-adds a poll cron: do NOT reuse "0 12 * * 1-5". That was the
+    # retired 17:30 day-end cron, and the string reappearing in this file would read as
+    # 17:30 having come back. The old poll 4 used "1 12" for exactly that reason.
   workflow_dispatch:
     inputs:
       mode:
@@ -192,10 +192,12 @@ jobs:
             workflow_dispatch:*)          mode="${{ inputs.mode }}" ;;
             schedule:"0 14 * * 1-5")      mode=final ;;
             schedule:"0 5 * * 6")         mode=audit ;;
-            schedule:"30 5 * * 1-5")      mode=poll ;;
-            schedule:"30 7 * * 1-5")      mode=poll ;;
-            schedule:"31 9 * * 1-5")      mode=poll ;;
-            schedule:"1 12 * * 1-5")      mode=poll ;;
+            # The four HDFIRE poll crons were retired on 2026-10-19 and their mappings
+            # go with them: a mapping for a cron that cannot fire is dead weight that
+            # reads as a live schedule. `mode=poll` is still dispatchable by hand, and
+            # re-adding a poll cron means re-adding its line here - the `*)` branch below
+            # exits 1 on an unrecognised trigger, so a forgotten mapping fails loudly
+            # rather than running the wrong leg.
             schedule:"45 8 * * 1-5")      mode=email ;;
             schedule:"0 9 * * 1-5")       mode=email ;;
             schedule:"15 9 * * 1-5")      mode=email ;;

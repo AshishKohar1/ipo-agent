@@ -55,6 +55,42 @@ def is_official(url: str) -> bool:
     return host_of(url) in OFFICIAL_HOSTS
 
 
+def resolve_pdf(sess, url: str) -> tuple[str, str]:
+    """`(pdf url, how)`. A SEBI FILING PAGE is followed one hop to the document.
+
+    The user supplied SEBI filing-page URLs - `.../public-issues/aug-2021/
+    ami-organics-limited_52088.html` - which is the right thing to give: it is the
+    regulator's page for that filing, and it is what a person reads. The first version of
+    this validator fetched those pages, found 8 KB of HTML instead of a PDF, and rejected
+    all 36 of them. That verdict was MY bug, not a bad URL.
+
+    The PDF is not an `href` on the page: SEBI renders it through a viewer and the real
+    document appears as a `file=...pdf` query parameter. That is the same extraction
+    `fetch_rhp.resolve_sebi` already uses, which is how the 412 prospectuses on disk were
+    found, so this follows the path that is known to work rather than inventing one.
+
+    A page offering several PDFs is REFUSED rather than guessed at - a filing split into
+    parts needs a human to say which part is the prospectus.
+    """
+    import re
+    if url.lower().endswith(".pdf"):
+        return url, "direct PDF link"
+    try:
+        t = sess.get(url, headers={**UA, "Accept": "text/html,*/*"}, timeout=60).text
+    except Exception as e:                                     # noqa: BLE001
+        return "", f"could not read the filing page: {type(e).__name__}: {str(e)[:70]}"
+    pdfs = list(dict.fromkeys(re.findall(r"file=([^'\"&]+\.pdf)", t, re.I)))
+    if not pdfs:
+        pdfs = list(dict.fromkeys(re.findall(r'href="([^"]+\.pdf)"', t, re.I)))
+    if not pdfs:
+        return "", "the SEBI filing page offers no PDF"
+    if len(pdfs) > 1:
+        return "", (f"the filing page offers {len(pdfs)} PDFs - refused rather than "
+                    f"guessed at; say which one is the prospectus")
+    u = pdfs[0] if pdfs[0].startswith("http") else "https://www.sebi.gov.in" + pdfs[0]
+    return u, "followed the SEBI filing page to its file= document"
+
+
 def fetch_to_disk(sess, url: str, dest: Path) -> tuple[bool, str, str, int]:
     """`(ok, note, sha256, bytes)`. Streams in blocks; never holds the body in memory."""
     try:
@@ -96,7 +132,8 @@ def validate(limit: int | None = None) -> pd.DataFrame:
                "listing_date": getattr(r, "listing_date", None), "rhp_url": url,
                "host": host_of(url), "official_host": is_official(url),
                "fetched": False, "bytes": None, "sha256": "", "pages": None,
-               "verified": False, "verdict": "", "reason": ""}
+               "verified": False, "verdict": "", "reason": "",
+               "pdf_url": "", "resolved_how": ""}
         if not url or url.lower() == "nan":
             rec["verdict"], rec["reason"] = "REJECT", "no URL supplied"
             rows.append(rec)
@@ -114,8 +151,16 @@ def validate(limit: int | None = None) -> pd.DataFrame:
             print(f"  {i:3d}/{len(d)} {comp[:36]:38s} REJECT  non-official host "
                   f"{rec['host']}")
             continue
+        pdf_url, how = resolve_pdf(sess, url)
+        rec["pdf_url"], rec["resolved_how"] = pdf_url, how
+        if not pdf_url:
+            rec["verdict"], rec["reason"] = "REJECT", how
+            print(f"  {i:3d}/{len(d)} {comp[:36]:38s} REJECT  {how[:62]}")
+            rows.append(rec)
+            time.sleep(GAP)
+            continue
         dest = PDF_DIR / (("".join(c if c.isalnum() else "_" for c in comp))[:70] + ".pdf")
-        ok, note, sha, n = fetch_to_disk(sess, url, dest)
+        ok, note, sha, n = fetch_to_disk(sess, pdf_url, dest)
         rec.update({"fetched": ok, "bytes": n or None, "sha256": sha})
         if not ok:
             rec["verdict"], rec["reason"] = "REJECT", f"fetch failed: {note}"
@@ -179,6 +224,18 @@ def self_test() -> int:
     chk("the body is streamed, never held whole", "iter_content(65536)" in src)
     chk("a rejected PDF is not kept", "dest.unlink()" in src)
     chk("the politeness gap is at least 3 s (rule 9)", GAP >= 3.0)
+
+    print(chr(10) + "[3] a SEBI filing page is followed to the document")
+    chk("a .html filing page is not treated as a failed PDF",
+        'file=([^' in src and "followed the SEBI filing page" in src)
+    chk("the extraction is the one that already works in fetch_rhp",
+        "fetch_rhp.resolve_sebi" in src and "file=" in src)
+    chk("a direct .pdf link is used as-is",
+        'url.lower().endswith(".pdf")' in src)
+    chk("a page offering several PDFs is REFUSED, not guessed at",
+        "refused rather than" in src)
+    chk("both the page URL and the resolved PDF URL are recorded",
+        '"pdf_url"' in src and '"resolved_how"' in src)
     print(f"{chr(10)}{ok} ok, {fail} failed")
     return 1 if fail else 0
 

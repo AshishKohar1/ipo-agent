@@ -139,13 +139,29 @@ Content-Type: application/json
 | 1 | IPO email | `15,35,45,55 9 * * 1-5` | 14:45 / 15:05 / 15:15 / 15:25 | `{"ref":"main","inputs":{"mode":"email"}}` |
 | 2 | IPO email dead-man | `5 10 * * 1-5` | 15:35 | `{"ref":"main","inputs":{"mode":"email"}}` |
 | 3 | IPO day-end capture | `0 14 * * 1-5` | 19:30 | `{"ref":"main","inputs":{"mode":"final"}}` |
-| 4 | HDFIRE poll AM | `30 5,7 13-15 10 *` | 11:00 / 13:00 | `{"ref":"main","inputs":{"mode":"poll"}}` |
-| 5 | HDFIRE poll PM 1 | `31 9 13-15 10 *` | 15:01 | `{"ref":"main","inputs":{"mode":"poll"}}` |
-| 6 | HDFIRE poll PM 2 | `1 12 13-15 10 *` | 17:31 | `{"ref":"main","inputs":{"mode":"poll"}}` |
+| ~~4~~ | ~~HDFIRE poll AM~~ | — | — | **DELETED 19 Oct 2026** |
+| ~~5~~ | ~~HDFIRE poll PM 1~~ | — | — | **DELETED 19 Oct 2026** |
+| ~~6~~ | ~~HDFIRE poll PM 2~~ | — | — | **DELETED 19 Oct 2026** |
 | 7 | **IPO monthly retrain** | `25 2 1 * *` | **07:55 on the 1st** | `{"ref":"main","inputs":{"mode":"retrain"}}` |
 
 **Jobs 1 and 2 are set up and live.** Job 3 is new and matters more than it looks
-— see below. Jobs 4–6 are the HDFIRE test and can be deleted after 15 October.
+— see below.
+
+**Jobs 4–6 were deleted by the user on 19 October 2026**, and the four matching
+`schedule:` crons were removed from `.github/workflows/live-model-l.yml` at the same time,
+along with their entries in the cron→mode resolver. A mapping for a cron that cannot fire
+reads as a live schedule, and the resolver's `*)` branch exits 1 on an unrecognised
+trigger, so a forgotten mapping fails loudly rather than running the wrong leg.
+
+**`mode=poll` and `hdfire_poll.py` are kept.** The intraday test is finished and reported
+(`reports/HDFIRE_INTRADAY.md`, and H40 confirming H22), but the capability is worth
+keeping: the poller gates itself on its own date window, records its real poll time rather
+than the nominal slot, and appends, so pointing it at a future IPO is a one-line change
+plus a cron. What was retired is the schedule, not the ability.
+
+Re-adding a poll cron later means adding the `schedule:` line to the workflow AND its
+mapping in the resolver. Do not reuse `0 12 * * 1-5` — that was the retired 17:30 day-end
+cron, and the string reappearing would read as 17:30 having come back.
 
 #### Job 7 — IPO monthly retrain (new, 2026-10-16)
 
