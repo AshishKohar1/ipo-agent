@@ -62,6 +62,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import live_markers as LM                                    # noqa: E402
 import trading_day as TD                                     # noqa: E402
+import nse_holidays as HOL                                   # noqa: E402
 
 REPORT = ROOT / "reports" / "CAPTURE_AUDIT.md"
 
@@ -85,7 +86,19 @@ UNRECOVERABLE = {
 
 
 def weekdays(upto=None, days: int = 7, now=None) -> list[pd.Timestamp]:
-    """The weekdays in the `days`-day window ending at `upto` (inclusive), oldest first.
+    """The **NSE trading days** in the `days`-day window ending at `upto` (inclusive).
+
+    Weekends were never in scope; **NSE holidays were, and should not have been.**
+    Tuesday 20 October 2026 was Dussehra, a full NSE holiday, and `d.weekday() < 5`
+    called it an ordinary working day - so this audit would have reported a missed 15:00
+    leg and a missed day-end leg for a day on which the exchange was shut, exited 1, and
+    gone red. A monitor that cries wolf on every holiday is a monitor that gets ignored.
+
+    The calendar is NSE's own, stored with provenance by `nse_holidays.py`. A date in a
+    year that calendar does not cover is **kept** in the window: hiding a real gap behind
+    missing reference data is the one direction a monitor must not fail in.
+    `is_trading_day` returns None for exactly that case, which is why the test below is
+    `is not False` rather than a truth test.
 
     Drops the final day when it is **the current trading date** and the day-end slot has
     not come round yet, because a job that is not due is not missing.
@@ -101,7 +114,8 @@ def weekdays(upto=None, days: int = 7, now=None) -> list[pd.Timestamp]:
     explicit = upto is not None
     upto = pd.Timestamp(upto).normalize() if explicit else TD.trading_date()
     start = upto - pd.Timedelta(days=days - 1)
-    out = [d for d in pd.date_range(start, upto, freq="D") if d.weekday() < 5]
+    out = [d for d in pd.date_range(start, upto, freq="D")
+           if HOL.is_trading_day(d) is not False]
     if explicit:
         return out
     t = pd.Timestamp(now) if now is not None else TD.ist_now()
@@ -185,14 +199,16 @@ def assert_no_email_catch_up() -> bool:
 def md(a: dict) -> str:
     g = a["gaps"]
     L = ["# Capture audit", "",
-         f"Window: the last {g['window_days']} days, weekdays only. "
+         f"Window: the last {g['window_days']} days, NSE trading days only "
+         f"(weekends and NSE holidays both excluded; calendar in "
+         f"data/nse_trading_holidays.csv). "
          f"Generated {pd.Timestamp.now():%Y-%m-%d %H:%M} IST.", "",
-         ("**Every weekday in the window produced a capture.**" if g["clean"] else
+         ("**Every trading day in the window produced a capture.**" if g["clean"] else
           f"**{g['n_email_gaps']} missed 15:00 leg(s), "
           f"{g['n_dayend_gaps']} missed day-end leg(s).**"), "",
          "A gap means the job left *no attempt at all* — an infrastructure failure. A job "
          "that ran and captured nothing is a quiet market, not a gap, and is not counted "
-         "here.", "",
+         "here. An NSE holiday is not a working day and never appears below.", "",
          "| date | 15:00 attempts | day-end attempts |", "|---|---|---|"]
     for r in g["checked"]:
         mark = lambda n: str(n) if n else "**0 — MISSED**"    # noqa: E731
@@ -231,7 +247,7 @@ def main(audit: bool = False, do_catch_up: bool = False, days: int = 7) -> int:
     g = a["gaps"]
     print(f"\n{REPORT}")
     if g["clean"]:
-        print("every weekday in the window produced a capture")
+        print("every trading day in the window produced a capture")
         return 0
     print(f"GAPS: 15:00 missed {g['email_gaps']}; day-end missed {g['dayend_gaps']}")
     # Exit non-zero so the scheduled audit goes red and is visible without being read.
@@ -263,6 +279,19 @@ def self_test() -> int:
     w = weekdays("2026-10-11", days=7)            # Sun 11 Oct back to Mon 5 Oct
     chk("no weekend days", all(d.weekday() < 5 for d in w))
     chk("5 weekdays in a 7-day window", len(w) == 5, [str(d.date()) for d in w])
+    # The day this change exists for: 20 Oct 2026 was Dussehra, a full NSE holiday.
+    h = weekdays("2026-10-23", days=7)            # Sat 17 Oct .. Fri 23 Oct
+    chk("20 Oct (Dussehra) is NOT audited",
+        pd.Timestamp("2026-10-20") not in h, [str(d.date()) for d in h])
+    chk("the other four trading days of that week are",
+        [str(d.date()) for d in h]
+        == ["2026-10-19", "2026-10-21", "2026-10-22", "2026-10-23"],
+        [str(d.date()) for d in h])
+    chk("2 Oct (Gandhi Jayanti, a Friday) is not audited either",
+        weekdays("2026-10-02", days=1) == [])
+    chk("a year with no stored calendar is still audited, so a gap cannot hide behind "
+        "missing reference data",
+        pd.Timestamp("2015-06-10") in weekdays("2015-06-10", days=1))
     chk("an explicit window is time-of-day independent",
         weekdays("2026-10-11", days=7) == weekdays("2026-10-11", days=7))
     # The drop only applies to a window that ENDS on the current trading date.

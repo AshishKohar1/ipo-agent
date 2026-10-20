@@ -60,6 +60,7 @@ import score_l as SL               # noqa: E402  — portable JSON, no joblib (P
 import predictions_log as PL       # noqa: E402
 import live_markers as LM          # noqa: E402
 import market_context as MC        # noqa: E402
+import nse_holidays as HOL        # noqa: E402  - NSE's own trading calendar
 import trading_day as TD           # noqa: E402  - one date per run (Task 1)
 import sent_markers as SM          # noqa: E402  - idempotent send (Task 4)
 import nse_subscription as NSE     # noqa: E402  - H22 source order (Task 8)
@@ -669,6 +670,22 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     if today.weekday() >= 5:
         print(f"{today.strftime('%A')} — no bidding at the weekend, no email.")
         return {"sent": False, "reason": "weekend"}
+
+    # An NSE holiday is not a working day for either leg. Tuesday 20 October 2026 was
+    # Dussehra; nothing here knew that, so the 19:30 leg went looking for index closes
+    # that do not exist and the Saturday audit was set up to call the day a gap. The
+    # calendar is NSE's own (nse_holidays.py), stored with its payload SHA-256.
+    #
+    # Exit GREEN and write no marker: the audit excludes holidays from its window
+    # entirely, so a marker would only assert work that never needed doing. A year the
+    # calendar does not cover returns None and the run proceeds - the model never
+    # declines to work on the strength of reference data it does not have.
+    if HOL.is_trading_day(today) is False:
+        why = HOL.holiday_reason(today) or "NSE holiday"
+        print(f"{today.date()} is an NSE trading holiday ({why}) — the exchange is shut, "
+              f"so there is nothing to bid on and no closes to capture.")
+        return {"sent": False, "reason": "exchange_holiday", "holiday": why,
+                "capture_point": capture_point, "fail_loudly": False}
 
     # Idempotency (Priority 1f): a previous attempt that captured NOTHING does not lock
     # this slot. Only a real capture does.
@@ -1422,6 +1439,26 @@ def self_test() -> int:
         != summary_key_for({"data_check_failed": False}))
     chk("a market summary can never satisfy 'was the decision delivered?'",
         SUMMARY_KIND not in (SM.DECISION, SM.DEAD_MAN))
+
+    print("\n[H] an NSE trading holiday stands both legs down")
+    import inspect as _ih
+    _m = _ih.getsource(main)
+    chk("the holiday test is in main(), after the weekend test",
+        "exchange_holiday" in _m
+        and _m.index('"weekend"') < _m.index('"exchange_holiday"'))
+    chk("it asks NSE's calendar, not a hand-kept list",
+        "HOL.is_trading_day(today) is False" in _m)
+    chk("20 Oct 2026 (Dussehra) is a holiday to that calendar",
+        HOL.is_trading_day("2026-10-20") is False)
+    chk("21 Oct 2026 is not", HOL.is_trading_day("2026-10-21") is True)
+    chk("it exits green - a holiday is not a fault",
+        '"fail_loudly": False' in _m[_m.index('"exchange_holiday"') - 200:
+                                     _m.index('"exchange_holiday"') + 200])
+    chk("and writes no marker, because the audit excludes holidays outright",
+        "mark_ran" not in _m[_m.index("is_trading_day(today) is False"):
+                             _m.index('"exchange_holiday"') + 300])
+    chk("a year with no calendar does NOT stand the run down",
+        HOL.is_trading_day("2015-06-10") is None)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
