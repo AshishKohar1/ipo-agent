@@ -63,17 +63,61 @@ KPI_NOT_FETCHED = ("Chittorgarh's KPI table is not in the harvest on disk - 50 f
                    "pages; queued, not guessed")
 
 
+def _ver_key(v) -> tuple:
+    """Sortable version. "1.8.1" sorts above "1.8.0" and above "1.10" done naively."""
+    try:
+        return tuple(int(x) for x in str(v).split("."))
+    except (TypeError, ValueError):
+        return (0,)
+
+
+def newest_per_variable(floor: str | None = None) -> pd.DataFrame:
+    """One row per (company, variable): the value from the NEWEST extractor version that
+    produced it.
+
+    **Why this exists rather than one version for everything.** A reader fix confined to
+    one section was re-run as a targeted stage (`--stage shares`), so the share count and
+    the promoter block carry 1.8.1 while the other blocks carry 1.8.0. Filtering the file
+    to a single version would therefore throw away either the corrected share counts or
+    everything else.
+
+    Taking the newest version per variable is the right rule anyway: a later version of a
+    reader is a correction of an earlier one, and `extractor_version_used` is written onto
+    every derived row so a mixed-provenance value can never be mistaken for a
+    single-version one.
+    """
+    d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
+    d = d[d["status"] == "ok"].copy()
+    d["_vk"] = d["extractor_version"].map(_ver_key)
+    if floor:
+        fk = _ver_key(floor)
+        d = d[d["_vk"] >= fk]
+    d = d.sort_values("_vk")
+    # last wins per (company, variable) = the newest version that produced a value
+    return d.drop_duplicates(subset=["company", "variable"], keep="last")
+
+
 def _wide(version: str | None = None):
     from extract.valuation import VALUATION_VERSION
-    v = version or VALUATION_VERSION
-    d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
-    d = d[(d["extractor_version"].astype(str) == str(v)) & (d["status"] == "ok")]
+    if version:
+        d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
+        d = d[(d["extractor_version"].astype(str) == str(version))
+              & (d["status"] == "ok")].copy()
+        used = str(version)
+    else:
+        # Everything from 1.8.0 onward, newest per variable. The floor keeps the four
+        # superseded passes (1.0.0 to 1.7.0) out: those carry values the current readers
+        # have since been FIXED to refuse, and "newest wins" would otherwise happily
+        # resurrect a 1.7.0 share count that 1.8.1 declines to produce.
+        d = newest_per_variable(floor="1.8.0")
+        vs = sorted(set(d["extractor_version"].astype(str)), key=_ver_key)
+        used = "+".join(vs)
     d["_x"] = np.where(d["value_crore"].notna(), d["value_crore"], d["value"])
     val = d.pivot_table(index="company", columns="variable", values="_x", aggfunc="first")
     pg = d.pivot_table(index="company", columns="variable", values="page", aggfunc="first")
     src = d.pivot_table(index="company", columns="variable", values="source_text",
                         aggfunc="first")
-    return val, pg, src, str(v)
+    return val, pg, src, used
 
 
 # A post-issue share count is only usable if the implied market capitalisation can
@@ -197,7 +241,7 @@ def derive(version: str | None = None) -> pd.DataFrame:
         po = float(po) if po is not None and pd.notna(po) else None
         o = {"company": company, "symbol": sym,
              "listing_date": m.get("listing_date") if m is not None else None,
-             "offer_price": po, "extractor_version": ver}
+             "offer_price": po, "extractor_version_used": ver}
 
         # ---------------------------------------------------- pre-issue variant
         nav_pre = _g(r, "nav_pre_issue")
@@ -406,6 +450,16 @@ def self_test() -> int:
         share_count_plausible(220000, None, 760)[0])
     chk("the refusal reason is written onto the row",
         'o["post_issue_shares_check"]' in src)
+
+    print(chr(10) + "[4c] mixed extractor versions are handled explicitly")
+    chk("a version is sorted numerically, so 1.8.1 outranks 1.8.0",
+        _ver_key("1.8.1") > _ver_key("1.8.0") and _ver_key("1.10.0") > _ver_key("1.9.0"))
+    chk("the newest version PER VARIABLE wins",
+        'drop_duplicates(subset=["company", "variable"], keep="last")' in src)
+    chk("superseded passes below the floor are excluded, so a fixed reader's refusal "
+        "is not undone by an old value", 'floor="1.8.0"' in src)
+    chk("and the versions actually used are written onto every derived row",
+        '"extractor_version_used"' in src)
 
     print(chr(10) + "[5] peer premiums need two peers")
     row = pd.Series({"peer_1_pb": 2.0, "peer_2_pb": 4.0, "peer_3_pb": -1.0})

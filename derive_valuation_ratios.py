@@ -63,21 +63,34 @@ SECTOR_PE_REASON = ("no P/E series is on disk for the sector index; only the Nif
 
 
 def _wide(version: str | None = None) -> tuple[pd.DataFrame, pd.DataFrame, str]:
-    """`(value per company x variable, page per company x variable, version used)`."""
-    from extract.valuation import VALUATION_VERSION
-    v = version or VALUATION_VERSION
-    d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
-    d = d[d["extractor_version"].astype(str) == str(v)]
-    if d.empty:
-        raise RuntimeError(f"no rows at extractor version {v}")
-    d = d[d["status"].astype(str) == "ok"]
+    """`(value per company x variable, page per company x variable, version used)`.
+
+    With no explicit version this takes the NEWEST version per variable from 1.8.0 onward,
+    using the same helper as the P/B module so the two cannot disagree about which value
+    is current. The share count and promoter block carry 1.8.1 from the targeted
+    Capital-Structure re-read while the other blocks carry 1.8.0, and filtering to one
+    version would discard one or the other.
+    """
+    from derive_pb import newest_per_variable, _ver_key
+    if version:
+        d = pd.read_csv(VALUES, low_memory=False, on_bad_lines="skip")
+        d = d[d["extractor_version"].astype(str) == str(version)]
+        if d.empty:
+            raise RuntimeError(f"no rows at extractor version {version}")
+        d = d[d["status"].astype(str) == "ok"].copy()
+        v = str(version)
+    else:
+        d = newest_per_variable(floor="1.8.0")
+        if d.empty:
+            raise RuntimeError("no rows at or above extractor version 1.8.0")
+        v = "+".join(sorted(set(d["extractor_version"].astype(str)), key=_ver_key))
     # value_crore where the extractor converted a money figure, value otherwise. A ratio
     # must never mix a figure in millions with one in crore, and `value_crore` is the only
     # column on which the unit is guaranteed to be the same for every row.
     d["_x"] = np.where(d["value_crore"].notna(), d["value_crore"], d["value"])
     val = d.pivot_table(index="company", columns="variable", values="_x", aggfunc="first")
     pg = d.pivot_table(index="company", columns="variable", values="page", aggfunc="first")
-    return val, pg, str(v)
+    return val, pg, v
 
 
 def _g(row, name):
@@ -342,6 +355,8 @@ def self_test() -> int:
         "price * shares / 1e7" in src)
     chk("and the share count passes the SAME guard the P/B module uses",
         "from derive_pb import share_count_plausible" in src)
+    chk("the newest version per variable comes from the SAME helper, not a second copy",
+        "from derive_pb import newest_per_variable" in src)
     chk("a refused count blocks EV/EBITDA and FCF yield, with the reason on the row",
         'o["post_issue_shares_check"]' in src and "sh_why" in src)
 
