@@ -75,7 +75,13 @@ def build(workers: int = 3, limit: int | None = None,
         return pd.DataFrame()
     jobs = [(str(r["abs"]), str(r["company"]), str(r.get("url") or "")) for r in todo]
     out, t0 = [], time.time()
-    with mp.Pool(processes=max(1, int(workers))) as pool:
+    # `maxtasksperchild=1`: a fresh interpreter per document. Measured, not assumed - at
+    # four workers each child settled around 500 MB, free memory fell from 3.4 GB to
+    # 0.4 GB, and in twenty-five minutes **not one document finished** where a single
+    # process takes four. The machine was swapping, so the extra workers were costing
+    # throughput rather than adding it. Recycling the child caps RSS at one document's
+    # worth for a ~2 s interpreter start, which against 155 s of work is free.
+    with mp.Pool(processes=max(1, int(workers)), maxtasksperchild=1) as pool:
         for i, res in enumerate(pool.imap_unordered(_one, jobs), 1):
             out.append(res)
             if i % 10 == 0 or i == len(jobs):
@@ -201,7 +207,8 @@ def self_test() -> int:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--workers", type=int, default=2,
+                    help="2 is the measured ceiling on this laptop; see build()")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--time-one-reader", action="store_true")

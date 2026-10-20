@@ -1670,3 +1670,116 @@ job, and withholding at the derive layer is what protects the ratios today. `fcf
 documents, because most RHP peer tables quote P/E, EPS, RoNW and NAV but not P/B.
 
 Never from Tapetide (H36), asserted on the module body.
+
+### H44 — the RHP field list is FROZEN, and a reader is graded before it runs (2026-10-21)
+
+**The list.** These are the only fields read from a prospectus. Offer price, issue size and
+the fresh/OFS split are **not** on it: they come from the master and Chittorgarh, per H5.
+
+| block | fields |
+|---|---|
+| Basis for Issue Price | basic EPS and diluted EPS, 3 fiscal years + the weighted average; RoNW, 3 FY + weighted; NAV per share, latest FY, plus post-issue if stated; the peer table — name, face value, revenue, EPS, P/E, RoNW, NAV, P/B |
+| Restated financials, last 3 **full** fiscal years, no stub periods | revenue from operations; PAT; tax expense; finance costs; depreciation & amortisation; EBITDA as stated, if given; net worth; total borrowings; cash & cash equivalents; cash from operations; capex (purchase of PPE) |
+| Capital structure | pre-issue shares; post-issue paid-up shares; promoter % pre-offer and post-offer |
+
+Frozen means: a field not on this list is not extracted, and a field on it is not dropped
+for being hard. Two of them — **net worth** and **pre-issue shares** — have never been
+extracted at all (0 values in `data/rhp_valuation_values.csv` at any version), which is
+why four of the H45 formulas cannot produce a single row today. That is a reader gap, not
+a formula problem, and naming it is the point of freezing the list.
+
+**The gate.** `reports/rhp_check_set.csv` holds the hand-read truth for 20 prospectuses
+from 2019 onward — every field, with its page and the quoted line. A reader runs over all
+450 documents only after it reaches **95% precision** on the check-set rows for its own
+fields, and precision and recall are printed per field.
+
+The 20 are chosen by `build_check_set.py` from listing year crossed with NSE industry and
+**nothing else** — never by whether the current readers succeed on a document. Grading a
+reader on documents it already parses is how a 24%-coverage extractor came to be reported
+as working (Stage 8). The selection is deterministic, so the same 20 come back on any
+machine: 7 listing years, 18 industries.
+
+### H45 — the derived valuation ratios, with their formulas (2026-10-21)
+
+Every ratio is computed **at the final offer price**, and every one is withheld — NULL with
+a reason — rather than approximated when an input is missing. Hard rule 1 applies to a
+derived value exactly as it does to a read one.
+
+| # | variable | formula | NULL when |
+|---|---|---|---|
+| a | `ipo_pe` | offer price / diluted EPS, latest full FY | EPS <= 0 |
+| a | `ipo_pe_weighted` | offer price / weighted diluted EPS | weighted EPS <= 0 |
+| b | `ipo_pb` | offer price / post-issue NAV per share (H43 methods 1-3) | no method yields a NAV |
+| b | `ipo_pb_pre_issue` | offer price / pre-issue NAV per share — stated if given, else **net worth / pre-issue shares**, flagged `derived_pre_issue_nav` | NAV <= 0, or either input missing |
+| c | `pe_premium_vs_peers` | `ipo_pe` / harmonic mean of peer P/Es - 1 | fewer than 2 usable peers |
+| c | `pe_premium_vs_peer_median` | `ipo_pe` / median peer P/E - 1 | fewer than 2 usable peers |
+| d | `pat_cagr` | (PAT latest FY / PAT earliest of the 3 FY)^(1/2) - 1 | either PAT <= 0 |
+| d | `ipo_peg` | `ipo_pe` / (`pat_cagr` x 100) | `pat_cagr` <= 0 |
+| e | `ebitda_fy1` | stated if the RHP gives it, else PAT + tax expense + finance costs + D&A, same FY and same unit, flagged `derived_ebitda` | **any** component missing |
+| f | `pre_money_mcap` | pre-issue shares x offer price | pre-issue shares missing |
+| f | `net_debt` | total borrowings - cash & equivalents, latest FY | either missing |
+| f | `ipo_ev_ebitda` | (`pre_money_mcap` + `net_debt`) / EBITDA | EBITDA <= 0 |
+| f | `fcf_yield` | (cash from operations - capex) / `pre_money_mcap` | either cash-flow input missing |
+
+**Three choices worth stating, because each one could reasonably have gone the other way.**
+
+*The pre-money basis (f).* Enterprise value and free-cash-flow yield are taken against
+**pre-issue** shares, not post-issue. A fresh issue adds cash to the balance sheet that the
+historical EBITDA and cash flow did not produce; pricing the post-issue share count against
+pre-issue cash flow double-counts the raise. It also sidesteps the post-issue share count,
+which is the least trustworthy number in the file — 130 values at 1.8.1, of which the
+two-sided guard rejects a share.
+
+*A harmonic mean for peer P/Es (c).* An arithmetic mean of ratios lets one 180x peer drag
+the basket; the harmonic mean is the ratio of the sums, which is what "what is this
+industry worth" means. The median is reported beside it so a reader can see when the two
+disagree. A market-cap-weighted basket is **not possible** from this data and will not be
+faked: RHP peer tables publish name, face value, revenue, EPS, P/E, RoNW, NAV and
+sometimes P/B, and **never market capitalisation or net profit**, so there are no weights.
+
+*Two growth years, not three (d).* Three fiscal years contain two year-on-year changes, so
+the exponent is 1/2. Writing 1/3 — a common error — understates every CAGR in the file.
+
+**Not built, and why.** A RoNW/Gordon-growth implied valuation needs an assumed cost of
+equity and an assumed payout ratio. Neither is in the prospectus, so both would be
+invented, and rule 1 does not have an exception for a plausible assumption. Note also that
+the derived EBITDA **includes other income**, because PAT does; that is stated on every row
+it produces rather than silently corrected.
+
+### H46 — peer-basket momentum is dropped; sector-index momentum is the only one (2026-10-21)
+
+`peer_basket_minus_nifty_3m` and `_6m` are cancelled before the price half was written.
+The name reader is the ceiling, not the mapping: of 967 peer-name rows, 285 matched NSE's
+equity list exactly, 510 were junk the reader had glued together from table headers and
+period labels, and only **66 of 296 IPOs** reached the two mapped peers the variable needs.
+A momentum number computed from two survivors of a noisy reader is a different variable on
+every row.
+
+`data/peer_symbols_mapped.csv` is kept for later. `data/manual_inputs/peer_symbols.csv` is
+**withdrawn from the user's to-do list** — it was 156 rows of this project's own extraction
+noise, and asking a human to resolve strings a reader invented is the wrong repair. It now
+sits at `data/peer_symbols_unmatched.csv`, outside `manual_inputs/`, which is by definition
+the folder of files the user is asked to fill.
+
+Sector momentum stays, and this is what raising its coverage was worth:
+
+| variable | 2019+ before | 2019+ after |
+|---|---|---|
+| `nse_industry` | 186 (47.3%) | **350 (89.1%)** |
+| `sector_index` | 107 (27.2%) | **249 (63.4%)** |
+| `sector_minus_nifty_3m` / `_6m` | 107 (27.2%) | **249 (63.4%)** |
+| `listing_gain_minus_sector_day` | 106 (27.0%) | **247 (62.8%)** |
+
+Three of those rows came from a comma. NSE spells the same sector two ways across its own
+files — `Oil Gas & Consumable Fuels` and `Oil, Gas & Consumable Fuels`, likewise Media —
+and the lookup used `.strip().lower()`, so one spelling mapped and the other fell through
+to "no index exists". The key is now punctuation-insensitive, and nothing else about it is
+loosened: two sectors differing by a word still differ (H28).
+
+The remaining 2019+ gap is 104 rows with an industry and no index, and NSE genuinely
+publishes no index for them. Re-checked against NSE's own catalogue (`api/equity-master`,
+122 indices) on 21 Oct: nothing exists for Capital Goods (56 rows), Consumer Services (37),
+Telecommunication (3), Utilities (3) or Textiles (2). The nearest candidates — NIFTY INDIA
+MANUFACTURING, NIFTY CAPITAL MARKETS, NIFTY INDIA CONSUMPTION, NIFTY MIDSMALL IT & TELECOM
+— are different baskets, and a wrong benchmark produces a momentum number that looks
+exactly like a right one. Not forced.

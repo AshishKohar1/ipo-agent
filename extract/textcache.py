@@ -45,6 +45,7 @@ the PDF. The SHA-256 is what `verify.py`-style auditing compares against
 """
 from __future__ import annotations
 
+import gc
 import gzip
 import hashlib
 import json
@@ -54,6 +55,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "rhp_text_cache"
 SCHEMA = 1
+CHUNK = 50          # pages per open; see build_one
 
 # One document at a time, by the same rule as the extractor itself: this laptop has ~8 GB
 # and a previous batch reached 3.4 GB by holding more than one. The memo exists so that
@@ -95,18 +97,28 @@ def build_one(path, company: str | None = None, url: str | None = None,
     pages: list[str] = []
     with pdfplumber.open(path) as pdf:
         n = len(pdf.pages)
-        for i in range(n):
-            try:
-                pages.append(pdf.pages[i].extract_text() or "")
-            except Exception:                                  # noqa: BLE001
-                # One unreadable page must not lose the other 581. An empty string is
-                # exactly what the live reader would have seen, so nothing changes.
-                pages.append("")
-            finally:
+    # **The file is re-opened every CHUNK pages.** `flush_cache()` drops a page's own
+    # character objects but not the shared object graph pdfplumber builds as it walks the
+    # page tree, and on these documents that graph grows without bound: a worker reading
+    # one prospectus straight through reached **1.95 GB** resident, the machine began
+    # compressing memory, and throughput collapsed to roughly one document per 25
+    # minutes against four minutes for the same document alone. Reopening costs ~0.8 s
+    # and is the only thing that actually releases the graph.
+    for lo in range(0, n, CHUNK):
+        with pdfplumber.open(path) as pdf:
+            for i in range(lo, min(lo + CHUNK, n)):
                 try:
-                    pdf.pages[i].flush_cache()
+                    pages.append(pdf.pages[i].extract_text() or "")
                 except Exception:                              # noqa: BLE001
-                    pass
+                    # One unreadable page must not lose the other 581. An empty string is
+                    # exactly what the live reader would have seen, so nothing changes.
+                    pages.append("")
+                finally:
+                    try:
+                        pdf.pages[i].flush_cache()
+                    except Exception:                          # noqa: BLE001
+                        pass
+        gc.collect()
 
     first10 = {i: pages[i] for i in range(min(10, n))}
     probe = {i: pages[i] for i in B.OFFSET_PROBES if i < n}

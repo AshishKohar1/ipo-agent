@@ -50,6 +50,7 @@ import argparse
 import hashlib
 import io
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -305,6 +306,26 @@ def fetch_sectors(q: Queue) -> pd.DataFrame:
     return out
 
 
+def sector_key(v) -> str:
+    """A sector name reduced to what identifies it, so punctuation cannot lose a mapping.
+
+    NSE spells the same sector two ways across its own files, and BSE a third: this map
+    holds both `Oil Gas & Consumable Fuels` and `Oil, Gas & Consumable Fuels`, and both
+    `Media Entertainment & Publication` and `Media, Entertainment & Publication`. A plain
+    `.strip().lower()` matched one spelling and dropped the other, so three 2019+ rows had
+    an industry, had an index, and still came out with no sector momentum - lost to a
+    comma.
+
+    This normalises punctuation only. It does not stem, abbreviate or fuzzy-match: two
+    sectors that differ by a word still differ here, which is the whole point (H28).
+    """
+    return re.sub(r"\s+", " ", re.sub(r"[,.()]", " ", str(v).strip().lower())).strip()
+
+
+SECTOR_TO_INDEX_KEYED = {sector_key(k): v for k, v in SECTOR_TO_INDEX.items()}
+NO_INDEX_REASON_KEYED = {sector_key(k): v for k, v in NO_INDEX_REASON.items()}
+
+
 def remap_sectors() -> pd.DataFrame:
     """Recompute `sector_index` and its reason on the sector map already on disk.
 
@@ -314,10 +335,10 @@ def remap_sectors() -> pd.DataFrame:
     """
     d = pd.read_csv(SECTOR_MAP)
     d["sector_index"] = d["nse_industry"].map(
-        lambda v: SECTOR_TO_INDEX.get(str(v).strip().lower()))
+        lambda v: SECTOR_TO_INDEX_KEYED.get(sector_key(v)))
     d["sector_index_missing_reason"] = [
         "" if not pd.isna(idx)
-        else NO_INDEX_REASON.get(str(v).strip().lower(),
+        else NO_INDEX_REASON_KEYED.get(sector_key(v),
                                  f"sector {v!r} has no index among the 15 captured and "
                                  f"is not in the declined list - review the mapping")
         for v, idx in zip(d["nse_industry"], d["sector_index"])]

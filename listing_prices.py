@@ -57,6 +57,7 @@ import requests
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import dataio                                               # noqa: E402
+import nse_holidays as HOL
 import trading_day as TD                                    # noqa: E402
 
 CACHE = ROOT / "data" / "bhavcopy_cache"
@@ -577,6 +578,23 @@ def capture_listing_day(day=None, catch_up: bool = False) -> dict:
     trading = TD.trading_date()
     if day > TD.ist_now().normalize():
         return {"date": str(day.date()), "error": "refusing to capture a future date"}
+    # An NSE holiday has no bhavcopy, so there is nothing to capture and no gap to
+    # record. A listing nominally due on a holiday happens on the NEXT TRADING day, and
+    # the day-end leg will find it there: this function runs on every trading day and
+    # re-scans every pending prediction until the scrip appears. HD Fire Protect closed
+    # on 15 Oct, T+3 fell on Tuesday 20 Oct (Dussehra), and the listing therefore moves
+    # to Wednesday 21 Oct - which is only reachable because the holiday is named here
+    # rather than answered with a 404 from the archive.
+    if HOL.is_trading_day(day) is False:
+        nxt = HOL.next_trading_day(day)
+        return {"date": str(day.date()), "n_pending": None,
+                "skipped": "not_a_trading_day",
+                "holiday": HOL.holiday_reason(day),
+                "next_trading_day": str(nxt.date()) if nxt is not None else None,
+                "note": (f"{day.date()} is not an NSE trading day"
+                         f"{' (' + str(HOL.holiday_reason(day)) + ')' if HOL.holiday_reason(day) else ''}"
+                         f"; no bhavcopy exists. Anything due to list then lists on "
+                         f"{nxt.date() if nxt is not None else 'the next trading day'}.")}
     if day != trading and not catch_up:
         return {"date": str(day.date()),
                 "error": (f"refusing to capture {day.date()} without catch_up=True: "
