@@ -210,47 +210,47 @@ nifty_tri_ret_12m,2017-2021,2023,149,57,58,0.3951,-1.0,0.47022332506203474,,A,Tr
 nifty_tri_ret_12m,2018-2022,2024,153,80,74,0.4222,-1.0,0.4465811965811966,,A,True
 nifty_tri_ret_12m,2019-2023,2025,188,52,92,0.1124,-1.0,0.54296875,,A,True
 sector_minus_nifty_3m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,A,True
-sector_minus_nifty_3m,2010-2011,2013,63,3,12,0.3446,1.0,,test year has only 3 rows - AUC not trustworthy,A,True
-sector_minus_nifty_3m,2010-2012,2014,71,5,14,0.1272,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,A,True
-sector_minus_nifty_3m,2010-2013,2015,74,17,17,0.0887,-1.0,0.4513888888888889,,A,True
-sector_minus_nifty_3m,2010-2014,2016,79,25,21,0.0777,-1.0,0.5714285714285714,,A,True
-sector_minus_nifty_3m,2011-2015,2017,51,34,24,0.3126,-1.0,0.4423076923076923,,A,True
-sector_minus_nifty_3m,2012-2016,2018,58,22,32,0.13,1.0,0.5848214285714286,,A,True
-sector_minus_nifty_3m,2013-2017,2019,84,16,38,0.106,1.0,0.26666666666666666,,A,True
-sector_minus_nifty_3m,2014-2018,2020,103,14,43,0.147,1.0,0.5,,A,True
-sector_minus_nifty_3m,2015-2019,2021,114,63,49,0.0522,-1.0,0.5066518847006651,,A,True
-sector_minus_nifty_3m,2016-2020,2022,111,38,50,0.0941,-1.0,0.31101190476190477,,A,True
-sector_minus_nifty_3m,2017-2021,2023,149,57,58,0.1006,-1.0,0.4094292803970223,,A,True
-sector_minus_nifty_3m,2018-2022,2024,153,80,74,0.0668,-1.0,0.5010683760683761,,A,True
-sector_minus_nifty_3m,2019-2023,2025,188,52,92,0.0398,-1.0,0.56875,,A,True
+sector_minus_nifty_3m,2010-2011,2013,63,3,12,0.1678,-1.0,,test year has only 3 rows - AUC not trustworthy,A,True
+sector_minus_nifty_3m,2010-2012,2014,71,5,14,0.0973,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,A,True
+sector_minus_nifty_3m,2010-2013,2015,74,17,17,0.0314,-1.0,0.7152777777777778,,A,True
+sector_minus_nifty_3m,2010-2014,2016,79,25,21,0.1004,1.0,0.4902597402597403,,A,True
+sector_minus_nifty_3m,2011-2015,2017,51,34,24,0.1864,-1.0,0.4951923076923077,,A,True
+sector_minus_nifty_3m,2012-2016,2018,58,22,32,0.309,1.0,0.5669642857142857,,A,True
+sector_minus_nifty_3m,2013-2017,2019,84,16,38,0.1318,1.0,0.1,,A,True
+sector_minus_nifty_3m,2014-2018,2020,103,14,43,0.1489,1.0,0.375,,A,True
+sector_minus_nifty_3m,2015-2019,2021,114,63,49,0.1057,-1.0,0.48004434589800443,,A,True
+sector_minus_nifty_3m,2016-2020,2022,111,38,50,0.1878,-1.0,0.34672619047619047,,A,True
+sector_minus_nifty_3m,2017-2021,2023,149,57,58,0.1171,-1.0,0.5694789081885856,,A,True
+sector_minus_nifty_3m,2018-2022,2024,153,80,74,0.0655,-1.0,0.5423789173789174,,A,True
+sector_minus_nifty_3m,2019-2023,2025,188,52,92,0.0708,-1.0,0.42109375,,A,True
 sector_minus_nifty_6m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,A,True
-sector_minus_nifty_6m,2010-2011,2013,63,3,12,0.1065,-1.0,,test year has only 3 rows - AUC not trustworthy,A,True
-sector_minus_nifty_6m,2010-2012,2014,71,5,14,0.278,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,A,True
-sector_minus_nifty_6m,2010-2013,2015,74,17,17,0.2268,-1.0,0.5486111111111112,,A,True
-sector_minus_nifty_6m,2010-2014,2016,79,25,21,0.2027,-1.0,0.7142857142857143,,A,True
-sector_minus_nifty_6m,2011-2015,2017,51,34,24,0.2058,1.0,0.44471153846153844,,A,True
-sector_minus_nifty_6m,2012-2016,2018,58,22,32,0.447,1.0,0.53125,,A,True
-sector_minus_nifty_6m,2013-2017,2019,84,16,38,0.106,1.0,0.49166666666666664,,A,True
-sector_minus_nifty_6m,2014-2018,2020,103,14,43,0.1638,-1.0,0.475,,A,True
-sector_minus_nifty_6m,2015-2019,2021,114,63,49,0.1434,-1.0,0.39301552106430154,,A,True
-sector_minus_nifty_6m,2016-2020,2022,111,38,50,0.3374,-1.0,0.49851190476190477,,A,True
-sector_minus_nifty_6m,2017-2021,2023,149,57,58,0.0414,-1.0,0.5179900744416873,,A,True
-sector_minus_nifty_6m,2018-2022,2024,153,80,74,0.0548,-1.0,0.483974358974359,,A,True
-sector_minus_nifty_6m,2019-2023,2025,188,52,92,0.0398,-1.0,0.61796875,,A,True
+sector_minus_nifty_6m,2010-2011,2013,63,3,12,0.1678,-1.0,,test year has only 3 rows - AUC not trustworthy,A,True
+sector_minus_nifty_6m,2010-2012,2014,71,5,14,0.2482,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,A,True
+sector_minus_nifty_6m,2010-2013,2015,74,17,17,0.1695,-1.0,0.7152777777777778,,A,True
+sector_minus_nifty_6m,2010-2014,2016,79,25,21,0.1714,-1.0,0.5454545454545454,,A,True
+sector_minus_nifty_6m,2011-2015,2017,51,34,24,0.3708,-1.0,0.4519230769230769,,A,True
+sector_minus_nifty_6m,2012-2016,2018,58,22,32,0.4803,1.0,0.53125,,A,True
+sector_minus_nifty_6m,2013-2017,2019,84,16,38,0.1052,1.0,0.19166666666666668,,A,True
+sector_minus_nifty_6m,2014-2018,2020,103,14,43,0.1853,1.0,0.6125,,A,True
+sector_minus_nifty_6m,2015-2019,2021,114,63,49,0.1254,-1.0,0.35421286031042126,,A,True
+sector_minus_nifty_6m,2016-2020,2022,111,38,50,0.2627,-1.0,0.39285714285714285,,A,True
+sector_minus_nifty_6m,2017-2021,2023,149,57,58,0.0768,-1.0,0.5136476426799007,,A,True
+sector_minus_nifty_6m,2018-2022,2024,153,80,74,0.1487,-1.0,0.49145299145299143,,A,True
+sector_minus_nifty_6m,2019-2023,2025,188,52,92,0.1542,-1.0,0.5171875,,A,True
 listing_gain_minus_sector_day,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,A,True
-listing_gain_minus_sector_day,2010-2011,2013,63,3,12,0.276,1.0,,test year has only 3 rows - AUC not trustworthy,A,True
-listing_gain_minus_sector_day,2010-2012,2014,71,5,14,0.2326,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,A,True
-listing_gain_minus_sector_day,2010-2013,2015,74,17,17,0.1847,-1.0,0.5347222222222222,,A,True
-listing_gain_minus_sector_day,2010-2014,2016,79,25,21,0.1641,-1.0,0.5844155844155844,,A,True
-listing_gain_minus_sector_day,2011-2015,2017,51,34,24,0.1824,1.0,0.3173076923076923,,A,True
-listing_gain_minus_sector_day,2012-2016,2018,58,22,32,0.2539,-1.0,0.5089285714285714,,A,True
-listing_gain_minus_sector_day,2013-2017,2019,84,16,38,0.3271,-1.0,0.7666666666666667,,A,True
-listing_gain_minus_sector_day,2014-2018,2020,103,14,43,0.234,-1.0,0.625,,A,True
-listing_gain_minus_sector_day,2015-2019,2021,114,63,49,0.2556,-1.0,0.5825942350332595,,A,True
-listing_gain_minus_sector_day,2016-2020,2022,111,38,50,0.1275,-1.0,0.41369047619047616,,A,True
-listing_gain_minus_sector_day,2017-2021,2023,149,57,58,0.0726,-1.0,0.446029776674938,,A,True
-listing_gain_minus_sector_day,2018-2022,2024,153,80,74,0.0955,-1.0,0.5373931623931624,,A,True
-listing_gain_minus_sector_day,2019-2023,2025,188,52,92,0.0661,-1.0,0.5890625,,A,True
+listing_gain_minus_sector_day,2010-2011,2013,63,3,12,0.2863,1.0,,test year has only 3 rows - AUC not trustworthy,A,True
+listing_gain_minus_sector_day,2010-2012,2014,71,5,14,0.399,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,A,True
+listing_gain_minus_sector_day,2010-2013,2015,74,17,17,0.3076,-1.0,0.5972222222222222,,A,True
+listing_gain_minus_sector_day,2010-2014,2016,79,25,21,0.2863,-1.0,0.6363636363636364,,A,True
+listing_gain_minus_sector_day,2011-2015,2017,51,34,24,0.2983,1.0,0.3870192307692308,,A,True
+listing_gain_minus_sector_day,2012-2016,2018,58,22,32,0.3885,-1.0,0.6116071428571429,,A,True
+listing_gain_minus_sector_day,2013-2017,2019,84,16,38,0.152,1.0,0.9333333333333333,,A,True
+listing_gain_minus_sector_day,2014-2018,2020,103,14,43,0.1734,1.0,0.5625,,A,True
+listing_gain_minus_sector_day,2015-2019,2021,114,63,49,0.3834,-1.0,0.6014412416851441,,A,True
+listing_gain_minus_sector_day,2016-2020,2022,111,38,50,0.1561,-1.0,0.4732142857142857,,A,True
+listing_gain_minus_sector_day,2017-2021,2023,149,57,58,0.0681,-1.0,0.4088089330024814,,A,True
+listing_gain_minus_sector_day,2018-2022,2024,153,80,74,0.1832,-1.0,0.5277777777777778,,A,True
+listing_gain_minus_sector_day,2019-2023,2025,188,52,92,0.1106,-1.0,0.4828125,,A,True
 smallcap_minus_nifty_6m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,A,True
 smallcap_minus_nifty_6m,2010-2011,2013,63,3,12,0.672,-1.0,,test year has only 3 rows - AUC not trustworthy,A,True
 smallcap_minus_nifty_6m,2010-2012,2014,71,5,14,0.9695,-1.0,0.0,test year has only 5 rows - AUC not trustworthy,A,True
@@ -728,47 +728,47 @@ nifty_tri_ret_12m,2018-2021,2023,115,57,50,0.7653,-1.0,0.3641439205955335,,B,Tru
 nifty_tri_ret_12m,2019-2022,2024,131,80,66,0.5009,-1.0,0.422008547008547,,B,True
 nifty_tri_ret_12m,2020-2023,2025,172,52,82,0.1429,-1.0,0.50390625,,B,True
 sector_minus_nifty_3m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,B,True
-sector_minus_nifty_3m,2010-2011,2013,63,3,12,0.3446,1.0,,test year has only 3 rows - AUC not trustworthy,B,True
-sector_minus_nifty_3m,2010-2012,2014,71,5,14,0.1272,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,B,True
-sector_minus_nifty_3m,2010-2013,2015,74,17,17,0.0887,-1.0,0.4513888888888889,,B,True
-sector_minus_nifty_3m,2011-2014,2016,34,25,15,0.3962,-1.0,0.37337662337662336,,B,True
-sector_minus_nifty_3m,2012-2015,2017,33,34,18,0.4206,-1.0,0.6971153846153846,,B,True
-sector_minus_nifty_3m,2013-2016,2018,50,22,30,0.3345,1.0,0.38839285714285715,,B,True
-sector_minus_nifty_3m,2014-2017,2019,81,16,35,0.1172,1.0,0.31666666666666665,,B,True
-sector_minus_nifty_3m,2015-2018,2020,98,14,39,0.1872,1.0,0.5,,B,True
-sector_minus_nifty_3m,2016-2019,2021,97,63,40,0.0439,-1.0,0.4955654101995565,,B,True
-sector_minus_nifty_3m,2017-2020,2022,86,38,36,0.1438,-1.0,0.36755952380952384,,B,True
-sector_minus_nifty_3m,2018-2021,2023,115,57,50,0.1625,-1.0,0.544044665012407,,B,True
-sector_minus_nifty_3m,2019-2022,2024,131,80,66,0.0682,-1.0,0.5042735042735043,,B,True
-sector_minus_nifty_3m,2020-2023,2025,172,52,82,0.0611,1.0,0.52265625,,B,True
+sector_minus_nifty_3m,2010-2011,2013,63,3,12,0.1678,-1.0,,test year has only 3 rows - AUC not trustworthy,B,True
+sector_minus_nifty_3m,2010-2012,2014,71,5,14,0.0973,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,B,True
+sector_minus_nifty_3m,2010-2013,2015,74,17,17,0.0314,-1.0,0.7152777777777778,,B,True
+sector_minus_nifty_3m,2011-2014,2016,34,25,15,0.1267,-1.0,0.4090909090909091,,B,True
+sector_minus_nifty_3m,2012-2015,2017,33,34,18,0.306,-1.0,0.4375,,B,True
+sector_minus_nifty_3m,2013-2016,2018,50,22,30,0.4158,1.0,0.6473214285714286,,B,True
+sector_minus_nifty_3m,2014-2017,2019,81,16,35,0.1684,1.0,0.1,,B,True
+sector_minus_nifty_3m,2015-2018,2020,98,14,39,0.2115,1.0,0.375,,B,True
+sector_minus_nifty_3m,2016-2019,2021,97,63,40,0.0633,-1.0,0.4495565410199557,,B,True
+sector_minus_nifty_3m,2017-2020,2022,86,38,36,0.348,-1.0,0.36160714285714285,,B,True
+sector_minus_nifty_3m,2018-2021,2023,115,57,50,0.2422,-1.0,0.5794044665012407,,B,True
+sector_minus_nifty_3m,2019-2022,2024,131,80,66,0.1666,-1.0,0.5601851851851852,,B,True
+sector_minus_nifty_3m,2020-2023,2025,172,52,82,0.0793,1.0,0.4,,B,True
 sector_minus_nifty_6m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,B,True
-sector_minus_nifty_6m,2010-2011,2013,63,3,12,0.1065,-1.0,,test year has only 3 rows - AUC not trustworthy,B,True
-sector_minus_nifty_6m,2010-2012,2014,71,5,14,0.278,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,B,True
-sector_minus_nifty_6m,2010-2013,2015,74,17,17,0.2268,-1.0,0.5486111111111112,,B,True
-sector_minus_nifty_6m,2011-2014,2016,34,25,15,0.3962,-1.0,0.42207792207792205,,B,True
-sector_minus_nifty_6m,2012-2015,2017,33,34,18,0.6807,1.0,0.5336538461538461,,B,True
-sector_minus_nifty_6m,2013-2016,2018,50,22,30,0.3345,1.0,0.47767857142857145,,B,True
-sector_minus_nifty_6m,2014-2017,2019,81,16,35,0.1172,1.0,0.5416666666666666,,B,True
-sector_minus_nifty_6m,2015-2018,2020,98,14,39,0.205,-1.0,0.475,,B,True
-sector_minus_nifty_6m,2016-2019,2021,97,63,40,0.1705,-1.0,0.39079822616407983,,B,True
-sector_minus_nifty_6m,2017-2020,2022,86,38,36,0.1864,-1.0,0.48660714285714285,,B,True
-sector_minus_nifty_6m,2018-2021,2023,115,57,50,0.0759,-1.0,0.43610421836228286,,B,True
-sector_minus_nifty_6m,2019-2022,2024,131,80,66,0.0863,-1.0,0.4672364672364672,,B,True
-sector_minus_nifty_6m,2020-2023,2025,172,52,82,0.0352,-1.0,0.553125,,B,True
+sector_minus_nifty_6m,2010-2011,2013,63,3,12,0.1678,-1.0,,test year has only 3 rows - AUC not trustworthy,B,True
+sector_minus_nifty_6m,2010-2012,2014,71,5,14,0.2482,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,B,True
+sector_minus_nifty_6m,2010-2013,2015,74,17,17,0.1695,-1.0,0.7152777777777778,,B,True
+sector_minus_nifty_6m,2011-2014,2016,34,25,15,0.1267,-1.0,0.41883116883116883,,B,True
+sector_minus_nifty_6m,2012-2015,2017,33,34,18,0.6381,-1.0,0.47115384615384615,,B,True
+sector_minus_nifty_6m,2013-2016,2018,50,22,30,0.4158,1.0,0.6116071428571429,,B,True
+sector_minus_nifty_6m,2014-2017,2019,81,16,35,0.1408,1.0,0.10833333333333334,,B,True
+sector_minus_nifty_6m,2015-2018,2020,98,14,39,0.1712,-1.0,0.625,,B,True
+sector_minus_nifty_6m,2016-2019,2021,97,63,40,0.2201,-1.0,0.35476718403547675,,B,True
+sector_minus_nifty_6m,2017-2020,2022,86,38,36,0.348,-1.0,0.4107142857142857,,B,True
+sector_minus_nifty_6m,2018-2021,2023,115,57,50,0.2152,-1.0,0.5465260545905707,,B,True
+sector_minus_nifty_6m,2019-2022,2024,131,80,66,0.2604,-1.0,0.5227920227920227,,B,True
+sector_minus_nifty_6m,2020-2023,2025,172,52,82,0.0948,-1.0,0.50625,,B,True
 listing_gain_minus_sector_day,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,B,True
-listing_gain_minus_sector_day,2010-2011,2013,63,3,12,0.276,1.0,,test year has only 3 rows - AUC not trustworthy,B,True
-listing_gain_minus_sector_day,2010-2012,2014,71,5,14,0.2326,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,B,True
-listing_gain_minus_sector_day,2010-2013,2015,74,17,17,0.1847,-1.0,0.5347222222222222,,B,True
-listing_gain_minus_sector_day,2011-2014,2016,34,25,15,0.3962,-1.0,0.41233766233766234,,B,True
-listing_gain_minus_sector_day,2012-2015,2017,33,34,18,0.0919,-1.0,0.6682692307692307,,B,True
-listing_gain_minus_sector_day,2013-2016,2018,50,22,30,0.3345,1.0,0.5758928571428571,,B,True
-listing_gain_minus_sector_day,2014-2017,2019,81,16,35,0.3472,-1.0,0.7666666666666667,,B,True
-listing_gain_minus_sector_day,2015-2018,2020,98,14,39,0.2799,-1.0,0.675,,B,True
-listing_gain_minus_sector_day,2016-2019,2021,97,63,40,0.1286,-1.0,0.5809312638580931,,B,True
-listing_gain_minus_sector_day,2017-2020,2022,86,38,36,0.1239,-1.0,0.5178571428571429,,B,True
-listing_gain_minus_sector_day,2018-2021,2023,115,57,50,0.059,-1.0,0.49627791563275436,,B,True
-listing_gain_minus_sector_day,2019-2022,2024,131,80,66,0.1455,-1.0,0.51994301994302,,B,True
-listing_gain_minus_sector_day,2020-2023,2025,172,52,82,0.0506,-1.0,0.54453125,,B,True
+listing_gain_minus_sector_day,2010-2011,2013,63,3,12,0.2863,1.0,,test year has only 3 rows - AUC not trustworthy,B,True
+listing_gain_minus_sector_day,2010-2012,2014,71,5,14,0.399,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,B,True
+listing_gain_minus_sector_day,2010-2013,2015,74,17,17,0.3076,-1.0,0.5972222222222222,,B,True
+listing_gain_minus_sector_day,2011-2014,2016,34,25,15,0.1267,-1.0,0.474025974025974,,B,True
+listing_gain_minus_sector_day,2012-2015,2017,33,34,18,0.306,-1.0,0.38461538461538464,,B,True
+listing_gain_minus_sector_day,2013-2016,2018,50,22,30,0.3637,1.0,0.6339285714285714,,B,True
+listing_gain_minus_sector_day,2014-2017,2019,81,16,35,0.1894,1.0,0.7666666666666667,,B,True
+listing_gain_minus_sector_day,2015-2018,2020,98,14,39,0.2374,-1.0,0.6375,,B,True
+listing_gain_minus_sector_day,2016-2019,2021,97,63,40,0.1231,-1.0,0.5964523281596452,,B,True
+listing_gain_minus_sector_day,2017-2020,2022,86,38,36,0.1756,-1.0,0.5342261904761905,,B,True
+listing_gain_minus_sector_day,2018-2021,2023,115,57,50,0.2078,-1.0,0.43982630272952855,,B,True
+listing_gain_minus_sector_day,2019-2022,2024,131,80,66,0.2924,-1.0,0.5705128205128205,,B,True
+listing_gain_minus_sector_day,2020-2023,2025,172,52,82,0.0609,-1.0,0.43828125,,B,True
 smallcap_minus_nifty_6m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,B,True
 smallcap_minus_nifty_6m,2010-2011,2013,63,3,12,0.672,-1.0,,test year has only 3 rows - AUC not trustworthy,B,True
 smallcap_minus_nifty_6m,2010-2012,2014,71,5,14,0.9695,-1.0,0.0,test year has only 5 rows - AUC not trustworthy,B,True
@@ -1246,47 +1246,47 @@ nifty_tri_ret_12m,2010-2021,2023,270,57,102,0.3174,-1.0,0.45347394540942926,,C,T
 nifty_tri_ret_12m,2010-2022,2024,308,80,126,0.339,-1.0,0.45584045584045585,,C,True
 nifty_tri_ret_12m,2010-2023,2025,365,52,152,0.2148,-1.0,0.49765625,,C,True
 sector_minus_nifty_3m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,C,True
-sector_minus_nifty_3m,2010-2011,2013,63,3,12,0.3446,1.0,,test year has only 3 rows - AUC not trustworthy,C,True
-sector_minus_nifty_3m,2010-2012,2014,71,5,14,0.1272,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,C,True
-sector_minus_nifty_3m,2010-2013,2015,74,17,17,0.0887,-1.0,0.4513888888888889,,C,True
-sector_minus_nifty_3m,2010-2014,2016,79,25,21,0.0777,-1.0,0.5714285714285714,,C,True
-sector_minus_nifty_3m,2010-2015,2017,96,34,30,0.0414,-1.0,0.5961538461538461,,C,True
-sector_minus_nifty_3m,2010-2016,2018,121,22,44,0.1405,1.0,0.5669642857142857,,C,True
-sector_minus_nifty_3m,2010-2017,2019,155,16,52,0.0329,1.0,0.2833333333333333,,C,True
-sector_minus_nifty_3m,2010-2018,2020,177,14,60,0.0686,-1.0,0.625,,C,True
-sector_minus_nifty_3m,2010-2019,2021,193,63,70,0.0434,-1.0,0.5066518847006651,,C,True
-sector_minus_nifty_3m,2010-2020,2022,207,38,80,0.1127,1.0,0.41517857142857145,,C,True
-sector_minus_nifty_3m,2010-2021,2023,270,57,102,0.0523,-1.0,0.5390818858560794,,C,True
-sector_minus_nifty_3m,2010-2022,2024,308,80,126,0.0294,-1.0,0.5192307692307693,,C,True
-sector_minus_nifty_3m,2010-2023,2025,365,52,152,0.0236,1.0,0.5671875,,C,True
+sector_minus_nifty_3m,2010-2011,2013,63,3,12,0.1678,-1.0,,test year has only 3 rows - AUC not trustworthy,C,True
+sector_minus_nifty_3m,2010-2012,2014,71,5,14,0.0973,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,C,True
+sector_minus_nifty_3m,2010-2013,2015,74,17,17,0.0314,-1.0,0.7152777777777778,,C,True
+sector_minus_nifty_3m,2010-2014,2016,79,25,21,0.1004,1.0,0.4902597402597403,,C,True
+sector_minus_nifty_3m,2010-2015,2017,96,34,30,0.1647,-1.0,0.44711538461538464,,C,True
+sector_minus_nifty_3m,2010-2016,2018,121,22,44,0.2315,1.0,0.6205357142857143,,C,True
+sector_minus_nifty_3m,2010-2017,2019,155,16,52,0.1075,1.0,0.1,,C,True
+sector_minus_nifty_3m,2010-2018,2020,177,14,60,0.1267,1.0,0.4,,C,True
+sector_minus_nifty_3m,2010-2019,2021,193,63,70,0.0604,-1.0,0.4445676274944568,,C,True
+sector_minus_nifty_3m,2010-2020,2022,207,38,80,0.1254,-1.0,0.37351190476190477,,C,True
+sector_minus_nifty_3m,2010-2021,2023,270,57,102,0.046,-1.0,0.5669975186104218,,C,True
+sector_minus_nifty_3m,2010-2022,2024,308,80,126,0.0358,-1.0,0.48753561253561256,,C,True
+sector_minus_nifty_3m,2010-2023,2025,365,52,152,0.0559,1.0,0.53984375,,C,True
 sector_minus_nifty_6m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,C,True
-sector_minus_nifty_6m,2010-2011,2013,63,3,12,0.1065,-1.0,,test year has only 3 rows - AUC not trustworthy,C,True
-sector_minus_nifty_6m,2010-2012,2014,71,5,14,0.278,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,C,True
-sector_minus_nifty_6m,2010-2013,2015,74,17,17,0.2268,-1.0,0.5486111111111112,,C,True
-sector_minus_nifty_6m,2010-2014,2016,79,25,21,0.2027,-1.0,0.7142857142857143,,C,True
-sector_minus_nifty_6m,2010-2015,2017,96,34,30,0.17,-1.0,0.3798076923076923,,C,True
-sector_minus_nifty_6m,2010-2016,2018,121,22,44,0.1881,1.0,0.5803571428571429,,C,True
-sector_minus_nifty_6m,2010-2017,2019,155,16,52,0.1371,1.0,0.49166666666666664,,C,True
-sector_minus_nifty_6m,2010-2018,2020,177,14,60,0.0599,1.0,0.5375,,C,True
-sector_minus_nifty_6m,2010-2019,2021,193,63,70,0.0563,1.0,0.4024390243902439,,C,True
-sector_minus_nifty_6m,2010-2020,2022,207,38,80,0.1369,-1.0,0.5669642857142857,,C,True
-sector_minus_nifty_6m,2010-2021,2023,270,57,102,0.0245,-1.0,0.5260545905707196,,C,True
-sector_minus_nifty_6m,2010-2022,2024,308,80,126,0.0179,-1.0,0.5284900284900285,,C,True
-sector_minus_nifty_6m,2010-2023,2025,365,52,152,0.0241,-1.0,0.4765625,,C,True
+sector_minus_nifty_6m,2010-2011,2013,63,3,12,0.1678,-1.0,,test year has only 3 rows - AUC not trustworthy,C,True
+sector_minus_nifty_6m,2010-2012,2014,71,5,14,0.2482,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,C,True
+sector_minus_nifty_6m,2010-2013,2015,74,17,17,0.1695,-1.0,0.7152777777777778,,C,True
+sector_minus_nifty_6m,2010-2014,2016,79,25,21,0.1714,-1.0,0.5454545454545454,,C,True
+sector_minus_nifty_6m,2010-2015,2017,96,34,30,0.1647,1.0,0.46634615384615385,,C,True
+sector_minus_nifty_6m,2010-2016,2018,121,22,44,0.2315,1.0,0.65625,,C,True
+sector_minus_nifty_6m,2010-2017,2019,155,16,52,0.126,1.0,0.15833333333333333,,C,True
+sector_minus_nifty_6m,2010-2018,2020,177,14,60,0.1318,1.0,0.5875,,C,True
+sector_minus_nifty_6m,2010-2019,2021,193,63,70,0.0991,1.0,0.39800443458980045,,C,True
+sector_minus_nifty_6m,2010-2020,2022,207,38,80,0.173,-1.0,0.5476190476190477,,C,True
+sector_minus_nifty_6m,2010-2021,2023,270,57,102,0.0499,-1.0,0.4975186104218362,,C,True
+sector_minus_nifty_6m,2010-2022,2024,308,80,126,0.0742,-1.0,0.4946581196581197,,C,True
+sector_minus_nifty_6m,2010-2023,2025,365,52,152,0.0546,-1.0,0.52734375,,C,True
 listing_gain_minus_sector_day,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,C,True
-listing_gain_minus_sector_day,2010-2011,2013,63,3,12,0.276,1.0,,test year has only 3 rows - AUC not trustworthy,C,True
-listing_gain_minus_sector_day,2010-2012,2014,71,5,14,0.2326,-1.0,0.5,test year has only 5 rows - AUC not trustworthy,C,True
-listing_gain_minus_sector_day,2010-2013,2015,74,17,17,0.1847,-1.0,0.5347222222222222,,C,True
-listing_gain_minus_sector_day,2010-2014,2016,79,25,21,0.1641,-1.0,0.5844155844155844,,C,True
-listing_gain_minus_sector_day,2010-2015,2017,96,34,30,0.1788,-1.0,0.2692307692307692,,C,True
-listing_gain_minus_sector_day,2010-2016,2018,121,22,44,0.299,1.0,0.46875,,C,True
-listing_gain_minus_sector_day,2010-2017,2019,155,16,52,0.192,-1.0,0.7666666666666667,,C,True
-listing_gain_minus_sector_day,2010-2018,2020,177,14,60,0.1538,-1.0,0.65,,C,True
-listing_gain_minus_sector_day,2010-2019,2021,193,63,70,0.1117,-1.0,0.5421286031042128,,C,True
-listing_gain_minus_sector_day,2010-2020,2022,207,38,80,0.1178,-1.0,0.49107142857142855,,C,True
-listing_gain_minus_sector_day,2010-2021,2023,270,57,102,0.124,-1.0,0.47518610421836227,,C,True
-listing_gain_minus_sector_day,2010-2022,2024,308,80,126,0.0914,-1.0,0.5559116809116809,,C,True
-listing_gain_minus_sector_day,2010-2023,2025,365,52,152,0.0393,-1.0,0.42421875,,C,True
+listing_gain_minus_sector_day,2010-2011,2013,63,3,12,0.2863,1.0,,test year has only 3 rows - AUC not trustworthy,C,True
+listing_gain_minus_sector_day,2010-2012,2014,71,5,14,0.399,-1.0,0.625,test year has only 5 rows - AUC not trustworthy,C,True
+listing_gain_minus_sector_day,2010-2013,2015,74,17,17,0.3076,-1.0,0.5972222222222222,,C,True
+listing_gain_minus_sector_day,2010-2014,2016,79,25,21,0.2863,-1.0,0.6363636363636364,,C,True
+listing_gain_minus_sector_day,2010-2015,2017,96,34,30,0.6867,1.0,0.2692307692307692,,C,True
+listing_gain_minus_sector_day,2010-2016,2018,121,22,44,0.4508,1.0,0.4642857142857143,,C,True
+listing_gain_minus_sector_day,2010-2017,2019,155,16,52,0.2917,1.0,0.7,,C,True
+listing_gain_minus_sector_day,2010-2018,2020,177,14,60,0.1786,-1.0,0.6875,,C,True
+listing_gain_minus_sector_day,2010-2019,2021,193,63,70,0.1668,-1.0,0.5277161862527716,,C,True
+listing_gain_minus_sector_day,2010-2020,2022,207,38,80,0.153,-1.0,0.4375,,C,True
+listing_gain_minus_sector_day,2010-2021,2023,270,57,102,0.1358,-1.0,0.47332506203473945,,C,True
+listing_gain_minus_sector_day,2010-2022,2024,308,80,126,0.1061,-1.0,0.5405982905982906,,C,True
+listing_gain_minus_sector_day,2010-2023,2025,365,52,152,0.0589,-1.0,0.5953125,,C,True
 smallcap_minus_nifty_6m,2010-2010,2012,45,8,6,,,,only 6 beat-Nifty outcomes in training (limit 10) - not measured,C,True
 smallcap_minus_nifty_6m,2010-2011,2013,63,3,12,0.672,-1.0,,test year has only 3 rows - AUC not trustworthy,C,True
 smallcap_minus_nifty_6m,2010-2012,2014,71,5,14,0.9695,-1.0,0.0,test year has only 5 rows - AUC not trustworthy,C,True

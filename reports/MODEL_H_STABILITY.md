@@ -1,4 +1,4 @@
-# Model H — variable stability (2026-10-13)
+# Model H — variable stability (2026-10-21)
 
 Analysis only. **No variable set is chosen here, no window is chosen, and no model is fitted.** H29 is unchanged.
 
@@ -28,11 +28,11 @@ Analysis only. **No variable set is chosen here, no window is chosen, and no mod
 | sub_qib | STABLE | 14 | 11 | 14 | 13 | 0.2266 | 0.4152 | -1.0 |
 | mean_sub_total_prior_3m | STABLE | 14 | 12 | 14 | 14 | 0.2265 | 0.5104 | -1.0 |
 | log_issue_size | STABLE | 14 | 13 | 14 | 13 | 0.1985 | 0.4838 | -1.0 |
-| listing_gain_minus_sector_day | STABLE | 14 | 12 | 14 | 13 | 0.1835 | 0.5347 | -1.0 |
 | turnover_x_issue_size | STABLE | 14 | 12 | 14 | 14 | 0.1731 | 0.4708 | -1.0 |
-| sector_minus_nifty_6m | STABLE | 14 | 11 | 14 | 14 | 0.1536 | 0.5 | -1.0 |
+| sector_minus_nifty_6m | STABLE | 14 | 11 | 14 | 14 | 0.1687 | 0.5273 | -1.0 |
 | rhp_uses_of_proceeds_n | STABLE | 14 | 13 | 14 | 12 | 0.0824 | 0.5 | 1.0 |
 | smallcap_minus_nifty_6m | CURRENT | 14 | 9 | 14 | 14 | 0.3052 | 0.5149 | -1.0 |
+| listing_gain_minus_sector_day | CURRENT | 14 | 10 | 14 | 14 | 0.2348 | 0.6011 | -1.0 |
 | sub_hni | CURRENT | 14 | 8 | 14 | 14 | 0.1883 | 0.5089 | 1.0 |
 | qib_share_of_total | CURRENT | 14 | 7 | 14 | 14 | 0.1439 | 0.4792 | 1.0 |
 | anchor_amount_cr | CURRENT | 14 | 5 | 8 | 9 | 0.1112 | 0.5342 | 1.0 |
@@ -50,7 +50,7 @@ Analysis only. **No variable set is chosen here, no window is chosen, and no mod
 | nifty_tri_ret_6m | NOISE | 14 | 7 | 14 | 14 | 0.1583 | 0.5078 | 1.0 |
 | rhp_promoter_holding_pre_pct | NOISE | 14 | 5 | 10 | 10 | 0.1301 | 0.5 | 1.0 |
 | rii_share_of_total | NOISE | 14 | 8 | 14 | 14 | 0.1247 | 0.5174 | -1.0 |
-| sector_minus_nifty_3m | NOISE | 14 | 9 | 14 | 14 | 0.0973 | 0.4514 | -1.0 |
+| sector_minus_nifty_3m | NOISE | 14 | 9 | 14 | 14 | 0.1114 | 0.5078 | -1.0 |
 | anchor_share_of_issue_pct | NOISE | 14 | 5 | 8 | 9 | 0.097 | 0.5385 | -1.0 |
 | rhp_pre_ipo_placement_flag | NOISE | 14 | 4 | 5 | 11 | 0.0558 | 0.5031 | -1.0 |
 | rhp_esop_exists_flag | NOISE | 14 | 9 | 14 | 8 | 0.0232 | 0.4822 | 1.0 |
@@ -68,11 +68,11 @@ Why each label:
 - `sub_qib` **STABLE** — sign agrees in 11/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 13/14 (>= 60%)
 - `mean_sub_total_prior_3m` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `log_issue_size` **STABLE** — sign agrees in 13/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 13/14 (>= 60%)
-- `listing_gain_minus_sector_day` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 13/14 (>= 60%)
 - `turnover_x_issue_size` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `sector_minus_nifty_6m` **STABLE** — sign agrees in 11/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `rhp_uses_of_proceeds_n` **STABLE** — sign agrees in 13/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 12/14 (>= 60%)
 - `smallcap_minus_nifty_6m` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 9/14 and 14/14 overall
+- `listing_gain_minus_sector_day` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 10/14 and 14/14 overall
 - `sub_hni` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 8/14 and 14/14 overall
 - `qib_share_of_total` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 7/14 and 14/14 overall
 - `anchor_amount_cr` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 5/8 and 9/14 overall
@@ -109,8 +109,8 @@ Why each label:
 | mean_sub_total_prior_3m | STABLE | 14 | 11 | 14 | 14 | 0.2386 | 0.5139 | -1.0 |
 | turnover_x_issue_size | STABLE | 14 | 12 | 14 | 14 | 0.2042 | 0.5024 | -1.0 |
 | mean_listing_gain_prior_3m | STABLE | 14 | 13 | 14 | 14 | 0.2013 | 0.5417 | -1.0 |
+| sector_minus_nifty_6m | STABLE | 14 | 12 | 14 | 14 | 0.1932 | 0.5 | -1.0 |
 | log_issue_size | STABLE | 14 | 14 | 14 | 14 | 0.1666 | 0.5216 | -1.0 |
-| listing_gain_minus_sector_day | STABLE | 14 | 12 | 14 | 13 | 0.1651 | 0.5227 | -1.0 |
 | rhp_uses_of_proceeds_n | STABLE | 14 | 13 | 14 | 12 | 0.1386 | 0.5 | 1.0 |
 | sub_rii | STABLE | 14 | 11 | 14 | 12 | 0.1289 | 0.4752 | -1.0 |
 | smallcap_minus_nifty_6m | CURRENT | 14 | 10 | 14 | 14 | 0.2374 | 0.497 | -1.0 |
@@ -124,15 +124,15 @@ Why each label:
 | promoter_holding_post_pct_agg | NOISE | 14 | 8 | 14 | 13 | 0.2923 | 0.5391 | 1.0 |
 | nifty_pe_at_listing | NOISE | 14 | 9 | 14 | 13 | 0.2744 | 0.5 | -1.0 |
 | promoter_holding_pre_pct_agg | NOISE | 14 | 8 | 14 | 14 | 0.2452 | 0.5 | 1.0 |
+| listing_gain_minus_sector_day | NOISE | 14 | 10 | 14 | 14 | 0.2226 | 0.5268 | -1.0 |
 | rhp_board_size_n | NOISE | 14 | 7 | 14 | 14 | 0.2073 | 0.4859 | 1.0 |
 | qib_share_of_total | NOISE | 14 | 7 | 14 | 14 | 0.2052 | 0.4625 | 1.0 |
 | promoter_dilution_pp_agg | NOISE | 14 | 8 | 14 | 14 | 0.2015 | 0.542 | -1.0 |
 | sub_hni | NOISE | 14 | 7 | 14 | 13 | 0.1816 | 0.5 | 1.0 |
-| sector_minus_nifty_6m | NOISE | 14 | 10 | 14 | 13 | 0.1784 | 0.5268 | -1.0 |
 | sub_qib | NOISE | 14 | 9 | 14 | 13 | 0.1745 | 0.443 | -1.0 |
+| sector_minus_nifty_3m | NOISE | 14 | 9 | 14 | 14 | 0.1672 | 0.5417 | -1.0 |
 | nifty_tri_ret_6m | NOISE | 14 | 7 | 14 | 14 | 0.1555 | 0.5208 | 1.0 |
 | rhp_promoter_holding_pre_pct | NOISE | 14 | 6 | 10 | 10 | 0.1503 | 0.5 | 1.0 |
-| sector_minus_nifty_3m | NOISE | 14 | 8 | 14 | 14 | 0.1355 | 0.5055 | -1.0 |
 | rii_share_of_total | NOISE | 14 | 7 | 14 | 14 | 0.1112 | 0.5294 | 1.0 |
 | rhp_auditor_qualification_flag | NOISE | 14 | 2 | 2 | 9 | 0.0601 | 0.4833 | -1.0 |
 | rhp_pre_ipo_placement_flag | NOISE | 14 | 3 | 3 | 10 | 0.0394 | 0.5031 | -1.0 |
@@ -149,8 +149,8 @@ Why each label:
 - `mean_sub_total_prior_3m` **STABLE** — sign agrees in 11/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `turnover_x_issue_size` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `mean_listing_gain_prior_3m` **STABLE** — sign agrees in 13/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
+- `sector_minus_nifty_6m` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `log_issue_size` **STABLE** — sign agrees in 14/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
-- `listing_gain_minus_sector_day` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 13/14 (>= 60%)
 - `rhp_uses_of_proceeds_n` **STABLE** — sign agrees in 13/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 12/14 (>= 60%)
 - `sub_rii` **STABLE** — sign agrees in 11/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 12/14 (>= 60%)
 - `smallcap_minus_nifty_6m` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 10/14 and 14/14 overall
@@ -164,15 +164,15 @@ Why each label:
 - `promoter_holding_post_pct_agg` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 13/14
 - `nifty_pe_at_listing` **NOISE** — sign agrees in only 9/14 measurable windows and IV >= 0.02 in 13/14
 - `promoter_holding_pre_pct_agg` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 14/14
+- `listing_gain_minus_sector_day` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 14/14
 - `rhp_board_size_n` **NOISE** — sign agrees in only 7/14 measurable windows and IV >= 0.02 in 14/14
 - `qib_share_of_total` **NOISE** — sign agrees in only 7/14 measurable windows and IV >= 0.02 in 14/14
 - `promoter_dilution_pp_agg` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 14/14
 - `sub_hni` **NOISE** — sign agrees in only 7/14 measurable windows and IV >= 0.02 in 13/14
-- `sector_minus_nifty_6m` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 13/14
 - `sub_qib` **NOISE** — sign agrees in only 9/14 measurable windows and IV >= 0.02 in 13/14
+- `sector_minus_nifty_3m` **NOISE** — sign agrees in only 9/14 measurable windows and IV >= 0.02 in 14/14
 - `nifty_tri_ret_6m` **NOISE** — sign agrees in only 7/14 measurable windows and IV >= 0.02 in 14/14
 - `rhp_promoter_holding_pre_pct` **NOISE** — sign agrees in only 6/10 measurable windows and IV >= 0.02 in 10/14
-- `sector_minus_nifty_3m` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 14/14
 - `rii_share_of_total` **NOISE** — sign agrees in only 7/14 measurable windows and IV >= 0.02 in 14/14
 - `rhp_auditor_qualification_flag` **NOISE** — sign agrees in 2/2 measurable windows, direction measurable in only 2/14, IV >= 0.02 in 9/14
 - `rhp_pre_ipo_placement_flag` **NOISE** — sign agrees in 3/3 measurable windows, direction measurable in only 3/14, IV >= 0.02 in 10/14
@@ -192,25 +192,25 @@ Why each label:
 | mean_listing_gain_prior_3m | STABLE | 14 | 11 | 14 | 14 | 0.1847 | 0.5487 | -1.0 |
 | listing_gain_pct | STABLE | 14 | 12 | 14 | 14 | 0.1807 | 0.5617 | 1.0 |
 | rhp_uses_of_proceeds_n | STABLE | 14 | 14 | 14 | 14 | 0.1714 | 0.5 | 1.0 |
-| listing_gain_minus_sector_day | STABLE | 14 | 12 | 14 | 14 | 0.1589 | 0.5182 | -1.0 |
 | turnover_x_issue_size | STABLE | 14 | 12 | 14 | 14 | 0.1442 | 0.5417 | -1.0 |
 | nifty_tri_ret_6m | STABLE | 14 | 11 | 14 | 14 | 0.1244 | 0.4955 | -1.0 |
 | rhp_pre_ipo_placement_flag | STABLE | 14 | 9 | 9 | 12 | 0.0682 | 0.5 | -1.0 |
 | promoter_holding_post_pct_agg | CURRENT | 14 | 9 | 14 | 14 | 0.2831 | 0.5179 | 1.0 |
 | nifty_pe_at_listing | CURRENT | 14 | 8 | 14 | 14 | 0.1847 | 0.5 | -1.0 |
+| sector_minus_nifty_6m | CURRENT | 14 | 9 | 14 | 14 | 0.1482 | 0.5 | -1.0 |
 | india_vix_at_listing | CURRENT | 14 | 6 | 7 | 7 | 0.0636 | 0.5 | 1.0 |
 | anchor_n_investors | CURRENT | 14 | 6 | 8 | 9 | 0.0408 | 0.5 | -1.0 |
 | rhp_promoter_lockin_months | WEAK | 14 | 11 | 14 | 7 | 0.0153 | 0.4969 | 1.0 |
 | nifty_pe_vs_10y_median | NOISE | 14 | 10 | 14 | 13 | 0.3963 | 0.5 | -1.0 |
 | smallcap_minus_nifty_6m | NOISE | 14 | 8 | 14 | 14 | 0.2496 | 0.4732 | -1.0 |
+| listing_gain_minus_sector_day | NOISE | 14 | 9 | 14 | 14 | 0.2324 | 0.5357 | -1.0 |
 | log1p_sub_total | NOISE | 14 | 10 | 14 | 12 | 0.2064 | 0.4778 | -1.0 |
 | sub_total | NOISE | 14 | 10 | 14 | 12 | 0.2064 | 0.4778 | -1.0 |
-| sector_minus_nifty_6m | NOISE | 14 | 10 | 14 | 13 | 0.1217 | 0.5347 | -1.0 |
 | sub_qib | NOISE | 14 | 8 | 14 | 14 | 0.121 | 0.4567 | -1.0 |
 | mean_sub_total_prior_3m | NOISE | 14 | 8 | 14 | 14 | 0.1169 | 0.4777 | -1.0 |
 | qib_share_of_total | NOISE | 14 | 8 | 14 | 11 | 0.0989 | 0.4706 | 1.0 |
+| sector_minus_nifty_3m | NOISE | 14 | 8 | 14 | 14 | 0.0988 | 0.4783 | -1.0 |
 | log_issue_size | NOISE | 14 | 10 | 14 | 14 | 0.094 | 0.5549 | -1.0 |
-| sector_minus_nifty_3m | NOISE | 14 | 8 | 14 | 14 | 0.0604 | 0.5 | -1.0 |
 | sub_rii | NOISE | 14 | 9 | 14 | 11 | 0.0544 | 0.4422 | -1.0 |
 | rhp_promoter_holding_pre_pct | NOISE | 14 | 6 | 10 | 9 | 0.0459 | 0.4866 | 1.0 |
 | rii_share_of_total | NOISE | 14 | 10 | 14 | 13 | 0.0451 | 0.518 | -1.0 |
@@ -232,25 +232,25 @@ Why each label:
 - `mean_listing_gain_prior_3m` **STABLE** — sign agrees in 11/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `listing_gain_pct` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `rhp_uses_of_proceeds_n` **STABLE** — sign agrees in 14/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
-- `listing_gain_minus_sector_day` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `turnover_x_issue_size` **STABLE** — sign agrees in 12/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `nifty_tri_ret_6m` **STABLE** — sign agrees in 11/14 measurable windows (>= 75%), direction measurable in 14/14, and IV >= 0.02 in 14/14 (>= 60%)
 - `rhp_pre_ipo_placement_flag` **STABLE** — sign agrees in 9/9 measurable windows (>= 75%), direction measurable in 9/14, and IV >= 0.02 in 12/14 (>= 60%)
 - `promoter_holding_post_pct_agg` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 9/14 and 14/14 overall
 - `nifty_pe_at_listing` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 8/14 and 14/14 overall
+- `sector_minus_nifty_6m` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 9/14 and 14/14 overall
 - `india_vix_at_listing` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 6/7 and 7/14 overall
 - `anchor_n_investors` **CURRENT** — sign agrees and IV >= 0.02 in all of the last 4 windows, but only 6/8 and 9/14 overall
 - `rhp_promoter_lockin_months` **WEAK** — sign agrees in 11/14 and IV >= 0.02 in 7/14 - neither stable nor clearly noise
 - `nifty_pe_vs_10y_median` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 13/14
 - `smallcap_minus_nifty_6m` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 14/14
+- `listing_gain_minus_sector_day` **NOISE** — sign agrees in only 9/14 measurable windows and IV >= 0.02 in 14/14
 - `log1p_sub_total` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 12/14
 - `sub_total` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 12/14
-- `sector_minus_nifty_6m` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 13/14
 - `sub_qib` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 14/14
 - `mean_sub_total_prior_3m` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 14/14
 - `qib_share_of_total` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 11/14
-- `log_issue_size` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 14/14
 - `sector_minus_nifty_3m` **NOISE** — sign agrees in only 8/14 measurable windows and IV >= 0.02 in 14/14
+- `log_issue_size` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 14/14
 - `sub_rii` **NOISE** — sign agrees in only 9/14 measurable windows and IV >= 0.02 in 11/14
 - `rhp_promoter_holding_pre_pct` **NOISE** — sign agrees in only 6/10 measurable windows and IV >= 0.02 in 9/14
 - `rii_share_of_total` **NOISE** — sign agrees in only 10/14 measurable windows and IV >= 0.02 in 13/14
@@ -278,15 +278,15 @@ Scheme A trains on the year immediately before the test year, whose 12-month out
 | sub_qib | STABLE | 13 | 10 | 13 | 13 | 0.2418 | 0.4863 |
 | log_issue_size | STABLE | 13 | 12 | 13 | 13 | 0.2135 | 0.5147 |
 | turnover_x_issue_size | STABLE | 13 | 11 | 13 | 13 | 0.195 | 0.5258 |
-| listing_gain_minus_sector_day | STABLE | 13 | 11 | 13 | 13 | 0.1847 | 0.5361 |
-| sector_minus_nifty_6m | STABLE | 13 | 10 | 13 | 13 | 0.1638 | 0.4993 |
+| sector_minus_nifty_6m | STABLE | 13 | 10 | 13 | 13 | 0.1695 | 0.5154 |
 | rhp_uses_of_proceeds_n | STABLE | 13 | 13 | 13 | 12 | 0.0892 | 0.5083 |
 | smallcap_minus_nifty_6m | CURRENT | 13 | 8 | 13 | 13 | 0.3388 | 0.4988 |
+| listing_gain_minus_sector_day | CURRENT | 13 | 9 | 13 | 13 | 0.2863 | 0.5799 |
 | promoter_holding_pre_pct_agg | CURRENT | 13 | 7 | 13 | 13 | 0.2532 | 0.4968 |
 | sub_hni | CURRENT | 13 | 8 | 13 | 13 | 0.1939 | 0.5087 |
 | promoter_dilution_pp_agg | CURRENT | 13 | 7 | 13 | 13 | 0.1936 | 0.5093 |
+| sector_minus_nifty_3m | CURRENT | 13 | 9 | 13 | 13 | 0.1171 | 0.4927 |
 | anchor_amount_cr | CURRENT | 13 | 4 | 7 | 8 | 0.1084 | 0.5 |
-| sector_minus_nifty_3m | CURRENT | 13 | 9 | 13 | 13 | 0.1006 | 0.5 |
 | qib_share_of_total | CURRENT | 13 | 7 | 13 | 13 | 0.0979 | 0.4748 |
 | anchor_n_investors | CURRENT | 13 | 5 | 7 | 8 | 0.0697 | 0.5 |
 | india_vix_at_listing | CURRENT | 13 | 5 | 6 | 6 | 0.0 | 0.5 |
