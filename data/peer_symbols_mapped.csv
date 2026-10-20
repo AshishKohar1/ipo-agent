@@ -1,0 +1,968 @@
+company,listing_date,slot,peer_name,peer_name_raw,nse_symbol,matched_how,status
+AAVAS Financiers Ltd,2018-10-08,1,HDFC Limited,HDFC Limited,,,unmatched
+AAVAS Financiers Ltd,2018-10-08,2,Gruh Finance Limited,Gruh Finance Limited,,,unmatched
+AAVAS Financiers Ltd,2018-10-08,3,Repco Home Finance Limited,Repco Home Finance Limited,REPCOHOME,exact name in NSE EQUITY_L,matched
+AAVAS Financiers Ltd,2018-10-08,4,Can Fin Homes Limited,Can Fin Homes Limited,CANFINHOME,exact name in NSE EQUITY_L,matched
+AAVAS Financiers Ltd,2018-10-08,5,PNB Housing Finance Limited,PNB Housing Finance Limited,PNBHOUSING,exact name in NSE EQUITY_L,matched
+Aditya Birla Sun Life AMC Limited,2021-10-11,1,HDFC Asset Management Company Limited,HDFC Asset Management Company Limited,HDFCAMC,exact name in NSE EQUITY_L,matched
+Aditya Birla Sun Life AMC Limited,2021-10-11,2,Nippon Life India Asset Management Limited,Nippon Life India Asset Management Limited,NAM-INDIA,exact name in NSE EQUITY_L,matched
+Aditya Birla Sun Life AMC Limited,2021-10-11,3,UTI Asset Management Company Limited,UTI Asset Management Company Limited,UTIAMC,exact name in NSE EQUITY_L,matched
+Archean Chemical Industries Limited,2022-11-21,1,March,March,,,junk
+Archean Chemical Industries Limited,2022-11-21,2,March,March,,,junk
+Archean Chemical Industries Limited,2022-11-21,3,March,March,,,junk
+ACME Solar Holdings Limited,2024-11-13,1,October Return on Net Worth (“RoNW”) Financial Year ended RoNW (%),October Return on Net Worth (“RoNW”) Financial Year ended RoNW (%),,,junk
+ACME Solar Holdings Limited,2024-11-13,2,March,March,,,junk
+ACME Solar Holdings Limited,2024-11-13,3,March,March,,,junk
+ACME Solar Holdings Limited,2024-11-13,4,March,March,,,junk
+ACME Solar Holdings Limited,2024-11-13,5,As at three months ended June,As at three months ended June,,,junk
+ACME Solar Holdings Limited,2024-11-13,6,As at three months ended June,As at three months ended June,,,junk
+ACME Solar Holdings Limited,2024-11-13,7,Not annaulised for three months ended June,*Not annaulised for three months ended June,,,junk
+Aether Industries,2022-06-03,1,March,March,,,junk
+Aether Industries,2022-06-03,2,March,March,,,junk
+Aether Industries,2022-06-03,3,March,March,,,junk
+Aether Industries,2022-06-03,4,Nine months period ended December Not annualized,Nine months period ended December * Not annualized,,,junk
+Aether Industries,2022-06-03,5,The Company has undertaken a Pre-IPO Placement on May,^ The Company has undertaken a Pre-IPO Placement on May,,,junk
+Afcons Infrastructure Limited,2024-11-04,1,March,March,,,junk
+Afcons Infrastructure Limited,2024-11-04,2,March,March,,,junk
+Afcons Infrastructure Limited,2024-11-04,3,March,March,,,junk
+Anlon Healthcare Ltd.,2025-09-03,1,Kronox Lab Sciences Limited,Kronox Lab Sciences Limited,KRONOX,exact name in NSE EQUITY_L,matched
+Anlon Healthcare Ltd.,2025-09-03,2,Acutaas,Acutaas,,,unmatched
+Anlon Healthcare Ltd.,2025-09-03,3,Chemicals Ltd,Chemicals Ltd,,,unmatched
+Akums Drugs and Pharmaceuticals Limited,2024-08-06,1,Divi's Laboratories,Divi's Laboratories,DIVISLAB,exact name in NSE EQUITY_L,matched
+Alkem Laboratories Ltd,2015-12-23,1,Torrent Pharmaceuticals Limited,Torrent Pharmaceuticals Limited(2),TORNTPHARM,exact name in NSE EQUITY_L,matched
+Alkem Laboratories Ltd,2015-12-23,2,Ipca Laboratories Limited,Ipca Laboratories Limited(2),IPCALAB,exact name in NSE EQUITY_L,matched
+Alkem Laboratories Ltd,2015-12-23,3,Alembic Pharmaceuticals Limited,Alembic Pharmaceuticals Limited(2),APLLTD,exact name in NSE EQUITY_L,matched
+Anand Rathi Wealth Limited,2021-12-14,1,Anand Rathi,Anand Rathi,,,unmatched
+Anthem Biosciences Limited,2025-07-21,1,Fiscal,Fiscal,,,junk
+Anthem Biosciences Limited,2025-07-21,2,Fiscal,Fiscal,,,junk
+Anthem Biosciences Limited,2025-07-21,3,Fiscal,Fiscal,,,junk
+Anupam Rasayan India Limited,2021-03-24,1,Anupam Rasayan India Limited,Anupam Rasayan India Limited Listed Peers,ANURAS,exact name in NSE EQUITY_L,matched
+Anupam Rasayan India Limited,2021-03-24,2,PI Industries Limited,PI Industries Limited,PIIND,exact name in NSE EQUITY_L,matched
+Anupam Rasayan India Limited,2021-03-24,3,Navin Fluorine International Limited,Navin Fluorine International Limited,NAVINFLUOR,exact name in NSE EQUITY_L,matched
+Anupam Rasayan India Limited,2021-03-24,4,Astec Lifesciences Limited,Astec Lifesciences Limited,ASTEC,exact name in NSE EQUITY_L,matched
+Apollo Micro Systems Ltd,2018-01-22,1,Bharat Electronics Ltd Astra Microwave,Bharat Electronics Ltd Astra Microwave,,,unmatched
+Ashoka Buildcon Ltd,2010-10-14,1,Information” on pages xii,"Information” on pages xii,",,,junk
+ASK Automotive Limited,2023-11-15,1,Financial Years ended March,Financial Years ended March,,,unmatched
+Ather Energy Limited,2025-05-06,1,Financial year ended March,Financial year ended March,,,junk
+Ather Energy Limited,2025-05-06,2,Financial year ended March,Financial year ended March,,,junk
+Ather Energy Limited,2025-05-06,3,Financial year ended March,Financial year ended March,,,junk
+Ather Energy Limited,2025-05-06,4,Nine months ended December,Nine months ended December,,,junk
+Ather Energy Limited,2025-05-06,5,Nine months ended December Not annualised,Nine months ended December **Not annualised.,,,junk
+AU Small Finance Bank Ltd,2017-07-11,1,Bajaj Finance Limited,Bajaj Finance Limited,BAJFINANCE,exact name in NSE EQUITY_L,matched
+AU Small Finance Bank Ltd,2017-07-11,2,Sundaram Finance Limited,Sundaram Finance Limited,SUNDARMFIN,exact name in NSE EQUITY_L,matched
+AU Small Finance Bank Ltd,2017-07-11,3,RBL Bank Limited,RBL Bank Limited(6),RBLBANK,exact name in NSE EQUITY_L,matched
+AU Small Finance Bank Ltd,2017-07-11,4,IndusInd Bank Limited,IndusInd Bank Limited(6),INDUSINDBK,exact name in NSE EQUITY_L,matched
+AU Small Finance Bank Ltd,2017-07-11,5,Equitas Holdings Limited,Equitas Holdings Limited,,,unmatched
+AU Small Finance Bank Ltd,2017-07-11,6,Ujjivan Financial Services Limited,Ujjivan Financial Services Limited,,,unmatched
+Avalon Technologies Limited,2023-04-18,1,Dixon Technologies (India) Limited,Dixon Consolidated Technologies (India) Limited**,DIXON,exact name in NSE EQUITY_L,matched
+Avalon Technologies Limited,2023-04-18,2,Amber Enterprises India Limited,Amber Consolidated Enterprises India Limited**,AMBER,exact name in NSE EQUITY_L,matched
+Azad Engineering Limited,2023-12-28,1,MTAR Technologies Limited,MTAR Technologies Limited,MTARTECH,exact name in NSE EQUITY_L,matched
+Bajaj Housing Finance Limited,2024-09-16,1,Bajaj Housing Finance Limited,Bajaj Housing Finance Limited# Listed Peers,BAJAJHFL,exact name in NSE EQUITY_L,matched
+Bajaj Housing Finance Limited,2024-09-16,2,LIC Housing Finance Limited,LIC Housing Finance Limited,LICHSGFIN,exact name in NSE EQUITY_L,matched
+Shree Tirupati Balajee Agro Trading Company Limited,2024-09-12,1,Shree Tirupati Balajee Agro Trading Company Limited,Shree Tirupati Balajee Agro Trading Company Limited*,BALAJEE,exact name in NSE EQUITY_L,matched
+Bandhan Bank Ltd,2018-03-27,1,March,March,,,junk
+Bandhan Bank Ltd,2018-03-27,2,March,March,,,junk
+Bandhan Bank Ltd,2018-03-27,3,March,March,,,junk
+Bansal Wire Industries Limited,2024-07-10,1,Bansal Wire Industries Limited,Bansal Wire Industries Limited Listed peers,BANSALWIRE,exact name in NSE EQUITY_L,matched
+Bansal Wire Industries Limited,2024-07-10,2,Rajratan Global Wire Limited,Rajratan Global Wire Limited,RAJRATAN,exact name in NSE EQUITY_L,matched
+Bansal Wire Industries Limited,2024-07-10,3,DP Wires Limited,DP Wires Limited,DPWIRES,exact name in NSE EQUITY_L,matched
+Bansal Wire Industries Limited,2024-07-10,4,Bedmutha Industries Limited,Bedmutha Industries Limited,BEDMUTHA,exact name in NSE EQUITY_L,matched
+Mrs Bectors Food Specialities Ltd,2020-12-24,1,March,March,,,junk
+Mrs Bectors Food Specialities Ltd,2020-12-24,2,March,March,,,junk
+Mrs Bectors Food Specialities Ltd,2020-12-24,3,March,March,,,junk
+Belrise Industries Limited,2025-05-28,1,Financial Year ended March,Financial Year ended March,,,junk
+Belrise Industries Limited,2025-05-28,2,Financial Year ended March,Financial Year ended March,,,junk
+Belrise Industries Limited,2025-05-28,3,Financial Year ended March,Financial Year ended March,,,junk
+Belrise Industries Limited,2025-05-28,4,Nine months period ended December,Nine months period ended December,,,junk
+Belrise Industries Limited,2025-05-28,5,Nine months period ended December Not annualised,Nine months period ended December *Not annualised.,,,junk
+Bharatiya Global Infomedia Ltd,2011-07-28,1,March,March,,,junk
+Bharti Hexacom Ltd ,2024-04-12,1,Infocomm Limited,Infocomm Limited**,,,unmatched
+Bikaji Foods International Limited,2022-11-16,1,March,March,,,junk
+Bikaji Foods International Limited,2022-11-16,2,March,March,,,junk
+Bikaji Foods International Limited,2022-11-16,3,March,March,,,junk
+Bikaji Foods International Limited,2022-11-16,4,For the three months period ended June Not annualised,For the three months period ended June * Not annualised,,,junk
+Zinka Logistics Solution Limited (BlackBuck),2024-11-22,1,Zinka Logistics Solutions,Zinka Logistics Solutions,,,unmatched
+Zinka Logistics Solution Limited (BlackBuck),2024-11-22,2,C.E. Info Systems Ltd International,C.E. Info Systems Ltd International Listed Peers,,,unmatched
+Zinka Logistics Solution Limited (BlackBuck),2024-11-22,3,"FLEETCOR Technologies, Inc","FLEETCOR Technologies, Inc",,,unmatched
+Zinka Logistics Solution Limited (BlackBuck),2024-11-22,4,Full Truck Alliance Co. Ltd,Full Truck Alliance Co. Ltd,,,unmatched
+BLS E-Services Limited,2024-02-06,1,For six months period ended September,For six months period ended September,,,junk
+BLS E-Services Limited,2024-02-06,2,March,March,,,junk
+BLS E-Services Limited,2024-02-06,3,March,March,,,junk
+BLS E-Services Limited,2024-02-06,4,March Not Annualised,March *Not Annualised,,,junk
+BlueStone Jewellery & Lifestyle Ltd.,2025-08-19,1,"peers, as of August IV. Return on Net Worth (“RoNW","peers, as of August IV. Return on Net Worth (“RoNW",,,unmatched
+BlueStone Jewellery & Lifestyle Ltd.,2025-08-19,2,March,March,,,junk
+BlueStone Jewellery & Lifestyle Ltd.,2025-08-19,3,March,March,,,junk
+BlueStone Jewellery & Lifestyle Ltd.,2025-08-19,4,March Weighted Average N.A,March Weighted Average N.A.,,,junk
+Brigade Hotel Ventures Limited,2025-07-31,1,March,March,,,junk
+Brigade Hotel Ventures Limited,2025-07-31,2,March,March,,,junk
+Brigade Hotel Ventures Limited,2025-07-31,3,March,March,,,junk
+Bharat Road Network Ltd,2017-09-18,1,March Particulars RoNW (%) Weight,March Particulars RoNW** (%) Weight,,,junk
+Bharat Road Network Ltd,2017-09-18,2,March,March,,,junk
+Bharat Road Network Ltd,2017-09-18,3,March,March,,,junk
+Brooks Laboratories Ltd,2011-09-05,1,Rs.7.00 for the financial year ended on March,Rs.7.00 for the financial year ended on March,,,junk
+Campus Activewear (India) Limited,2022-05-09,1,March,March,,,junk
+Campus Activewear (India) Limited,2022-05-09,2,March,March,,,junk
+Campus Activewear (India) Limited,2022-05-09,3,March,March,,,junk
+Campus Activewear (India) Limited,2022-05-09,4,Nine months ended December Not annualised,Nine months ended December * Not annualised.,,,junk
+Cantabil Retail India Ltd,2010-10-12,1,Cantabil Retail India Limited,Cantabil Retail India Limited,CANTABIL,exact name in NSE EQUITY_L,matched
+Cantabil Retail India Ltd,2010-10-12,2,Kewal Kiran Clothing Limited,Kewal Kiran Clothing Limited,KKCL,exact name in NSE EQUITY_L,matched
+Cantabil Retail India Ltd,2010-10-12,3,Koutons Retail India Limited,Koutons Retail India Limited,,,unmatched
+Cantabil Retail India Ltd,2010-10-12,4,Provogue India Limited,Provogue India Limited,,,unmatched
+Cantabil Retail India Ltd,2010-10-12,5,Zodiac Clothing Company Limited,Zodiac Clothing Company Limited,ZODIACLOTH,exact name in NSE EQUITY_L,matched
+Capital Small Finance Bank Limited,2024-02-14,1,Capital Small Finance Bank Limited,Capital Small Finance Bank Limited* Listed Peers,CAPITALSFB,exact name in NSE EQUITY_L,matched
+Capital Small Finance Bank Limited,2024-02-14,2,IDFC First Bank,IDFC First Bank,IDFCFIRSTB,exact name in NSE EQUITY_L,matched
+Capital Small Finance Bank Limited,2024-02-14,3,AU SFB,AU SFB,,,unmatched
+Carraro India Limited,2024-12-30,1,March,March,,,junk
+Carraro India Limited,2024-12-30,2,March,March,,,junk
+Carraro India Limited,2024-12-30,3,March,March,,,junk
+Carraro India Limited,2024-12-30,4,September,September,,,junk
+Carraro India Limited,2024-12-30,5,September Not annualised,September *Not annualised,,,junk
+Ceigall India Limited,2024-08-08,1,March,March,,,junk
+Ceigall India Limited,2024-08-08,2,March,March,,,junk
+Ceigall India Limited,2024-08-08,3,March,March,,,junk
+Cello World Limited,2023-11-06,1,For the year ended March,For the year ended March,,,junk
+Cello World Limited,2023-11-06,2,For the year ended March,For the year ended March,,,junk
+Cello World Limited,2023-11-06,3,For the year ended March Not annualised,For the year ended March *Not annualised,,,junk
+Concord Enviro Systems Limited,2024-12-27,1,Concord Enviro Systems Limited,Concord Enviro Systems Limited*,CEWATER,exact name in NSE EQUITY_L,matched
+Chalet Hotels Ltd,2019-02-07,1,is,is,,,junk
+Chemcon Speciality Chemicals Ltd,2020-10-01,1,as closing share price III. Return on Net Worth (“RoN As per Financial Stat Fiscal/Period Ended RoNW (%) W II. After the Issue : (a) At the Floor Price: ₹ [●] (b) At the Cap Price: ₹ [●] III. Issue Price : ₹ [●] To be updated in the Prospect,as closing share price III. Return on Net Worth (“RoN As per Restated Financial Stat Fiscal/Period Ended RoNW (%) W II. After the Issue*: (a) At the Floor Price: ₹ [●] (b) At the Cap Price: ₹ [●] III. Issue Price*: ₹ [●] *To be updated in the Prospect,,,junk
+Clean Science and Technology Limited,2021-07-19,1,Clean Science and Technology Limited,Clean Science and Technology Limited Listed Peers Vinati Organics Limited Fine Organic Industries Limited,CLEAN,exact name in NSE EQUITY_L,matched
+Clean Science and Technology Limited,2021-07-19,2,Atul Limited Camlin Fine Sciences Limited,Atul Limited Camlin Fine Sciences Limited,,,unmatched
+Clean Science and Technology Limited,2021-07-19,3,SRF Limited Navin Flourine International Limited,SRF Limited Navin Flourine International Limited,,,unmatched
+Clean Science and Technology Limited,2021-07-19,4,PI Industries Limited,PI Industries Limited,PIIND,exact name in NSE EQUITY_L,matched
+CMS Info Systems Limited,2021-12-31,1,March,March,,,junk
+CMS Info Systems Limited,2021-12-31,2,March,March,,,junk
+CMS Info Systems Limited,2021-12-31,3,March Not annualised,March * Not annualised,,,junk
+Concord Biotech Limited,2023-08-18,1,Our Company,Our Company Listed Peers,,,junk
+Concord Biotech Limited,2023-08-18,2,Divi’s Laboratories Limited,Divi’s Laboratories Limited,DIVISLAB,exact name in NSE EQUITY_L,matched
+Concord Biotech Limited,2023-08-18,3,Suven Pharmaceuticals Limited,Suven Pharmaceuticals Limited,,,unmatched
+Concord Biotech Limited,2023-08-18,4,Laurus Labs Limited,Laurus Labs Limited,LAURUSLABS,exact name in NSE EQUITY_L,matched
+Concord Biotech Limited,2023-08-18,5,Shilpa Medicare Limited,Shilpa Medicare Limited,SHILPAMED,exact name in NSE EQUITY_L,matched
+Aditya Infotech Ltd,2025-08-05,1,Financial Year,Financial Year,,,junk
+Aditya Infotech Ltd,2025-08-05,2,Financial Year,Financial Year,,,junk
+Aditya Infotech Ltd,2025-08-05,3,Financial Year,Financial Year,,,junk
+Craftsman Automation Limited,2021-03-25,1,Bharat Forge Limited,Bharat Consolidated Forge Limited*,BHARATFORG,exact name in NSE EQUITY_L,matched
+Craftsman Automation Limited,2021-03-25,2,Endurance Technologie s Limited,Endurance Consolidated Technologie s Limited*,ENDURANCE,exact name in NSE EQUITY_L,matched
+Craftsman Automation Limited,2021-03-25,3,Jamna Auto Industries Limited,Jamna Auto Consolidated Industries Limited*,JAMNAAUTO,exact name in NSE EQUITY_L,matched
+Craftsman Automation Limited,2021-03-25,4,Mahindra CIE Automotive Limited,Mahindra Consolidated CIE Automotive Limited*,,,unmatched
+Craftsman Automation Limited,2021-03-25,5,Minda Industries Limited,Minda Consolidated Industries Limited#,,,unmatched
+Craftsman Automation Limited,2021-03-25,6,Sundram Fasteners Limited,Sundram Consolidated Fasteners Limited*,SUNDRMFAST,exact name in NSE EQUITY_L,matched
+Craftsman Automation Limited,2021-03-25,7,Ramkrishna Forgings Limited,Ramkrishna Consolidated Forgings Limited*,RKFORGE,exact name in NSE EQUITY_L,matched
+CreditAccess Grameen Ltd,2018-08-23,1,Bharat Financial Inclusion Limited,Bharat Financial Inclusion Limited,,,unmatched
+CreditAccess Grameen Ltd,2018-08-23,2,Satin Creditcare Network Limited,Satin Creditcare Network Limited,SATIN,exact name in NSE EQUITY_L,matched
+CreditAccess Grameen Ltd,2018-08-23,3,Au Small Finance Bank Limited,Au Small Finance Bank Limited,AUBANK,exact name in NSE EQUITY_L,matched
+CreditAccess Grameen Ltd,2018-08-23,4,Ujjivan Financial Services Limited,Ujjivan Financial Services Limited,,,unmatched
+CreditAccess Grameen Ltd,2018-08-23,5,Equitas Holdings Limited,Equitas Holdings Limited,,,unmatched
+CreditAccess Grameen Ltd,2018-08-23,6,Shriram Transport Finance Company Limited,Shriram Transport Finance Company Limited,,,unmatched
+CreditAccess Grameen Ltd,2018-08-23,7,Mahindra & Mahindra Financial Services Limited,Mahindra & Mahindra Financial Services Limited,M&MFIN,exact name in NSE EQUITY_L,matched
+CSB Bank Ltd,2019-12-04,1,DCB bank,DCB bank,DCBBANK,exact name in NSE EQUITY_L,matched
+CSB Bank Ltd,2019-12-04,2,Federal bank,Federal bank,,,unmatched
+CSB Bank Ltd,2019-12-04,3,South Indian bank,South Indian bank,,,unmatched
+CSB Bank Ltd,2019-12-04,4,City Union,City Union,,,unmatched
+CSB Bank Ltd,2019-12-04,5,Karur Vysya Bank,Karur Vysya Bank,KARURVYSYA,exact name in NSE EQUITY_L,matched
+Cyient DLM Limited,2023-07-10,1,Syrma SGS Technology Ltd,Syrma SGS Technology Ltd,SYRMA,exact name in NSE EQUITY_L,matched
+Cyient DLM Limited,2023-07-10,2,Kaynes Technology India Limited,Kaynes Technology India Limited,KAYNES,exact name in NSE EQUITY_L,matched
+Cyient DLM Limited,2023-07-10,3,DCX Systems Limited,DCX Systems Limited,DCXINDIA,exact name in NSE EQUITY_L,matched
+Dam Capital Advisors Limited,2024-12-27,1,March,March,,,junk
+Dam Capital Advisors Limited,2024-12-27,2,March,March,,,junk
+Dam Capital Advisors Limited,2024-12-27,3,March Not annualised,March *Not annualised,,,junk
+Deepak Builders & Engineers India Limited,2024-10-28,1,Details of our KPIs for the three months period ended June,Details of our KPIs for the three months period ended June,,,junk
+Dilip Buildcon Ltd,2016-08-11,1,J. Kumar Infraprojects Limited,J. Kumar Infraprojects Limited(2),JKIL,exact name in NSE EQUITY_L,matched
+Dilip Buildcon Ltd,2016-08-11,2,Simplex Infrastructures Limited,Simplex Infrastructures Limited(3),SIMPLEXINF,exact name in NSE EQUITY_L,matched
+Dilip Buildcon Ltd,2016-08-11,3,KNR Constructions Limited,KNR Constructions Limited(3),KNRCON,exact name in NSE EQUITY_L,matched
+Dilip Buildcon Ltd,2016-08-11,4,MBL Infra Limited,MBL Infra Limited(3),,,unmatched
+Dilip Buildcon Ltd,2016-08-11,5,Sadbhav Engineering Limited N A,Sadbhav Engineering Limited(3) N A -,,,unmatched
+Dilip Buildcon Ltd,2016-08-11,6,Ashoka Buildcon Limited,Ashoka Buildcon Limited(3),ASHOKA,exact name in NSE EQUITY_L,matched
+Dilip Buildcon Ltd,2016-08-11,7,IL&FS Transportation Networks,IL&FS Transportation Networks,IL&FSTRANS,exact name in NSE EQUITY_L,matched
+Dilip Buildcon Ltd,2016-08-11,8,Limited,Limited(3),,,junk
+Dilip Buildcon Ltd,2016-08-11,9,IRB Infrastructure Developers,IRB Infrastructure Developers,IRB,exact name in NSE EQUITY_L,matched
+Dilip Buildcon Ltd,2016-08-11,10,Limited,Limited(3),,,junk
+Dilip Buildcon Ltd,2016-08-11,11,PNC Infratech Limited,PNC Infratech Limited(3),PNCINFRA,exact name in NSE EQUITY_L,matched
+DCX Systems Ltd,2022-11-11,1,“Restated Financial Information” on pages view,“Restated Financial Information” on pages view.,,,junk
+Delhivery Limited,2022-05-24,1,March,March,,,junk
+Delhivery Limited,2022-05-24,2,March,March,,,junk
+Delhivery Limited,2022-05-24,3,March,March,,,junk
+Delhivery Limited,2022-05-24,4,Nine months period ended December Not annualised,Nine months period ended December *Not annualised,,,junk
+Dev Accelerator Ltd.,2025-09-17,1,March,March,,,junk
+Dev Accelerator Ltd.,2025-09-17,2,March,March,,,junk
+Dev Accelerator Ltd.,2025-09-17,3,March,March,,,junk
+Devyani International Limited,2021-08-16,1,Devyani International Limited,Devyani International Limited* Listed Peers,DEVYANI,exact name in NSE EQUITY_L,matched
+Devyani International Limited,2021-08-16,2,Jubilant FoodWorks Limited,Jubilant FoodWorks Limited,JUBLFOOD,exact name in NSE EQUITY_L,matched
+Devyani International Limited,2021-08-16,3,Westlife Development Limited,Westlife Development Limited,,,unmatched
+Devyani International Limited,2021-08-16,4,Burger King India Limited,Burger King India Limited,,,unmatched
+Dharmaj Crop Guard Limited,2022-12-08,1,March,March,,,junk
+Dharmaj Crop Guard Limited,2022-12-08,2,March,March,,,junk
+Dharmaj Crop Guard Limited,2022-12-08,3,March,March,,,junk
+Dharmaj Crop Guard Limited,2022-12-08,4,Four months period ended July Not annualized,Four months period ended July * Not annualized,,,junk
+Divgi Torqtransfer Systems Limited,2023-03-14,1,shares on February,shares on February,,,unmatched
+Avenue Supermarts Ltd (DMart),2017-03-21,1,Future Retail Limited,Future Retail Consolidated Limited,,,unmatched
+Avenue Supermarts Ltd (DMart),2017-03-21,2,Trent Limited Consolidated,Trent Limited Consolidated,,,unmatched
+Avenue Supermarts Ltd (DMart),2017-03-21,3,Not adjusted for Stock Split from ₹10 to ₹1 on September,* Not adjusted for Stock Split from ₹10 to ₹1 on September,,,unmatched
+Doms Industries Limited,2023-12-20,1,DOMS Industries Limited,DOMS Industries Limited,DOMS,exact name in NSE EQUITY_L,matched
+Easy Trip Planners Limited,2021-03-19,1,Fiscal,Fiscal,,,junk
+Easy Trip Planners Limited,2021-03-19,2,Fiscal,Fiscal,,,junk
+Easy Trip Planners Limited,2021-03-19,3,Fiscal Financial Period RoNW (%) Weig,Fiscal Financial Period RoNW (%) Weig,,,junk
+Easy Trip Planners Limited,2021-03-19,4,Fiscal,Fiscal,,,junk
+Easy Trip Planners Limited,2021-03-19,5,Fiscal,Fiscal,,,junk
+Easy Trip Planners Limited,2021-03-19,6,Fiscal (consolidated),Fiscal (consolidated)*,,,junk
+GNG Electronics Limited,2025-07-30,1,Newjaisa Technologies Limited,Newjaisa Technologies Limited,,,unmatched
+Ecos (India) Mobility & Hospitality Limited,2024-09-04,1,Ecos Mobility & Hospitality Limited,Ecos Mobility & Hospitality Limited* Listed peers,ECOSMOBLTY,exact name in NSE EQUITY_L,matched
+Elin Electronics Limited,2022-12-30,1,Six months ended September Not annualised by the Subsidiary: Fiscal RoNW (%) Weight,Six months ended September *Not annualised by the Subsidiary: Fiscal RoNW (%) Weight,,,junk
+Elin Electronics Limited,2022-12-30,2,Six months ended September Not annualised,Six months ended September *Not annualised,,,junk
+Emcure Pharmaceuticals Limited,2024-07-10,1,operations per June,operations per June,,,unmatched
+Emcure Pharmaceuticals Limited,2024-07-10,2,Emcure Pharmaceutical s Limited,Emcure Pharmaceutical s Limited* Listed peers**,EMCURE,exact name in NSE EQUITY_L,matched
+Emcure Pharmaceuticals Limited,2024-07-10,3,Dr. Reddy's Laboratories Limited,Dr. Reddy's Laboratories Limited,DRREDDY,exact name in NSE EQUITY_L,matched
+Emcure Pharmaceuticals Limited,2024-07-10,4,Cipla Limited,Cipla Limited,CIPLA,exact name in NSE EQUITY_L,matched
+Emcure Pharmaceuticals Limited,2024-07-10,5,Alkem Laboratories Limited,Alkem Laboratories Limited,ALKEM,exact name in NSE EQUITY_L,matched
+Emcure Pharmaceuticals Limited,2024-07-10,6,Torrent Pharmaceutical s Limited,Torrent Pharmaceutical s Limited,TORNTPHARM,exact name in NSE EQUITY_L,matched
+eMudhra Ltd,2022-06-01,1,March,March,,,junk
+eMudhra Ltd,2022-06-01,2,March,March,,,junk
+eMudhra Ltd,2022-06-01,3,March,March,,,junk
+eMudhra Ltd,2022-06-01,4,Nine month period ended December Not Annualised,Nine month period ended December *Not Annualised,,,junk
+Endurance Technologies Ltd,2016-10-19,1,Endurance Technologies Limited@,Endurance Technologies Limited@,ENDURANCE,exact name in NSE EQUITY_L,matched
+Endurance Technologies Ltd,2016-10-19,2,Bharat Forge Limited,Bharat Forge Limited*,BHARATFORG,exact name in NSE EQUITY_L,matched
+Endurance Technologies Ltd,2016-10-19,3,Motherson Sumi Systems Limited,Motherson Sumi Systems Limited*,,,unmatched
+Endurance Technologies Ltd,2016-10-19,4,Gabriel India Limited,Gabriel India Limited#,GABRIEL,exact name in NSE EQUITY_L,matched
+Endurance Technologies Ltd,2016-10-19,5,Mahindra CIE Automotive Limited,Mahindra CIE Automotive Limited *(1),,,unmatched
+Endurance Technologies Ltd,2016-10-19,6,Munjal Showa Limited,Munjal Showa Limited#,MUNJALSHOW,exact name in NSE EQUITY_L,matched
+Endurance Technologies Ltd,2016-10-19,7,Rico Auto Industries Limited,Rico Auto Industries Limited*,RICOAUTO,exact name in NSE EQUITY_L,matched
+Entero Healthcare Solutions Limited,2024-02-16,1,Six months ended September,Six months ended September,,,junk
+Entero Healthcare Solutions Limited,2024-02-16,2,Six months ended September,Six months ended September,,,junk
+Entero Healthcare Solutions Limited,2024-02-16,3,Financial Year ended March,Financial Year ended March,,,junk
+Entero Healthcare Solutions Limited,2024-02-16,4,Financial Year ended March,Financial Year ended March,,,junk
+Entero Healthcare Solutions Limited,2024-02-16,5,Financial Year ended March Not annualised,Financial Year ended March *Not annualised,,,junk
+Epack Durable Limited,2024-01-30,1,Enterprises India Ltd PG,Enterprises Consolidated India Ltd PG,,,unmatched
+Epack Durable Limited,2024-01-30,2,Electroplast Limited Dixon,Electroplast Consolidated Limited Dixon,,,unmatched
+Epack Durable Limited,2024-01-30,3,Technologies Consolidated (India) Ltd,Technologies Consolidated (India) Ltd,,,unmatched
+Equitas Small Finance Bank Ltd,2020-11-02,1,Equitas Small Finance Bank Limited,Equitas Small Finance Bank Limited,EQUITASBNK,exact name in NSE EQUITY_L,matched
+ERIS Lifesciences Ltd,2017-06-30,1,ratio is,ratio is,,,unmatched
+ESAF Small Finance Bank Limited,2023-11-10,1,Limited,Limited*,,,junk
+Exicom Tele-Systems Ltd ,2024-03-05,1,website of NSE as of January,website of NSE as of January,,,unmatched
+Exxaro Tiles Limited,2021-08-16,1,March,March,,,junk
+Exxaro Tiles Limited,2021-08-16,2,March,March,,,junk
+Exxaro Tiles Limited,2021-08-16,3,March,March,,,junk
+Fedbank Financial Services Limited,2023-11-30,1,June,June,,,junk
+Fedbank Financial Services Limited,2023-11-30,2,June,June,,,junk
+Fedbank Financial Services Limited,2023-11-30,3,March,March,,,junk
+Fedbank Financial Services Limited,2023-11-30,4,March,March,,,junk
+Fedbank Financial Services Limited,2023-11-30,5,March Not annualised,March * Not annualised.,,,junk
+Brainbees Solutions Limited,2024-08-13,1,March,March,,,junk
+Brainbees Solutions Limited,2024-08-13,2,March,March,,,junk
+Brainbees Solutions Limited,2024-08-13,3,March,March,,,junk
+Five Star Business Finance Limited,2022-11-21,1,has been adjusted for the bonus issue allotment in D. Return on Average Net worth Fiscal RoNW (%) Weight,has been adjusted for the bonus issue allotment in D. Return on Average Net worth Fiscal RoNW (%) Weight,,,unmatched
+Five Star Business Finance Limited,2022-11-21,2,March,March,,,junk
+Five Star Business Finance Limited,2022-11-21,3,March,March,,,junk
+Five Star Business Finance Limited,2022-11-21,4,March,March,,,junk
+Five Star Business Finance Limited,2022-11-21,5,June Non annualized,June *Non annualized,,,junk
+Gem Aromatics Ltd,2025-08-26,1,NA,NA,,,junk
+Gland Pharma Ltd,2020-11-20,1,March,March,,,junk
+Gland Pharma Ltd,2020-11-20,2,March,March,,,junk
+Gland Pharma Ltd,2020-11-20,3,March,March,,,junk
+Gland Pharma Ltd,2020-11-20,4,Three month period ended June Not annualised,Three month period ended June # Not annualised,,,junk
+Go Fashion (India) Limited,2021-11-30,1,Financial Year ended March,Financial Year ended March,,,junk
+Go Fashion (India) Limited,2021-11-30,2,Financial Year ended March,Financial Year ended March,,,junk
+Go Fashion (India) Limited,2021-11-30,3,Financial Year ended March,Financial Year ended March,,,junk
+Go Fashion (India) Limited,2021-11-30,4,Three months ended June Not annualized,Three months ended June * Not annualized,,,junk
+Godavari Biorefineries Limited,2024-10-30,1,Godavari Biorefineries Limited,Godavari Biorefineries Limited Listed peers,GODAVARIB,exact name in NSE EQUITY_L,matched
+Godavari Biorefineries Limited,2024-10-30,2,Alkyl Amines Chemicals Limited,Alkyl Amines Chemicals Limited,ALKYLAMINE,exact name in NSE EQUITY_L,matched
+Godavari Biorefineries Limited,2024-10-30,3,Jubilant Ingrevia,Jubilant Ingrevia,JUBLINGREA,exact name in NSE EQUITY_L,matched
+Godrej Properties Limited,2010-01-05,1,Godrej Properties Limited Mahindra Lifespace Developers Limited,Godrej Properties Limited Mahindra Lifespace Developers Limited,,,unmatched
+Godrej Properties Limited,2010-01-05,2,Puravankara Projects Limited,Puravankara Projects Limited,,,unmatched
+Godrej Properties Limited,2010-01-05,3,Parsvnath Developers Limited,Parsvnath Developers Limited#,PARSVNATH,exact name in NSE EQUITY_L,matched
+Godrej Properties Limited,2010-01-05,4,Peninsula Land Limited,Peninsula Land Limited#,PENINLAND,exact name in NSE EQUITY_L,matched
+Godrej Properties Limited,2010-01-05,5,Sobha Developers Limited,Sobha Developers Limited,,,unmatched
+Godrej Properties Limited,2010-01-05,6,Omaxe Limited,Omaxe Limited,OMAXE,exact name in NSE EQUITY_L,matched
+Godrej Properties Limited,2010-01-05,7,HDIL,HDIL,,,unmatched
+Gopal Snacks Ltd,2024-03-14,1,March,March,,,junk
+Gopal Snacks Ltd,2024-03-14,2,March,March,,,junk
+Gopal Snacks Ltd,2024-03-14,3,March Not annualised,March *Not annualised,,,junk
+GPT Healthcare Ltd ,2024-02-29,1,Fiscal,Fiscal,,,junk
+GPT Healthcare Ltd ,2024-02-29,2,Fiscal,Fiscal,,,junk
+GPT Healthcare Ltd ,2024-02-29,3,Fiscal,Fiscal,,,junk
+GPT Healthcare Ltd ,2024-02-29,4,Six months period ended September,Six months period ended September,,,junk
+GPT Healthcare Ltd ,2024-02-29,5,Six months period ended September Not annualised,Six months period ended September * Not annualised.,,,junk
+Gravita India Ltd,2010-11-16,1,Hindustan Zinc Ltd,Hindustan Zinc Ltd.,HINDZINC,exact name in NSE EQUITY_L,matched
+Gravita India Ltd,2010-11-16,2,Nile Limited,Nile Limited,NILE,exact name in NSE EQUITY_L,matched
+Gravita India Ltd,2010-11-16,3,Pondy Oxides & Chemicals Ltd,Pondy Oxides & Chemicals Ltd.,POCL,exact name in NSE EQUITY_L,matched
+G R Infraprojects Limited,2021-07-19,1,KNR Constructions Limited,KNR Constructions Limited,KNRCON,exact name in NSE EQUITY_L,matched
+G R Infraprojects Limited,2021-07-19,2,PNC Infratech Limited,PNC Infratech Limited,PNCINFRA,exact name in NSE EQUITY_L,matched
+G R Infraprojects Limited,2021-07-19,3,HG Infra Engineering Limited,HG Infra Engineering Limited,HGINFRA,exact name in NSE EQUITY_L,matched
+G R Infraprojects Limited,2021-07-19,4,Dilip Buildcon Limited,Dilip Buildcon Limited,DBL,exact name in NSE EQUITY_L,matched
+G R Infraprojects Limited,2021-07-19,5,Ashoka Buildcon Limited,Ashoka Buildcon Limited,ASHOKA,exact name in NSE EQUITY_L,matched
+G R Infraprojects Limited,2021-07-19,6,IRB Infrastructure Developers Limited,IRB Infrastructure Developers Limited,IRB,exact name in NSE EQUITY_L,matched
+G R Infraprojects Limited,2021-07-19,7,Sadbhav Engineering Limited,Sadbhav Engineering Limited,SADBHAV,exact name in NSE EQUITY_L,matched
+Global Surfaces Limited,2023-03-23,1,Global Surfaces Limited,Global Surfaces Limited,GSLSU,exact name in NSE EQUITY_L,matched
+GTPL Hathway Ltd,2017-07-04,1,Consolidated Datacom Limited Den Networks,Consolidated Datacom Limited Den Networks,,,junk
+GTPL Hathway Ltd,2017-07-04,2,Consolidated Limited Siti Cable,Consolidated Limited Siti Cable,,,junk
+GTPL Hathway Ltd,2017-07-04,3,Network Ortel,Network Consolidated Ortel,,,unmatched
+GTPL Hathway Ltd,2017-07-04,4,Communications Ltd Composite,Communications Standalone Ltd Composite,,,unmatched
+Happiest Minds Technologies Ltd,2020-09-17,1,For the year ended March,For the year ended March,,,junk
+Happiest Minds Technologies Ltd,2020-09-17,2,For the year ended March,For the year ended March,,,junk
+Happiest Minds Technologies Ltd,2020-09-17,3,For the year ended March,For the year ended March,,,junk
+Happiest Minds Technologies Ltd,2020-09-17,4,For the three months period ended June Not annualised,For the three months period ended June *Not annualised,,,junk
+Happy Forgings Limited,2023-12-27,1,Financial year ended,Financial year ended,,,junk
+Happy Forgings Limited,2023-12-27,2,Financial year ended,Financial year ended,,,junk
+Happy Forgings Limited,2023-12-27,3,Financial year ended,Financial year ended,,,junk
+Happy Forgings Limited,2023-12-27,4,Six months ended September (not annualised),Six months ended September (not annualised),,,junk
+Happy Forgings Limited,2023-12-27,5,Six months ended September (not annualised),Six months ended September (not annualised),,,junk
+Harsha Engineers,2022-09-26,1,Harsha Engineers International Limited,Harsha Engineers International Limited,HARSHA,exact name in NSE EQUITY_L,matched
+Healthcare Global Enterprises Ltd,2016-03-31,1,March,March,,,junk
+Healthcare Global Enterprises Ltd,2016-03-31,2,March,March,,,junk
+Healthcare Global Enterprises Ltd,2016-03-31,3,March,March,,,junk
+Healthcare Global Enterprises Ltd,2016-03-31,4,For the six months ended September,For the six months ended September,,,junk
+Healthcare Global Enterprises Ltd,2016-03-31,5,For the eight months ended November,For the eight months ended November,,,unmatched
+HDB Financial Services Limited,2025-07-02,1,March,March,,,junk
+HDB Financial Services Limited,2025-07-02,2,March,March,,,junk
+HDB Financial Services Limited,2025-07-02,3,March,March,,,junk
+Hexaware Technologies Limited,2025-02-19,1,Financial Year ended December,Financial Year ended December,,,junk
+Hexaware Technologies Limited,2025-02-19,2,Financial Year ended December,Financial Year ended December,,,junk
+Hexaware Technologies Limited,2025-02-19,3,Financial Year ended December,Financial Year ended December,,,junk
+Hexaware Technologies Limited,2025-02-19,4,Nine months period ended September,Nine months period ended September,,,junk
+Hexaware Technologies Limited,2025-02-19,5,Nine months period ended September Not annualised,Nine months period ended September * Not annualised,,,junk
+Home First Finance Company India Limited,2021-02-03,1,Aavas Financiers Limited,Aavas Financiers Limited,AAVAS,exact name in NSE EQUITY_L,matched
+Honasa Consumer Limited (Mamaearth),2023-11-07,1,March,March,,,junk
+Honasa Consumer Limited (Mamaearth),2023-11-07,2,March,March,,,junk
+Honasa Consumer Limited (Mamaearth),2023-11-07,3,March,March,,,junk
+Honasa Consumer Limited (Mamaearth),2023-11-07,4,Three months period ended June,Three months period ended June,,,junk
+Honasa Consumer Limited (Mamaearth),2023-11-07,5,Three months period ended June Not annualized,Three months period ended June * Not annualized,,,junk
+HP Adhesives Limited,2021-12-27,1,HP Adhesives Limited,HP Adhesives Limited,HPAL,exact name in NSE EQUITY_L,matched
+Indian Energy Exchange Ltd,2017-10-23,1,March,March,,,junk
+Indian Energy Exchange Ltd,2017-10-23,2,March,March,,,junk
+Indian Energy Exchange Ltd,2017-10-23,3,March,March,,,junk
+Indian Energy Exchange Ltd,2017-10-23,4,For the three months period ended June,For the three months period ended June,,,junk
+Inventurus Knowledge Solutions Limited,2024-12-19,1,March,March,,,junk
+Inventurus Knowledge Solutions Limited,2024-12-19,2,March,March,,,junk
+Inventurus Knowledge Solutions Limited,2024-12-19,3,March,March,,,junk
+Inventurus Knowledge Solutions Limited,2024-12-19,4,Six months ended September,Six months ended September,,,junk
+Inventurus Knowledge Solutions Limited,2024-12-19,5,Six months ended September Not annualised,Six months ended September * Not annualised,,,junk
+Indiamart Intermesh Ltd,2019-07-04,1,March,March,,,junk
+Indiamart Intermesh Ltd,2019-07-04,2,March,March,,,junk
+Indiamart Intermesh Ltd,2019-07-04,3,March Period/Year ended RONW (%) Wei,March Period/Year ended RONW (%) Wei,,,junk
+Indiamart Intermesh Ltd,2019-07-04,4,March,March,,,junk
+Indiamart Intermesh Ltd,2019-07-04,5,March,March,,,junk
+Indiamart Intermesh Ltd,2019-07-04,6,March,March,,,junk
+India Shelter Finance Limited,2023-12-20,1,India Shelter Finance Corporation Limited,India Shelter Finance Corporation Limited# Listed peers*,INDIASHLTR,exact name in NSE EQUITY_L,matched
+India Shelter Finance Limited,2023-12-20,2,Aptus Value Housing Finance India Limited,Aptus Value Housing Finance India Limited,APTUS,exact name in NSE EQUITY_L,matched
+India Shelter Finance Limited,2023-12-20,3,Aavas,Aavas,,,unmatched
+Indigo Paints Limited,2021-02-02,1,March,March,,,junk
+Indigo Paints Limited,2021-02-02,2,March,March,,,junk
+Indigo Paints Limited,2021-02-02,3,March Not annualized profit for the year/,March *Not annualized Restated profit for the year/,,,junk
+Indigo Paints Limited,2021-02-02,4,(iv) An aggregate of given above. (basic) (₹)(iii) (diluted) (₹),(iv) An aggregate of given above. (basic) (₹)(iii) (diluted) (₹),,,unmatched
+Indigo Paints Limited,2021-02-02,5,As on September,As on September,,,junk
+Indigo Paints Limited,2021-02-02,6,As on March At Cap Price: [●] At Cap Price Offer Price [●] [●],As on March At Cap Price: [●] At Cap Price Offer Price [●] [●],,,junk
+Indigo Paints Limited,2021-02-02,7,(iii) The Board of Directors and the Shareholders in its mee,(iii) The Board of Directors and the Shareholders in its mee,,,unmatched
+Indigo Paints Limited,2021-02-02,8,approved conversion of the balance CCCPS as on September,approved conversion of the balance CCCPS as on September,,,junk
+Indigo Paints Limited,2021-02-02,9,as per share purchase agreements dated August capital of our Company,as per share purchase agreements dated August capital of our Company.,,,unmatched
+Indiqube Spaces Limited,2025-07-30,1,March,March,,,junk
+Indiqube Spaces Limited,2025-07-30,2,March,March,,,junk
+Indiqube Spaces Limited,2025-07-30,3,March Weighted Average NA,March Weighted Average NA -,,,junk
+Indo Farm Equipment Limited,2025-01-07,1,For the three months period ended June Not Annualised,For the three months period ended June * Not Annualised,,,junk
+Indostar Capital Finance Ltd,2018-05-21,1,L&T Finance Holdings Ltd,L&T Finance Holdings Ltd,,,unmatched
+Indostar Capital Finance Ltd,2018-05-21,2,Piramal Enterprises Ltd,Piramal Enterprises Ltd,,,unmatched
+Indostar Capital Finance Ltd,2018-05-21,3,Aditya Birla Capital Ltd,Aditya Birla Capital Ltd,ABCAPITAL,exact name in NSE EQUITY_L,matched
+Indostar Capital Finance Ltd,2018-05-21,4,Capital First Ltd,Capital First Ltd,,,unmatched
+Indostar Capital Finance Ltd,2018-05-21,5,Shriram Transport Finance Co. Ltd,Shriram Transport Finance Co. Ltd.,,,unmatched
+Indostar Capital Finance Ltd,2018-05-21,6,Sundaram Finance Ltd,Sundaram Finance Ltd.,SUNDARMFIN,exact name in NSE EQUITY_L,matched
+Indostar Capital Finance Ltd,2018-05-21,7,Cholamandalam Investment and Finance Company Ltd,Cholamandalam Investment and Finance Company Ltd.,CHOLAFIN,exact name in NSE EQUITY_L,matched
+Indostar Capital Finance Ltd,2018-05-21,8,Repco Home Finance Ltd P/E. Book Building Process. Building Process,Repco Home Finance Ltd P/E. Book Building Process. Building Process.,,,unmatched
+Indo Thai Securities Ltd,2011-11-02,1,Indo Thai Securities Ltd (Year Ended,Indo Thai Securities Ltd (Year Ended,,,junk
+Innova Captab Limited,2023-12-29,1,Innova Captab Limited,Innova Captab Limited,INNOVACAP,exact name in NSE EQUITY_L,matched
+Innova Captab Limited,2023-12-29,2,Torrent Pharmaceuticals Limited,Torrent Pharmaceuticals Limited,TORNTPHARM,exact name in NSE EQUITY_L,matched
+Innova Captab Limited,2023-12-29,3,Laurus Labs Limited,Laurus Labs Limited,LAURUSLABS,exact name in NSE EQUITY_L,matched
+Innova Captab Limited,2023-12-29,4,Ajanta Pharma Limited,Ajanta Pharma Limited,AJANTPHARM,exact name in NSE EQUITY_L,matched
+Innova Captab Limited,2023-12-29,5,J. B. Chemicals and Pharmaceuticals Limited,J. B. Chemicals and Pharmaceuticals Limited,,,unmatched
+Innova Captab Limited,2023-12-29,6,NATCO Pharma Limited,NATCO Pharma Limited,NATCOPHARM,exact name in NSE EQUITY_L,matched
+Innova Captab Limited,2023-12-29,7,Eris Lifesciences Limited,Eris Lifesciences Limited,ERIS,exact name in NSE EQUITY_L,matched
+Inox Green Energy Limited,2022-11-23,1,Three months ended June,Three months ended June,,,junk
+Inox Green Energy Limited,2022-11-23,2,March,March,,,junk
+Inox Green Energy Limited,2022-11-23,3,March,March,,,junk
+Inox Green Energy Limited,2022-11-23,4,March Not annualised,March *Not annualised,,,junk
+Interarch Building Products Limited,2024-08-26,1,March,March,,,junk
+Interarch Building Products Limited,2024-08-26,2,March,March,,,junk
+Interarch Building Products Limited,2024-08-26,3,March,March,,,junk
+India Pesticides Limited,2021-07-05,1,India Pesticides Limited,India Pesticides Limited* Listed Peers Dhanuka Agritech,IPL,exact name in NSE EQUITY_L,matched
+Indian Renewable Energy Development Agency Limited (IREDA),2023-11-29,1,September,September,,,junk
+Indian Renewable Energy Development Agency Limited (IREDA),2023-11-29,2,September,September,,,junk
+Indian Renewable Energy Development Agency Limited (IREDA),2023-11-29,3,March,March,,,junk
+Indian Renewable Energy Development Agency Limited (IREDA),2023-11-29,4,March,March,,,junk
+Indian Renewable Energy Development Agency Limited (IREDA),2023-11-29,5,March Not annualized,March * Not annualized,,,junk
+Indian Railway Finance Corporation Limited,2021-01-29,1,March,March,,,junk
+Indian Railway Finance Corporation Limited,2021-01-29,2,March,March,,,junk
+Indian Railway Finance Corporation Limited,2021-01-29,3,March,March,,,junk
+Indian Railway Finance Corporation Limited,2021-01-29,4,Six months ended September Not annualized,Six months ended September *Not annualized,,,junk
+J.G.Chemicals Ltd ,2024-03-13,1,Million),Million)(1),,,unmatched
+J.G.Chemicals Ltd ,2024-03-13,2,J.G.Chemicals Limited,J.G.Chemicals Limited(4) Listed Peers,JGCHEM,exact name in NSE EQUITY_L,matched
+J.G.Chemicals Ltd ,2024-03-13,3,Rajratan Global Wire Limited,Rajratan Global Wire Limited,RAJRATAN,exact name in NSE EQUITY_L,matched
+J.G.Chemicals Ltd ,2024-03-13,4,NOCIL Limited,NOCIL Limited,NOCIL,exact name in NSE EQUITY_L,matched
+J.G.Chemicals Ltd ,2024-03-13,5,Yasho Industries Limited,Yasho Industries Limited,YASHO,exact name in NSE EQUITY_L,matched
+Jupiter Life Line Limited,2023-09-18,1,Jupiter Life Line Hospitals Limited,Jupiter Life Line Hospitals Limited* Listed peers,JLHL,exact name in NSE EQUITY_L,matched
+Jupiter Life Line Limited,2023-09-18,2,Apollo Enterprise Limited,Apollo Enterprise Limited,,,unmatched
+Jupiter Life Line Limited,2023-09-18,3,Fortis Healthcare Limited,Fortis Healthcare Limited,FORTIS,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,1,Jana Small Finance Bank Limited,Jana Small Finance Bank Limited* Listed peers,JSFB,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,2,AU Small Finance Bank Limited,AU Small Finance Bank Limited,AUBANK,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,3,Suryoday Small Finance Bank Limited,Suryoday Small Finance Bank Limited,SURYODAY,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,4,Credit Access Grameen Limited,Credit Access Grameen Limited,CREDITACC,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,5,Spandana Sphoorty Financial Limited,Spandana Sphoorty Financial Limited,SPANDANA,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,6,Bandhan Bank Limited,Bandhan Bank Limited,BANDHANBNK,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,7,Ujjivan Small Finance Bank Limited,Ujjivan Small Finance Bank Limited,UJJIVANSFB,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,8,Equitas Small Finance Bank Limited,Equitas Small Finance Bank Limited,EQUITASBNK,exact name in NSE EQUITY_L,matched
+Jana Small Finance Bank Limited,2024-02-14,9,Fusion Micro Finance Limited,Fusion Micro Finance Limited,FUSION,exact match on a known former name (aliases),matched
+Jana Small Finance Bank Limited,2024-02-14,10,Utkarsh Small Finance Bank Limited,Utkarsh Small Finance Bank Limited,UTKARSHBNK,exact name in NSE EQUITY_L,matched
+JSW Cement Ltd,2025-08-14,1,July,July,,,junk
+JSW Infrastructure Limited,2023-10-03,1,JSW Infrastructure Limited,JSW Infrastructure Limited*,JSWINFRA,exact name in NSE EQUITY_L,matched
+Juniper Hotels Ltd ,2024-02-28,1,March,March,,,junk
+Juniper Hotels Ltd ,2024-02-28,2,March,March,,,junk
+Juniper Hotels Ltd ,2024-02-28,3,March,March,,,junk
+Juniper Hotels Ltd ,2024-02-28,4,Six months ended September,Six months ended September,,,junk
+Juniper Hotels Ltd ,2024-02-28,5,Six months ended September Not annualised,Six months ended September * Not annualised,,,junk
+Just Dial Ltd,2013-06-05,1,Year ended March,Year ended March,,,junk
+Just Dial Ltd,2013-06-05,2,Year ended March,Year ended March,,,junk
+Just Dial Ltd,2013-06-05,3,Year ended March Nine month period ended,Year ended March Nine month period ended,,,junk
+Just Dial Ltd,2013-06-05,4,December,December,,,junk
+Jyoti CNC Automation Limited,2024-01-16,1,Financial year ended,Financial year ended,,,junk
+Jyoti CNC Automation Limited,2024-01-16,2,Financial year ended,Financial year ended,,,junk
+Jyoti CNC Automation Limited,2024-01-16,3,Financial year ended Not Annualised,Financial year ended #Not Annualised,,,junk
+Sai Silks (Kalamandir) Limited,2023-09-27,1,Vedant Fashions Limited,Vedant Fashions Limited,MANYAVAR,exact name in NSE EQUITY_L,matched
+Sai Silks (Kalamandir) Limited,2023-09-27,2,TCNS Clothing Co. Limited,TCNS Clothing Co. Limited,,,unmatched
+Sai Silks (Kalamandir) Limited,2023-09-27,3,Go Fashion Aditya Birla Fashion and Retai,Go Fashion Aditya Birla Fashion and Retai,,,unmatched
+Kalpataru Limited,2025-07-01,1,Fiscal,Fiscal,,,junk
+Kalpataru Limited,2025-07-01,2,Fiscal,Fiscal,,,junk
+Kalpataru Limited,2025-07-01,3,Fiscal Not Annualised,Fiscal *Not Annualised.,,,junk
+Kalyan Jewellers India Limited,2021-03-26,1,March,March,,,junk
+Kalyan Jewellers India Limited,2021-03-26,2,March,March,,,junk
+Kalyan Jewellers India Limited,2021-03-26,3,March,March,,,junk
+Kalyan Jewellers India Limited,2021-03-26,4,Nine months ended December Not annualised,Nine months ended December * Not annualised.,,,junk
+Kaynes Technology India Limited,2022-11-22,1,Financial Year,Financial Year,,,junk
+Kaynes Technology India Limited,2022-11-22,2,Financial Year,Financial Year,,,junk
+Kaynes Technology India Limited,2022-11-22,3,Financial Year,Financial Year,,,junk
+Kaynes Technology India Limited,2022-11-22,4,Three months ended June Not annualised,Three months ended June * Not annualised.,,,junk
+KFin Technologies Limited,2022-12-29,1,KFin Technologies Limited,KFin Technologies Limited,KFINTECH,exact name in NSE EQUITY_L,matched
+KFin Technologies Limited,2022-12-29,2,Computer Age Management Services Limited,Computer Age Management Services Limited,CAMS,exact name in NSE EQUITY_L,matched
+Khadim India Ltd,2017-11-14,1,Company,Company*,,,junk
+Khadim India Ltd,2017-11-14,2,Bata India Limited,Bata India Limited^,BATAINDIA,exact name in NSE EQUITY_L,matched
+Khadim India Ltd,2017-11-14,3,Relaxo Footwears Limited,Relaxo Footwears Limited**,RELAXO,exact name in NSE EQUITY_L,matched
+Khadim India Ltd,2017-11-14,4,Liberty Shoes Limited,Liberty Shoes Limited***,LIBERTSHOE,exact name in NSE EQUITY_L,matched
+Krishna Institute of Medical Sciences Limited,2021-06-28,1,Apollo Hospitals Enterprise Limited,Apollo Consolidated Hospitals Enterprise Limited,APOLLOHOSP,exact name in NSE EQUITY_L,matched
+Krishna Institute of Medical Sciences Limited,2021-06-28,2,Fortis Healthcare Limited,Fortis Consolidated Healthcare Limited,FORTIS,exact name in NSE EQUITY_L,matched
+Krishna Institute of Medical Sciences Limited,2021-06-28,3,Narayana Hrudayalaya Limited,Narayana Consolidated Hrudayalaya Limited,NH,exact name in NSE EQUITY_L,matched
+Krishna Institute of Medical Sciences Limited,2021-06-28,4,Max Healthcare Institute Limited,Max Consolidated Healthcare Institute Limited,MAXHEALTH,exact name in NSE EQUITY_L,matched
+KRN Heat Exchanger and Refrigeration Limited,2024-10-03,1,March,March,,,junk
+KRN Heat Exchanger and Refrigeration Limited,2024-10-03,2,March,March,,,junk
+KRN Heat Exchanger and Refrigeration Limited,2024-10-03,3,March,March,,,junk
+Krystal Integrated Services Ltd ,2024-03-21,1,Krystal Integrated Services Limited,Krystal Integrated Services Limited* Listed Peers Quess Corp Limited,KRYSTAL,exact name in NSE EQUITY_L,matched
+Krystal Integrated Services Ltd ,2024-03-21,2,SIS Limited,SIS Limited,,,junk
+Krystal Integrated Services Ltd ,2024-03-21,3,Updater Services Limited,Updater Services Limited,UDS,exact name in NSE EQUITY_L,matched
+Landmark Cars Limited,2022-12-23,1,Fiscal,Fiscal,,,junk
+Landmark Cars Limited,2022-12-23,2,Fiscal,Fiscal,,,junk
+Landmark Cars Limited,2022-12-23,3,Fiscal,Fiscal,,,junk
+Landmark Cars Limited,2022-12-23,4,Three months ended June Not annualised,Three months ended June *Not annualised,,,junk
+Laurus Labs Ltd,2016-12-19,1,March,March,,,junk
+Laurus Labs Ltd,2016-12-19,2,March,March,,,junk
+Laurus Labs Ltd,2016-12-19,3,March,March,,,junk
+Laurus Labs Ltd,2016-12-19,4,For the six month period ended September,For the six month period ended September,,,junk
+Laxmi Dental Limited,2025-01-20,1,Poly Medicure,Poly Medicure,POLYMED,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,1,Laxmi India Finance Limited,Laxmi India Finance Limited#,LAXMIINDIA,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,2,MAS Financial Services Limited,MAS Financial Services Limited,MASFIN,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,3,Five Star Business Finance Limited,Five Star Business Finance Limited,FIVESTAR,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,4,SBFC Finance Limited,SBFC Finance Limited,SBFC,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,5,Ugro Capital Limited,Ugro Capital Limited,UGROCAP,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,6,CSL Finance Limited,CSL Finance Limited,CSLFINANCE,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,7,AKME Fintrade,AKME Fintrade,AFIL,exact name in NSE EQUITY_L,matched
+Laxmi India Finance Ltd,2025-08-05,8,Moneyboxx Finance Limited,Moneyboxx Finance Limited,MONEYBOXX,exact name in NSE EQUITY_L,matched
+Lemon Tree Hotels Ltd,2018-04-09,1,is,is,,,junk
+Life Insurance Corporation of India (LIC),2022-05-17,1,Fiscal,Fiscal,,,junk
+Life Insurance Corporation of India (LIC),2022-05-17,2,Fiscal,Fiscal,,,junk
+Life Insurance Corporation of India (LIC),2022-05-17,3,Fiscal,Fiscal,,,junk
+Life Insurance Corporation of India (LIC),2022-05-17,4,Nine months period ended December Not Annualised,Nine months period ended December #Not Annualised,,,junk
+Lovable Lingerie Ltd,2011-03-24,1,and Diluted EPS for the financial year ended March investments,and Diluted EPS for the financial year ended March investments.,,,junk
+Laxmi Organic Industries Limited,2021-03-25,1,Fiscal,Fiscal,,,junk
+Laxmi Organic Industries Limited,2021-03-25,2,Fiscal,Fiscal,,,junk
+Laxmi Organic Industries Limited,2021-03-25,3,Fiscal not annualised and amalgamation,Fiscal *not annualised and amalgamation.,,,junk
+Laxmi Organic Industries Limited,2021-03-25,4,As on March,As on March,,,junk
+Laxmi Organic Industries Limited,2021-03-25,5,As on September II. After the Offer : (a) At the Floor Price: ₹ [●] (b) At the Cap Price: ₹ [●] (c) At the Offer Price: ₹ [●] To be updated in the Prospect,As on September II. After the Offer*: (a) At the Floor Price: ₹ [●] (b) At the Cap Price: ₹ [●] (c) At the Offer Price: ₹ [●] *To be updated in the Prospect,,,junk
+Manba Finance Limited,2024-09-30,1,March,March,,,junk
+Manba Finance Limited,2024-09-30,2,March,March,,,junk
+Manba Finance Limited,2024-09-30,3,March Not Annualised,March *Not Annualised,,,junk
+Mankind Pharma Limited,2023-05-09,1,March,March,,,junk
+Mankind Pharma Limited,2023-05-09,2,March,March,,,junk
+Mankind Pharma Limited,2023-05-09,3,March,March,,,junk
+Mankind Pharma Limited,2023-05-09,4,For nine months period ended December,For nine months period ended December,,,junk
+Mankind Pharma Limited,2023-05-09,5,For nine months period ended December,For nine months period ended December,,,junk
+Mankind Pharma Limited,2023-05-09,6,Not annualized for the nine months period ended December,* Not annualized for the nine months period ended December,,,junk
+Vedant Fashions Limited,2022-02-16,1,Fiscal,Fiscal,,,junk
+Vedant Fashions Limited,2022-02-16,2,Fiscal,Fiscal,,,junk
+Vedant Fashions Limited,2022-02-16,3,Fiscal,Fiscal,,,junk
+Matrimony.com Ltd,2017-09-21,1,Just Dial,Just Dial(1),JUSTDIAL,exact name in NSE EQUITY_L,matched
+Matrimony.com Ltd,2017-09-21,2,Info Edge,Info Edge(2),NAUKRI,exact name in NSE EQUITY_L,matched
+Global Health Limited,2022-11-16,1,Three months ended June Not annualized,Three months ended June * Not annualized,,,junk
+Medi Assist Healthcare Services Limited,2024-01-23,1,March,March,,,junk
+Medi Assist Healthcare Services Limited,2024-01-23,2,March,March,,,junk
+Medi Assist Healthcare Services Limited,2024-01-23,3,March,March,,,junk
+Medi Assist Healthcare Services Limited,2024-01-23,4,Six months ended September,Six months ended September,,,junk
+Medi Assist Healthcare Services Limited,2024-01-23,5,Six months ended September,Six months ended September,,,junk
+Mangal Electrical Industries Ltd.,2025-08-28,1,Financial Year ended March,Financial Year ended March,,,junk
+Mangal Electrical Industries Ltd.,2025-08-28,2,Financial Year ended March,Financial Year ended March,,,junk
+Mangal Electrical Industries Ltd.,2025-08-28,3,Financial Year ended March,Financial Year ended March,,,junk
+Metropolis Healthcare Ltd,2019-04-15,1,ratio is,ratio is,,,unmatched
+One Mobikwik Systems Limited,2024-12-18,1,December,December,,,junk
+Monte Carlo Fashions Ltd,2014-12-19,1,March,March,,,junk
+Monte Carlo Fashions Ltd,2014-12-19,2,March,March,,,junk
+Monte Carlo Fashions Ltd,2014-12-19,3,March,March,,,junk
+Monte Carlo Fashions Ltd,2014-12-19,4,Three month period June,Three month period June,,,junk
+Motisons Jewellers Limited,2023-12-26,1,Motisons Jewellers Limited,Motisons Jewellers Limited*,MOTISONS,exact name in NSE EQUITY_L,matched
+MTAR Technologies Limited,2021-03-15,1,March,March,,,junk
+MTAR Technologies Limited,2021-03-15,2,March,March,,,junk
+MTAR Technologies Limited,2021-03-15,3,March,March,,,junk
+MTAR Technologies Limited,2021-03-15,4,Nine months ended December,Nine months ended December,,,junk
+MT Educare Ltd,2012-04-12,1,Fiscal,Fiscal,,,junk
+MT Educare Ltd,2012-04-12,2,Fiscal,Fiscal,,,junk
+MT Educare Ltd,2012-04-12,3,Fiscal,Fiscal,,,junk
+Credo Brands Marketing Limited,2023-12-27,1,Go Fashion,Go Fashion,GOCOLORS,exact name in NSE EQUITY_L,matched
+Credo Brands Marketing Limited,2023-12-27,2,Arvind Fashions Limited@,Arvind Fashions Limited@,ARVINDFASN,exact name in NSE EQUITY_L,matched
+Credo Brands Marketing Limited,2023-12-27,3,Kewal Kiran Clothing Limited,Kewal Kiran Clothing Limited,KKCL,exact name in NSE EQUITY_L,matched
+Mukka Proteins Ltd ,2024-03-07,1,Lowest,Lowest,,,unmatched
+Muthoot Microfin Limited,2023-12-26,1,Lowest,Lowest,,,unmatched
+Navkar Corporation Ltd,2015-09-09,1,Gati Limited Allcargo Logistics Limited Con,Gati Limited Allcargo Logistics Limited Con,,,unmatched
+Nazara Technologies Limited,2021-03-30,1,March,March,,,junk
+Nazara Technologies Limited,2021-03-30,2,March,March,,,junk
+Nazara Technologies Limited,2021-03-30,3,March,March,,,junk
+Nazara Technologies Limited,2021-03-30,4,Six month period ended September,Six month period ended September,,,junk
+Neogen Chemicals Ltd,2019-05-08,1,Atul Industries,Atul Industries,,,unmatched
+Neogen Chemicals Ltd,2019-05-08,2,Navin Flourine International Limited BSE/corporate websites,Navin Flourine International Limited BSE/corporate websites,,,unmatched
+Netweb Technologies India Limited,2023-07-27,1,Financial year ended March,Financial year ended March,,,junk
+Netweb Technologies India Limited,2023-07-27,2,Financial year ended March,Financial year ended March,,,junk
+Narayana Hrudayalaya Ltd,2016-01-06,1,Apollo Hospitals Enterprise Limited,Apollo Hospitals Enterprise Limited**,APOLLOHOSP,exact name in NSE EQUITY_L,matched
+New India Assurance Company Ltd,2017-11-13,1,Statements” on pages your investments,Statements” on pages your investments.,,,junk
+Niva Bupa Health Insurance Company Limited,2024-11-14,1,Niva Bupa Health Insurance Company Limited,Niva Bupa Health Insurance Company Limited,NIVABUPA,exact name in NSE EQUITY_L,matched
+NTPC Green Energy Limited,2024-11-27,1,Adani ₹ Green,Adani ₹ Green,,,unmatched
+Nuvoco Vistas Corporation Limited,2021-08-23,1,Nuvoco Vistas Corporation Limited Industry Peers Ultratech Cement,Nuvoco Vistas Corporation Limited^ Industry Peers Ultratech Cement,,,unmatched
+Nuvoco Vistas Corporation Limited,2021-08-23,2,Shree Cement Limited Ambuja Cement Limited,Shree Cement Limited# Ambuja Cement Limited##,,,unmatched
+Nuvoco Vistas Corporation Limited,2021-08-23,3,ACC Limited,ACC Limited##,,,junk
+FSN E Commerce Ventures Limited (Nykaa),2021-11-10,1,March,March,,,junk
+FSN E Commerce Ventures Limited (Nykaa),2021-11-10,2,March,March,,,junk
+FSN E Commerce Ventures Limited (Nykaa),2021-11-10,3,March,March,,,junk
+FSN E Commerce Ventures Limited (Nykaa),2021-11-10,4,June Not Annualised,June *Not Annualised,,,junk
+Ola Electric Mobility Limited,2024-08-09,1,March,March,,,junk
+Ola Electric Mobility Limited,2024-08-09,2,March,March,,,junk
+Ola Electric Mobility Limited,2024-08-09,3,March,March,,,junk
+Onelife Capital Advisors Ltd,2011-10-17,1,Onelife Capital Advisors Limited,Onelife Capital Advisors Limited,ONELIFECAP,exact name in NSE EQUITY_L,matched
+Orient Technologies Limited,2024-08-28,1,Financial year ended March,Financial year ended March,,,junk
+Orient Technologies Limited,2024-08-28,2,Financial year ended March,Financial year ended March,,,junk
+Orient Technologies Limited,2024-08-28,3,Financial year ended March,Financial year ended March,,,junk
+Ortel Communications Ltd,2015-03-19,1,March,March,,,junk
+Ortel Communications Ltd,2015-03-19,2,March,March,,,junk
+Ortel Communications Ltd,2015-03-19,3,March,March,,,junk
+Ortel Communications Ltd,2015-03-19,4,September,September,,,junk
+Oswal Pumps Limited,2025-06-20,1,Financial Year ended March,Financial Year ended March,,,junk
+Oswal Pumps Limited,2025-06-20,2,Financial Year ended March,Financial Year ended March,,,junk
+Oswal Pumps Limited,2025-06-20,3,Financial Year ended March,Financial Year ended March,,,junk
+Paradeep Phosphates Limited,2022-05-27,1,Company,Company* Listed Peers#,,,junk
+Paradeep Phosphates Limited,2022-05-27,2,Coromandel International Limited,Coromandel International Limited,COROMANDEL,exact name in NSE EQUITY_L,matched
+Paradeep Phosphates Limited,2022-05-27,3,Chambal Fertilizers Chemicals Limited,Chambal Fertilizers Chemicals Limited,CHAMBLFERT,exact name in NSE EQUITY_L,matched
+Paradeep Phosphates Limited,2022-05-27,4,Deepak Fertilizers and Petrochemicals Limited,Deepak Fertilizers and Petrochemicals Limited,DEEPAKFERT,exact name in NSE EQUITY_L,matched
+Parag Milk Foods Ltd,2016-05-19,1,Britannia Industries Limited,Britannia Industries Limited,BRITANNIA,exact name in NSE EQUITY_L,matched
+Parag Milk Foods Ltd,2016-05-19,2,Hatsun Agro Product Limited,Hatsun Agro Product Limited,HATSUN,exact name in NSE EQUITY_L,matched
+Parag Milk Foods Ltd,2016-05-19,3,Nestle India Limited,Nestle India Limited,NESTLEIND,exact name in NSE EQUITY_L,matched
+Parag Milk Foods Ltd,2016-05-19,4,Prabhat Dairy Limited,Prabhat Dairy Limited,,,unmatched
+PC Jeweller Ltd,2012-12-27,1,PC Jeweller Limited,PC Jeweller Limited,PCJEWELLER,exact name in NSE EQUITY_L,matched
+PC Jeweller Ltd,2012-12-27,2,Titan Industries Limited,Titan Industries Limited ^,,,unmatched
+PC Jeweller Ltd,2012-12-27,3,Gitanjali Gems Limited,Gitanjali Gems Limited ^,,,unmatched
+PC Jeweller Ltd,2012-12-27,4,Tribhovandas Bhimji Zaveri Limited,Tribhovandas Bhimji Zaveri Limited ^,TBZ,exact name in NSE EQUITY_L,matched
+Persistent Systems Limited,2010-04-06,1,Infosys Technologies Limited,Infosys Technologies Limited,,,unmatched
+Persistent Systems Limited,2010-04-06,2,Wipro Limited,Wipro Limited,WIPRO,exact name in NSE EQUITY_L,matched
+Persistent Systems Limited,2010-04-06,3,HCL Technologies Limited,HCL Technologies Limited,HCLTECH,exact name in NSE EQUITY_L,matched
+Persistent Systems Limited,2010-04-06,4,Tech Mahindra Limited,Tech Mahindra Limited,TECHM,exact name in NSE EQUITY_L,matched
+Platinum Industries Ltd ,2024-03-05,1,10,10.,,,junk
+Platinum Industries Ltd ,2024-03-05,2,11,11.,,,junk
+Platinum Industries Ltd ,2024-03-05,3,12,12.,,,junk
+Plaza Wires Limited,2023-10-12,1,March,March,,,junk
+Plaza Wires Limited,2023-10-12,2,March,March,,,junk
+Plaza Wires Limited,2023-10-12,3,March,March,,,junk
+PNB Housing Finance Ltd,2016-11-07,1,Our Company,Our Company,,,junk
+PNB Housing Finance Ltd,2016-11-07,2,Housing Development Finance Corporation Limited,Housing Development Finance Corporation Limited,,,unmatched
+PNB Housing Finance Ltd,2016-11-07,3,LIC Housing Finance Limited,LIC Housing Finance Limited,LICHSGFIN,exact name in NSE EQUITY_L,matched
+PNB Housing Finance Ltd,2016-11-07,4,Indiabulls Housing Finance Limited,Indiabulls Housing Finance Limited,,,unmatched
+PNB Housing Finance Ltd,2016-11-07,5,Gruh Finance Limited,Gruh Finance Limited,,,unmatched
+PNB Housing Finance Ltd,2016-11-07,6,Dewan Housing Finance Limited,Dewan Housing Finance Limited,,,unmatched
+PNB Housing Finance Ltd,2016-11-07,7,Repco Home Finance Limited,Repco Home Finance Limited,REPCOHOME,exact name in NSE EQUITY_L,matched
+P N Gadgil Jewellers Limited,2024-09-17,1,March,March,,,junk
+Polycab India Ltd,2019-04-16,1,Nine months period ended December Not annualised Fiscal RoNW (%) Weight,Nine months period ended December *Not annualised Fiscal RoNW (%) Weight,,,junk
+Polycab India Ltd,2019-04-16,2,Nine months period ended December Not annualised,Nine months period ended December *Not annualised,,,junk
+Premier Energies Limited,2024-09-03,1,March,March,,,junk
+Premier Energies Limited,2024-09-03,2,March,March,,,junk
+Premier Energies Limited,2024-09-03,3,March,March,,,junk
+Premier Energies Limited,2024-09-03,4,Three months ended June,Three months ended June,,,junk
+Premier Energies Limited,2024-09-03,5,Three months ended June Not annualised,Three months ended June * Not annualised.,,,junk
+Prudent Corporate Advisory Services Limited,2022-05-20,1,March,March,,,junk
+Prudent Corporate Advisory Services Limited,2022-05-20,2,March,March,,,junk
+Prudent Corporate Advisory Services Limited,2022-05-20,3,March,March,,,junk
+Prudent Corporate Advisory Services Limited,2022-05-20,4,Nine months ended December,Nine months ended December,,,junk
+Punjab & Sind Bank,2010-12-30,1,The Issue Price of ` [(cid:404)(cid:64)(cid:3)per equity sha,The Issue Price of ` [(cid:404)(cid:64)(cid:3)per equity sha,,,unmatched
+Punjab & Sind Bank,2010-12-30,2,ratio. The BRLMs believe that the Issue Price of ` [(cid:404 all or part of your investment,ratio. The BRLMs believe that the Issue Price of ` [(cid:404 all or part of your investment,,,unmatched
+PSP Projects Ltd,2017-05-29,1,Ahluwalia Contracts (India) Limited,Ahluwalia Contracts (India) Limited,AHLUCONT,exact name in NSE EQUITY_L,matched
+PSP Projects Ltd,2017-05-29,2,Man Infra Construction Limited,Man Infra Construction Limited,MANINFRA,exact name in NSE EQUITY_L,matched
+PSP Projects Ltd,2017-05-29,3,Prakash Constrowell Limited,Prakash Constrowell Limited,,,unmatched
+PSP Projects Ltd,2017-05-29,4,RPP Infra Projects Limited,RPP Infra Projects Limited,RPPINFRA,exact name in NSE EQUITY_L,matched
+PSP Projects Ltd,2017-05-29,5,Nila Infrastructures Limited,Nila Infrastructures Limited,NILAINFRA,exact name in NSE EQUITY_L,matched
+Popular Vehicles & Services Ltd ,2024-03-19,1,Landmark Cars Limited,Landmark Cars Limited,LANDMARK,exact name in NSE EQUITY_L,matched
+Pyramid Technoplast Limited,2023-08-29,1,Pyramid Technoplast Limited,Pyramid Technoplast Limited*,PYRAMID,exact name in NSE EQUITY_L,matched
+Quality Power Electronics Limited,2025-02-24,1,Revenue from Operations,Revenue from Operations,,,unmatched
+Quality Power Electronics Limited,2025-02-24,2,EBITDA,EBITDA,,,unmatched
+Quality Power Electronics Limited,2025-02-24,3,EBITDA Margin,EBITDA Margin,,,unmatched
+Quality Power Electronics Limited,2025-02-24,4,PAT,PAT,,,junk
+Quality Power Electronics Limited,2025-02-24,5,PAT Margin,PAT Margin,,,unmatched
+Quality Power Electronics Limited,2025-02-24,6,Net Worth,Net Worth,,,unmatched
+Quality Power Electronics Limited,2025-02-24,7,ROE,ROE,,,junk
+Quality Power Electronics Limited,2025-02-24,8,ROCE,ROCE,,,unmatched
+Quality Power Electronics Limited,2025-02-24,9,Debt – Equity Ratio,Debt – Equity Ratio,,,unmatched
+Quality Power Electronics Limited,2025-02-24,10,Net Cash from/ in) Operating Activities (A),Net Cash from/ in) Operating Activities (A),,,unmatched
+Quality Power Electronics Limited,2025-02-24,11,Net Cash from/ in) Operating Activities/ EBITDA (%) facilities,Net Cash from/ in) Operating Activities/ EBITDA (%) facilities,,,unmatched
+Quality Power Electronics Limited,2025-02-24,12,International markets (no. of countries) international markets (%),International markets (no. of countries) international markets (%),,,unmatched
+Radiant Cash Management Services Limited,2023-01-04,1,March,March,,,junk
+Radiant Cash Management Services Limited,2023-01-04,2,March,March,,,junk
+Radiant Cash Management Services Limited,2023-01-04,3,March,March,,,junk
+Radiant Cash Management Services Limited,2023-01-04,4,Three months period ended June Not annualized,Three months period ended June * Not annualized,,,junk
+Railtel Corporation of India Limited,2021-02-26,1,March,March,,,junk
+Railtel Corporation of India Limited,2021-02-26,2,March,March,,,junk
+Railtel Corporation of India Limited,2021-02-26,3,March Not annualised,March * Not annualised,,,junk
+Rainbow Children’s Medicare Limited,2022-05-10,1,Apollo Enterprise Limited,Apollo Consolidated Enterprise Limited,,,unmatched
+Rainbow Children’s Medicare Limited,2022-05-10,2,Fortis Healthcare Limited,Fortis Consolidated Healthcare Limited,FORTIS,exact name in NSE EQUITY_L,matched
+Rainbow Children’s Medicare Limited,2022-05-10,3,Narayana Hrudalaya Limited,Narayana Consolidated Hrudalaya Limited,,,unmatched
+Rainbow Children’s Medicare Limited,2022-05-10,4,Max Healthcare Institute Limited,Max Consolidated Healthcare Institute Limited,MAXHEALTH,exact name in NSE EQUITY_L,matched
+Rainbow Children’s Medicare Limited,2022-05-10,5,Krishna Medical Sciences Limited,Krishna Consolidated Medical Sciences Limited,,,unmatched
+Ramky Infrastructure Ltd,2010-10-08,1,Year ended March,Year ended March,,,junk
+Ramky Infrastructure Ltd,2010-10-08,2,Year ended March,Year ended March,,,junk
+Ramky Infrastructure Ltd,2010-10-08,3,Year ended March • Net Asset Value Per Share,Year ended March • Net Asset Value Per Share*,,,junk
+Ramky Infrastructure Ltd,2010-10-08,4,of March,of March,,,unmatched
+Rategain Travel Technologies Limited,2021-12-17,1,March,March,,,junk
+Rategain Travel Technologies Limited,2021-12-17,2,March,March,,,junk
+Rategain Travel Technologies Limited,2021-12-17,3,March,March,,,junk
+Ratnaveer Precision Limited,2023-09-11,1,Ratnaveer Precision Engineering Limited,Ratnaveer Precision Engineering Limited,RATNAVEER,exact name in NSE EQUITY_L,matched
+RBL Bank Ltd,2016-08-31,1,Yes Bank Limited,Yes Bank Limited,YESBANK,exact name in NSE EQUITY_L,matched
+RBL Bank Ltd,2016-08-31,2,Indusind Bank Limited,Indusind Bank Limited,INDUSINDBK,exact name in NSE EQUITY_L,matched
+RBL Bank Ltd,2016-08-31,3,Kotak Mahindra Bank Limited,Kotak Mahindra Bank Limited,KOTAKBANK,exact name in NSE EQUITY_L,matched
+RBL Bank Ltd,2016-08-31,4,City Union Bank Limited,City Union Bank Limited,CUB,exact name in NSE EQUITY_L,matched
+RBL Bank Ltd,2016-08-31,5,DCB Bank Limited,DCB Bank Limited,DCBBANK,exact name in NSE EQUITY_L,matched
+RBZ Jewellers Limited,2023-12-27,1,RBZ Jewellers Limited,RBZ Jewellers Limited,RBZJEWEL,exact name in NSE EQUITY_L,matched
+RBZ Jewellers Limited,2023-12-27,2,Kalyan Jewellers Limited,Kalyan Jewellers Limited,KALYANKJIL,exact name in NSE EQUITY_L,matched
+RBZ Jewellers Limited,2023-12-27,3,Senco Gold Ltd,Senco Gold Ltd*,SENCO,exact name in NSE EQUITY_L,matched
+RBZ Jewellers Limited,2023-12-27,4,Thangamayil Jewellery Ltd,Thangamayil Jewellery Ltd,THANGAMAYL,exact name in NSE EQUITY_L,matched
+RBZ Jewellers Limited,2023-12-27,5,D P Abhushan Limited,D P Abhushan Limited,DPABHUSHAN,exact name in NSE EQUITY_L,matched
+RBZ Jewellers Limited,2023-12-27,6,Titan Company Limited,Titan Company Limited,TITAN,exact name in NSE EQUITY_L,matched
+RBZ Jewellers Limited,2023-12-27,7,Ashapuri Gold Ornament Limited,Ashapuri Gold Ornament Limited,,,unmatched
+RBZ Jewellers Limited,2023-12-27,8,Sky Gold Limited,Sky Gold Limited,,,unmatched
+Regaal Resources Ltd.,2025-08-20,1,Financial year ended March,Financial year ended March,,,junk
+Regaal Resources Ltd.,2025-08-20,2,Financial year ended March,Financial year ended March,,,junk
+Regaal Resources Ltd.,2025-08-20,3,Financial year ended March,Financial year ended March,,,junk
+Rishabh Instruments Limited,2023-09-11,1,March,March,,,junk
+Rishabh Instruments Limited,2023-09-11,2,March,March,,,junk
+Rishabh Instruments Limited,2023-09-11,3,March,March,,,junk
+Rolex Rings Limited,2021-08-09,1,Financial Year ended March,Financial Year ended March,,,junk
+Rolex Rings Limited,2021-08-09,2,Financial Year ended March,Financial Year ended March,,,junk
+Rolex Rings Limited,2021-08-09,3,Financial Year ended March,Financial Year ended March,,,junk
+Rossari Biotech Ltd,2020-07-23,1,Rossari Biotech Limited,Rossari Biotech Limited Listed Peers,ROSSARI,exact name in NSE EQUITY_L,matched
+Rossari Biotech Ltd,2020-07-23,2,Aarti Industries Limited,Aarti Industries Limited,AARTIIND,exact name in NSE EQUITY_L,matched
+Rossari Biotech Ltd,2020-07-23,3,Vinati Organics Limited,Vinati Organics Limited,VINATIORGA,exact name in NSE EQUITY_L,matched
+Rossari Biotech Ltd,2020-07-23,4,Atul Limited,Atul Limited,ATUL,exact name in NSE EQUITY_L,matched
+Rossari Biotech Ltd,2020-07-23,5,Galaxy Surfactants Limited Fine Organics Industries Limited,Galaxy Surfactants Limited Fine Organics Industries Limited,,,unmatched
+Rashi Peripherals Limited,2024-02-14,1,Rashi Peripherals Limited (Company),Rashi Peripherals Limited (Company) Listed Peers,RPTECH,exact name in NSE EQUITY_L,matched
+Rashi Peripherals Limited,2024-02-14,2,Redington India Limited,Redington India Limited,REDINGTON,exact name in NSE EQUITY_L,matched
+R R Kabel Limited,2023-09-20,1,Havells India Limited,Havells India Limited,HAVELLS,exact name in NSE EQUITY_L,matched
+R R Kabel Limited,2023-09-20,2,Polycab India Limited,Polycab India Limited,POLYCAB,exact name in NSE EQUITY_L,matched
+R R Kabel Limited,2023-09-20,3,KEI Industries Limited,KEI Industries Limited,KEI,exact name in NSE EQUITY_L,matched
+R R Kabel Limited,2023-09-20,4,Finolex Cables Limited,Finolex Cables Limited,FINCABLES,exact name in NSE EQUITY_L,matched
+R R Kabel Limited,2023-09-20,5,V-Guard Industries Limited,V-Guard Industries Limited,VGUARD,exact name in NSE EQUITY_L,matched
+R R Kabel Limited,2023-09-20,6,Crompton Greaves Consumer Electricals Limited,Crompton Greaves Consumer Electricals Limited,CROMPTON,exact name in NSE EQUITY_L,matched
+R R Kabel Limited,2023-09-20,7,Bajaj Electricals Limited,Bajaj Electricals Limited,BAJAJELEC,exact name in NSE EQUITY_L,matched
+Rushil Decor Ltd,2011-07-07,1,Year Ended March,Year Ended March,,,junk
+Rushil Decor Ltd,2011-07-07,2,Year Ended March,Year Ended March,,,junk
+Rushil Decor Ltd,2011-07-07,3,Year Ended March,Year Ended March,,,junk
+Keystone Realtors Limited,2022-11-24,1,Keystone Realtors Limited,Keystone Realtors Limited,RUSTOMJEE,exact name in NSE EQUITY_L,matched
+Keystone Realtors Limited,2022-11-24,2,Macrotech Developers Limited,Macrotech Developers Limited,,,unmatched
+Keystone Realtors Limited,2022-11-24,3,Godrej Properties Limited,Godrej Properties Limited,GODREJPROP,exact name in NSE EQUITY_L,matched
+Keystone Realtors Limited,2022-11-24,4,Oberoi Realty Limited,Oberoi Realty Limited,OBEROIRLTY,exact name in NSE EQUITY_L,matched
+Keystone Realtors Limited,2022-11-24,5,Sunteck Realty Limited,Sunteck Realty Limited,SUNTECK,exact name in NSE EQUITY_L,matched
+Sadbhav Infrastructure Project Ltd,2015-09-16,1,million) share (₹),million)(2)(3)(4) share (₹),,,unmatched
+Sadbhav Infrastructure Project Ltd,2015-09-16,2,IL & FS Transportation Networks Limited,IL & FS Transportation Networks Limited,IL&FSTRANS,exact name in NSE EQUITY_L,matched
+Sadbhav Infrastructure Project Ltd,2015-09-16,3,IRB Infrastructure Developers Limited Ashoka Buildcon Limited,IRB Infrastructure Developers Limited Ashoka Buildcon Limited,,,unmatched
+Sadbhav Infrastructure Project Ltd,2015-09-16,4,Gammon Infrastructure Projects Limited,Gammon Infrastructure Projects Limited,,,unmatched
+Sagility India Limited,2024-11-12,1,Financial Year ended March,Financial Year ended March,,,junk
+Sagility India Limited,2024-11-12,2,Financial Year ended March,Financial Year ended March,,,junk
+Sagility India Limited,2024-11-12,3,For the period beginning from July Not annualised,For the period beginning from July * Not annualised,,,junk
+Sai Life Sciences Limited,2024-12-18,1,price of equity shares on BSE on December,price of equity shares on BSE on December,,,unmatched
+Sambhv Steel Tubes Limited,2025-07-02,1,nine-month period ended December,nine-month period ended December,,,junk
+Sanathan Textiles Limited,2024-12-27,1,Financial year ended March,Financial year ended March,,,junk
+Sanathan Textiles Limited,2024-12-27,2,Financial year ended March,Financial year ended March,,,junk
+Sanathan Textiles Limited,2024-12-27,3,Financial year ended March,Financial year ended March,,,junk
+Sanathan Textiles Limited,2024-12-27,4,Quarter ended on June weight. Not annualised,Quarter ended on June weight. # Not annualised,,,junk
+Sandhar Technologies Ltd,2018-04-02,1,March,March,,,junk
+Sandhar Technologies Ltd,2018-04-02,2,March,March,,,junk
+Sandhar Technologies Ltd,2018-04-02,3,March Financial Year ended RoNW (%),March Financial Year ended RoNW (%),,,junk
+Sandhar Technologies Ltd,2018-04-02,4,March,March,,,junk
+Sandhar Technologies Ltd,2018-04-02,5,March,March,,,junk
+Sandhar Technologies Ltd,2018-04-02,6,March,March,,,junk
+Sanstar Limited,2024-07-26,1,Fiscal,Fiscal,,,junk
+Sanstar Limited,2024-07-26,2,Fiscal,Fiscal,,,junk
+Sanstar Limited,2024-07-26,3,Fiscal,Fiscal,,,junk
+Sapphire Foods India,2021-11-18,1,Financial Year ended March,Financial Year ended March,,,junk
+Sapphire Foods India,2021-11-18,2,Financial Year ended March,Financial Year ended March,,,junk
+Sapphire Foods India,2021-11-18,3,Financial Year ended March,Financial Year ended March,,,junk
+Sapphire Foods India,2021-11-18,4,The RoNW for the three months ended June,* The RoNW for the three months ended June,,,junk
+SBI Cards & Payment Services Ltd,2020-03-16,1,March,March,,,junk
+SBI Cards & Payment Services Ltd,2020-03-16,2,March,March,,,junk
+SBI Cards & Payment Services Ltd,2020-03-16,3,March,March,,,junk
+SBI Cards & Payment Services Ltd,2020-03-16,4,Nine months ended December Not annualized,Nine months ended December *Not annualized,,,junk
+SBI Life Insurance Company Ltd,2017-10-03,1,Name of Unconsolidated Face EPS per share),Name of Unconsolidated Face EPS per share),,,unmatched
+SBI Life Insurance Company Ltd,2017-10-03,2,ICICI Prudential Insurance,ICICI Consolidated Prudential Insurance,,,unmatched
+S Chand & Company Ltd,2017-05-09,1,Navneet Education Limited,Navneet Education Limited*#,NAVNETEDUL,exact name in NSE EQUITY_L,matched
+Senco Gold Limited,2023-07-14,1,March,March,,,junk
+Senco Gold Limited,2023-07-14,2,March,March,,,junk
+Senco Gold Limited,2023-07-14,3,March,March,,,junk
+Shalby Ltd,2017-12-15,1,March,March,,,junk
+Shalby Ltd,2017-12-15,2,March,March,,,junk
+Shalby Ltd,2017-12-15,3,March,March,,,junk
+Shankara Building Products Ltd,2017-04-05,1,March,March,,,junk
+Shankara Building Products Ltd,2017-04-05,2,March,March,,,junk
+Shankara Building Products Ltd,2017-04-05,3,March Not annualized Financial Year ended RoNW (%),March * Not annualized Financial Year ended RoNW (%),,,junk
+Shankara Building Products Ltd,2017-04-05,4,March,March,,,junk
+Shankara Building Products Ltd,2017-04-05,5,March,March,,,junk
+Shankara Building Products Ltd,2017-04-05,6,March Not annualized,March * Not annualized,,,junk
+Shanti Gold International Ltd,2025-08-01,1,March,March,,,junk
+Shanti Gold International Ltd,2025-08-01,2,March,March,,,junk
+Shanti Gold International Ltd,2025-08-01,3,March,March,,,junk
+Shringar House of Mangalsutra Ltd.,2025-09-17,1,Shringar House of Mangalsutra Limited,Shringar House of Mangalsutra Limited Listed Peers,SHRINGARMS,exact name in NSE EQUITY_L,matched
+Shringar House of Mangalsutra Ltd.,2025-09-17,2,Utssav CZ Gold Jewels Ltd,Utssav CZ Gold Jewels Ltd,,,unmatched
+Shringar House of Mangalsutra Ltd.,2025-09-17,3,RBZ Jewellers Ltd,RBZ Jewellers Ltd,RBZJEWEL,exact name in NSE EQUITY_L,matched
+Shringar House of Mangalsutra Ltd.,2025-09-17,4,Sky Gold & Diamonds Ltd,Sky Gold & Diamonds Ltd,,,unmatched
+Shriram Properties Limited,2021-12-20,1,is,is,,,junk
+Shyam Metalics and Energy Limited,2021-06-24,1,Tata Steel Limited,Tata Steel Consolidated Limited,TATASTEEL,exact name in NSE EQUITY_L,matched
+Shyam Metalics and Energy Limited,2021-06-24,2,JSW Steel Limited,JSW Steel Consolidated Limited,JSWSTEEL,exact name in NSE EQUITY_L,matched
+Shyam Metalics and Energy Limited,2021-06-24,3,Steel Authority of India Limited,Steel Authority Consolidated of India Limited,SAIL,exact name in NSE EQUITY_L,matched
+Shyam Metalics and Energy Limited,2021-06-24,4,Jindal Steel & Consolidated Power Limited,Jindal Steel & Consolidated Power Limited,,,unmatched
+Shyam Metalics and Energy Limited,2021-06-24,5,Tata Steel Long Products Limited,Tata Steel Long Consolidated Products Limited,,,unmatched
+Signature Global India Limited,2023-09-27,1,Signatureglobal (India) Limited,Signatureglobal (India) Limited,SIGNATURE,exact name in NSE EQUITY_L,matched
+Smartworks Coworking Limited,2025-07-17,1,Smartworks Coworking Spaces Limited,Smartworks Coworking Spaces Limited Listed peer,SMARTWORKS,exact name in NSE EQUITY_L,matched
+Smartworks Coworking Limited,2025-07-17,2,Awfis Space Solutions Limited,Awfis Space Solutions Limited,AWFIS,exact name in NSE EQUITY_L,matched
+Snowman Logistics Ltd,2014-09-12,1,pages investments,pages investments.,,,unmatched
+Spandana Sphoorty Financial Ltd,2019-08-19,1,Bharat Financial Inclusion Limited,Bharat Financial Inclusion Limited,,,unmatched
+Spandana Sphoorty Financial Ltd,2019-08-19,2,Satin Creditcare Network Limited,Satin Creditcare Network Limited,SATIN,exact name in NSE EQUITY_L,matched
+Spandana Sphoorty Financial Ltd,2019-08-19,3,Ujjivan Financial Services Limited,Ujjivan Financial Services Limited,,,unmatched
+Spandana Sphoorty Financial Ltd,2019-08-19,4,Bandhan Bank Limited,Bandhan Bank Limited,BANDHANBNK,exact name in NSE EQUITY_L,matched
+Spandana Sphoorty Financial Ltd,2019-08-19,5,Bajaj Finance Limited,Bajaj Finance Limited,BAJFINANCE,exact name in NSE EQUITY_L,matched
+Spandana Sphoorty Financial Ltd,2019-08-19,6,Cholamandalam Investment & Finance Company Limited,Cholamandalam Investment & Finance Company Limited,,,unmatched
+Spandana Sphoorty Financial Ltd,2019-08-19,7,Shriram City Union Finance Limited,Shriram City Union Finance Limited,,,unmatched
+Spandana Sphoorty Financial Ltd,2019-08-19,8,Sundaram Finance Limited,Sundaram Finance Limited,SUNDARMFIN,exact name in NSE EQUITY_L,matched
+Spandana Sphoorty Financial Ltd,2019-08-19,9,Mahindra & Mahindra Financial Services Limited,Mahindra & Mahindra Financial Services Limited,M&MFIN,exact name in NSE EQUITY_L,matched
+SRM Contractors Ltd ,2024-04-03,1,SRM Contactors [●],SRM Contactors [●],,,unmatched
+Saraswati Saree Depot Limited,2024-08-20,1,Saraswati Saree Depot Limited,Saraswati Saree Depot Limited,SSDL,exact name in NSE EQUITY_L,matched
+Stallion India Fluorochem Limited,2025-01-23,1,“Financial Statements” on pages,“Financial Statements” on pages,,,junk
+Stanley Lifestyles Limited,2024-06-28,1,March,March,,,junk
+Stanley Lifestyles Limited,2024-06-28,2,March,March,,,junk
+Stanley Lifestyles Limited,2024-06-28,3,March,March,,,junk
+Stanley Lifestyles Limited,2024-06-28,4,Nine months ended December Not annualised,Nine months ended December *Not annualised,,,junk
+Star Health and Allied Insurance Company Limited,2021-12-10,1,Star Health and Allied Insurance Company Limited,Star Health and Allied Insurance Company Limited,STARHEALTH,exact name in NSE EQUITY_L,matched
+Stove Kraft Limited,2021-02-08,1,on pages,on pages,,,junk
+Sula Vineyards Limited,2022-12-22,1,P/E ratio is,P/E ratio is,,,junk
+Suraj Estate Developers Limited,2023-12-26,1,based on closing price as on November,based on closing price as on November,,,junk
+Suraksha Diagnostic Limited,2024-12-06,1,Dr Lal PathLabs,Dr Lal PathLabs,LALPATHLAB,exact name in NSE EQUITY_L,matched
+Suraksha Diagnostic Limited,2024-12-06,2,Metropolis Healthcare,Metropolis Healthcare,METROPOLIS,exact name in NSE EQUITY_L,matched
+Suraksha Diagnostic Limited,2024-12-06,3,Thyrocare,Thyrocare,,,unmatched
+Suraksha Diagnostic Limited,2024-12-06,4,Vijaya Diagnostic,Vijaya Diagnostic,,,unmatched
+Suryoday Small Finance Bank Limited,2021-03-26,1,Suryoday Small Finance Bank Limited,Suryoday Small Finance Bank Limited* Listed Peers,SURYODAY,exact name in NSE EQUITY_L,matched
+Suryoday Small Finance Bank Limited,2021-03-26,2,Ujjivan Small Finance Bank Limited,Ujjivan Small Finance Bank Limited,UJJIVANSFB,exact name in NSE EQUITY_L,matched
+Suryoday Small Finance Bank Limited,2021-03-26,3,CreditAccess Grameen Limited,CreditAccess Grameen Limited,CREDITACC,exact name in NSE EQUITY_L,matched
+Suryoday Small Finance Bank Limited,2021-03-26,4,Spandana Sphoorty Financial Limited,Spandana Sphoorty Financial Limited,SPANDANA,exact name in NSE EQUITY_L,matched
+Suryoday Small Finance Bank Limited,2021-03-26,5,Bandhan Bank Limited,Bandhan Bank Limited,BANDHANBNK,exact name in NSE EQUITY_L,matched
+Suryoday Small Finance Bank Limited,2021-03-26,6,AU Small Finance Bank Limited,AU Small Finance Bank Limited,AUBANK,exact name in NSE EQUITY_L,matched
+Swiggy Limited,2024-11-13,1,March,March,,,junk
+Swiggy Limited,2024-11-13,2,March,March,,,junk
+Swiggy Limited,2024-11-13,3,March,March,,,junk
+Swiggy Limited,2024-11-13,4,Three months ended June Not annualized,Three months ended June * Not annualized,,,junk
+Tarapur Transformers Limited,2010-05-18,1,Voltamp Transformers Limited,Voltamp Transformers Limited,VOLTAMP,exact name in NSE EQUITY_L,matched
+Tarapur Transformers Limited,2010-05-18,2,EMCO transformers Ltd,EMCO transformers Ltd,,,unmatched
+Tarapur Transformers Limited,2010-05-18,3,Transformers & Rectifiers (India) Ltd,Transformers & Rectifiers (India) Ltd.,,,unmatched
+Tarsons Products,2021-11-26,1,March,March,,,junk
+Tarsons Products,2021-11-26,2,March,March,,,junk
+Tarsons Products,2021-11-26,3,March,March,,,junk
+Tarsons Products,2021-11-26,4,Three months ended June,Three months ended June,,,junk
+Tata Technologies Limited,2023-11-30,1,ended ended,ended ended,,,unmatched
+Tata Technologies Limited,2023-11-30,2,er,er,,,junk
+Tata Technologies Limited,2023-11-30,3,Revenue,Revenue,,,unmatched
+Tata Technologies Limited,2023-11-30,4,from Operation,from Operation,,,unmatched
+Tata Technologies Limited,2023-11-30,5,Revenue from Operation s (US$ million),Revenue from Operation s (US$ million),,,unmatched
+Tata Technologies Limited,2023-11-30,6,Revenue,Revenue,,,unmatched
+Tata Technologies Limited,2023-11-30,7,attributab le to the Services segment,attributab le to the Services segment,,,unmatched
+Tata Technologies Limited,2023-11-30,8,Revenue attributab le to the Services segment (% of Revenue from operation s),Revenue attributab le to the Services segment (% of Revenue from operation s),,,unmatched
+Tata Technologies Limited,2023-11-30,9,YoY N.A. N.A. growth in %) Revenue from Operation s (%),YoY N.A. N.A. growth in %) Revenue from Operation s (%),,,unmatched
+Tata Technologies Limited,2023-11-30,10,YoY N.A. N.A. constant %) currency growth in Revenue from,YoY N.A. N.A. constant %) currency growth in Revenue from,,,unmatched
+Tatva Chintan Pharma Chem Limited,2021-07-29,1,Aarti Industries Limited,Aarti Consolidated Industries Limited,AARTIIND,exact name in NSE EQUITY_L,matched
+Tatva Chintan Pharma Chem Limited,2021-07-29,2,Navin Fluorine International Limited,Navin Consolidated Fluorine International Limited,NAVINFLUOR,exact name in NSE EQUITY_L,matched
+Tatva Chintan Pharma Chem Limited,2021-07-29,3,Alkyl Amines Chemicals Limited,Alkyl Consolidated Amines Chemicals Limited,ALKYLAMINE,exact name in NSE EQUITY_L,matched
+Tatva Chintan Pharma Chem Limited,2021-07-29,4,Vinati Organics Limited,Vinati Standalone Organics Limited,VINATIORGA,exact name in NSE EQUITY_L,matched
+Tribhovandas Bhimji Zaveri Ltd,2012-05-09,1,"Jewellery Limited, P/E based on closing price of April (standalone)","Jewellery Limited, P/E based on closing price of April (standalone).",,,unmatched
+Tega Industries Limited,2021-12-13,1,Engineering Limited,Engineering Consolidated Limited,,,unmatched
+Tejas Networks Ltd,2017-06-27,1,March,March,,,junk
+Tejas Networks Ltd,2017-06-27,2,March,March,,,junk
+Tejas Networks Ltd,2017-06-27,3,March,March,,,junk
+Schloss Bangalore Limited,2025-06-02,1,March,March,,,junk
+Thyrocare Technologies Ltd,2016-05-09,1,Dr. Lal Pathlabs Limited,Dr. Lal Pathlabs Limited,LALPATHLAB,exact name in NSE EQUITY_L,matched
+Tolins Tyres Limited,2024-09-16,1,March,March,,,junk
+Tolins Tyres Limited,2024-09-16,2,March,March,,,junk
+Tolins Tyres Limited,2024-09-16,3,March,March,,,junk
+Tracxn Technologies,2022-10-20,1,March,March,,,junk
+Tracxn Technologies,2022-10-20,2,March,March,,,junk
+Tracxn Technologies,2022-10-20,3,March,March,,,junk
+Tracxn Technologies,2022-10-20,4,Three months ended June,Three months ended June,,,junk
+Transrail Lighting Limited,2024-12-27,1,Financial Year ended March,Financial Year ended March,,,junk
+Transrail Lighting Limited,2024-12-27,2,Financial Year ended March,Financial Year ended March,,,junk
+Transrail Lighting Limited,2024-12-27,3,Financial Year ended March Not annualized,Financial Year ended March * Not annualized.,,,junk
+Travel Food Services Limited,2025-07-14,1,Accountants,"Accountants,",,,unmatched
+Tree House Education & Accessories Ltd,2011-08-26,1,Total Basic RoNW,Total Basic RoNW,,,junk
+Tree House Education & Accessories Ltd,2011-08-26,2,Face Value Income (Rs.) (Rs. in (Rs.) (Rs.) million),Face Value Income (Rs.) (Rs. in (Rs.) (Rs.) million),,,junk
+Tree House Education & Accessories Ltd,2011-08-26,3,Tree House Education,Tree House Education#,,,unmatched
+Tree House Education & Accessories Ltd,2011-08-26,4,Aptech,Aptech,APTECHT,exact name in NSE EQUITY_L,matched
+TVS Supply Chain Solutions Limited,2023-08-23,1,A list of our KPIs for the Fiscals • Revenues from Operations • EBITDA • EBITDA Margin • EBITDA Growth Rate • Adjusted EBITDA • Adjusted EBITDA Margin • Adjusted EBITDA Growth Rate • PBT • PBT Margin • PBT Growth Rate • Restated Profit/ (Loss) for • ROCE • ROE • RoIC Pre-Tax • RoIC Post-Tax S. KPI Explanation No,A list of our KPIs for the Fiscals • Revenues from Operations • EBITDA • EBITDA Margin • EBITDA Growth Rate • Adjusted EBITDA • Adjusted EBITDA Margin • Adjusted EBITDA Growth Rate • PBT • PBT Margin • PBT Growth Rate • Restated Profit/ (Loss) for • ROCE • ROE • RoIC Pre-Tax • RoIC Post-Tax S. KPI Explanation No.,,,unmatched
+Updater Services Limited,2023-10-04,1,Consolidated Limited,Consolidated Limited,,,junk
+Updater Services Limited,2023-10-04,2,SIS Limited TeamLease,SIS Limited Consolidated TeamLease,,,unmatched
+Updater Services Limited,2023-10-04,3,Services Limited,Services Consolidated Limited,,,unmatched
+UFO Moviez India Ltd,2015-05-14,1,Inox Leisure Limited,Inox Leisure Limited,,,unmatched
+Ujjivan Small Finance Bank Ltd,2019-12-12,1,Ujjivan Small Finance Bank Limited,Ujjivan Small Finance Bank Limited Listed Peers,UJJIVANSFB,exact name in NSE EQUITY_L,matched
+Ujjivan Small Finance Bank Ltd,2019-12-12,2,AU Small Finance Bank Ltd,AU Small Finance Bank Ltd,AUBANK,exact name in NSE EQUITY_L,matched
+Ujjivan Small Finance Bank Ltd,2019-12-12,3,Equitas Holdings Limited,Equitas Holdings Limited,,,unmatched
+Ujjivan Small Finance Bank Ltd,2019-12-12,4,Bandhan Bank Limited,Bandhan Bank Limited,BANDHANBNK,exact name in NSE EQUITY_L,matched
+Ujjivan Small Finance Bank Ltd,2019-12-12,5,CreditAccess Grameen Ltd,CreditAccess Grameen Ltd,CREDITACC,exact name in NSE EQUITY_L,matched
+Ujjivan Small Finance Bank Ltd,2019-12-12,6,RBL Bank Limited,RBL Bank Limited,RBLBANK,exact name in NSE EQUITY_L,matched
+Ujjivan Small Finance Bank Ltd,2019-12-12,7,DCB Bank Limited,DCB Bank Limited,DCBBANK,exact name in NSE EQUITY_L,matched
+Uma Exports Limited,2022-04-07,1,Based on closing market price as on March (i) CAGR,# Based on closing market price as on March (i) CAGR,,,junk
+Uma Exports Limited,2022-04-07,2,Revenue from Operations,Revenue from Operations,,,unmatched
+Uma Exports Limited,2022-04-07,3,Operating EBITDA,Operating EBITDA,,,unmatched
+Uma Exports Limited,2022-04-07,4,Adjusted EBITDA,Adjusted EBITDA,,,unmatched
+Uma Exports Limited,2022-04-07,5,ROCE,ROCE,,,unmatched
+Unicommerce eSolutions Limited,2024-08-13,1,March,March,,,junk
+Unicommerce eSolutions Limited,2024-08-13,2,March,March,,,junk
+Unicommerce eSolutions Limited,2024-08-13,3,March,March,,,junk
+Unimech Aerospace and Manufacturing Limited,2024-12-31,1,P/E ratio and the average P/E ratio as on September,P/E ratio and the average P/E ratio as on September,,,junk
+Unimech Aerospace and Manufacturing Limited,2024-12-31,2,P/E Ratio Not annualised,P/E Ratio *Not annualised,,,junk
+UTI Asset Management Company Ltd,2020-10-13,1,HDFC Asset Management Company Limited,HDFC Asset Management Company Limited,HDFCAMC,exact name in NSE EQUITY_L,matched
+UTI Asset Management Company Ltd,2020-10-13,2,Nippon Life Asset Management Limited,Nippon Life Asset Management Limited,NAM-INDIA,exact name in NSE EQUITY_L,matched
+Utkarsh Small Finance Bank Limited,2023-07-21,1,Bank Limited,Bank Limited* Listed Peers Equitas Small Finance Bank Limited Ujjivan Small Finance Bank Limited Credit Access Grameen Limited Spandana Sphoorty Financial Limited,,,unmatched
+Utkarsh Small Finance Bank Limited,2023-07-21,2,Bandhan Bank Limited AU Small Finance Bank Limited Suryoday Small Finance Bank Limited Fusion Micro Finance Limited,Bandhan Bank Limited AU Small Finance Bank Limited Suryoday Small Finance Bank Limited Fusion Micro Finance Limited,,,unmatched
+Varroc Engineering Ltd,2018-07-09,1,Motherson Sumi,Motherson Sumi*,,,unmatched
+Varroc Engineering Ltd,2018-07-09,2,Bharat Forge,Bharat Forge*,BHARATFORG,exact name in NSE EQUITY_L,matched
+Varroc Engineering Ltd,2018-07-09,3,Endurance prices as available on NSE,Endurance prices as available on NSE,,,unmatched
+Ventive Hospitality Limited,2024-12-30,1,March,March,,,junk
+Ventive Hospitality Limited,2024-12-30,2,March,March,,,junk
+Ventive Hospitality Limited,2024-12-30,3,March,March,,,junk
+Ventive Hospitality Limited,2024-12-30,4,Six month period ended September Not annualized,Six month period ended September *Not annualized,,,junk
+Ventive Hospitality Limited,2024-12-30,5,disclosed under section titled “Acquisition Transactions “at,disclosed under section titled “Acquisition Transactions “at,,,unmatched
+Venus Pipes & Tubes Limited,2022-05-24,1,Venus Pipes & Tubes Limited,Venus Pipes & Tubes Limited,VENUSPIPES,exact name in NSE EQUITY_L,matched
+Vijaya Diagnostic Centre Limited,2021-09-14,1,March,March,,,junk
+Vijaya Diagnostic Centre Limited,2021-09-14,2,March,March,,,junk
+Vijaya Diagnostic Centre Limited,2021-09-14,3,March,March,,,junk
+Vijaya Diagnostic Centre Limited,2021-09-14,4,June,June,,,junk
+Vijaya Diagnostic Centre Limited,2021-09-14,5,June,June,,,junk
+Vishal Mega Mart Limited,2024-12-18,1,March,March,,,junk
+Vishal Mega Mart Limited,2024-12-18,2,March,March,,,junk
+Vishal Mega Mart Limited,2024-12-18,3,March,March,,,junk
+Vishal Mega Mart Limited,2024-12-18,4,Six months period ended September,Six months period ended September,,,junk
+Vishal Mega Mart Limited,2024-12-18,5,Six months period ended September Not annualized,Six months period ended September * Not annualized,,,junk
+Vishnu Prakash R P Limited,2023-09-05,1,Vishnu Prakash R Punglia Limited,Vishnu Prakash R Punglia Limited,VPRPL,exact name in NSE EQUITY_L,matched
+Vishnu Prakash R P Limited,2023-09-05,2,PNC Infratech Ltd,PNC Infratech Ltd,PNCINFRA,exact name in NSE EQUITY_L,matched
+Vishnu Prakash R P Limited,2023-09-05,3,H.G. Infra Engineering Ltd,H.G. Infra Engineering Ltd,HGINFRA,exact name in NSE EQUITY_L,matched
+Vishnu Prakash R P Limited,2023-09-05,4,NCC Limited,NCC Limited,,,junk
+Vishnu Prakash R P Limited,2023-09-05,5,Rail Vikas Nigam Ltd,Rail Vikas Nigam Ltd,RVNL,exact name in NSE EQUITY_L,matched
+Vishnu Prakash R P Limited,2023-09-05,6,ITD Cementation India Ltd,ITD Cementation India Ltd,,,unmatched
+VRL Logistics Ltd,2015-04-30,1,Gati Limited,Gati Limited,,,unmatched
+VRL Logistics Ltd,2015-04-30,2,Transport Corporation of India Limited basis,Transport Corporation of India Limited basis.,,,unmatched
+Waaree Energies Limited,2024-10-28,1,March,March,,,junk
+Waaree Energies Limited,2024-10-28,2,March,March,,,junk
+Waaree Energies Limited,2024-10-28,3,March Not annualised,March *Not annualised.,,,junk
+Indosolar Limited,2010-09-29,1,March,March,,,junk
+Indosolar Limited,2010-09-29,2,Websol Energy Systems Ltd,Websol Energy Systems Ltd,,,unmatched
+Indosolar Limited,2010-09-29,3,Indosolar Limited,Indosolar Limited*,WAAREEINDO,exact name in NSE EQUITY_L,matched
+Western Carriers Limited,2024-09-24,1,Fiscal,Fiscal,,,junk
+Western Carriers Limited,2024-09-24,2,Fiscal,Fiscal,,,junk
+Western Carriers Limited,2024-09-24,3,Fiscal _____________,Fiscal _____________,,,junk
+Windlas Biotech Limited,2021-08-16,1,March,March,,,junk
+Windlas Biotech Limited,2021-08-16,2,March,March,,,junk
+Windlas Biotech Limited,2021-08-16,3,March,March,,,junk
+Yatharth Hospital & Trauma Care Services Limited,2023-08-07,1,Apollo Hospitals Enterprise Limited,Apollo Hospitals Enterprise Limited,APOLLOHOSP,exact name in NSE EQUITY_L,matched
+Yatharth Hospital & Trauma Care Services Limited,2023-08-07,2,Fortis Healthcare Limited,Fortis Healthcare Limited,FORTIS,exact name in NSE EQUITY_L,matched
+Yatharth Hospital & Trauma Care Services Limited,2023-08-07,3,Narayana Hrudalaya Limited,Narayana Hrudalaya Limited,,,unmatched
+Yatharth Hospital & Trauma Care Services Limited,2023-08-07,4,Max Healthcare Institute Limited,Max Healthcare Institute Limited,MAXHEALTH,exact name in NSE EQUITY_L,matched
+Yatharth Hospital & Trauma Care Services Limited,2023-08-07,5,Krishna Institute of Medical Sciences Limited,Krishna Institute of Medical Sciences Limited,KIMS,exact name in NSE EQUITY_L,matched
+Yatharth Hospital & Trauma Care Services Limited,2023-08-07,6,Healthcare Global Enterprises Limited,Healthcare Global Enterprises Limited,HCG,exact name in NSE EQUITY_L,matched
+Yatharth Hospital & Trauma Care Services Limited,2023-08-07,7,Global Health Limited,Global Health Limited,MEDANTA,exact name in NSE EQUITY_L,matched
+Yatra Online Limited,2023-09-28,1,Yatra Online Limited,Yatra Online Limited Listed peers,YATRA,exact name in NSE EQUITY_L,matched
+Yatra Online Limited,2023-09-28,2,Easy Trip Planners,Easy Trip Planners,EASEMYTRIP,exact name in NSE EQUITY_L,matched
+Zaggle Prepaid Ocean Limited,2023-09-22,1,each to equity shares of face value of ₹1 each pursuant to a,each to equity shares of face value of ₹1 each pursuant to a,,,unmatched
+Zaggle Prepaid Ocean Limited,2023-09-22,2,and the Shareholders at their extraordinary general meeting,and the Shareholders at their extraordinary general meeting,,,unmatched
+Allied Blenders and Distillers Limited,7/2/2024,1,Limited,Limited Listed Peers United Spirits Limited Radico Khaitan Limited Globus Spirits Limited,,,junk
+Dr Agarwal's Healthcare Limited,2/4/2025,1,March,March,,,junk
+Dr Agarwal's Healthcare Limited,2/4/2025,2,March,March,,,junk
+Dr Agarwal's Healthcare Limited,2/4/2025,3,March Not annualized,March * Not annualized,,,junk
+Angel One Ltd,10/5/2020,1,Financial Year,Financial Year,,,junk
+Angel One Ltd,10/5/2020,2,Financial Year,Financial Year,,,junk
+Angel One Ltd,10/5/2020,3,Financial Year,Financial Year,,,junk
+Angel One Ltd,10/5/2020,4,Period ended June Not annualised Particulars RoNW % Weight,Period ended June * Not annualised Particulars RoNW % Weight,,,junk
+Angel One Ltd,10/5/2020,5,Financial Year,Financial Year,,,junk
+Angel One Ltd,10/5/2020,6,Financial Year,Financial Year,,,junk
+Angel One Ltd,10/5/2020,7,Financial Year,Financial Year,,,junk
+Angel One Ltd,10/5/2020,8,Period ended June Not annualised,Period ended June * Not annualised,,,junk
+AWL Agri Business Limited (formerly Adani Wilmar Limited),2/8/2022,1,Adani Wilmar Limited,Adani Wilmar Limited* Listed Peers,AWL,exact match on a known former name (aliases),matched
+AWL Agri Business Limited (formerly Adani Wilmar Limited),2/8/2022,2,Hindustan Unilever Limited,Hindustan Unilever Limited,HINDUNILVR,exact name in NSE EQUITY_L,matched
+AWL Agri Business Limited (formerly Adani Wilmar Limited),2/8/2022,3,Britannia Industries Limited,Britannia Industries Limited,BRITANNIA,exact name in NSE EQUITY_L,matched
+AWL Agri Business Limited (formerly Adani Wilmar Limited),2/8/2022,4,Tata Consumer Products Limited,Tata Consumer Products Limited,TATACONSUM,exact name in NSE EQUITY_L,matched
+AWL Agri Business Limited (formerly Adani Wilmar Limited),2/8/2022,5,Dabur India Limited,Dabur India Limited,DABUR,exact name in NSE EQUITY_L,matched
+AWL Agri Business Limited (formerly Adani Wilmar Limited),2/8/2022,6,Marico Limited,Marico Limited,MARICO,exact name in NSE EQUITY_L,matched
+AWL Agri Business Limited (formerly Adani Wilmar Limited),2/8/2022,7,Nestle India Limited,Nestle India Limited,NESTLEIND,exact name in NSE EQUITY_L,matched
+Barbeque Nation Hospitality Limited,4/7/2021,1,Fiscal,Fiscal,,,junk
+Barbeque Nation Hospitality Limited,4/7/2021,2,Fiscal,Fiscal,,,junk
+Barbeque Nation Hospitality Limited,4/7/2021,3,Fiscal NM,Fiscal NM,,,junk
+Denta Water & Infrastructure Limited,1/29/2025,1,Our Company,Our Company,,,junk
+Fusion Finance Ltd,11/15/2022,1,Financial Year ended March,Financial Year ended March,,,junk
+Fusion Finance Ltd,11/15/2022,2,Financial Year ended March,Financial Year ended March,,,junk
+Fusion Finance Ltd,11/15/2022,3,Financial Year ended March,Financial Year ended March,,,junk
+Fusion Finance Ltd,11/15/2022,4,For the three months period ended June,For the three months period ended June,,,junk
+Fusion Finance Ltd,11/15/2022,5,For the three months period ended June statements,For the three months period ended June statements.,,,junk
+Gandhar Oil Refineries Limited,11/30/2023,1,June Not annualised,June * Not annualised,,,junk
+Ideaforge Technologies Limited,7/7/2023,1,Committee pursuant to its resolution dated June,Committee pursuant to its resolution dated June,,,unmatched
+Indogulf Cropsciences Limited,7/3/2025,1,website as of April,website as of April,,,unmatched
+Inox India Limited,12/21/2023,1,March,March,,,junk
+Inox India Limited,12/21/2023,2,March,March,,,junk
+Inox India Limited,12/21/2023,3,March,March,,,junk
+Inox India Limited,12/21/2023,4,Six-month period ended September Not annualised,Six-month period ended September *Not annualised,,,junk
+Kross Limited,9/16/2024,1,For the year ended March,For the year ended March,,,junk
+Kross Limited,9/16/2024,2,For the year ended March,For the year ended March,,,junk
+Kross Limited,9/16/2024,3,For the year ended March,For the year ended March,,,junk
+Macrotech Developers Limited (Lodha Group),4/19/2021,1,Macrotech Developers Limited,Macrotech Developers Limited* Listed Peers#,,,unmatched
+Macrotech Developers Limited (Lodha Group),4/19/2021,2,Brigade Enterprises Limited,Brigade Enterprises Limited,BRIGADE,exact name in NSE EQUITY_L,matched
+Macrotech Developers Limited (Lodha Group),4/19/2021,3,DLF Limited,DLF Limited,,,junk
+Macrotech Developers Limited (Lodha Group),4/19/2021,4,Godrej Properties Limited,Godrej Properties Limited,GODREJPROP,exact name in NSE EQUITY_L,matched
+Macrotech Developers Limited (Lodha Group),4/19/2021,5,Oberoi Realty Limited,Oberoi Realty Limited,OBEROIRLTY,exact name in NSE EQUITY_L,matched
+Macrotech Developers Limited (Lodha Group),4/19/2021,6,Prestige Estates Projects Limited,Prestige Estates Projects Limited,PRESTIGE,exact name in NSE EQUITY_L,matched
+Macrotech Developers Limited (Lodha Group),4/19/2021,7,Sobha Limited,Sobha Limited,SOBHA,exact name in NSE EQUITY_L,matched
+Macrotech Developers Limited (Lodha Group),4/19/2021,8,Sunteck Realty Limited,Sunteck Realty Limited,SUNTECK,exact name in NSE EQUITY_L,matched
+M & B Engineering Ltd,8/6/2025,1,M & B Engineering Limited,M & B Engineering Limited Listed peers,MBEL,exact name in NSE EQUITY_L,matched
+M & B Engineering Ltd,8/6/2025,2,Pennar Industries Limited,Pennar Industries Limited,PENIND,exact name in NSE EQUITY_L,matched
+M & B Engineering Ltd,8/6/2025,3,Bansal Roofing Products Limited,Bansal Roofing Products Limited,,,unmatched
+M & B Engineering Ltd,8/6/2025,4,BirlaNU Limited,BirlaNU Limited*,BIRLANU,exact name in NSE EQUITY_L,matched
+M & B Engineering Ltd,8/6/2025,5,Everest Industries Limited,Everest Industries Limited,EVERESTIND,exact name in NSE EQUITY_L,matched
+M & B Engineering Ltd,8/6/2025,6,Interarch Building Products Limited,Interarch Building Products Limited,,,unmatched
+Manoj Vaibhav Gems,10/3/2023,1,"along with “Risk Factors”, “Our Business” and “Financial Inf","along with “Risk Factors”, “Our Business” and “Financial Inf",,,unmatched
+Northern ARC Capital Limited,9/24/2024,1,"period Fiscal ended September (₹ million, unless otherwise s","period Fiscal ended September (₹ million, unless otherwise s",,,unmatched
+Apeejay Surrendra Group (conglomerate),2/12/2024,1,Apeejay Surrendra Park Hotels Limited,Apeejay Surrendra Park Hotels Limited,PARKHOTELS,exact name in NSE EQUITY_L,matched
+Restaurant Brands Asia Ltd,12/14/2020,1,Jubilant Foodworks Limited,Jubilant Foodworks Limited,JUBLFOOD,exact name in NSE EQUITY_L,matched
+Restaurant Brands Asia Ltd,12/14/2020,2,Westlife Development Limited,Westlife Development Limited,,,unmatched
+Supriya Lifescience Limited,12/28/2021,1,Solara Active Pharma Sciences Limited,Solara Active Pharma Sciences Limited,SOLARA,exact name in NSE EQUITY_L,matched
+Supriya Lifescience Limited,12/28/2021,2,Neuland Laboratories Limited,Neuland Laboratories Limited,NEULANDLAB,exact name in NSE EQUITY_L,matched
+Supriya Lifescience Limited,12/28/2021,3,Aarti Drugs Limited,Aarti Drugs Limited,AARTIDRUGS,exact name in NSE EQUITY_L,matched
+Supriya Lifescience Limited,12/28/2021,4,Wanbury Limited,Wanbury Limited,WANBURY,exact name in NSE EQUITY_L,matched
+Supriya Lifescience Limited,12/28/2021,5,Divis Laboratories Limited,Divis Laboratories Limited,DIVISLAB,exact name in NSE EQUITY_L,matched
+Syrma SGS Technologies,8/26/2022,1,Technologies Limited Amber,Technologies Consolidated Limited Amber,,,unmatched
+Syrma SGS Technologies,8/26/2022,2,Enterprises India Limited,Enterprises Consolidated India Limited,,,unmatched
+Urban Company Ltd,9/17/2025,1,"(47 of which are in India, as at June","(47 of which are in India, as at June",,,junk
+Acutaas Chemicals Limited,9/14/2021,1,Ami Organics Limited,Ami Organics Limited*,ACUTAAS,exact match on a known former name (aliases),matched
+Samhi Hotels Limited,9/22/2023,1,Our Company,Our Company*,,,junk
+Samhi Hotels Limited,9/22/2023,2,Pro Forma Condensed Financial Information (SAMHI Hotels Limited and ACIC SPVs (Pro Forma)),Pro Forma Condensed Financial Information (SAMHI Hotels Limited and ACIC SPVs (Pro Forma))**,,,unmatched
+Udayshivakumar Infosolutions Limited,4/3/2023,1,KNR Constructions Limited,KNR Consolidated Constructions Limited,KNRCON,exact name in NSE EQUITY_L,matched
