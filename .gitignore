@@ -24,3 +24,4 @@ data/bhavcopy_raw_cache/
 # watch_progress.py keeps its last reading here so a second run can compute a rate.
 # Per-machine scratch, not data.
 data/.watch_state.json
+data/rhp_text_cache/

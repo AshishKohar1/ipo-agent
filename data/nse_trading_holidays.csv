@@ -1,0 +1,21 @@
+date,weekday,description,segment,muhurat,source_url,fetched_at_ist,payload_sha256
+2026-01-15,Thursday,Municipal Corporation Election - Maharashtra,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-01-26,Monday,Republic Day,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-02-15,Sunday,Mahashivratri,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-03-03,Tuesday,Holi,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-03-21,Saturday,Id-Ul-Fitr (Ramadan Eid),CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-03-26,Thursday,Shri Ram Navami,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-03-31,Tuesday,Shri Mahavir Jayanti,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-04-03,Friday,Good Friday,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-04-14,Tuesday,Dr. Baba Saheb Ambedkar Jayanti,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-05-01,Friday,Maharashtra Day,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-05-28,Thursday,Bakri Id,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-06-26,Friday,Muharram,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-08-15,Saturday,Independence Day,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-09-14,Monday,Ganesh Chaturthi,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-10-02,Friday,Mahatma Gandhi Jayanti,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-10-20,Tuesday,Dussehra,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-11-08,Sunday,Diwali Laxmi Pujan*,CM,True,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-11-10,Tuesday,Diwali-Balipratipada,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-11-24,Tuesday,Prakash Gurpurb Sri Guru Nanak Dev,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe
+2026-12-25,Friday,Christmas,CM,False,https://www.nseindia.com/api/holiday-master?type=trading,2026-10-21 00:22,933cf5dc6dd4efe3b8db8ce6ecd6ecb2582929f5e0b4faffdb88e11cf4efdfbe

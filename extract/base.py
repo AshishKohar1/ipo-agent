@@ -147,9 +147,32 @@ class Doc:
 
 
 # ---------------------------------------------------------------- pdf access
+def _from_cache(path, indices) -> dict[int, str] | None:
+    """Page text from the text cache, or None if this document is not cached.
+
+    Imported lazily and failure-tolerant on purpose: the cache is an accelerator, and a
+    broken or absent cache must degrade to reading the PDF, never to returning nothing.
+    """
+    try:
+        from . import textcache
+        return textcache.pages_at(path, indices)
+    except Exception:                                          # noqa: BLE001
+        return None
+
+
 def page_texts(path: Path, first_idx: int, last_idx: int) -> dict[int, str]:
-    """Text of PDF pages [first_idx, last_idx] inclusive. Opens and closes the file."""
+    """Text of PDF pages [first_idx, last_idx] inclusive.
+
+    Served from `extract/textcache.py` when that document has been cached, which is the
+    whole point of the cache: every reader reads text through this function, so one
+    lookup here puts all of them on the cache without a line changing in any reader. On a
+    miss - no cache file, or a cache built from a different file at this path - the PDF is
+    opened and closed exactly as before.
+    """
     import pdfplumber
+    hit = _from_cache(path, range(max(0, first_idx), last_idx + 1))
+    if hit is not None:
+        return hit
     out: dict[int, str] = {}
     with pdfplumber.open(path) as pdf:
         n = len(pdf.pages)
@@ -179,6 +202,9 @@ def page_texts_at(path: Path, indices) -> dict[int, str]:
     out: dict[int, str] = {}
     if not want:
         return out
+    hit = _from_cache(path, want)
+    if hit is not None:
+        return hit
     with pdfplumber.open(path) as pdf:
         n = len(pdf.pages)
         for i in want:
