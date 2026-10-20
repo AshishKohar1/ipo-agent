@@ -1,23 +1,19 @@
 # Capture audit
 
-Window: the last 4 days, weekdays only. Generated 2026-10-20 19:32 IST.
+Window: the last 4 days, weekdays only. Generated 2026-10-20 23:50 IST.
 
-**0 missed 15:00 leg(s), 1 missed day-end leg(s).**
+**Every weekday in the window produced a capture.**
 
 A gap means the job left *no attempt at all* — an infrastructure failure. A job that ran and captured nothing is a quiet market, not a gap, and is not counted here.
 
 | date | 15:00 attempts | day-end attempts |
 |---|---|---|
 | 2026-10-19 | 1 | 1 |
-| 2026-10-20 | 6 | **0 — MISSED** |
+| 2026-10-20 | 8 | 1 |
 
 ## What catch-up recovered
 
-### 2026-10-20
-
-* listing prices — 0 prediction(s) scored, 6 not found in either bhavcopy
-* index closes — 0 closes, 15 NULL with a reason
-
+Nothing to recover.
 ## Not recoverable, by nature
 
 * **final_subscription** — Chittorgarh removes the subscription table at allotment (H1), so a missed day's final figure does not exist anywhere we may fetch from. Not retryable.
