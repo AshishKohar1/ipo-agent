@@ -84,13 +84,19 @@ MAX_PEERS = 12
 #          once and shared between the share-count and promoter readers rather than
 #          twice, and capital.py pre-scans the text before extracting any table;
 #          together those were 29 of the 53 seconds one document took.
+#   1.8.1  1.2c again: 1.8.0's capital phrase required "equity SHARE capital" and missed
+#          the two commonest build-up spellings, "AFTER THE ISSUE n Equity Shares of face
+#          value" and "EQUITY CAPITAL AFTER THE ISSUE n Equity Shares". Precision rose to
+#          91% while USABLE output fell from 121 to 81 - a worse result. "equity capital"
+#          and a bare "Equity Shares" now satisfy the capital side, and a line opening with
+#          the after-the-offer phrase is accepted as a build-up row on its own.
 #   1.8.0  1.2c: the post-issue share count now requires the CAPITAL BUILD-UP context,
 #          not merely a line mentioning "post-issue". 20 of the 153 counts 1.7.0 produced
 #          were impossible - implied market capitalisation below the money raised - and
 #          every one came from a line about something else: an employee reservation cap, a
 #          promoter lock-in row, a pre-IPO placement or preference-share footnote, or the
 #          selling shareholders' OFS size. Not a unit or scale fault.
-VALUATION_VERSION = "1.8.0"
+VALUATION_VERSION = "1.8.1"
 
 FY_HDR = re.compile(r"(?:FY|FISCAL|FINANCIAL YEAR|YEAR ENDED|MARCH)\s*'?\s*(\d{2,4})", re.I)
 WEIGHTED = re.compile(r"(?i)weighted\s*average")
@@ -1225,8 +1231,26 @@ def financials(doc: Doc) -> list[Value]:
 # looks like: "D) ISSUED, SUBSCRIBED AND PAID-UP CAPITAL AFTER THE OFFER". And any line
 # matching one of the four families above is refused outright, because a line can satisfy
 # the capital phrasing and still be about the employee quota.
-CAPITAL_PHRASE = r"(?:issued|subscribed|paid[\s-]*up|equity\s+share\s+capital)"
+# 1.8.1 widens this. 1.8.0 required "equity SHARE capital" and so missed the two commonest
+# build-up row spellings - "AFTER THE ISSUE 31,250,000 Equity Shares of face value of
+# Rs 10/- each" and "E) EQUITY CAPITAL AFTER THE ISSUE 423,559,671 Equity Shares" - which
+# cost 34 good values. Precision went up (79% -> 91%) and usable output went DOWN (121 ->
+# 81), which is a worse result, not a better one.
+#
+# So "equity capital" and a bare "Equity Shares" now satisfy the capital side, and a line
+# that OPENS with the after-the-offer phrase is accepted as a build-up row in its own
+# right: a row in that table begins with its label, optionally after a row letter like
+# "E)". The four false families are still refused by NOT_THE_COUNT, and the two-sided
+# arithmetic guard still sits behind all of it.
+CAPITAL_PHRASE = (r"(?:issued|subscribed|paid[\s-]*up"
+                  r"|equity\s+(?:share\s+)?capital|equity\s+shares?)")
 AFTER_PHRASE = r"(?:after|post)[\s-]*(?:the\s*)?(?:offer|issue|ipo)"
+# A build-up row opens with its label, so the after-phrase appearing in the first ~34
+# characters is itself the evidence - "E) EQUITY CAPITAL AFTER THE ISSUE ...",
+# "AFTER THE ISSUE 31,250,000 Equity Shares ...". A prose sentence about the post-issue
+# capital almost never starts that way.
+ROW_OPENER = re.compile(r"(?i)^\s*(?:[A-Z]\s*[).]\s*)?(?:total\s+)?"
+                        r"(?:equity\s+(?:share\s+)?capital\s+)?" + AFTER_PHRASE)
 POST_ISSUE = re.compile(
     r"(?i)(?:" + CAPITAL_PHRASE + r".{0,90}?" + AFTER_PHRASE
     + r"|" + AFTER_PHRASE + r".{0,90}?" + CAPITAL_PHRASE + r")")
@@ -1262,7 +1286,9 @@ def _post_issue_count(doc, texts: dict[int, str]):
     for i, t in sorted(texts.items()):
         lines = [re.sub(r"\s+", " ", x).strip() for x in (t or "").splitlines()]
         for n, ln in enumerate(lines):
-            if not ln or not POST_ISSUE.search(ln) or NOT_THE_COUNT.search(ln):
+            if not ln or NOT_THE_COUNT.search(ln):
+                continue
+            if not (POST_ISSUE.search(ln) or ROW_OPENER.match(ln)):
                 continue
             joined = ln if COUNT_ADJ.search(ln) else " ".join(lines[n:n + 2]).strip()
             if NOT_THE_COUNT.search(joined):

@@ -420,6 +420,89 @@ def review_sheet(write: bool = True,
     return out
 
 
+def extract_shares_only(limit: int | None = None, write: bool = True) -> pd.DataFrame:
+    """Re-read ONLY the Capital Structure section, for the share count and promoter block.
+
+    Why a targeted stage rather than a full pass: a whole-document pass is eight hours on
+    this laptop, and a reader fix confined to one section does not need the other three
+    blocks re-read. This opens the capital pages and nothing else, so it runs in about a
+    tenth of the time, and it writes rows stamped with the CURRENT version so the
+    provenance of a corrected value is never ambiguous.
+
+    It is additive. The 1.8.0 rows stay exactly where they are; these rows sit beside them
+    and the derive layer takes the newest version available PER VARIABLE, which is
+    recorded on the output row. Nothing is silently replaced.
+    """
+    import gc
+    import extract.base as B
+    from extract import valuation as V
+    from extract.valuation import VALUATION_VERSION
+
+    f = pd.read_csv(FETCH_LOG, low_memory=False, on_bad_lines="skip")
+    f = f[f["status"].astype(str).str.startswith("ok")]
+    done = set()
+    if VALUES.exists():
+        prev = pd.read_csv(VALUES, usecols=["company", "variable", "extractor_version"],
+                           low_memory=False)
+        cur = prev[(prev["extractor_version"].astype(str) == VALUATION_VERSION)
+                   & (prev["variable"].astype(str) == "shares_outstanding_post_issue")]
+        done = set(cur["company"].astype(str))
+    pend = [r for _, r in f.iterrows() if str(r["company"]) not in done]
+    if limit:
+        pend = pend[:limit]
+    print(f"{len(f)} documents, {len(done)} already re-read at {VALUATION_VERSION}, "
+          f"{len(pend)} to do")
+    rows, t0 = [], time.time()
+    for i, r in enumerate(pend, 1):
+        pdf = ROOT / str(r["path"])
+        comp = str(r["company"])
+        if not pdf.exists():
+            continue
+        try:
+            n_pages = int(r["pages"]) if pd.notna(r.get("pages")) else 0
+            probe = [j for j in B.OFFSET_PROBES if j < n_pages]
+            pre = B.page_texts_at(pdf, list(range(min(10, n_pages))) + probe)
+            toc = B.parse_toc(pdf, n_pages,
+                              texts={j: t for j, t in pre.items() if j < 10})
+            off = B.measure_offset(pdf, n_pages, texts=pre)
+            del pre
+            doc = B.Doc(pdf, comp, str(r.get("doc_type") or "RHP"),
+                        str(r["sha256_now"]), str(r["url"]), n_pages, off, toc)
+            rng, _ = B.find(doc, "capital")
+            cap_texts = None
+            if rng:
+                ca, cb = rng
+                cap_texts = B.page_texts(doc.path, ca, min(cb, ca + 20))
+            vals = (V.shares_post_issue(doc, texts=cap_texts)
+                    + V.promoter_shareholding(doc, texts=cap_texts))
+            for v in vals:
+                d = v.as_row()
+                d["listing_date"] = str(r.get("listing_date"))[:10]
+                d["symbol"] = r.get("symbol")
+                d["hash_matches"] = r.get("hash_matches")
+                rows.append(d)
+            del doc, vals, cap_texts, toc
+        except Exception as e:                                 # noqa: BLE001
+            rows.append({"company": comp, "variable": "shares_group", "value": None,
+                         "status": "unreadable",
+                         "note": f"{type(e).__name__}: {str(e)[:120]}",
+                         "missing_reason": "present_but_unparsed",
+                         "extractor_version": VALUATION_VERSION})
+        if i % 10 == 0 or i == len(pend):
+            if write and rows:
+                pd.DataFrame(rows).to_csv(VALUES, mode="a", header=not VALUES.exists(),
+                                          index=False, encoding="utf-8")
+                rows = []
+            gc.collect()
+            el = (time.time() - t0) / 60
+            print(f"  {i}/{len(pend)}  ({el * 60 / max(i, 1):.0f}s/doc, "
+                  f"{el:.0f} min elapsed)", flush=True)
+    if write and rows:
+        pd.DataFrame(rows).to_csv(VALUES, mode="a", header=not VALUES.exists(),
+                                  index=False, encoding="utf-8")
+    return pd.DataFrame()
+
+
 def coverage(version: str | None = None) -> pd.DataFrame:
     """variable | rows | % | first year | withheld count and top reason (Task 1.5)."""
     if not VALUES.exists():
@@ -702,7 +785,7 @@ if __name__ == "__main__":
     import os
     os.chdir(ROOT)
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage", choices=["fetch", "extract"])
+    ap.add_argument("--stage", choices=["fetch", "extract", "shares"])
     ap.add_argument("--limit", type=int)
     ap.add_argument("--deadline", help="IST timestamp to stop at, e.g. '2026-10-14 08:00'")
     ap.add_argument("--found-table", action="store_true")
@@ -718,6 +801,9 @@ if __name__ == "__main__":
         print(not_on_sebi_by_year().to_string(index=False))
     if a.stage == "fetch":
         fetch(limit=a.limit, deadline=a.deadline)
+    if a.stage == "shares":
+        extract_shares_only(a.limit)
+        raise SystemExit(0)
     if a.stage == "extract":
         extract(limit=a.limit, deadline=a.deadline)
     if a.coverage:
