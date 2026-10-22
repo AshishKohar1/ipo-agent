@@ -71,6 +71,40 @@ ROWS = {
 }
 SPAN = {"financials": 26, "capital": 12, "basis": 14}
 
+# A data row that the label patterns miss. In the Basis block the per-fiscal-year
+# rows begin with a bare year - "2018 24.63 24.63 3" - so a label pattern anchored on
+# words finds the table header and its weighted average and drops the three years the
+# header is describing. Polycab EPS, RoNW and NAV rows were all invisible until this
+# was added. Kept deliberately loose: a label-ish start and at least two numbers.
+# Over-inclusion costs a human a glance; under-inclusion costs a value nobody knows
+# is missing.
+NUM = re.compile(r"\(?\s*-?[\d,]+(?:\.\d+)?\s*\)?%?")
+
+
+def _numrow(s: str) -> bool:
+    """True when the line looks like a table row: a short label, then 2+ numbers.
+
+    Deliberately crude. It is a filter in front of a human, not a parser: over-inclusion
+    costs a glance, under-inclusion costs a value nobody knows is missing.
+    """
+    t = s.strip()
+    if not t or len(t) > 220:
+        return False
+    nums = [m.group(0) for m in NUM.finditer(t) if any(c.isdigit() for c in m.group(0))]
+    if len(nums) < 2:
+        return False
+    # The line must START with something label-like: a word, a bracket, a currency mark,
+    # or a bare fiscal year. A sentence of prose that happens to cite two page numbers is
+    # excluded by requiring the numbers to sit in the back half of the line.
+    if not re.match(r"^[\(\[]?[A-Za-z₹–\-]|^\d{4}\*?\b", t):
+        return False
+    # A bare fiscal year IS the label - "2018 24.63 24.63 3" - so the numbers may start
+    # at position 0 in that one shape, and the year itself does not count as a value.
+    if re.match(r"^\d{4}\*?\s", t):
+        return len(nums) >= 3 or (len(nums) >= 2 and "." in t)
+    first = t.find(nums[0])
+    return first > 0 and (len(t) - first) <= max(90, len(t) * 0.75)
+
 
 def docs() -> pd.DataFrame:
     return pd.read_csv(DOCS)
@@ -104,7 +138,7 @@ def dump_one(row) -> tuple[str, int]:
                 s = ln.rstrip()
                 if not s.strip():
                     continue
-                if hdr.search(s) or pat.search(s):
+                if hdr.search(s) or pat.search(s) or _numrow(s):
                     keep.append(f"p{doc.index_to_printed(i)}|{s}")
             if keep:
                 body.extend(keep)
@@ -154,6 +188,15 @@ def self_test() -> int:
             bool(re.compile(HEADER).search(h)), h)
     chk("a data row is NOT mistaken for a header",
         not re.compile(HEADER).search("Revenue from operations 55,067.00 48,344.22"))
+
+    print("\n[2b] a bare-year data row is kept, which labels miss")
+    for line in ("2018 24.63 24.63 3", "2017 16.50 16.50 2",
+                 "Fiscal 2016 12.28 12.28 1", "2018 20.21 3",
+                 "Unconsolidated basis 121.84 Consolidated basis 124.39"):
+        chk(f"numrow keeps {line[:30]!r}", _numrow(line), line)
+    for line in ("Notes for listed peer companies:",
+                 "further details, see page 131."):
+        chk(f"numrow ignores {line[:30]!r}", not _numrow(line), line)
 
     print("\n[3] the rows each block needs")
     fin = re.compile(ROWS["financials"])
