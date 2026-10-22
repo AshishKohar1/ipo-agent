@@ -1783,3 +1783,79 @@ Telecommunication (3), Utilities (3) or Textiles (2). The nearest candidates —
 MANUFACTURING, NIFTY CAPITAL MARKETS, NIFTY INDIA CONSUMPTION, NIFTY MIDSMALL IT & TELECOM
 — are different baskets, and a wrong benchmark produces a momentum number that looks
 exactly like a right one. Not forced.
+
+### H47 — NSE's terms of use prohibit automated collection. AWAITING_USER (2026-10-22)
+
+Rule 5 says "respect robots.txt **and site terms**", and B1's standing instruction is: if a
+source's terms prohibit access, stop using it and report. The terms were read today for the
+first time, at the URLs the user supplied. **This is the report.**
+
+#### What NSE's terms say, quoted
+
+`https://www.nseindia.com/static/nse-terms-of-use`, fetched 2026-10-22, payload SHA-256
+`7da31c2d52ee…`:
+
+> "User is granted a non-exclusive, non-transferable, limited right to access the Website /
+> Mobile Application and avail the services provided by NSE through the Website / Mobile
+> Application. **User is prohibited to conduct any systematic or automated data collection
+> activities (including scraping, data mining, data extraction and data harvesting) on or in
+> relation to our Website / Mobile Application.**"
+
+And separately:
+
+> "User agrees that any information or content or data on the Website / Mobile Application
+> shall not be copied, modified, reverse engineer, reproduced, uploaded, transmitted, posted,
+> **stored (either in hardcopy or in an electronic retrieval system)**, adapted, altered,
+> translated, disseminated, distributed, displayed, performed, broadcasted, published,
+> hyperlinked, sold, marketed, licensed, rented, leased or distributed in any form, without…"
+
+`https://www.nseindia.com/static/website-policies` (SHA-256 `a8b5bb54bbd8…`) adds:
+
+> "no portion of the information on this website may be reproduced on or transmitted to or
+> stored in any other website or in other form of electronic retrieval system"
+
+#### Why this matters here, stated plainly
+
+Every NSE call this project makes is automated. `data/listing_prices.csv`,
+`data/NIFTY50_TRI.csv`, the bhavcopy cache, `data/sector_map.csv`,
+`data/nse_trading_holidays.csv` and `data/issue_dates_recovered.csv` all store NSE-sourced
+values in an electronic retrieval system. On the plain words above, **this project is doing
+what NSE's terms prohibit** — and by the project's own H18 clause ("still forbidden: …
+reaching any source whose terms prohibit scraping"), NSE falls into the same category as
+`ipoindex.in`, which is on the B1 blacklist for a Terms-of-Use clause.
+
+The machine-readable permission says the opposite. `www.nseindia.com/robots.txt`, re-fetched
+today, is `User-agent: *` → `Allow: /` with only `/market-data-test` disallowed. So NSE's
+robots.txt invites the crawl its terms forbid. Both were read; neither is being ignored in
+favour of the other, and the conflict is the finding.
+
+#### What is NOT in dispute
+
+* **BSE does not prohibit this.** Its footer Disclaimer and Website Policies, read today
+  through the rendered page (they are buttons, not links — no URL to cite), contain no
+  mention of scraping, crawling, automated access, data mining or robots. The only
+  restriction is copyright: "Any reproduction, redistribution or transmission, for
+  consideration or otherwise, of any such information contained on the Website is strictly
+  prohibited", and "No part of the information on this Website … may be reproduced or
+  transmitted in any form by any means, without the express written consent of BSE." That
+  bars **redistribution**, which this project does not do. BSE is clear.
+* **SEBI** publishes `robots.txt` with an empty `Disallow:` (allow all) plus four static
+  asset paths. No automated-access clause was found.
+* Nothing here concerns bypassing a login, CAPTCHA or paywall. NSE's data is served openly.
+
+#### The decision is the user's, and these are the options
+
+| | Option | What it costs |
+|---|---|---|
+| A | **Carry on.** Personal, non-commercial, no redistribution, a handful of requests a day, ≥3 s apart — treat the clause as aimed at commercial harvesting | The clause says "any", not "any commercial". This is a judgement that the words do not support on their face |
+| B | **Stop at NSE. Rebuild on BSE.** BSE serves bhavcopies, an IPO demand schedule and industry classification, and permits it | Loses `api/public-past-issues`, `ipo-active-category`, the holiday master, NSE Indices TRI and the index constituent files. The TRI is Model H's benchmark and has no BSE equivalent. Weeks of work, and some of it unreplaceable |
+| C | **Ask NSE for written permission** for personal research use, and pause new NSE collection until they answer | Slow, may get no reply, but it is the only route that makes A safe in writing |
+| D | **Narrow it.** Keep the live subscription read (Chittorgarh already covers it) and stop storing NSE-derived values, deriving what is possible from BSE | Half-measure; the stored history is the asset |
+
+**Recommendation: C, with A continuing meanwhile only if the user says so.** This is the
+user's personal project on their own account and their call to make, not mine. What I will
+not do is keep collecting while describing the position as settled.
+
+**Until the user decides, this session made no further NSE requests after the finding.** The
+calls already made today — the holiday calendar, HD Fire's issue record, the 137 issue-open
+dates — were made before the terms were read and are recorded with full provenance.
