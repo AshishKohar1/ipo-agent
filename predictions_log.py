@@ -293,8 +293,16 @@ def scored() -> pd.DataFrame:
     """Predictions joined to their outcomes, for measuring the delivered hit rate."""
     df = load()
     p = df[df["row_type"] == "prediction"]
-    o = df[df["row_type"] == "outcome"][["prediction_id", "listing_gain_pct",
-                                         "l1_actual", "l2_actual"]]
+    o = df[df["row_type"] == "outcome"].copy()
+    # The NEWEST outcome row per prediction wins. This file is append-only (rule 11), so
+    # a correction is a new row rather than an edit - and a prediction with two outcome
+    # rows must not become two rows here, which would double-count it in the delivered
+    # hit rate. HD Fire Protect is the case: its 21 Oct outcome carried a NULL gain
+    # because the offer price was missing, and the corrected row came later.
+    if len(o):
+        o["_t"] = pd.to_datetime(o["logged_at_ist"], errors="coerce")
+        o = o.sort_values("_t").drop_duplicates(subset=["prediction_id"], keep="last")
+    o = o[["prediction_id", "listing_gain_pct", "l1_actual", "l2_actual"]]
     return p.merge(o, on="prediction_id", how="left", suffixes=("", "_out"))
 
 

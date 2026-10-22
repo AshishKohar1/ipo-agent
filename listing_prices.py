@@ -94,7 +94,7 @@ OUT_COLS = ["ipo", "isin", "symbol", "bse_code", "listing_date", "offer_price",
             "nse_open", "nse_close", "bse_open", "bse_close",
             "nse_match_by", "bse_match_by",
             "listing_open", "listing_close", "listing_gain_pct",
-            "sources", "reconciled", "note", "fetched_at"]
+            "sources", "reconciled", "note", "offer_price_source", "fetched_at"]
 
 # The Syngene gate. Kept as a constant so the check is re-runnable and so the expected
 # value is stated in one place rather than retyped in prose.
@@ -343,6 +343,80 @@ def reconcile(nse: dict, bse: dict, offer: float | None) -> dict:
     return out
 
 
+def rescore_unpriced(write: bool = True) -> list[dict]:
+    """Repair captures that have a listing price but no OFFER price, and score them.
+
+    The hole this closes. A live prediction is scored on its listing date by
+    `capture_listing_day`, which takes the offer price from `master_with_symbols.csv`.
+    A brand-new IPO has no row there, so the gain came out NULL and `l1_actual` /
+    `l2_actual` were NULL with it - on the only prediction this system has made. The
+    prices themselves were captured correctly, on the listing date, from that date's
+    bhavcopy; only the denominator was missing.
+
+    `capture_listing_day` now takes the price from NSE's own issue record when the master
+    has none, so this cannot recur going forward. This function exists for the rows
+    already on disk, and because the same hole will open for every future IPO that lists
+    before the master is rebuilt.
+
+    The gain is recomputed with the SAME arithmetic `reconcile` uses - on the OPEN - and
+    the correction is APPENDED to `predictions_log.csv` as a new outcome row. Rule 11:
+    the file is append-only and no past row is edited. `PL.scored()` takes the newest
+    outcome per prediction, so the NULL row stays as the audit trail without
+    double-counting.
+    """
+    import predictions_log as PL
+    if not OUT.exists():
+        return []
+    d = pd.read_csv(OUT)
+    need = d[d["listing_open"].notna() & d["offer_price"].isna()]
+    done = []
+    pl_all = PL.load()
+    for i, r in need.iterrows():
+        # The date handed to the resolver must be near the ISSUE END date, because H28
+        # matches on name AND an issue end within four days of it. Passing the LISTING
+        # date refused every row: HD Fire closed on 15 Oct and listed on 21 Oct, six days
+        # apart, so the window could not be met. The prediction's own `logged_at_ist` is
+        # the bid-time date and is what `capture_listing_day` passes.
+        around = r.get("listing_date")
+        if len(pl_all):
+            pr = pl_all[(pl_all["row_type"] == "prediction")
+                        & (pl_all["ipo"].astype(str) == str(r["ipo"]))]
+            if len(pr) and pd.notna(pr.iloc[-1].get("logged_at_ist")):
+                around = pr.iloc[-1]["logged_at_ist"]
+        res = resolve_from_nse(str(r["ipo"]), around)
+        price = res.get("issue_price")
+        if not price:
+            done.append({"ipo": r["ipo"], "repaired": False,
+                         "why": f"NSE gave no issue price: {res.get('how')}"})
+            continue
+        gain = round(100 * (float(r["listing_open"]) / float(price) - 1), 4)
+        d.loc[i, "offer_price"] = float(price)
+        d.loc[i, "offer_price_source"] = "nse_public_past_issues"
+        d.loc[i, "listing_gain_pct"] = gain
+        pid = None
+        pl = pl_all
+        hit = pl[(pl["row_type"] == "prediction")
+                 & (pl["ipo"].astype(str) == str(r["ipo"]))]
+        if len(hit):
+            pid = str(hit.iloc[-1]["prediction_id"])
+            if write:
+                PL.log_outcome(pid, str(r["ipo"]), r.get("listing_date"), gain,
+                               note=("corrected outcome: the 21 Oct capture had the "
+                                     "listing prices but no offer price, because a "
+                                     "brand-new IPO is not in the master. Offer price "
+                                     f"{price} from NSE public-past-issues; gain on the "
+                                     "OPEN, same arithmetic as reconcile(). Supersedes "
+                                     "the earlier NULL outcome row, which is kept "
+                                     "(rule 11)"))
+        done.append({"ipo": r["ipo"], "repaired": True, "offer_price": float(price),
+                     "listing_open": float(r["listing_open"]), "gain_pct": gain,
+                     "prediction_id": pid,
+                     "l1_actual": int(gain > 0), "l2_actual": int(gain > 10)})
+    if write and any(x.get("repaired") for x in done):
+        d.to_csv(OUT, index=False, encoding="utf-8")
+    return done
+
+
 # ---------------------------------------------------------------- the gate (2c)
 def verify_as_reported(f: Fetcher | None = None) -> dict:
     """Priority 2c. MUST pass before any collection. Returns a verdict dict."""
@@ -489,6 +563,25 @@ def _pending_predictions() -> pd.DataFrame:
 
 
 
+def nse_issue_price(raw) -> float | None:
+    """NSE's `issuePrice` as a number, or None.
+
+    NSE serves it space-padded (`"   271"`) while an issue is still unpriced, and `"-"`
+    once the field exists but carries no value. Both have to come back as None rather
+    than as a number, because an offer price is the denominator of every listing gain:
+    a wrong one mislabels a hit as a miss.
+    """
+    t = str(raw if raw is not None else "").strip()
+    if not t or t in ("-", "--", "NA", "N.A.", "nan", "None"):
+        return None
+    t = t.replace(",", "").replace("Rs.", "").replace("Rs", "").strip()
+    try:
+        v = float(t)
+    except ValueError:
+        return None
+    return v if v > 0 else None
+
+
 def resolve_from_nse(ipo_name: str, around=None) -> dict:
     """`{symbol, isin, source, how}` for an IPO that is NOT yet in the master.
 
@@ -509,7 +602,7 @@ def resolve_from_nse(ipo_name: str, around=None) -> dict:
     import dataio as _d
     want = _d.norm_name(ipo_name)
     if not want:
-        return {"symbol": None, "isin": None, "source": None, "how": "no usable name"}
+        return {"symbol": None, "isin": None, "issue_price": None, "source": None, "how": "no usable name"}
     try:
         import requests
         UA = {"User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -545,6 +638,13 @@ def resolve_from_nse(ipo_name: str, around=None) -> dict:
                 ad = pd.Timestamp(around).date() if around is not None else "?"
                 hits.append({
                     "symbol": r.get("symbol"), "isin": r.get("isin") or None,
+                    # The offer price travels with the symbol, out of the SAME NSE row.
+                    # Resolving the symbol and leaving the price behind is what left HD
+                    # Fire Protect captured but unscored: the master has no row for a
+                    # brand-new IPO, so `Offer Price` was NaN, the gain was NaN, and
+                    # l1_actual / l2_actual were NULL on the one prediction this system
+                    # has made. The price was in the payload all along.
+                    "issue_price": nse_issue_price(r.get("issuePrice")),
                     "source": url,
                     "how": ("NSE issue record: the normalised name matched exactly AND "
                             "the issue end date " + str(ed) + " is within 4 days of "
@@ -553,12 +653,12 @@ def resolve_from_nse(ipo_name: str, around=None) -> dict:
         if len(syms) == 1:
             return hits[0]
         if not syms:
-            return {"symbol": None, "isin": None, "source": None,
+            return {"symbol": None, "isin": None, "issue_price": None, "source": None,
                     "how": "no NSE issue record matched on BOTH name and date"}
-        return {"symbol": None, "isin": None, "source": None,
+        return {"symbol": None, "isin": None, "issue_price": None, "source": None,
                 "how": f"refused: {len(syms)} different symbols matched ({sorted(syms)})"}
     except Exception as e:                                     # noqa: BLE001
-        return {"symbol": None, "isin": None, "source": None,
+        return {"symbol": None, "isin": None, "issue_price": None, "source": None,
                 "how": f"{type(e).__name__}: {e}"}
 
 
@@ -645,6 +745,12 @@ def capture_listing_day(day=None, catch_up: bool = False) -> dict:
         offer = pd.to_numeric(pd.Series([getattr(mr, "Offer Price", None)
                                          if mr is not None else None]),
                               errors="coerce").iloc[0]
+        offer_src = "master"
+        if pd.isna(offer) and resolved is not None and resolved.get("issue_price"):
+            # The master wins where it has a row; this only fills the hole a brand-new
+            # IPO leaves. NSE's own issue record is the source, so this is not a guess.
+            offer = float(resolved["issue_price"])
+            offer_src = "nse_public_past_issues"
 
         n, nhow = find(nse_df, isin or None, symbol, None)
         b, bhow = find(bse_df, isin or None, symbol, code)
@@ -665,6 +771,7 @@ def capture_listing_day(day=None, catch_up: bool = False) -> dict:
         rec.update({"ipo": r.ipo, "isin": isin or None, "symbol": symbol, "bse_code": code,
                     "listing_date": str(day.date()),
                     "offer_price": None if pd.isna(offer) else float(offer),
+                    "offer_price_source": None if pd.isna(offer) else offer_src,
                     "fetched_at": str(pd.Timestamp.now())})
         if (str(rec["ipo"]), str(rec["listing_date"])) not in already:
             rows.append(rec)
@@ -773,7 +880,10 @@ def self_test() -> int:
     fut = (pd.Timestamp.now() + pd.Timedelta(days=5)).normalize()
     r = capture_listing_day(fut)
     chk("a FUTURE date is refused", "error" in r and "future" in r["error"], str(r))
-    past = (pd.Timestamp.now() - pd.Timedelta(days=5)).normalize()
+    # A past TRADING day, not just "five days ago". The non-trading-day guard now answers
+    # first and rightly so - a weekend or an NSE holiday has no bhavcopy, so there is
+    # nothing to catch up - and five days ago lands on a weekend two days in seven.
+    past = HOL.prev_trading_day(pd.Timestamp.now().normalize() - pd.Timedelta(days=4))
     r = capture_listing_day(past)
     chk("a PAST date is refused without catch_up",
         "error" in r and "catch_up" in r["error"], str(r))
@@ -813,6 +923,47 @@ def self_test() -> int:
                      (verify_as_reported, backfill, capture_listing_day, _norm))
     chk("no surviving code computes it", needle not in bodies)
     chk("and is not an output column", "first_day_marker" not in OUT_COLS)
+
+    print("\n[OP] the offer price travels with the symbol (HD Fire Protect)")
+    import inspect as _i
+    chk("NSE's space-padded issuePrice parses", nse_issue_price("   271") == 271.0)
+    chk("a comma and an Rs prefix parse", nse_issue_price("Rs.1,090") == 1090.0)
+    for bad in ("-", "--", "", "   ", None, "NA", "abc", "0", "-5"):
+        chk(f"{bad!r} is NOT a price", nse_issue_price(bad) is None)
+    _r = _i.getsource(resolve_from_nse)
+    chk("the resolver carries issue_price out of the SAME row as the symbol",
+        '"issue_price": nse_issue_price(r.get("issuePrice"))' in _r)
+    chk("and every refusal path returns issue_price None, so a caller cannot read a "
+        "stale key", _r.count('"issue_price": None') == 4)
+    _c = _i.getsource(capture_listing_day)
+    chk("the master still wins where it has a row",
+        'if pd.isna(offer) and resolved is not None' in _c)
+    chk("the NSE price only fills the hole a brand-new IPO leaves",
+        'offer_src = "nse_public_past_issues"' in _c)
+    chk("and the row records WHICH source priced it",
+        '"offer_price_source"' in _c and "offer_price_source" in OUT_COLS)
+    chk("a gain still needs a positive offer price",
+        reconcile({"open": 335.0, "close": 306.75, "match_by": "symbol"},
+                  {"match_by": "none"}, None)["listing_gain_pct"] is None)
+    chk("and with the price it is computed on the OPEN",
+        abs(reconcile({"open": 335.0, "close": 306.75, "match_by": "symbol"},
+                      {"match_by": "none"}, 271.0)["listing_gain_pct"] - 23.6162) < 0.01)
+
+    print("\n[RS] the unpriced-capture repair")
+    _rs = _i.getsource(rescore_unpriced)
+    chk("it only touches rows with a price but no offer price",
+        'd["listing_open"].notna() & d["offer_price"].isna()' in _rs)
+    chk("it refuses rather than guessing when NSE has no price",
+        '"repaired": False' in _rs and "if not price" in _rs)
+    chk("the gain is on the OPEN, the same arithmetic as reconcile()",
+        'float(r["listing_open"]) / float(price) - 1' in _rs)
+    chk("the correction is APPENDED, never written over a past row (rule 11)",
+        "PL.log_outcome(" in _rs and "Supersedes" in _rs)
+    chk("and it records which source priced the row",
+        '"offer_price_source"] = "nse_public_past_issues"' in _rs)
+    chk("the resolver is handed the BID-TIME date, not the listing date - H28 matches on "
+        "an issue end within four days, and those are six days apart for HD Fire",
+        'logged_at_ist' in _rs and 'res = resolve_from_nse(str(r["ipo"]), around)' in _rs)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
