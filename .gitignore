@@ -25,3 +25,4 @@ data/bhavcopy_raw_cache/
 # Per-machine scratch, not data.
 data/.watch_state.json
 data/rhp_text_cache/
+_local/check_set_dump/
