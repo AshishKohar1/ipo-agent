@@ -1929,3 +1929,55 @@ rename` still began with the string `### H18`, so a grep for the heading found t
 superseded entry first. The heading now reads `### H18 → RENUMBERED H28`, with its body and
 its pointer untouched. That is a signpost, not an edit to a decision's identity — which is
 the thing this file exists to prevent.
+
+### H48 — the three post-issue figures are CALCULATED, not read (2026-10-23)
+
+Hand-reading the check set established what a coverage table had been hiding: a Red Herring
+Prospectus **cannot** state the post-issue share count, the post-issue NAV per share or the
+promoter post-Offer percentage. All three depend on a price that is not fixed until the book
+closes, so the document prints `[●]`. Polycab prints it for every one. That is not a reader
+failure, and it explains `shares_outstanding_post_issue` reaching only 130 of 450 documents
+and `ipo_pb` sitting at 0% for 2019+.
+
+So they are calculated, from numbers the RHP does state and the price the market later fixed:
+
+| variable | formula |
+|---|---|
+| `post_issue_shares` | pre-issue shares (RHP) + fresh issue amount (RHP) ÷ final offer price (master). A fresh issue stated as a SHARE COUNT is added directly and no division happens. **An offer for sale does not change the total** — it transfers existing shares |
+| `post_issue_nav` | (pre-issue net worth + fresh issue amount) ÷ `post_issue_shares` |
+| `promoter_post_pct` | (promoter pre-issue shares − promoter OFS shares) ÷ `post_issue_shares` |
+
+All flagged `derived_from_rhp`. The share count passes the same two-sided plausibility guard
+`derive_pb` uses, and a failure there withholds everything downstream of it.
+
+**Where the RHP prints `[●]` for the fresh issue amount too**, it is recovered as
+`issue size (master) − OFS shares (RHP) × final offer price`. Every term is a stated number.
+This was graded against a case where the RHP *does* state the amount before being trusted
+anywhere else: Craftsman Automation, issue size ₹823.70 cr less 4,521,450 shares at ₹1,490 =
+**₹150.00 cr**, against the **₹1,500.00 million** printed on p71 of its own RHP — agreement to
+**0.003%**, which is the master's own rounding of the issue size to two decimals.
+
+**Two things are disclosed on every row rather than smoothed away.** Issue expenses are
+ignored, which overstates post-issue book value and therefore understates P/B. And where the
+promoter OFS participation is unknown, the calculation assumes none and **says so**, because
+that assumption overstates the holding.
+
+**Hand-validated on three check-set RHPs:**
+
+| | Polycab | Craftsman Automation | Global Health (Medanta) |
+|---|---|---|---|
+| pre-issue shares, page | 141,205,838 (p102) | 20,121,600 (p71) | 253,303,930 (p125) |
+| fresh issue | ₹4,000 million, stated (p102) | ₹1,500.00 million, stated (p71) | **`[●]`** — derived ₹500.00 cr |
+| OFS shares | 17,582,000 (p102) | 4,521,450 (p71) | 50,761,000 (p125) |
+| final offer price | ₹538 | ₹1,490 | ₹336 |
+| **post-issue shares** | **148,640,782** | **21,128,338** | **268,184,894** |
+| **post-issue NAV** | **₹184.96** | not computed — net worth not yet transcribed | not computed — same |
+| **promoter post %** | **63.00%**, from 66.32% pre | not computed | not computed |
+
+Polycab's figures carry their own cross-check: the implied post-issue P/B is 538 ÷ 184.96 =
+**2.91×**, the NAV rises from the stated pre-issue ₹166.39 as a raise requires, and the
+promoter holding falls from the stated 66.32% as dilution requires. Craftsman and Medanta are
+validated on the share count only; their net worth is not yet hand-read, and a figure is not
+reported until it is.
+
+`derive_post_issue.py`, 33 self-tests.
