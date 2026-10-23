@@ -739,6 +739,11 @@ def main(dry: bool = False, final: bool = False, force: bool = False) -> dict:
     except Exception as e:                              # noqa: BLE001
         print(f"  H22: NSE enrichment skipped ({type(e).__name__}: {str(e)[:70]}); "
               f"Chittorgarh figures stand.")
+    # H47 rule 5: a block is reported by name, in the run summary, every time. A run that
+    # quietly fell back would leave nobody able to tell a working pipeline from one that
+    # has been refused for a month.
+    for line in mv.get("failover_notes", []):
+        print(f"  FAILOVER: {line}")
     n_snap = 0 if dry else append_snapshots(mv, capture_point, today)
 
     # Priority 6: the 19:30 day-end leg is where the index closes are captured — after

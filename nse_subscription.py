@@ -56,6 +56,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+import failover as FO                                           # noqa: E402
 import trading_day as TD                                     # noqa: E402
 
 HOME = "https://www.nseindia.com/"
@@ -242,6 +243,12 @@ def fetch(symbol: str, series: str = "EQ", f: Fetcher | None = None,
     return res
 
 
+def _status_in(note) -> int | None:
+    """The HTTP status a failure note names, if it names one."""
+    m = re.search(r"HTTP\s+(\d{3})", str(note or ""))
+    return int(m.group(1)) if m else None
+
+
 def enrich_market_view(mv: dict, f: Fetcher | None = None, today=None) -> dict:
     """H22, provisional: try NSE first for every MAINBOARD IPO closing today.
 
@@ -284,8 +291,21 @@ def enrich_market_view(mv: dict, f: Fetcher | None = None, today=None) -> dict:
                         "nse_update_time": got["update_time"],
                         "nse_note": "NSE primary (H22)"})
         else:
+            # H47 rule 5. A REFUSAL and a fault are different facts and are kept apart:
+            # a 403, a 401, a 429 or a refused connection means NSE has answered, that
+            # answer is final for this run, and the run must SAY the host blocked us.
+            # A timeout or a parse failure is an ordinary fault. Neither is retried -
+            # retrying a block is the circumvention H47 forbids.
+            state = FO.classify(status=_status_in(got["note"]))
             sub["nse_note"] = f"NSE not used: {got['note']}"
             sub.setdefault("source", "chittorgarh")
+            if state == "blocked":
+                sub["nse_blocked"] = True
+                have = sub.get("total_x") is not None
+                mv.setdefault("failover_notes", []).append(
+                    f"NSE blocked - failed over to Chittorgarh for {r.get('ipo')}"
+                    if have else
+                    f"NSE blocked and Chittorgarh has no figure for {r.get('ipo')}")
     return mv
 
 
@@ -447,6 +467,58 @@ def self_test() -> int:
         symbol_for("Ravita", cal) == {}, symbol_for("Ravita", cal))
     chk("an unknown name returns nothing", symbol_for("Nonesuch Industries", cal) == {})
     chk("a too-short name is refused outright", symbol_for("ABC", cal) == {})
+
+    print("\n[FO] H47 rule 5: a simulated 403 fails over and says so")
+    import nse_subscription as _M
+    _saved_fetch, _saved_open, _saved_sym = _M.fetch, _M.open_issues, _M.symbol_for
+    try:
+        calls = []
+
+        def _blocked(sym, series, f=None, today=None):
+            calls.append(sym)
+            return {"ok": False, "note": "HTTP 403", "total": None, "qib": None,
+                    "hni": None, "rii": None, "update_time": None}
+
+        _M.fetch = _blocked
+        _M.open_issues = lambda f=None: []
+        _M.symbol_for = lambda name, cal: {"symbol": "HDFIRE", "series": "EQ",
+                                           "how": "test"}
+        import copy as _cp
+        # DEEP copies. dict(mv) is shallow, so the second case reused the first case's
+        # `sub` dict and inherited its nse_blocked flag - the test failed on its own
+        # fixture, not on the code.
+        mv = {"closing_today": [{"ipo": "HD Fire Protect Limited",
+                                 "segment": "mainboard",
+                                 "sub": {"ok": True, "total_x": 85.12,
+                                         "source": "chittorgarh"}}]}
+        out = _M.enrich_market_view(_cp.deepcopy(mv), f=object())
+        sub = out["closing_today"][0]["sub"]
+        chk("NSE was called exactly ONCE - a block is never retried",
+            len(calls) == 1, calls)
+        chk("the row is marked blocked", sub.get("nse_blocked") is True)
+        chk("the Chittorgarh figure SURVIVES untouched", sub["total_x"] == 85.12)
+        chk("the source stays chittorgarh", sub["source"] == "chittorgarh")
+        chk("the run reports the block and the failover",
+            out["failover_notes"] == ["NSE blocked - failed over to Chittorgarh for "
+                                      "HD Fire Protect Limited"],
+            out.get("failover_notes"))
+
+        calls.clear()
+
+        def _timeout(sym, series, f=None, today=None):
+            calls.append(sym)
+            return {"ok": False, "note": "ReadTimeout after 30s", "total": None,
+                    "qib": None, "hni": None, "rii": None, "update_time": None}
+
+        _M.fetch = _timeout
+        out2 = _M.enrich_market_view(_cp.deepcopy(mv), f=object())
+        chk("a TIMEOUT is not reported as a block",
+            "failover_notes" not in out2
+            and out2["closing_today"][0]["sub"].get("nse_blocked") is None)
+        chk("but it still falls back to Chittorgarh",
+            out2["closing_today"][0]["sub"]["total_x"] == 85.12)
+    finally:
+        _M.fetch, _M.open_issues, _M.symbol_for = _saved_fetch, _saved_open, _saved_sym
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
