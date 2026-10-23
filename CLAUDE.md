@@ -58,7 +58,9 @@ CAGR is 0.218. Never merge them.
    No DRHPs. `NSE_DOWNLOADS_ALLOWED` stays `False` — never accept a disclaimer or
    click-through. Never ask the user to fetch a document.
    **Never fetch from IPO Ji, InvestorGain, ipoindex.in or iporupee.com** (decision B1).
-   **Rule 5 was relaxed by the user on 2026-10-05 (H18):** realistic browser headers MAY be
+   **Rule 5 was relaxed by the user on 2026-10-05 (H18 — the ONLY meaning of H18; the
+   2026-10-03 name-similarity decision was renumbered H28 on 2026-10-10):** realistic
+   browser headers MAY be
    sent to **official** sources — NSE, BSE, NSE Indices, SEBI — because the earlier ban on
    browser User-Agents was stricter than intended and was the only thing blocking us. Still
    forbidden: bypassing a login, CAPTCHA, paywall or click-through agreement; ignoring an
@@ -79,7 +81,14 @@ CAGR is 0.218. Never merge them.
    NAV, revenue, PAT, net worth, borrowings. Those come from the aggregator and the master,
    with the RHP as the verifying second source. RHP extraction covers only the **H6** list:
    what nothing else publishes.
-8. **Never ingest an AI-generated summary table as data (H8).** One was reviewed and
+8. **NSE and niftyindices are used under H47 (ratified 2026-10-23).** Their terms
+   prohibit automated collection and storage without written consent; the user accepts
+   that risk for personal, non-commercial use on six conditions. The two that bind every
+   run: **raw NSE/niftyindices data is never published, shared or redistributed** — only
+   aggregate results — and **a 403 or a refused connection is never worked around.** One
+   attempt per host per run; on a block the pipeline fails over to BSE or Chittorgarh and
+   reports `NSE blocked — failed over to X`. No header rotation, no retry loop, no proxy.
+9. **Never ingest an AI-generated summary table as data (H8).** One was reviewed and
    rejected — two unrelated companies with identical net worth, a "100% OFS" issue also
    claiming capex use of proceeds, six values marked approximate, no page citations. Use
    such tables to prompt a human check, never as a source. `ipotrack.in`'s subscription

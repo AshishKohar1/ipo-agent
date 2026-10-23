@@ -372,7 +372,7 @@ as the audit trail of failed attempts but do not lock. The three stuck slots wer
 the logic change rather than by deleting rows. Idempotency suppresses duplicate *work*,
 never duplicate *attempts at work that has not happened*.
 
-### H18 — name similarity cannot identify a company rename (NEEDS RATIFICATION)
+### H18 → RENUMBERED H28 — name similarity cannot identify a company rename
 
 > **Renumbered `H28` on 2026-10-10.** `H18` now means only the rule 5 relaxation
 > (2026-10-05). See *Numbering resolved* at the end of this file.
@@ -1784,7 +1784,7 @@ MANUFACTURING, NIFTY CAPITAL MARKETS, NIFTY INDIA CONSUMPTION, NIFTY MIDSMALL IT
 — are different baskets, and a wrong benchmark produces a momentum number that looks
 exactly like a right one. Not forced.
 
-### H47 — NSE's terms of use prohibit automated collection. AWAITING_USER (2026-10-22)
+### H47 — NSE's terms of use prohibit automated collection (2026-10-22; **RATIFIED 2026-10-23**, see the end of this file)
 
 Rule 5 says "respect robots.txt **and site terms**", and B1's standing instruction is: if a
 source's terms prohibit access, stop using it and report. The terms were read today for the
@@ -1859,3 +1859,73 @@ not do is keep collecting while describing the position as settled.
 **Until the user decides, this session made no further NSE requests after the finding.** The
 calls already made today — the holiday calendar, HD Fire's issue record, the 137 issue-open
 dates — were made before the terms were read and are recorded with full provenance.
+
+---
+
+## 2026-10-23 — H47 RATIFIED, and a correction to what I reported about H18
+
+### H47 — NSE and niftyindices terms: the user accepts the risk and continues
+
+**Supersedes the AWAITING_USER entry recorded on 2026-10-22.** The user's decision, verbatim
+in substance:
+
+> NSE and niftyindices.com terms prohibit automated collection and storage without written
+> consent. The user accepts the risk of being blocked and continues for personal,
+> non-commercial use:
+>
+> 1. The repository stays private. Raw NSE/niftyindices data is never published, shared or
+>    redistributed; only aggregate results and conclusions may be shared.
+> 2. Claude Code commits data only to the private repo — never to a public location, gist,
+>    artifact or share link.
+> 3. Requests stay minimal: existing schedule, rule-5 gaps, cached data reused, no bulk
+>    re-downloads.
+> 4. For each data item the source giving the most/best data is primary; BSE or Chittorgarh
+>    replaces NSE only where equal or better, and is added wherever it brings data NSE lacks.
+> 5. Every NSE/niftyindices fetch has an automatic failover to BSE/Chittorgarh. A block
+>    (403/connection refusal) is never worked around — the pipeline fails over and reports it.
+> 6. Pending: the user is applying via NSE's form; if consent is granted, record it here.
+
+**What this binds me to, stated as operational rules rather than sentiment:**
+
+| # | Rule | Enforced by |
+|---|---|---|
+| 1 | Never publish raw NSE or niftyindices data | No artifact, gist, paste or share link may carry a row of it. Aggregates and conclusions only |
+| 2 | Commit only to this private repository | `git remote -v` is the only destination |
+| 3 | No bulk re-download | Caches are reused: `data/bhavcopy_cache/`, `data/rhp_text_cache/`, the stored holiday calendar. A re-fetch needs a reason |
+| 4 | Best source wins per item | Section "Source map" below. NSE is not the default — it is the default *where it is better* |
+| 5 | **A 403 is an answer, never an obstacle** | Failover to BSE/Chittorgarh, and the run says `NSE blocked — failed over to X`. No retry loop, no header rotation, no proxy, no backing off and trying again later to see if the block lifted |
+| 6 | Consent pending | `reports/NSE_FORM_DRAFT.md` is drafted for the user to complete and submit. Nothing is submitted by me |
+
+Rule 5 deserves the emphasis. The line between "failing over because we were blocked" and
+"working around a block" is the whole of this decision's integrity, and it is drawn at
+**one** attempt: if NSE answers 403 or refuses the connection, that host is done for that
+run. Changing a header, waiting and retrying, or routing differently would each be a
+circumvention, and H18's prohibitions still stand in full.
+
+**What has NOT changed.** The B1 blacklist (IPO Ji, InvestorGain, ipoindex.in,
+iporupee.com). Bypassing a login, CAPTCHA, paywall or click-through. Ignoring a robots.txt
+disallow. H36's Tapetide terms. BSE remains clear: its Disclaimer and Website Policies carry
+no automated-access clause at all, only a copyright bar on reproduction and redistribution,
+which rule 1 above already honours.
+
+### A correction: H18 was not ambiguous, and I said it was
+
+On 2026-10-22 I reported that "the label H18 is carrying two decisions" and offered to split
+it. **That was wrong.** The collision was found and resolved on **2026-10-10**, in the
+*Numbering resolved* section of this file, and in the opposite direction to the one I
+described: the 2026-10-03 "name similarity cannot identify a company rename" decision was
+renumbered **H28**, and **H18 means only the rule 5 relaxation** (2026-10-05). `CLAUDE.md`
+line 61 attributes the header relaxation to H18, which is correct and needs no change.
+
+So the user's instruction — "give the header-relaxation decision its own number" — is
+**declined on the evidence**, because carrying it out would break what the 2026-10-10 entry
+deliberately protected: H18 is cited by that meaning in code comments (`listing_prices.py`,
+`market_context.py`, `model_h_sources.py`, `ingest_outcomes.py`, `backtest_email.py`), in
+`PROGRESS.md` stage rows 21/23/26/31, and in the live email footer. Renumbering it now would
+invalidate live citations to fix a problem that does not exist.
+
+The one real defect was navigational: `### H18 — name similarity cannot identify a company
+rename` still began with the string `### H18`, so a grep for the heading found the
+superseded entry first. The heading now reads `### H18 → RENUMBERED H28`, with its body and
+its pointer untouched. That is a signpost, not an edit to a decision's identity — which is
+the thing this file exists to prevent.
