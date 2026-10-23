@@ -79,11 +79,23 @@ HEADERS = {
     "Connection": "keep-alive",
 }
 
+# Equity groups / series, per exchange. A BSE file and an NSE file now share one
+# column name and use different vocabularies in it.
+BSE_EQ_GROUPS = {"A", "B", "T", "M", "MT", "X", "XT", "Z", "P", "R", "W"}
+NSE_EQ_SERIES = {"EQ", "BE", "SM", "ST", "MT"}
 BSE_HOME = "https://www.bseindia.com/"
 BSE_OLD = "https://www.bseindia.com/download/BhavCopy/Equity/EQ{ddmmyy}_CSV.ZIP"
 BSE_NEW = ("https://www.bseindia.com/download/BhavCopy/Equity/"
            "BhavCopy_BSE_CM_0_0_0_{ymd}_F_0000.CSV")
-BSE_REFERER = "https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx"
+# BSE restructured its site and now says so on the page itself - "Website URLs have
+# been updated. Kindly delink old bookmarks". The old `.aspx` Referer still resolves,
+# by redirect, and BSE's edge answers a download carrying it with the Angular shell:
+# HTTP 200, 14,287 bytes of HTML, which parsed to a DataFrame of ZERO rows. That was
+# cached, so every BSE bhavcopy from 2024-07-02 onward - 154 dates - was a cached
+# failure and every listing since has been labelled single-source with rule 2's
+# two-source standard silently unmet. With the Referer the live page actually uses,
+# the same URL returns 862,609 bytes of real CSV.
+BSE_REFERER = "https://www.bseindia.com/markets/marketinfo/bhavcopy"
 NSE_HOME = "https://www.nseindia.com/"
 NSE_NEW = ("https://nsearchives.nseindia.com/content/cm/"
            "BhavCopy_NSE_CM_0_0_0_{ymd}_F_0000.csv.zip")
@@ -194,7 +206,15 @@ def _norm(df: pd.DataFrame, which: str) -> pd.DataFrame:
                             "open": pd.to_numeric(df["OpnPric"], errors="coerce"),
                             "close": pd.to_numeric(df["ClsPric"], errors="coerce")})
         if "SctySrs" in c:
-            out = out[df["SctySrs"].astype(str).str.strip().isin(["EQ", "BE", "", "nan"])]
+            # The series codes are EXCHANGE-SPECIFIC, and the unified file name hides it.
+            # NSE writes series - EQ, BE, SM, ST. BSE writes its GROUP - A, B, T, M, MT,
+            # X, XT, Z for equity, F and G for debt and government securities. Filtering a
+            # BSE file against NSE's series discarded every row of it, which is the second
+            # of the two reasons BSE bhavcopies have been empty since July 2024. HD Fire
+            # Protect trades in group B.
+            srs = df["SctySrs"].astype(str).str.strip().str.upper()
+            keep = (BSE_EQ_GROUPS if which == "bse" else NSE_EQ_SERIES) | {"", "NAN"}
+            out = out[srs.isin(keep)]
     elif {"SYMBOL", "OPEN", "CLOSE"} <= c:                  # NSE old
         out = pd.DataFrame({"code": None,
                             "symbol": df["SYMBOL"].astype(str).str.strip(),
@@ -221,7 +241,17 @@ def bhavcopy(f: Fetcher, day, which: str, use_cache: bool = True):
     cp = CACHE / f"{which}_{d:%Y%m%d}.csv.gz"
     if use_cache and cp.exists():
         try:
-            return pd.read_csv(cp, low_memory=False), "cache"
+            cached = pd.read_csv(cp, low_memory=False)
+            if len(cached):
+                return cached, "cache"
+            # An EMPTY cached bhavcopy is a cached failure, not data. Every trading day
+            # has thousands of scrips, so zero rows can only mean the download gave us
+            # something that was not a bhavcopy. Caching it made the failure STICKY and
+            # silent: BSE began serving its Angular shell (14,287 bytes of HTML) at the
+            # bhavcopy URL, every BSE file from 2026 cached as 77 bytes of empty gzip,
+            # and every listing since has been single-source - with rule 2's two-source
+            # standard quietly unmet and nothing saying so.
+            log(f"  {cp.name} cached ZERO rows - a cached failure, refetching")
         except Exception as e:                              # noqa: BLE001
             log(f"  cache unreadable, refetching {cp.name}: {type(e).__name__}")
     # Try the format that era actually used FIRST. Both exchanges moved to the unified
@@ -252,6 +282,11 @@ def bhavcopy(f: Fetcher, day, which: str, use_cache: bool = True):
             df = _norm(_unzip_csv(raw), which)
         except Exception as e:                              # noqa: BLE001
             notes.append(f"{u.rsplit('/', 1)[-1]}: parse {type(e).__name__}: {e}")
+            continue
+        if not len(df):
+            # Zero rows is a failed download wearing a DataFrame. Try the next URL and,
+            # if that also fails, return None so the caller sees a miss - never cache it.
+            notes.append(f"{u.rsplit('/', 1)[-1]}: parsed but ZERO rows (not a bhavcopy)")
             continue
         try:
             df.to_csv(cp, index=False, compression="gzip", encoding="utf-8")
@@ -964,6 +999,36 @@ def self_test() -> int:
     chk("the resolver is handed the BID-TIME date, not the listing date - H28 matches on "
         "an issue end within four days, and those are six days apart for HD Fire",
         'logged_at_ist' in _rs and 'res = resolve_from_nse(str(r["ipo"]), around)' in _rs)
+
+    print("\n[BSE] the bhavcopy that was empty for 154 dates")
+    import inspect as _ib
+    _n = _ib.getsource(_norm)
+    chk("the series filter is exchange-aware",
+        "BSE_EQ_GROUPS if which ==" in _n)
+    chk("BSE group codes are equity groups, not NSE series",
+        "B" in BSE_EQ_GROUPS and "A" in BSE_EQ_GROUPS and "EQ" not in BSE_EQ_GROUPS)
+    chk("NSE series are unchanged", {"EQ", "BE"} <= NSE_EQ_SERIES)
+    _bse = pd.DataFrame({"FinInstrmId": ["500325", "766726", "800001"],
+                         "TckrSymb": ["RELIANCE", "HDFIRE", "GOISEC"],
+                         "ISIN": ["INE002A01018", "INE18AK01028", "IN0020230069"],
+                         "SctySrs": ["A", "B", "G"],
+                         "OpnPric": [1400.0, 334.4, 99.1],
+                         "ClsPric": [1410.0, 307.2, 99.2]})
+    got = _norm(_bse.copy(), "bse")
+    chk("a BSE group-A and group-B row survive", set(got["symbol"]) >= {"RELIANCE", "HDFIRE"})
+    chk("a government-security row does NOT", "GOISEC" not in set(got["symbol"]))
+    _nse = _bse.rename(columns={}).copy()
+    _nse["SctySrs"] = ["EQ", "BE", "N1"]
+    got2 = _norm(_nse, "nse")
+    chk("NSE EQ and BE survive", len(got2) == 2)
+    chk("an NSE debt series does not", "GOISEC" not in set(got2["symbol"]))
+    _e = _ib.getsource(bhavcopy)
+    chk("a ZERO-row parse is never cached",
+        "parsed but ZERO rows" in _e and "if not len(df):" in _e)
+    chk("a ZERO-row CACHE is re-fetched, not served",
+        "cached ZERO rows" in _e)
+    chk("the Referer is the URL BSE's live page uses, not the redirecting .aspx",
+        BSE_REFERER == "https://www.bseindia.com/markets/marketinfo/bhavcopy")
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
