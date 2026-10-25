@@ -463,6 +463,13 @@ def coverage_by_year(horizon: str = "1y") -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------- the corrected target
+# The exact line the run summary prints when the one source for the benchmark is
+# unavailable. niftyindices has no failover: BSE publishes no total-return index at all.
+BENCH_BLOCKED = "NIFTYINDICES BLOCKED - Model H target not refreshed"
+# A weekend plus a long holiday is about five days; past that the series is stale rather
+# than merely not-yet-updated.
+BENCH_STALE_DAYS = 10
+
 CORRECTED_COLS = [
     "symbol", "company", "isin", "listing_date", "end_date", "horizon",
     # raw, as reported on the day - the point of the exercise
@@ -560,6 +567,9 @@ def build_corrected(horizon: str = "1y", limit: int | None = None,
             else pd.DataFrame(columns=ACTION_COLS))
     done_ck = _ckpt()
     bench = _bench()
+    bst = bench_status(bench)
+    # Printed whether or not it is bad news, so its absence is never mistaken for health.
+    print(f"  BENCHMARK: {bst['summary']}")
     lab_stored = "H_label" if horizon == "1y" else "H3_label"
     ex_stored = f"excess_{horizon}_pp"
 
@@ -583,7 +593,7 @@ def build_corrected(horizon: str = "1y", limit: int | None = None,
         return {"horizon": horizon, "computed": 0}
 
     f = LP.Fetcher()
-    out, n_ok, n_nopx, n_noca = [], 0, 0, 0
+    out, n_ok, n_nopx, n_noca, n_nobench = [], 0, 0, 0, 0
     for i, r in enumerate(pending, 1):
         sym, isin = str(r["symbol"]), r.get("isin")
         d0, d1 = r["listing_date"], r["end_date"]
@@ -641,6 +651,11 @@ def build_corrected(horizon: str = "1y", limit: int | None = None,
                 excess = ipo_r - bench_r
                 lab = int(excess > 0)
                 n_ok += 1
+            else:
+                # The IPO's own return was computable and the benchmark's was not, so the
+                # only thing stopping this row is the index. Counted, and named in the
+                # summary, rather than folded into the generic no-price count.
+                n_nobench += 1
         if raw0 is None or raw1 is None:
             n_nopx += 1
 
@@ -679,8 +694,12 @@ def build_corrected(horizon: str = "1y", limit: int | None = None,
                   f"no_ca={n_noca}")
     if out:
         _append_corrected(out)
+    if n_nobench:
+        print(f"  {BENCH_BLOCKED} - {n_nobench} row(s) had an IPO return but NO "
+              f"benchmark value, so their excess target is NULL. {bst['summary']}")
     return {"horizon": horizon, "computed": n_ok, "no_price": n_nopx,
-            "ca_missing": n_noca}
+            "ca_missing": n_noca, "no_benchmark": n_nobench,
+            "benchmark": bst["summary"]}
 
 
 def _cached_only(f, day, isin, symbol, within_days: int = 7):
@@ -719,6 +738,38 @@ def _bench():
 def _bench_at(bench, d):
     s = bench[bench.index >= pd.Timestamp(d)]
     return float(s.iloc[0]) if len(s) else None
+
+
+def bench_status(bench=None, today=None) -> dict:
+    """How current the Nifty 50 TRI is, and what that costs.
+
+    niftyindices is the ONLY source for this series: BSE publishes no total-return index
+    (0 of its 151 public indices), and a price index is not a substitute for a benchmark
+    whose whole purpose is to include dividends. So there is no failover, and the only
+    honest alternative to a stale benchmark is a NULL target.
+
+    This function exists so that the NULL is never silent. `_bench_at` returns None past
+    the stored end date, so `excess` and the label are already NULL; what was missing was
+    a line in the run summary saying why.
+    """
+    try:
+        bench = _bench() if bench is None else bench
+    except Exception as e:                                  # noqa: BLE001
+        return {"ok": False, "end": None, "stale_days": None,
+                "summary": f"{BENCH_BLOCKED} (series unreadable: {type(e).__name__})"}
+    if bench is None or not len(bench):
+        return {"ok": False, "end": None, "stale_days": None,
+                "summary": f"{BENCH_BLOCKED} (series empty)"}
+    end = pd.Timestamp(bench.index.max())
+    now = pd.Timestamp(today or pd.Timestamp.today().normalize())
+    stale = int((now - end).days)
+    if stale > BENCH_STALE_DAYS:
+        return {"ok": False, "end": str(end.date()), "stale_days": stale,
+                "summary": (f"{BENCH_BLOCKED} - Nifty 50 TRI ends {end.date()}, "
+                            f"{stale} days stale. Any target window reaching past that "
+                            f"date is NULL, not computed against a stale index")}
+    return {"ok": True, "end": str(end.date()), "stale_days": stale,
+            "summary": f"Nifty 50 TRI current to {end.date()} ({stale}d)"}
 
 
 def _append_corrected(rows: list[dict]) -> None:
@@ -1093,6 +1144,34 @@ def self_test() -> int:
             float(got[got["symbol"] == "AAA"]["excess_corrected_pp"].iloc[0]) == 12.5, got)
         chk("a symbol with only a failed attempt is still listed, with no value",
             pd.isna(got[got["symbol"] == "BBB"]["excess_corrected_pp"].iloc[0]))
+
+    print("\n[B] the benchmark has ONE source, and a gap in it is loud")
+    chk("the blocked line is the exact wording the run prints",
+        BENCH_BLOCKED == "NIFTYINDICES BLOCKED - Model H target not refreshed")
+    st = bench_status(bench=pd.Series(dtype=float))
+    chk("an empty series is not ok", st["ok"] is False)
+    chk("and says which host", "NIFTYINDICES" in st["summary"], st["summary"])
+    _idx = pd.to_datetime(["2026-01-01", "2026-01-02"])
+    _fresh = pd.Series([100.0, 101.0], index=_idx)
+    chk("a series ending yesterday is ok",
+        bench_status(bench=_fresh, today="2026-01-03")["ok"] is True)
+    _stale = bench_status(bench=_fresh, today="2026-03-01")
+    chk("a series 58 days old is NOT ok", _stale["ok"] is False, _stale)
+    chk("the stale line gives the end date", "2026-01-02" in _stale["summary"], _stale)
+    chk("the stale line says the target goes NULL rather than being computed",
+        "NULL" in _stale["summary"], _stale)
+    chk("the stale day count is reported", _stale["stale_days"] == 58, _stale)
+    _bsrc = inspect.getsource(build_corrected)
+    chk("build_corrected prints the benchmark status every run",
+        'print(f"  BENCHMARK:' in _bsrc)
+    chk("a row the benchmark could not price is counted apart from a missing price",
+        "n_nobench += 1" in _bsrc and "no_benchmark" in _bsrc)
+    # The docstring EXPLAINS that BSE has no total-return index, so searching the whole
+    # source finds the explanation and fails the check it is describing. Code only.
+    _code = re.sub(r'(?s)"' + chr(34) * 2 + r'.*?"' + chr(34) * 2, "",
+                   inspect.getsource(bench_status))
+    chk("no BSE substitute is used for the TRI in bench_status's CODE",
+        "bse" not in _code.lower(), _code)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

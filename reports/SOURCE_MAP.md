@@ -75,3 +75,45 @@ rows being sectors for which NSE publishes no index and BSE's is out of reach.
 is small and the method is already fixed: correlate daily returns 2019–2026, keep NSE
 unless the correlation is below 0.9 or BSE's history is longer, and record the source on
 every mapped row.
+
+## 4. niftyindices is a single point of failure, and nothing can replace it
+
+Added 2026-10-25 (Task 4). Recorded here because it is a structural risk, not a bug: three
+of Model H's inputs come from **one host with no second source anywhere**.
+
+| Data item | Only source | Fallback | What a block costs |
+|---|---|---|---|
+| **Nifty 50 Total Return Index** | niftyindices `getTotalReturnIndexString` | **none** | Model H's target `excess_1y` / `excess_3y` cannot be computed for any window reaching past the stored end date |
+| **Index closes (15 indices)** | niftyindices `getHistoricaldatatabletoString` | **none** | `market_heat`, sector-relative features |
+| **Index P/E and P/B history** | niftyindices `getpepbHistoricaldataDBtoString` | **none** | the market-valuation features in the H45 ratio set |
+
+**Why there is no fallback, rather than one we have not built.** BSE's public historical
+archive lists 151 indices and **not one is a total-return series**. A price index is not a
+substitute: the entire purpose of the benchmark is that it includes dividends, so swapping
+in a price index would understate the benchmark and inflate every excess return in the
+training set. That is a fabricated improvement, which rule 1 forbids more firmly than it
+forbids a gap. `api.bseindia.com` also answers 403 on every path, so even BSE's price
+indices are out of reach.
+
+So the design is: **no substitute, and a loud failure.**
+
+| Behaviour | Where | Proof |
+|---|---|---|
+| A 403 is one attempt and final — no retry, no header change | `fetch_nifty_tri.fetch` raises `failover.Blocked` on 401/403/429 **before** parsing the body | self-test [1]: the host is asked exactly once |
+| Nothing is written on a block | `fetch_nifty_tri.refresh` returns before the writer is called | self-test [1]: "NOTHING was written" |
+| The run prints `NIFTYINDICES BLOCKED - Model H target not refreshed` | `BLOCKED_SUMMARY`, and `model_h_targets.BENCH_BLOCKED` with the same wording | self-tests assert the exact string in both modules |
+| The target goes **NULL**, never computed against a stale index | `_bench_at` returns None past the series end, so `excess` and the label stay None | pre-existing behaviour, now counted as `no_benchmark` and named in the summary instead of folded into `no_price` |
+| Staleness is visible even when nothing is blocked | `bench_status()` prints every run, good news or bad | self-test: a series 58 days old is not ok |
+| **The 15:00 Model L email is unaffected** | `send_daily_email` reaches no index at all | self-test [4]: the module's source contains no reference to the TRI or its file |
+
+**A 403 was being retried until today.** `fetch_nifty_tri` wrapped the request in
+`for attempt in range(3)` and caught every exception. A 403 returns HTML, so `json.loads`
+raised a parse error and the loop asked twice more — three requests at a host that had
+already refused. The same defect existed in `listing_prices.Fetcher.get`, which treated
+403 and 429 as retryable alongside the 5xx codes. Both are fixed; 5xx stays retryable,
+because a gateway error is a fault and not a refusal.
+
+**Live status at the time of writing:** the stored TRI ends **2026-09-25**, 30 days before
+today. Nothing is blocked — it simply has not been refreshed since. Under the rule above
+that means any Model H target window ending after 2026-09-25 is NULL rather than wrong,
+and `build_corrected` now says so on every run.
