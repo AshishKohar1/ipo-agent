@@ -1,16 +1,39 @@
 ipo,listing_date,offer_price_before,listing_open_before,listing_gain_pct_before,reconciled_before,offer_price_after,listing_open_after,listing_gain_pct_after,reconciled_after
 Vivekanand Cotspin,2026-09-28,37.0,,,no_source,37.0,,,no_source
-ArMee Infotech,2026-09-30,375.0,,,no_source,375.0,375.0,0.0,single_source_unverified
-Swastika Infra,2026-09-30,185.0,,,no_source,185.0,200.0,8.1081,single_source_unverified
-Varmora Granito,2026-09-29,148.0,,,no_source,148.0,155.0,4.7297,single_source_unverified
+ArMee Infotech,2026-09-30,375.0,375.0,0.0,single_source_unverified,375.0,375.0,0.0,single_source_unverified
+Swastika Infra,2026-09-30,185.0,200.0,8.1081,single_source_unverified,185.0,200.0,8.1081,single_source_unverified
+Varmora Granito,2026-09-29,148.0,155.0,4.7297,single_source_unverified,148.0,155.0,4.7297,single_source_unverified
 Coreintegra Consulting Services,2026-09-30,78.0,,,no_source,78.0,,,no_source
-Elevate Campuses,2026-09-30,362.0,,,no_source,362.0,355.1,-1.9061,single_source_unverified
+Elevate Campuses,2026-09-30,362.0,355.1,-1.9061,single_source_unverified,362.0,355.1,-1.9061,single_source_unverified
 Roopa Screen,2026-10-01,64.0,,,no_source,64.0,,,no_source
 Pooja Logistics,2026-09-30,115.0,,,no_source,115.0,,,no_source
 Liqvd Digital India,2026-09-30,54.0,,,no_source,54.0,,,no_source
 Peshwa Wheat,2026-10-01,101.0,,,no_source,101.0,,,no_source
 FX Multitech,2026-09-28,116.0,,,no_source,116.0,,,no_source
-Moneyview,2026-10-01,34.0,,,no_source,34.0,55.0,61.7647,single_source_unverified
+Moneyview,2026-10-01,34.0,55.0,61.7647,single_source_unverified,34.0,55.0,61.7647,single_source_unverified
 Himalaya Nutravedics India,2026-09-29,106.0,,,no_source,106.0,,,no_source
-Adroit Industries (India),2026-09-30,134.0,,,no_source,134.0,235.0,75.3731,single_source_unverified
+Adroit Industries (India),2026-09-30,134.0,235.0,75.3731,single_source_unverified,134.0,235.0,75.3731,single_source_unverified
 Anand Seamless,2026-09-29,72.0,,,no_source,72.0,,,no_source
+R.K. Fashion Accessories Limited,2026-10-12,,,,single_source_unverified,,80.0,,single_source_unverified
+Nityas Gems and Jewellery Limited,2026-10-08,,,,reconciled_2_sources,,81.0,,reconciled_2_sources
+Vishal Nirmiti Limited,2026-10-08,,,,reconciled_2_sources,,215.0,,reconciled_2_sources
+Eventions Limited,2026-10-08,,,,single_source_unverified,,111.0,,single_source_unverified
+Papadmalji Agro Foods Limited,2026-10-07,,,,single_source_unverified,,72.3,,single_source_unverified
+Shah Investor's Home Limited,2026-10-06,,,,reconciled_2_sources,,171.0,,reconciled_2_sources
+Srit India Limited,2026-10-06,,,,reconciled_2_sources,,,,reconciled_2_sources
+Orient Cables (India) Limited,2026-10-05,,,,reconciled_2_sources,,449.05,,reconciled_2_sources
+Runwal Enterprises Limited,2026-10-05,,,,reconciled_2_sources,,305.5,,reconciled_2_sources
+German Green Steel and Power Limited,2026-10-05,,,,reconciled_2_sources,,142.75,,reconciled_2_sources
+AceVector Limited,2026-10-05,,,,reconciled_2_sources,,28.31,,reconciled_2_sources
+Himalayan Solar Limited,2026-10-05,,,,single_source_unverified,,85.0,,single_source_unverified
+Bench Mark Infotech Services Limited,2026-10-05,,,,single_source_unverified,,110.0,,single_source_unverified
+Green Asia Impex Limited,2026-10-07,,,,single_source_unverified,,89.0,,single_source_unverified
+HD Fire Protect Limited,2026-10-21,,,,reconciled_2_sources,,334.7,,reconciled_2_sources
+Vaibhav Vyapaar Limited,2026-10-21,,,,no_source,,,,no_source
+Party Cruisers Limited,2026-10-21,,,,no_source,,,,no_source
+Fusion CX Limited,2026-10-22,,,,reconciled_2_sources,,298.5,,reconciled_2_sources
+Ravita Engineering Services Limited,2026-10-22,,,,no_source,,,,no_source
+Zetwerk Manufacturing Businesses Limited,2026-10-23,,,,reconciled_2_sources,,159.125,,reconciled_2_sources
+Tonbo Imaging India Limited,2026-10-23,,,,reconciled_2_sources,,1161.0,,reconciled_2_sources
+Bonfiglioli Transmissions Limited,2026-10-23,,,,reconciled_2_sources,,586.0,,reconciled_2_sources
+Sahajanand Medical Technologies Limited,2026-10-23,,,,reconciled_2_sources,,369.6,,reconciled_2_sources

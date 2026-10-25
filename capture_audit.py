@@ -59,6 +59,9 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
+# A cached bhavcopy under this many rows is a failed download, not a quiet market: every
+# trading day lists thousands of scrips on either exchange.
+THIN_ROWS = 1000
 sys.path.insert(0, str(ROOT))
 import live_markers as LM                                    # noqa: E402
 import trading_day as TD                                     # noqa: E402
@@ -196,6 +199,24 @@ def assert_no_email_catch_up() -> bool:
     return not any(b in body for b in banned)
 
 
+def thin_bhavcopies(days: int = 7, upto=None) -> list[dict]:
+    """Trading days in the window whose cached bhavcopy is implausibly small.
+
+    Why this is in the audit and not only in the fetcher. From 2024-07-02 to 2026-10-22
+    every BSE bhavcopy this project downloaded parsed to ZERO rows - BSE began serving its
+    Angular shell at the old download path, and the row filter was testing BSE's group
+    codes against NSE's series vocabulary. The fetcher is fixed, but the reason the defect
+    survived 154 dates is that nothing ever asked "does this file look like a bhavcopy?".
+
+    Every trading day lists thousands of scrips on either exchange, so a file with fewer
+    than 1,000 rows is a failed download rather than a quiet market. The check reads the
+    cache, so it costs no requests.
+    """
+    import relabel_window as RW
+    want = [f"{d:%Y-%m-%d}" for d in weekdays(upto=upto, days=days)]
+    return RW.audit_bhavcopy_rows(dates=want)
+
+
 def md(a: dict) -> str:
     g = a["gaps"]
     L = ["# Capture audit", "",
@@ -229,6 +250,20 @@ def md(a: dict) -> str:
               f"* listing prices — {lp_say}",
               f"* index closes — {mc_say}",
               ""]
+    thin = a.get("thin_bhavcopies", [])
+    L += ["", "## Bhavcopy plausibility", ""]
+    if not thin:
+        L += ["Every cached bhavcopy for a trading day in the window has at least "
+              f"{THIN_ROWS:,} rows.", ""]
+    else:
+        L += [f"**{len(thin)} cached bhavcopy file(s) in the window are too small to be a "
+              "bhavcopy.** Every trading day lists thousands of scrips, so this is a "
+              "failed download, not a thin market.", "",
+              "| file | exchange | date | rows | why |", "|---|---|---|---|---|"]
+        for h in thin:
+            L.append(f"| `{h['file']}` | {h['exchange']} | {h['date']} | "
+                     f"{h['rows']} | {h['why']} |")
+        L.append("")
     L += ["## Not recoverable, by nature", ""]
     for k, v in UNRECOVERABLE.items():
         L += [f"* **{k}** — {v}"]
@@ -241,14 +276,22 @@ def md(a: dict) -> str:
 
 def main(audit: bool = False, do_catch_up: bool = False, days: int = 7) -> int:
     a = catch_up(days=days) if do_catch_up else {"gaps": gaps(days=days)}
+    a["thin_bhavcopies"] = thin_bhavcopies(days=days)
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(md(a), encoding="utf-8")
     print(json.dumps(a["gaps"], indent=2, default=str))
     g = a["gaps"]
     print(f"\n{REPORT}")
-    if g["clean"]:
+    for h in a.get("thin_bhavcopies", []):
+        print(f"THIN BHAVCOPY: {h['file']} — {h['why']}")
+    if g["clean"] and not a.get("thin_bhavcopies"):
         print("every trading day in the window produced a capture")
         return 0
+    if g["clean"]:
+        # The capture legs ran, so this is not a gap - but a bhavcopy that is not a
+        # bhavcopy is still a red audit, because the prices it fed are missing or wrong.
+        print(f"{len(a['thin_bhavcopies'])} implausible bhavcopy file(s)")
+        return 1 if audit else 0
     print(f"GAPS: 15:00 missed {g['email_gaps']}; day-end missed {g['dayend_gaps']}")
     # Exit non-zero so the scheduled audit goes red and is visible without being read.
     return 1 if audit else 0
@@ -330,6 +373,44 @@ def self_test() -> int:
         "catch_up=True" in src)
     chk("it never calls a live-quote path", "StockReachGraph" not in src
         and "quote" not in src.lower())
+
+    print("\n[T] a bhavcopy that is not a bhavcopy fails the audit")
+    import relabel_window as _RW
+    import tempfile
+    import listing_prices as _LP
+    import pandas as _pd
+    _old = _LP.CACHE
+    try:
+        with tempfile.TemporaryDirectory() as _td:
+            _LP.CACHE = Path(_td)
+            _days = weekdays(upto="2026-01-09", days=7)
+            _d0 = f"{_days[0]:%Y%m%d}"
+            _pd.DataFrame({"symbol": ["A"], "open": [1.0]}).to_csv(
+                _LP.CACHE / f"bse_{_d0}.csv.gz", index=False, compression="gzip")
+            _pd.DataFrame({"symbol": [f"S{i}" for i in range(1200)],
+                           "open": [1.0] * 1200}).to_csv(
+                _LP.CACHE / f"nse_{_d0}.csv.gz", index=False, compression="gzip")
+            _hits = thin_bhavcopies(days=7, upto="2026-01-09")
+            chk("the 1-row BSE file is flagged",
+                any(h["file"] == f"bse_{_d0}.csv.gz" for h in _hits), _hits)
+            chk("the 1,200-row NSE file is not",
+                not any(h["file"] == f"nse_{_d0}.csv.gz" for h in _hits), _hits)
+            chk("the threshold is 1,000 rows", THIN_ROWS == 1000)
+            _rep = md({"gaps": gaps(days=7, upto="2026-01-09"),
+                       "thin_bhavcopies": _hits})
+            chk("the report names the file", f"bse_{_d0}.csv.gz" in _rep)
+            chk("the report says it is a failed download, not a thin market",
+                "not a thin market" in _rep)
+            _clean = md({"gaps": gaps(days=7, upto="2026-01-09"),
+                         "thin_bhavcopies": []})
+            chk("a clean window says so instead of staying silent",
+                "has at least" in _clean)
+    finally:
+        _LP.CACHE = _old
+    _msrc = inspect.getsource(main)
+    chk("main runs the check every audit", "thin_bhavcopies(days=days)" in _msrc)
+    chk("and a thin file makes the audit go red even when no leg was missed",
+        "implausible bhavcopy file(s)" in _msrc)
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

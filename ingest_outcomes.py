@@ -407,12 +407,28 @@ def backfill_prices(dry: bool = False) -> pd.DataFrame:
         offer = pd.to_numeric(pd.Series([r.get("offer_price")]), errors="coerce").iloc[0]
         rec = LP.reconcile(nd, bd, None if pd.isna(offer) else float(offer))
         if rec.get("listing_gain_pct") is None:
+            # TWO different failures used to print the same word. "NOT FOUND" was shown
+            # both when neither bhavcopy carried the scrip and when both did but the row
+            # had no OFFER price - and in the second case the prices, which are real and
+            # as-reported, were thrown away while the row was still labelled
+            # `reconciled_2_sources`. A label claiming two-source agreement about a value
+            # that is not stored is worse than no label.
+            got_px = rec.get("listing_open") is not None
+            if got_px:
+                d.loc[i, "listing_open"] = rec.get("listing_open")
+                d.loc[i, "listing_close"] = rec.get("listing_close")
+                d.loc[i, "gain_source_a"] = nd.get("open")
+                d.loc[i, "gain_source_b"] = bd.get("open")
             d.loc[i, "reconciled"] = rec.get("reconciled") or "no_source"
-            d.loc[i, "note"] = (f"{r.get('note','')} | backfill {day}: symbol "
+            why = ("prices captured but NO OFFER PRICE on the row, so the gain stays "
+                   "NULL - see rescore_unpriced" if got_px
+                   else "scrip in neither bhavcopy")
+            d.loc[i, "note"] = (f"{r.get('note','')} | backfill {day}: {why}; symbol "
                                 f"{symbol or 'NONE'} via {how_sym}; "
                                 f"nse {nnote}; bse {bnote}")[:600]
             print(f"  {str(r['ipo'])[:30]:32s} {day}  sym={str(symbol):12s} "
-                  f"NOT FOUND  {how_sym[:36]}")
+                  f"{'NO OFFER PRICE' if got_px else 'NOT IN BHAVCOPY'}  "
+                  f"open={rec.get('listing_open')}  {rec.get('reconciled')}")
             continue
         d.loc[i, "listing_open"] = rec.get("listing_open")
         d.loc[i, "listing_close"] = rec.get("listing_close")

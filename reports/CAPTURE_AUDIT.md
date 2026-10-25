@@ -1,6 +1,6 @@
 # Capture audit
 
-Window: the last 7 days, NSE trading days only (weekends and NSE holidays both excluded; calendar in data/nse_trading_holidays.csv). Generated 2026-10-24 14:49 IST.
+Window: the last 7 days, NSE trading days only (weekends and NSE holidays both excluded; calendar in data/nse_trading_holidays.csv). Generated 2026-10-25 18:29 IST.
 
 **Every trading day in the window produced a capture.**
 
@@ -16,6 +16,11 @@ A gap means the job left *no attempt at all* — an infrastructure failure. A jo
 ## What catch-up recovered
 
 Nothing to recover.
+
+## Bhavcopy plausibility
+
+Every cached bhavcopy for a trading day in the window has at least 1,000 rows.
+
 ## Not recoverable, by nature
 
 * **final_subscription** — Chittorgarh removes the subscription table at allotment (H1), so a missed day's final figure does not exist anywhere we may fetch from. Not retryable.
