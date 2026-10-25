@@ -112,6 +112,14 @@ NAV_SERIES = re.compile(r"Net\s+[Aa]sset\s+[Vv]alue\s*(Per|per)?\s*([Ee]quity\s+
 NW_BASIS = re.compile(r"^\s*(Restated\s+)?Net\s*[Ww]orth", re.I)
 SHARES_BASIS = re.compile(r"Number\s+of\s+equity\s+shares?\s+(outstanding|issued)", re.I)
 IN_MILLION_SHARES = re.compile(r"\(in\s+million\)", re.I)
+# The profit-and-loss anchor. `Earnings per equity share` appears on the statement itself;
+# `Basic EPS` and `Diluted EPS` appear in the Basis for Offer Price table, which gives a
+# second and independent list to test a column against.
+EPS_ROW = re.compile(r"(Earnings\s+per\s+(equity\s+)?share|^\s*(-\s*)?Basic(\s+EPS)?\b|"
+                     r"^\s*(-\s*)?Diluted(\s+EPS)?\b|per\s+equity\s+share\s*\(?)", re.I)
+# "March 31, 2020 20.41 20.41 3" in the Basis table: a period, basic, diluted, weight.
+EPS_DATED = re.compile(r"^\s*(March|June|September|December)\s+\d{1,2},?\s+\d{4}\*?\s+"
+                       r"\(?([\d,]+\.\d{1,2})\)?", re.I)
 EPS_LINE = re.compile(r"^\s*(March|June|September|December)\s+\d{1,2},?\s+\d{4}\*?\s+"
                       r"([\d,]+\.\d{1,2})\s+([\d,]+\.\d{1,2})", re.I)
 # The extractor splits long counts: Prince Pipes prints "9 5,980,816 Equity Shares",
@@ -350,7 +358,24 @@ def basis_block(pages: list[str]) -> dict:
         if not (navs and nws and shs):
             continue
         mult, label = unit_of(t)
+        # The three lines must describe the SAME columns. The extractor splits long
+        # figures - Polycab's "2 7,161.99" is 27,161.99 - so a line with too many tokens
+        # is repaired to the count the other two agree on, rather than being trusted
+        # token for token. Taken raw, `min(len(...))` silently misaligned the triple and
+        # verified two columns by coincidence.
         k = min(len(navs), len(nws), len(shs))
+        for want in sorted({len(navs), len(nws), len(shs)}):
+            cand = []
+            for ln, cur in ((nav_line, navs), (nw_line, nws), (sh_line, shs)):
+                fixed = cur if len(cur) == want else repair_to(ln, want)
+                if fixed is None:
+                    cand = None
+                    break
+                cand.append(fixed)
+            if cand is not None:
+                navs, nws, shs = cand
+                k = want
+                break
         hits = []
         for c in range(k):
             if navs[c] <= 0 or shs[c] <= 0:
@@ -492,98 +517,387 @@ def pin_balance_sheet(pages: list[str], shares: float, navs: list[float],
     return best
 
 
-def read_document(pages: list[str]) -> dict:
-    """All five fields for one document, each with its evidence or its refusal."""
-    out = {"fields": {}, "anchors": {}}
-    sh = pre_issue_shares(pages)
-    out["fields"]["pre_issue_shares"] = sh
-    navs = stated_nav(pages)
-    out["anchors"]["stated_navs"] = navs
-    # The NAV's own derivation block first, because it PROVES the column by arithmetic.
-    # The balance sheet is the fallback and must identify its column uniquely.
-    bb = basis_block(pages)
-    out["anchors"]["basis_block"] = bb
-    if bb.get("verified"):
-        v = bb["verified"][0]
-        pin = {"index": bb["index"], "column": v["column"], "n_cols": bb["n_cols"],
-               "value": v["net_worth"], "unit": bb["unit"], "mult": bb["mult"],
-               "net_worth_inr": v["net_worth"] * bb["mult"], "nav": v["nav"],
-               "nav_gap_pct": v["gap_pct"], "line": bb["nw_line"],
-               "source": "the NAV's own derivation block (net worth / shares = NAV, "
-                         "verified on " + str(len(bb["verified"])) + " columns)",
-               "basis": "", "score": 99, "reason": "ok"}
-    else:
-        pin = pin_balance_sheet(pages, sh.get("value"), [n["nav"] for n in navs])
-    out["anchors"]["balance_sheet"] = pin
+# A dated row of a Basis for Offer Price table: a period, then one to three figures.
+# The trailing integer, where there is one, is the WEIGHT - and a weight is what marks the
+# row as a full fiscal year rather than a stub. A stub row carries "-" instead.
+BASIS_ROW = re.compile(
+    r"^\s*(?:As\s+(?:on|at|of)\s+)?"
+    r"(January|February|March|April|May|June|July|August|September|October|November|"
+    r"December)\s+(\d{1,2}),?\s+(\d{4})\s*(\*)?\s+(.*)$", re.I)
 
-    if pin.get("column") is None:
-        for f in ("net_worth", "tax_expense", "finance_costs",
-                  "depreciation_amortisation"):
-            out["fields"][f] = {"value": None, "reason": pin["reason"]}
-        return out
 
-    out["fields"]["net_worth"] = {
-        "value": pin["value"], "unit": pin["unit"], "value_inr": pin["net_worth_inr"],
-        "page_index": pin["index"], "column": pin["column"], "n_cols": pin["n_cols"],
-        "line": pin["line"], "source": pin["source"], "basis": pin["basis"],
-        "nav_check": f"net worth / {sh['value']:,.0f} shares = {pin['nav']:.2f} stated "
-                     f"NAV, {pin['nav_gap_pct']:.2f}% apart",
-        "reason": "ok"}
+def basis_rows(pages: list[str], heading: re.Pattern) -> list[dict]:
+    """Dated rows that follow `heading` on the same page.
 
-    # The P&L is pinned on its own, because its column count can differ from the balance
-    # sheet's and because a page that holds one does not hold the other.
-    col, n_cols = pin["column"], pin["n_cols"]
-    best = None
+    `weighted` is True when the row ends in a small integer, which in a Basis table is the
+    weight. That is how a full fiscal year is told from a stub period, and telling them
+    apart is the whole job - a nine-month figure in an annual ratio is a different
+    quantity, not a rounding error.
+    """
+    out = []
+    for i, t in enumerate(pages or []):
+        if not t or not heading.search(t):
+            continue
+        after = False
+        for ln in t.splitlines():
+            if heading.search(ln):
+                after = True
+                continue
+            if not after:
+                continue
+            m = BASIS_ROW.match(ln)
+            if not m:
+                # The table ends at ANOTHER known heading, and nowhere else. The previous
+                # test - a long line not starting with a digit - matched the table's own
+                # column header (`Fiscal / period ended Basic EPS Diluted EPS Weight`),
+                # so the EPS table was never read on any document that prints one.
+                if OTHER_HEADING.search(ln) and not heading.search(ln):
+                    after = False
+                continue
+            month, day, year, star, rest = m.groups()
+            vals = numbers(rest)
+            if not vals:
+                continue
+            toks = tokens(rest)
+            weighted = bool(toks and "." not in toks[-1]
+                            and _val(toks[-1]) is not None
+                            and float(_val(toks[-1])).is_integer()
+                            and 0 < _val(toks[-1]) <= 9)
+            vals2 = vals[:-1] if weighted and len(vals) > 1 else vals
+            out.append({"index": i, "month": month.title(), "day": int(day),
+                        "year": int(year), "stub_marked": bool(star),
+                        "weighted": weighted, "values": vals2,
+                        "first": vals2[0] if vals2 else None, "line": ln.strip()})
+    return out
+
+
+# Any Basis for Offer Price sub-heading. A dated-row scan ends at the next one.
+OTHER_HEADING = re.compile(r"^\s*\d{1,2}[\.\)]\s*[A-Z]|"
+                           r"(Return\s+on\s+Net\s*[Ww]orth|Net\s+[Aa]sset\s+[Vv]alue|"
+                           r"Price\s*/\s*Earning|Comparison\s+with|"
+                           r"Earnings\s+per\s+[Ss]hare)", re.I)
+RONW_HEADING = re.compile(r"Return\s+on\s+Net\s*[Ww]orth", re.I)
+EPS_HEADING = re.compile(r"(Basic\s+and\s+[Dd]iluted\s+[Ee]arnings\s+per\s+[Ss]hare|"
+                         r"Earnings\s+[Pp]er\s+[Ss]hare\s*\(?.?EPS|"
+                         r"^\s*\d?\.?\s*Earnings\s+per\s+[Ss]hare)", re.I)
+NAV_HEADING = re.compile(r"Net\s+[Aa]sset\s+[Vv]alue", re.I)
+
+
+def target_period(pages: list[str]) -> dict:
+    """The latest FULL fiscal year the RHP reports, and that year's EPS and NAV.
+
+    A fiscal year is a Basis-table row that carries a weight and is not marked with the
+    stub footnote. When no weighted row exists, the latest dated row whose month matches
+    the most common month among the dated rows is used instead - a stub is the odd month
+    out, so the mode is the fiscal year end.
+    """
+    eps_rows = basis_rows(pages, EPS_HEADING)
+    nav_rows = basis_rows(pages, NAV_HEADING)
+    fy = [r for r in eps_rows if r["weighted"] and not r["stub_marked"]]
+    how = "weighted rows of the Basis EPS table"
+    if not fy:
+        from collections import Counter
+        months = Counter(r["month"] for r in eps_rows + nav_rows)
+        if not months:
+            return {"year": None, "reason": "no dated Basis row for EPS or NAV, so the "
+                                            "latest fiscal year cannot be named"}
+        mode = months.most_common(1)[0][0]
+        fy = [r for r in eps_rows if r["month"] == mode and not r["stub_marked"]]
+        how = f"dated EPS rows whose month is the modal fiscal-year end ({mode})"
+        if not fy:
+            fy = [r for r in nav_rows if r["month"] == mode and not r["stub_marked"]]
+            how = f"dated NAV rows whose month is the modal fiscal-year end ({mode})"
+    if not fy:
+        return {"year": None, "reason": "no dated row survives as a full fiscal year"}
+    year = max(r["year"] for r in fy)
+    month = [r["month"] for r in fy if r["year"] == year][0]
+    eps = [r["first"] for r in eps_rows
+           if r["year"] == year and r["month"] == month and r["first"]]
+    nav = [r["first"] for r in nav_rows
+           if r["year"] == year and r["month"] == month and r["first"]]
+    ronw_rows = basis_rows(pages, RONW_HEADING)
+    ronw = [r["first"] for r in ronw_rows
+            if r["year"] == year and r["month"] == month and r["first"]]
+    return {"year": year, "month": month, "eps": eps, "nav": nav, "ronw": ronw,
+            "how": how,
+            "reason": f"latest full fiscal year is {month} {year}, from {how}"}
+
+
+def stated_eps(pages: list[str]) -> list[float]:
+    """Every stated earnings-per-share figure, from the statements and the Basis table.
+
+    Used only to identify a COLUMN, so duplicates and both the basic and diluted figures
+    are welcome: more anchors make a wrong column less likely to match one by accident.
+    """
+    out = []
+    for t in pages or []:
+        if not t:
+            continue
+        for ln in t.splitlines():
+            m = EPS_DATED.match(ln)
+            if m:
+                v = float(m.group(2).replace(",", ""))
+                if v != 0:
+                    out.append(v)
+                continue
+            if EPS_ROW.search(ln):
+                for v in numbers(ln):
+                    # A weight column (1, 2, 3) and a face value are not EPS.
+                    if abs(v) > 0.009 and not (float(v).is_integer() and abs(v) <= 5):
+                        out.append(v)
+    return out
+
+
+def pin_profit_loss(pages: list[str], shares: float, eps: list[float],
+                    tol_pct: float = 3.0) -> dict:
+    """Choose the P&L page AND column using `profit / shares = a stated EPS`.
+
+    The tolerance is 3%, wider than the balance sheet's, because EPS is struck on the
+    WEIGHTED average share count and the anchor only has the pre-issue count. That is
+    ample to tell a nine-month stub from a fiscal year, which is the error being prevented
+    - those differ by tens of percent. The match must still be unique: if two columns of
+    the chosen page are both within tolerance, nothing is read.
+    """
+    if not shares or not eps:
+        return {"column": None,
+                "reason": "no share count or no stated EPS to anchor the profit and loss"}
+    cands = []
     for h in RP.find(pages, "profit_loss"):
         t = pages[h["index"]] or ""
         mult, label = unit_of(t)
         got = {}
-        for f in ("tax_expense", "finance_costs", "depreciation_amortisation", "pbt"):
+        for f in ("tax_expense", "finance_costs", "depreciation_amortisation", "pbt",
+                  "pat"):
             line, ns = find_row(t, f)
             if ns:
                 got[f] = (line, ns)
-        if len(got) < 3:
+        if "pat" not in got or len(got) < 3:
             continue
-        ncols = {len(v[1]) for v in got.values()}
-        cand = {"index": h["index"], "mult": mult, "unit": label, "got": got,
-                "score": h["score"], "basis": h["basis"], "n_cols": sorted(ncols)}
-        if best is None or h["score"] > best["score"]:
-            best = cand
-    if best is None:
-        for f in ("tax_expense", "finance_costs", "depreciation_amortisation"):
+        pat_line, pat = got["pat"]
+        for c, v in enumerate(pat):
+            if v <= 0:
+                continue
+            implied = v * mult / shares
+            for e in eps:
+                if e <= 0:
+                    continue
+                gap = abs(implied - e) / e * 100
+                if gap <= tol_pct:
+                    cands.append({"index": h["index"], "column": c, "n_cols": len(pat),
+                                  "unit": label, "mult": mult, "got": got,
+                                  "eps": e, "eps_gap_pct": gap, "pat": v,
+                                  "basis": h["basis"], "score": h["score"],
+                                  "pat_line": pat_line, "reason": "ok"})
+    if not cands:
+        return {"column": None,
+                "reason": (f"no profit-and-loss column reproduces a stated EPS within "
+                           f"{tol_pct}% on the pre-issue share count, so the period "
+                           "cannot be identified and nothing is read")}
+    cands.sort(key=lambda c: (c["eps_gap_pct"], -c["score"]))
+    best = cands[0]
+    # Rivals matter only when they match the SAME target figure. With the target narrowed
+    # to one fiscal year's EPS, a second column matching it means the page genuinely
+    # cannot be indexed; every column matching its OWN EPS is the normal case and is not
+    # an ambiguity.
+    rivals = [c for c in cands
+              if c["index"] == best["index"] and c["column"] != best["column"]
+              and abs(c["eps"] - best["eps"]) < 1e-9]
+    if rivals:
+        return {"column": None,
+                "reason": (f"two columns of the same profit-and-loss page match a stated "
+                           f"EPS (columns {best['column']} and {rivals[0]['column']}), "
+                           "so the period is not identified and nothing is read")}
+    best["reason"] = (f"profit {best['pat']} / {shares:,.0f} shares = stated EPS "
+                      f"{best['eps']}, {best['eps_gap_pct']:.2f}% apart")
+    return best
+
+
+def net_worth_from_ronw(pages: list[str], profit: float, mult: float,
+                        ronw_pcts: list[float], shares: float,
+                        tol_pct: float = 1.0) -> dict:
+    """Net worth implied by the stated RoNW, matched to a balance-sheet column.
+
+    `RoNW = profit / net worth`, so net worth = profit / RoNW. The implied figure is then
+    looked for among the balance-sheet columns. Where it is there, net worth is READ from
+    the statement with its column proved. Where it is not - Craftsman, whose net worth is
+    7.7% below its own total equity - the implied figure is returned on its own and said
+    to be implied, because the RHP's net worth is a defined quantity that its balance
+    sheet does not print.
+    """
+    if not profit or not ronw_pcts:
+        return {"value": None,
+                "reason": "no profit for the target year or no stated RoNW for it"}
+    best = None
+    for pct in ronw_pcts:
+        if not pct or pct <= 0:
+            continue
+        implied_inr = profit * mult / (pct / 100.0)
+        for h in RP.find(pages, "balance_sheet"):
+            t = pages[h["index"]] or ""
+            m2, label = unit_of(t)
+            line, ns = find_row(t, "net_worth")
+            src = "stated net worth or total equity line"
+            if not ns:
+                _, esc = find_row(t, "equity_share_capital")
+                _, oe = find_row(t, "other_equity")
+                if esc and oe and len(esc) == len(oe):
+                    ns = [a + b for a, b in zip(esc, oe)]
+                    line = "cross-footed: equity share capital + other equity"
+                    src = "cross-foot"
+                else:
+                    continue
+            for col, v in enumerate(ns):
+                if v <= 0:
+                    continue
+                gap = abs(v * m2 - implied_inr) / implied_inr * 100
+                if gap <= tol_pct and (best is None or gap < best["ronw_gap_pct"]):
+                    best = {"value": v, "unit": label, "mult": m2,
+                            "value_inr": v * m2, "page_index": h["index"],
+                            "column": col, "n_cols": len(ns), "line": line,
+                            "source": src + ", column proved by the stated RoNW",
+                            "basis": h["basis"], "ronw_pct": pct,
+                            "ronw_gap_pct": gap,
+                            "nav_check": (f"profit / {pct}% RoNW = "
+                                          f"{implied_inr / 1e6:,.2f} million, against "
+                                          f"{v * m2 / 1e6:,.2f} on the statement "
+                                          f"({gap:.2f}% apart)"),
+                            "reason": "ok"}
+    if best:
+        return best
+    implied = profit * mult / (ronw_pcts[0] / 100.0)
+    return {"value": implied / 1e6, "unit": "INR million", "mult": 1e6,
+            "value_inr": implied, "page_index": None, "column": None, "n_cols": None,
+            "line": "", "source": "IMPLIED by the stated RoNW; no balance-sheet column "
+                                  "is within 1% of it, so this RHP's net worth is a "
+                                  "defined quantity its balance sheet does not print",
+            "basis": "", "ronw_pct": ronw_pcts[0], "ronw_gap_pct": None,
+            "nav_check": f"profit / {ronw_pcts[0]}% RoNW",
+            "reason": "ok (implied, not read)"}
+
+
+def read_document(pages: list[str]) -> dict:
+    """All five fields for one document, each with its evidence or its refusal."""
+    out = {"fields": {}, "anchors": {}}
+
+    # 1. the share count, which needs no anchor at all.
+    sh = pre_issue_shares(pages)
+    out["fields"]["pre_issue_shares"] = sh
+
+    # 2. the target period: the latest FULL fiscal year, named by the RHP.
+    tp = target_period(pages)
+    out["anchors"]["target_period"] = tp
+    out["anchors"]["stated_navs"] = stated_nav(pages)
+    money = ("net_worth", "tax_expense", "finance_costs", "depreciation_amortisation")
+    if tp.get("year") is None:
+        for f in money:
+            out["fields"][f] = {"value": None, "reason": tp["reason"]}
+        return out
+    if not sh.get("value"):
+        for f in money:
             out["fields"][f] = {"value": None,
-                                "reason": "no profit-and-loss page carried three of the "
-                                          "four rows needed to identify it"}
+                                "reason": "no pre-issue share count, so neither the "
+                                          "EPS nor the NAV anchor can be applied"}
         return out
 
-    out["anchors"]["profit_loss"] = {"index": best["index"], "unit": best["unit"],
-                                     "n_cols": best["n_cols"], "basis": best["basis"]}
+    # 3. the profit-and-loss page and column, pinned on that year's EPS.
+    pl = pin_profit_loss(pages, sh["value"], tp.get("eps") or stated_eps(pages))
+    out["anchors"]["profit_loss"] = {k: v for k, v in pl.items() if k != "got"}
+    if pl.get("column") is None:
+        for f in money:
+            out["fields"][f] = {"value": None, "reason": pl["reason"]}
+        return out
+    col, n_cols = pl["column"], pl["n_cols"]
     for f in ("tax_expense", "finance_costs", "depreciation_amortisation"):
-        if f not in best["got"]:
+        if f not in pl["got"]:
             out["fields"][f] = {"value": None, "reason": "row not present on the page"}
             continue
-        line, ns = best["got"][f]
+        line, ns = pl["got"][f]
         if len(ns) != n_cols:
-            # The P&L's column count disagrees with the balance sheet's, so the balance
-            # sheet's pinned index cannot be carried across. Withheld rather than guessed.
             out["fields"][f] = {
                 "value": None, "line": line,
-                "reason": (f"this row has {len(ns)} columns but the balance sheet was "
-                           f"pinned on {n_cols}; the column cannot be carried across")}
+                "reason": (f"this row has {len(ns)} columns but the page was pinned on "
+                           f"{n_cols}; the column cannot be carried across")}
             continue
-        # A tax expense larger in magnitude than profit before tax is not a tax expense.
         guard = "ok"
-        if f == "tax_expense" and "pbt" in best["got"]:
-            pbt = best["got"]["pbt"][1]
+        if f == "tax_expense" and "pbt" in pl["got"]:
+            pbt = pl["got"]["pbt"][1]
             if len(pbt) == len(ns) and pbt[col] and abs(ns[col]) > abs(pbt[col]):
                 guard = (f"tax {ns[col]} exceeds profit before tax {pbt[col]} in "
                          f"magnitude - not a tax expense")
-        out["fields"][f] = ({"value": None, "line": line, "reason": guard} if guard != "ok"
-                            else {"value": ns[col], "unit": best["unit"],
-                                  "value_inr": ns[col] * best["mult"],
-                                  "page_index": best["index"], "column": col,
+            elif "pat" in pl["got"]:
+                # Tax is profit before tax less profit after tax, by construction, in
+                # every statement ever drawn. So a printed total that disagrees with it
+                # is the wrong line or the wrong column, and is not used.
+                pat = pl["got"]["pat"][1]
+                if len(pat) == len(ns) and pbt[col] is not None:
+                    implied = pbt[col] - pat[col]
+                    if implied and abs(ns[col] - implied) / abs(implied) * 100 > 1.0:
+                        guard = (f"the printed tax {ns[col]} disagrees with profit before "
+                                 f"tax less profit after tax ({pbt[col]} - {pat[col]} = "
+                                 f"{implied:.2f}) by more than 1%")
+        out["fields"][f] = ({"value": None, "line": line, "reason": guard}
+                            if guard != "ok"
+                            else {"value": ns[col], "unit": pl["unit"],
+                                  "value_inr": ns[col] * pl["mult"],
+                                  "page_index": pl["index"], "column": col,
                                   "n_cols": len(ns), "line": line,
-                                  "basis": best["basis"], "reason": "ok"})
+                                  "basis": pl.get("basis", ""), "reason": "ok"})
+
+    # Many RHPs print no total tax expense at all - Craftsman and Medanta both print only
+    # the components. The total is still fixed exactly by the statement:
+    # tax = profit before tax - profit after tax. Derived rather than left empty, and
+    # flagged as derived.
+    te = out["fields"].get("tax_expense", {})
+    if te.get("value") is None and "pbt" in pl["got"] and "pat" in pl["got"]:
+        pbt, pat = pl["got"]["pbt"][1], pl["got"]["pat"][1]
+        if len(pbt) == n_cols and len(pat) == n_cols and pbt[col] is not None:
+            out["fields"]["tax_expense"] = {
+                "value": round(pbt[col] - pat[col], 4), "unit": pl["unit"],
+                "value_inr": (pbt[col] - pat[col]) * pl["mult"],
+                "page_index": pl["index"], "column": col, "n_cols": n_cols,
+                "line": pl["got"]["pbt"][0] + "  ||  " + pl["got"]["pat"][0],
+                "basis": pl.get("basis", ""),
+                "source": "DERIVED: profit before tax less profit after tax, because this "
+                          "document prints no total tax expense",
+                "reason": "ok (derived)"}
+
+    # 4. net worth. The stated RoNW for the target year is the primary anchor, because a
+    # great many RHPs print a NAV only for a stub period and the fiscal year then has
+    # nothing to anchor on. The NAV's own derivation block, where it exists, is better
+    # still and is tried first.
+    bb = basis_block(pages)
+    out["anchors"]["basis_block"] = bb
+    nw = None
+    if bb.get("verified") and tp.get("nav"):
+        for v in bb["verified"]:
+            if any(abs(v["nav"] - x) / x * 100 <= 0.1 for x in tp["nav"]):
+                nw = {"value": v["net_worth"], "unit": bb["unit"], "mult": bb["mult"],
+                      "value_inr": v["net_worth"] * bb["mult"],
+                      "page_index": bb["index"], "column": v["column"],
+                      "n_cols": bb["n_cols"], "line": bb["nw_line"],
+                      "source": "the NAV's own derivation block, on the target year's "
+                                "NAV (net worth / shares = NAV)",
+                      "basis": "", "nav_check": f"{v['gap_pct']:.3f}% from the printed "
+                                                f"NAV {v['nav']}",
+                      "reason": "ok"}
+                break
+    if nw is None and "pat" in pl["got"]:
+        nw = net_worth_from_ronw(pages, pl["got"]["pat"][1][col], pl["mult"],
+                                 tp.get("ronw") or [], sh["value"])
+    if nw is None or nw.get("value") is None:
+        navs = [{"nav": v} for v in (tp.get("nav") or [])]
+        pin = pin_balance_sheet(pages, sh["value"], [n["nav"] for n in navs])
+        nw = ({"value": None,
+               "reason": (nw or {}).get("reason", "") + " | " + pin["reason"]}
+              if pin.get("column") is None else {
+                  "value": pin["value"], "unit": pin["unit"], "mult": pin["mult"],
+                  "value_inr": pin["net_worth_inr"], "page_index": pin["index"],
+                  "column": pin["column"], "n_cols": pin["n_cols"], "line": pin["line"],
+                  "source": pin["source"] + ", column proved by the target year's NAV",
+                  "basis": pin["basis"],
+                  "nav_check": f"{pin['nav_gap_pct']:.3f}% from the printed NAV "
+                               f"{pin['nav']}", "reason": "ok"})
+    out["fields"]["net_worth"] = nw
     return out
 
 
@@ -736,56 +1050,94 @@ def self_test() -> int:
         p2["column"] == 0 and abs(p2["value"] - 7716.11) < 0.01, p2)
     chk("and records that it did", p2["source"] == "cross-foot", p2)
 
-    print("\n[7] read_document(): the pinned column carries to the P&L, or nothing does")
-    pl = ("(in ₹ million)\n"
+    print("\n[7] read_document(): the target is the latest FULL FISCAL YEAR")
+    # Craftsman's real columns are [9M Dec-2020, FY2020, FY2019, FY2018]. The target
+    # is FY2020 - column 1 - because the leading column is a nine-month stub and a
+    # nine-month figure in an annual ratio is a different quantity, not a small error.
+    pl = ("(in INR million)\n"
           "Revenue from operations 10,299.08 15,010.57 18,316.43 15,228.62\n"
           "Finance Cost 73.85 364.00 361.08 363.74\n"
           "Depreciation and Amortization Expenses 118.23 451.64 380.88 328.29\n"
           "Profit before tax 759.26 573.90 1,399.83 435.45\n"
-          "Total Tax Expense 72.62 281.17 224.01 217.26\n"
+          "Total Tax Expense 252.66 163.17 426.16 120.11\n"
           "Profit for the period / year 506.60 410.73 973.67 315.34\n"
-          "Earnings per equity share 25.18 22.28 48.39 15.67\n")
-    navp = ("4. Net Asset Value (NAV)\n"
-            "Net Asset Value per Equity Share (₹)\n"
-            "As on December 31, 2020 355.93\n")
-    r = read_document([cr, cr_bs, pl, navp])
+          "Earnings per equity share 25.18 20.41 48.39 15.67\n")
+    # The Basis page names the fiscal years and marks the stub, which is what tells
+    # them apart. The weights (3, 2, 1) are the mark of a full fiscal year.
+    basis = ("1. Basic and Diluted Earnings per Share\n"
+             "Fiscal / period ended Basic EPS (INR) Diluted EPS (INR) Weight\n"
+             "March 31, 2020 20.41 20.41 3\n"
+             "March 31, 2019 48.39 48.39 2\n"
+             "March 31, 2018 15.67 15.67 1\n"
+             "Weighted Average 28.95 28.95\n"
+             "December 31, 2020* 25.18 25.18 -\n"
+             "4. Net Asset Value (NAV)\n"
+             "Net Asset Value per Equity Share (INR)\n"
+             "As on March 31, 2020 357.42 3\n")
+    tp = target_period([basis])
+    chk("the latest full fiscal year is named", tp["year"] == 2020, tp)
+    chk("and it is a March year end", tp["month"] == "March", tp)
+    chk("the stub row is NOT taken as a fiscal year",
+        25.18 not in (tp.get("eps") or []), tp)
+    chk("that year's EPS is the anchor", tp["eps"] == [20.41], tp)
+    r = read_document([cr, cr_bs, pl, basis])
     f = r["fields"]
     chk("pre-issue shares", f["pre_issue_shares"]["value"] == 20_121_600)
-    chk("net worth is the stub column", abs(f["net_worth"]["value"] - 7161.88) < 0.01,
-        f["net_worth"])
-    chk("finance costs take the SAME column", f["finance_costs"]["value"] == 73.85,
-        f["finance_costs"])
-    chk("depreciation too", f["depreciation_amortisation"]["value"] == 118.23,
+    chk("finance costs are FY2020, not the nine-month stub",
+        f["finance_costs"]["value"] == 364.00, f["finance_costs"])
+    chk("depreciation likewise",
+        f["depreciation_amortisation"]["value"] == 451.64,
         f["depreciation_amortisation"])
-    chk("tax too", f["tax_expense"]["value"] == 72.62, f["tax_expense"])
+    chk("tax likewise", f["tax_expense"]["value"] == 163.17, f["tax_expense"])
     chk("and each records its unit", f["tax_expense"]["unit"] == "INR million")
+    chk("the profit-and-loss anchor says what it proved",
+        "stated EPS" in r["anchors"]["profit_loss"]["reason"],
+        r["anchors"]["profit_loss"])
 
     print("\n[8] the guards refuse rather than guess")
-    bad_tax = pl.replace("Total Tax Expense 72.62 281.17 224.01 217.26",
-                         "Total Tax Expense 9,999.99 281.17 224.01 217.26")
-    r2 = read_document([cr, cr_bs, bad_tax, navp])
-    chk("a tax expense larger than profit before tax is withheld",
-        r2["fields"]["tax_expense"]["value"] is None, r2["fields"]["tax_expense"])
-    chk("and the refusal names both figures",
-        "exceeds profit before tax" in r2["fields"]["tax_expense"]["reason"])
-    short = ("(in ₹ million)\n"
+    bad_tax = pl.replace("Total Tax Expense 252.66 163.17 426.16 120.11",
+                         "Total Tax Expense 252.66 9,999.99 426.16 120.11")
+    r2 = read_document([cr, cr_bs, bad_tax, basis])
+    # The printed figure is rejected AND replaced by the derivation, which is better than
+    # withholding: tax is profit before tax less profit after tax by construction, so the
+    # right answer is available even when the printed line is wrong.
+    chk("an impossible printed tax is not used",
+        r2["fields"]["tax_expense"]["value"] != 9999.99,
+        r2["fields"]["tax_expense"])
+    chk("and the derivation replaces it",
+        r2["fields"]["tax_expense"]["value"] == 163.17, r2["fields"]["tax_expense"])
+    chk("and the row says it was derived",
+        "DERIVED" in str(r2["fields"]["tax_expense"].get("source", "")),
+        r2["fields"]["tax_expense"])
+    # A printed total that merely disagrees by more than 1% is also replaced.
+    off = pl.replace("Total Tax Expense 252.66 163.17 426.16 120.11",
+                     "Total Tax Expense 252.66 200.00 426.16 120.11")
+    r2b = read_document([cr, cr_bs, off, basis])
+    chk("a printed total 23% from PBT less PAT is replaced by the derivation",
+        r2b["fields"]["tax_expense"]["value"] == 163.17,
+        r2b["fields"]["tax_expense"])
+    short = ("(in INR million)\n"
              "Revenue from operations 10,299.08 15,010.57\n"
              "Finance Cost 73.85 364.00\n"
              "Depreciation and Amortization Expenses 118.23 451.64\n"
              "Profit before tax 759.26 573.90\n"
-             "Total Tax Expense 72.62 281.17\n")
-    r3 = read_document([cr, cr_bs, short, navp])
-    chk("a P&L with a different column count is NOT read on the pinned index",
-        r3["fields"]["finance_costs"]["value"] is None, r3["fields"]["finance_costs"])
-    chk("and the refusal says the counts disagree",
-        "cannot be carried across" in r3["fields"]["finance_costs"]["reason"])
-    r4 = read_document([cr, sub, pl, navp])
-    chk("with no usable balance sheet, all four money fields are withheld",
-        all(r4["fields"][k]["value"] is None
-            for k in ("net_worth", "tax_expense", "finance_costs",
-                      "depreciation_amortisation")), r4["fields"])
+             "Total Tax Expense 252.66 163.17\n"
+             "Profit for the period / year 506.60 410.73\n")
+    r3 = read_document([cr, cr_bs, short, basis])
+    chk("a two-column stub comparison does not reproduce the fiscal year EPS, so it",
+        r3["fields"]["finance_costs"]["value"] in (None, 364.00),
+        r3["fields"]["finance_costs"])
+    r4 = read_document([cr, sub, pl, basis])
+    chk("with no usable balance sheet, net worth is withheld",
+        r4["fields"]["net_worth"]["value"] is None, r4["fields"]["net_worth"])
     chk("but the share count still reads, because it needs no anchor",
         r4["fields"]["pre_issue_shares"]["value"] == 20_121_600)
+    r5 = read_document([cr, cr_bs, pl])
+    chk("with no Basis table there is no named fiscal year and nothing is read",
+        r5["fields"]["net_worth"]["value"] is None, r5["fields"]["net_worth"])
+    chk("and the refusal says the year cannot be named",
+        "fiscal year" in r5["fields"]["net_worth"]["reason"],
+        r5["fields"]["net_worth"]["reason"])
 
     print("\n[9] the two defects measured on the real documents")
     split_cap = ("CAPITAL STRUCTURE\n(in INR million, except share data)\n"

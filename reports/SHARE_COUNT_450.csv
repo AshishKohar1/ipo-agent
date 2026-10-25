@@ -1,0 +1,31 @@
+company,symbol,value,reason,line,heading,offer_price,issue_size_cr,guard_ok,guard_why,implied_multiple
+AAVAS Financiers Ltd,AAVAS,73723004.0,ok,"73,723,004 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",821,1640.32,True,market cap is 3.7x the issue size,3.689925519654702
+Aditya Birla Sun Life AMC Limited,ABSLAMC,288000000.0,ok,"288,000,000 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",712,2768.26,True,market cap is 7.4x the issue size,7.407396704066813
+Archean Chemical Industries Limited,ACI,103274120.0,ok,"103,274,120 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",407,1462.31,True,market cap is 2.9x the issue size,2.874395089960405
+ACME Solar Holdings Limited,ACMESOLAR,522207910.0,ok,"522,207,910 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",289,2900.0,True,market cap is 5.2x the issue size,5.204071930689655
+Advanced Enzyme Technologies Ltd,ADVENZYMES,21765600.0,ok,"21,765,600 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL
+BEFORE THE OFFER",896,411.49,True,market cap is 4.7x the issue size,4.739356387761549
+Aegis Vopak Terminals Limited,AEGISVOPAK,988842553.0,ok,"988,842,553 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE ISSUE",235,2800.0,True,market cap is 8.3x the issue size,8.299214284107144
+Aeroflex Industries Limited,AEROFLEX,114320370.0,ok,"114,320,370 Equity Shares","Issued, Subscribed and Paid-Up Share Capital before the
+Offer",108,351.0,True,market cap is 3.5x the issue size,3.5175498461538464
+Aether Industries,AETHER,114716318.0,ok,"114,716,318 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP CAPITAL BEFORE THE OFFER",642,808.04,True,market cap is 9.1x the issue size,9.114384950745013
+Afcons Infrastructure Limited,AFCONS,340738269.0,ok,"340,738,269 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",463,5430.0,True,market cap is 2.9x the issue size,2.9053741905524864
+AGS Transact Technologies Limited,AGSTRA,,"no ISSUED, SUBSCRIBED ... BEFORE THE OFFER line with an Equity Shares count",None,None,175,680.0,,no offer price or issue size to check against,
+Anlon Healthcare Ltd.,AHCL,39851500.0,ok,"3,98,51,500 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE ISSUE",91,121.03,True,market cap is 3.0x the issue size,2.996353383458646
+Ajax Engineering Limited,AJAXENGG,114406800.0,ok,"114,406,800 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",629,1268.88,True,market cap is 5.7x the issue size,5.671290996784565
+Akums Drugs and Pharmaceuticals Limited,AKUMS,147356280.0,ok,"147,356,280 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",679,1856.74,True,market cap is 5.4x the issue size,5.388741241099992
+Alkem Laboratories Ltd,ALKEM,119565000.0,ok,"119,565,000 Equity Shares","Issued, subscribed and paid up capital before the Offer",1050,1347.76,True,market cap is 9.3x the issue size,9.314955926871253
+All Time Plastics Ltd.,ALLTIME,55322580.0,ok,"55,322,580 equity shares","ISSUED, SUBSCRIBED AND PAID-UP CAPITAL BEFORE THE OFFER",275,400.6,True,market cap is 3.8x the issue size,3.797730778831752
+Amber Enterprises India Ltd,AMBER,25916855.0,ok,"25,916,855 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP CAPITAL
+BEFORE THE OFFER",859,599.57,True,market cap is 3.7x the issue size,3.713090789232283
+Anand Rathi Wealth Limited,ANANDRATHI,41616227.0,ok,"41,616,227 Equity Shares","ISSUED, SUBSCRIBED AND PAID UP SHARE CAPITAL BEFORE AND AFTER",550,659.38,True,market cap is 3.5x the issue size,3.4712798158876517
+Anthem Biosciences Limited,ANTHEM,561610051.0,ok,"561,610,051 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",570,3395.0,True,market cap is 9.4x the issue size,9.429093639764359
+Anupam Rasayan India Limited,ANURAS,86206896.0,ok,"86,206,896 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE ISSUE",555,760.0,True,market cap is 6.3x the issue size,6.295372010526315
+Apex Frozen Foods Ltd,APEX,24000000.0,ok,"24,000,000 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP CAPITAL
+BEFORE THE ISSUE",175,152.25,True,market cap is 2.8x the issue size,2.7586206896551726
+Apollo Micro Systems Ltd,APOLLO,20000.0,ok,"20,000 Equity Shares","Issued, Subscribed and Paid-Up Share Capital before the Issue",275,156.0,False,"IMPLAUSIBLE share count, TOO SMALL: 20,000 shares at Rs 275 is a post-issue market cap of Rs 0.6 cr against an issue of Rs 156.0 cr - the company cannot be worth less than the money it raised",0.003525641025641026
+Aptus Value Housing Finance India Limited,APTUS,481416290.0,ok,"481,416,290 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",353,2780.05,True,market cap is 6.1x the issue size,6.112837911908059
+Arkade Developers Limited,ARKADE,153626016.0,ok,"153,626,016 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL
+BEFORE THE ISSUE",128,410.0,True,market cap is 4.8x the issue size,4.79612928
+Ashoka Buildcon Ltd,ASHOKA,,"no ISSUED, SUBSCRIBED ... BEFORE THE OFFER line with an Equity Shares count",None,None,324,225.0,,no offer price or issue size to check against,
+ASK Automotive Limited,ASKAUTOLTD,197142600.0,ok,"197,142,600 Equity Shares","ISSUED, SUBSCRIBED AND PAID-UP SHARE CAPITAL BEFORE THE OFFER",282,833.91,True,market cap is 6.7x the issue size,6.666692232974782

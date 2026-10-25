@@ -1,15 +1,15 @@
 company,field,truth_latest,truth_all,got,reader_unit,on_a_stated_line,on_the_right_column,withheld,reason,line
-Polycab India Ltd,tax_expense,2055.96,"[807.12, 1283.62, 2055.96]",763.86,INR million,False,False,False,ok,Total tax expense 763.86 531.53
-Polycab India Ltd,finance_costs,936.8,"[659.49, 936.8, 1473.52]",1084.6,INR million,False,False,False,ok,"Finance costs 1,084.60 937.95"
-Polycab India Ltd,depreciation_amortisation,1329.5,"[1111.15, 1278.83, 1329.5]",975.34,INR million,False,False,False,ok,Depreciation and amortisation expense 975.34 708.66
+Polycab India Ltd,tax_expense,2055.96,"[807.12, 1283.62, 2055.96]",,,False,False,True,row not present on the page,None
+Polycab India Ltd,finance_costs,936.8,"[659.49, 936.8, 1473.52]",36.8,INR million,False,False,False,ok,"Finance costs - - - - 9 36.80 - - - - 659.49 - - - - 1 ,473.52"
+Polycab India Ltd,depreciation_amortisation,1329.5,"[1111.15, 1278.83, 1329.5]",1244.55,INR million,False,False,False,ok,"Depreciation & Amortisation expenses 1,244.55 74.71 10.24 - 1,329.50 1 ,239.89 3 4.40 4.54 - 1 ,278.83 1 ,090.74 20.39 0"
 Polycab India Ltd,shares_outstanding_pre_issue,141205838.0,[141205838.0],141205838.0,,True,True,False,ok,"141,205,838 Equity Shares"
-Prince Pipes and Fittings Ltd,net_worth,4007.67,"[2425.44, 3165.79, 4007.67]",,,False,False,True,"no balance-sheet column reproduces any stated NAV within 0.6% - the page, the column or the unit is wrong, so nothing is read",None
-Prince Pipes and Fittings Ltd,tax_expense,281.17,"[217.26, 224.01, 281.17]",,,False,False,True,"no balance-sheet column reproduces any stated NAV within 0.6% - the page, the column or the unit is wrong, so nothing is read",None
-Prince Pipes and Fittings Ltd,finance_costs,364.0,"[361.08, 363.74, 364.0]",,,False,False,True,"no balance-sheet column reproduces any stated NAV within 0.6% - the page, the column or the unit is wrong, so nothing is read",None
-Prince Pipes and Fittings Ltd,depreciation_amortisation,451.64,"[328.29, 380.88, 451.64]",,,False,False,True,"no balance-sheet column reproduces any stated NAV within 0.6% - the page, the column or the unit is wrong, so nothing is read",None
+Prince Pipes and Fittings Ltd,net_worth,4007.67,"[2425.44, 3165.79, 4007.67]",,,False,False,True,"two columns of the same profit-and-loss page match a stated EPS (columns 2 and 0), so the period is not identified and nothing is read",None
+Prince Pipes and Fittings Ltd,tax_expense,281.17,"[217.26, 224.01, 281.17]",,,False,False,True,"two columns of the same profit-and-loss page match a stated EPS (columns 2 and 0), so the period is not identified and nothing is read",None
+Prince Pipes and Fittings Ltd,finance_costs,364.0,"[361.08, 363.74, 364.0]",,,False,False,True,"two columns of the same profit-and-loss page match a stated EPS (columns 2 and 0), so the period is not identified and nothing is read",None
+Prince Pipes and Fittings Ltd,depreciation_amortisation,451.64,"[328.29, 380.88, 451.64]",,,False,False,True,"two columns of the same profit-and-loss page match a stated EPS (columns 2 and 0), so the period is not identified and nothing is read",None
 Vishwaraj Sugar Industries Ltd,shares_outstanding_pre_issue,34556000.0,[34556000.0],34556000.0,,True,True,False,ok,"3,45,56,000 Equity Shares"
-Computer Age Management Services Ltd,net_worth,5281.97,"[4412.85, 4435.23, 5281.97, 5398.12]",5281.97,INR million,True,True,False,ok,"Net Worth as restated (Rs. In Million) ('C) 5 ,281.97 4,581.59 5 ,398.12 4,412.85 4,435.23"
+Computer Age Management Services Ltd,net_worth,5398.12,"[4412.85, 4435.23, 5281.97, 5398.12]",5398.12,INR million,True,True,False,ok,"Net Worth as restated (Rs. In Million) ('C) 5 ,281.97 4,581.59 5 ,398.12 4,412.85 4,435.23"
 Computer Age Management Services Ltd,shares_outstanding_pre_issue,48786800.0,[48786800.0],48786800.0,,True,True,False,ok,"48,786,800 Equity Shares"
-Likhitha Infrastructure Ltd,net_worth,6995.58,"[3242.94, 5031.23, 6995.58]",,,False,False,True,no share count or no stated NAV to anchor on,None
-Likhitha Infrastructure Ltd,finance_costs,136.4,"[84.62, 136.4, 168.49]",,,False,False,True,no share count or no stated NAV to anchor on,None
+Likhitha Infrastructure Ltd,net_worth,6995.58,"[3242.94, 5031.23, 6995.58]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
+Likhitha Infrastructure Ltd,finance_costs,136.4,"[84.62, 136.4, 168.49]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
 Likhitha Infrastructure Ltd,shares_outstanding_pre_issue,14625000.0,[14625000.0],,,False,False,True,"no ISSUED, SUBSCRIBED ... BEFORE THE OFFER line with an Equity Shares count",None

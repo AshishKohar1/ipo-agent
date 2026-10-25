@@ -2051,3 +2051,74 @@ share count by the final offer price, and says that it did.
 
 Evidence: `h48_validate.py` (29 self-tests), `reports/H48_VALIDATION.md`,
 `reports/H48_VALIDATION.csv`. H48 stands; this narrows it.
+
+---
+
+### H50 — the RHP readers: the column is proved, not parsed; three of five are parked (2026-10-25)
+
+Task 3 built the five readers and a gate. The gate is a floor on **precision** — the share
+of values a reader produces that are right — because a reader that withholds is useless but
+a reader that is confidently wrong corrupts every ratio built on it and will not be found
+by inspection. Recall is reported but does not gate.
+
+**The architecture, and why it is this and not simpler.**
+
+| Step | What it does | Why not the obvious thing |
+|---|---|---|
+| 1 | Find the restated pages by **content** | `extract.base.locate` reads the TOC and puts Route Mobile's financials at PDF pages 2-28, which is the auditor's report in the front matter. Its restated balance sheet is 300 pages later |
+| 2 | Name the target period: the **latest full fiscal year**, from the weighted rows of the Basis tables | "The latest column" is not an answer when the latest column is a nine-month stub. A nine-month figure in an annual ratio is a different quantity, not a small error |
+| 3 | Pin the profit-and-loss column on `profit / shares = that year's stated EPS` | Borrowing the balance sheet's column index is what made the readers wrong |
+| 4 | Net worth from `profit / that year's stated RoNW`, matched to a balance-sheet column | A great many RHPs print a NAV only for the stub period, so the fiscal year has nothing to anchor on |
+
+**The column is never parsed from the header.** A restated table's header is split over two
+printed lines in whatever order the typesetter chose, and getting it wrong files a correct
+value against the wrong year. So the column is pinned by the document's own arithmetic, and
+where no column can be proved the reader **withholds**.
+
+**The score on the hand-read check set:**
+
+| field | produced | correct | precision | recall | verdict |
+|---|---|---|---|---|---|
+| `shares_outstanding_pre_issue` | 3 | 3 | **100%** | 75% | clears the floor |
+| `net_worth` | 1 | 1 | **100%** | 33% | clears the floor on **one** value |
+| `tax_expense` | 0 | 0 | — | 0% | **parked** |
+| `finance_costs` | 1 | 0 | **0%** | 0% | **parked** |
+| `depreciation_amortisation` | 1 | 0 | **0%** | 0% | **parked** |
+
+**Clearing a floor on one value is not a measurement, and is not treated as one.** Only the
+share-count reader was run over the corpus, and only because it has an *independent* guard
+that needs no hand reading: a pre-issue count times the offer price must imply a market
+capitalisation of roughly 1x to 25x the money raised, because an issue is a slice of a
+company. That turns the corpus into a few hundred checks instead of an extrapolation from
+three.
+
+**Why the three are parked, named precisely.** One cause dominates, and it is the PDF
+extractor splitting long figures. Polycab's page prints
+`Finance costs - - - - 9 36.80 - - - - 659.49`, where `9 36.80` is 936.80; the reader
+returned **36.80**. The repair exists — a row with too many tokens is merged back to the
+column count the page's clean rows agree on — but it needs a reliable column count, and on
+a page where most rows are split the modal count is itself wrong. Three further causes,
+each seen on real documents:
+
+| cause | example |
+|---|---|
+| the `Profit for the year` row has many spellings | `Profit After Tax`, `Restated profit for the year`, `Profit/(loss) for the year` |
+| margin tables interleave percentage columns | `Profit for the period 269.34 8.62% 691.02 7.14%` |
+| segment tables carry the same row labels | the Polycab line above is a segment table, not the P&L |
+
+The fix is a page-level column reconstruction — repair every row of the page to one
+consensus count, reject pages whose rows cannot be reconciled — rather than four more
+patches to a row-at-a-time parser. That is the next piece of work and it is not started.
+
+**pdfplumber's text-strategy tables were measured first and are not used.** On three
+check-set RHPs they split cells arbitrarily — `['Equity Share c', 'apital']`, and a number
+broken across two cells as `'1,'` and `'108.52'` — at 2-3 seconds per page against
+effectively zero for a cached text line.
+
+**Consequence for the rest of Task 3:** the H45 ratios are not re-derived, the variable
+inventory is not refreshed and the stability analysis is not re-run. All three consume the
+readers' output, and with three of five parked they would change nothing that is not noise.
+Stated rather than performed.
+
+Evidence: `rhp_pages.py` (20 self-tests), `rhp_readers.py` (63), `rhp_reader_gate.py` (17),
+`run_share_count.py` (9), `reports/READER_GATE.md`, `reports/SHARE_COUNT_450.md`.

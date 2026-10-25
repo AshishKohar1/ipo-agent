@@ -91,16 +91,23 @@ def score(reader_rows: pd.DataFrame | None = None) -> pd.DataFrame:
             # The check set records the value in the document's own unit, and so does the
             # reader, so they are comparable without converting either.
             on_line = any(near(v, x) for x in truths) if v is not None else False
-            # The column the anchor should have picked is the LATEST period the check set
-            # has for this field, which is its highest fiscal_year - except where the
-            # check set records a stub, which is later still.
-            stub = vals[vals["fiscal_year"].astype(str).str.contains("M-|M ", na=False)]
-            if len(stub):
-                want = float(stub["num"].iloc[0])
+            # The target is the latest FULL FISCAL YEAR, which is what the readers aim at
+            # and what every ratio downstream needs. A stub period - the check set records
+            # them as "3M-Jun-2020" - is a different quantity, not a later version of the
+            # same one, so it is NOT the target. Preferring the stub here scored the
+            # readers against the wrong number: CAMS's FY2020 net worth of 5,398.12 was
+            # marked wrong for not being the June stub's 5,281.97.
+            if cs_field not in MONEY:
+                # The pre-issue share count has no fiscal year - it is stated as of the
+                # date of the RHP - so there is one truth and it is the target.
+                want = float(truths[-1]) if len(truths) == 1 else None
             else:
                 fy = pd.to_numeric(vals["fiscal_year"], errors="coerce")
-                want = (float(vals.loc[fy.idxmax(), "num"]) if fy.notna().any()
-                        else float(truths[-1]))
+                want = float(vals.loc[fy.idxmax(), "num"]) if fy.notna().any() else None
+            if want is None:
+                # No full fiscal year in the truth for this field, so there is nothing to
+                # grade the column against. Skipped rather than graded on a stub.
+                continue
             out.append({
                 "company": r.company, "field": cs_field,
                 "truth_latest": want, "truth_all": truths,

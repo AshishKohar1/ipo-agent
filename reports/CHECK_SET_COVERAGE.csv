@@ -1,0 +1,21 @@
+company,year,industry,n,have,note
+Polycab India Ltd,2019,Capital Goods,5,"net worth*, tax, finance, D&A, pre-issue shares",complete
+Prince Pipes and Fittings Ltd,2019,Capital Goods,4,"net worth, tax, finance, D&A",missing: pre-issue shares
+Vishwaraj Sugar Industries Ltd,2019,Fast Moving Consumer Goods,1,pre-issue shares,"missing: net worth, tax, finance, D&A"
+Computer Age Management Services Ltd,2020,Financial Services,2,"net worth, pre-issue shares","missing: tax, finance, D&A"
+Likhitha Infrastructure Ltd,2020,Construction,3,"net worth, finance, pre-issue shares","missing: tax, D&A"
+Route Mobile Ltd,2020,Telecommunication,0,-,not transcribed
+Antony Waste Handling Cell Ltd,2021,Utilities,0,-,not transcribed
+CarTrade Tech Limited,2021,Consumer Services,0,-,not transcribed
+Craftsman Automation Limited,2021,Automobile and Auto Components,5,"net worth*, tax*, finance, D&A, pre-issue shares",complete
+AGS Transact Technologies Limited,2022,Financial Services,0,-,not transcribed
+Delhivery Limited,2022,Services,0,-,not transcribed
+Global Health Limited,2022,Healthcare,5,"net worth, tax*, finance, D&A, pre-issue shares",complete
+Cello World Limited,2023,Consumer Durables,0,-,not transcribed
+IRM Energy Limited,2023,"Oil, Gas & Consumable Fuels",0,-,not transcribed
+Signature Global India Limited,2023,Realty,0,-,not transcribed
+ACME Solar Holdings Limited,2024,Power,0,-,not transcribed
+Bansal Wire Industries Limited,2024,Metals & Mining,0,-,not transcribed
+Godavari Biorefineries Limited,2024,Chemicals,0,-,not transcribed
+Borana Weaves Limited,2025,Textiles,0,-,not transcribed
+GNG Electronics Limited,2025,Information Technology,0,-,not transcribed
