@@ -59,6 +59,9 @@ sys.path.insert(0, str(ROOT))
 import dataio                                               # noqa: E402
 import nse_holidays as HOL
 import trading_day as TD                                    # noqa: E402
+# H47 rule 5: 401/403/429 is the host refusing this client. One attempt, then stop.
+# Imported rather than redefined so there is ONE definition of "blocked" in the project.
+from failover import BLOCKED_STATUS                         # noqa: E402
 
 CACHE = ROOT / "data" / "bhavcopy_cache"
 OUT = ROOT / "data" / "listing_prices.csv"
@@ -173,7 +176,14 @@ class Fetcher:
                 return None, f"HTTP 200 but {len(r.content)}B of non-tabular content"
             if r.status_code in (404,):
                 return None, "HTTP 404 — most likely not a trading day"
-            if r.status_code in (403, 429, 500, 502, 503, 504):
+            if r.status_code in BLOCKED_STATUS:
+                # A BLOCK, not a fault. The host answered, and under H47 rule 5 that
+                # answer is final for this run: no retry, no backoff, no second request
+                # with different headers. Retrying a 403 is the circumvention the
+                # decision forbids, and it was doing exactly that here - up to
+                # len(BACKOFF_S) extra requests at every blocked URL.
+                return None, f"HTTP {r.status_code} - BLOCKED, not retried (H47 rule 5)"
+            if r.status_code in (500, 502, 503, 504):
                 if i == len(BACKOFF_S):
                     return None, f"HTTP {r.status_code} after {len(BACKOFF_S)} retries"
                 continue
