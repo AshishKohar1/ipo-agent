@@ -156,7 +156,24 @@ def derive(pre_shares, fresh_amount_inr=None, fresh_shares=None, offer_price=Non
             out["post_issue_shares"] = None
             out["post_issue_shares_reason"] = f"implausible: {guard}"
             sh = None
-    nav, why = post_issue_nav(pre_net_worth_inr, fresh_amount_inr, sh)
+    # A fresh issue stated as a SHARE COUNT raises money too, and the NAV needs the rupee
+    # amount. Without this the share-count branch - the one that needs no price for the
+    # share total - silently produced no NAV at all, which is the opposite of what that
+    # branch is for. The amount still needs the price, and says so.
+    fresh_for_nav, fresh_why = fresh_amount_inr, "stated rupee amount"
+    if (fresh_for_nav is None or pd.isna(fresh_for_nav)) and             fresh_shares is not None and not pd.isna(fresh_shares):
+        if offer_price is None or pd.isna(offer_price) or float(offer_price) <= 0:
+            fresh_why = ("fresh issue is a share count and there is no final offer price, "
+                         "so the money raised is unknown")
+        elif float(fresh_shares) == 0:
+            fresh_for_nav, fresh_why = 0.0, "pure offer for sale: no money raised"
+        else:
+            fresh_for_nav = float(fresh_shares) * float(offer_price)
+            fresh_why = (f"{float(fresh_shares):,.0f} fresh shares x the final offer "
+                         f"price")
+    out["fresh_amount_for_nav"] = fresh_for_nav
+    out["fresh_amount_for_nav_reason"] = fresh_why
+    nav, why = post_issue_nav(pre_net_worth_inr, fresh_for_nav, sh)
     out["post_issue_nav"], out["post_issue_nav_reason"] = nav, why
     pct, why = promoter_post_pct(promoter_pre_shares, promoter_ofs_shares, sh)
     out["promoter_post_pct"], out["promoter_post_pct_reason"] = pct, why

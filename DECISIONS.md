@@ -1981,3 +1981,73 @@ validated on the share count only; their net worth is not yet hand-read, and a f
 reported until it is.
 
 `derive_post_issue.py`, 33 self-tests.
+
+---
+
+### H49 — net worth is not "share capital + other equity", and a promoter's OFS is not the offer's OFS (2026-10-25)
+
+Found while hand-validating H48 across seven transcribed check-set RHPs. Three separate
+corrections, each with the document that forced it.
+
+**1. The net-worth cross-foot is not safe on its own.** H44 defines net worth as
+`equity share capital + other equity`. Craftsman Automation's balance sheet prints its own
+total-equity sub-total of **₹7,716.11 million** at 31 December 2020, and its stated NAV of
+₹355.93 on 20,121,600 shares implies **₹7,161.88 million** — 7.7% lower, past rule 2's
+tolerance. The document settles it itself: its stated RoNW of **7.07%** on a restated
+profit of ₹506.60 million requires about ₹7,165 million. The balance-sheet sub-total would
+give 6.57%. So the RHP's net worth is the lower figure, and the cross-foot is wrong here.
+
+Two other documents in the set print an explicit definition that explains the mechanism:
+
+| RHP | its own definition of net worth |
+|---|---|
+| Prince Pipes (p110) | equity share capital + reserves and surplus, per section 2(57) — the cross-foot IS valid |
+| Vishwaraj Sugar (p110-111) | share capital + securities premium + general reserve + surplus, **excluding preference capital and revaluation reserve** |
+
+**Rule for the reader:** take a stated `Total Equity`/`Net worth` line where one exists,
+cross-foot it against share capital + other equity, **and** cross-check it against the
+stated NAV and RoNW. On a disagreement above 5%, prefer the figure the stated NAV and RoNW
+agree on, and if they do not agree with each other, withhold.
+
+**2. The share count behind a stated NAV is the PERIOD-END count, not the RHP-date count.**
+
+| RHP | net worth ÷ stated NAV | pre-issue count on the capital page | gap |
+|---|---|---|---|
+| Medanta | 253,225,000 | 253,303,930 | +0.03% |
+| CAMS | 48,785,000 | 48,786,800 | exact |
+| Prince Pipes | 91,617,988 | 95,980,816 | **−4.5%** |
+| Likhitha | 14,625,000 | 14,625,000 | exact |
+
+Shares issued between the balance-sheet date and the RHP make the gap, so the cross-check
+must report the gap rather than fail on a fixed threshold. A hard ±1% test would have
+rejected Prince Pipes' correct reading.
+
+**3. A promoter's offer-for-sale is not the offer's offer-for-sale.** Polycab's post-issue
+promoter percentage was recorded on 23 October as **63.00%**. That is wrong. It is what
+`promoter_post_pct` returns when no promoter OFS count is supplied — and the function's own
+reason string warns that it overstates the holding. Polycab's p89 breaks the 17,582,000
+offered shares down by shareholder, and only four of the nine sellers are Promoters as p2
+defines them (IFC is the Investor Selling Shareholder; two Jaisinghanis are Promoter
+**Group**; two more are Individual Selling Shareholders). The Promoters' own portion is
+**8,312,844**, and the correct figure is **57.41%**.
+
+**4. A third route to a stated post-issue figure.** H48 named two exceptions: a pure OFS,
+and a fresh issue stated as a share count. CAMS adds a third for the promoter percentage —
+its promoter sells 6,108,400 shares **privately under share-purchase agreements before the
+bid opens**, not in the offer, so the RHP states its post-Offer holding (15,115,600, 30.98%)
+without needing a price.
+
+**5. One correction of my own.** The CAMS pre- and post-issue share counts recorded on
+23 October as 25,486,027 were the **securities premium account**. The words "Before and
+after the Offer" appear twice on that page under different headings, and I matched the
+phrase without reading the section. The true figure, 48,786,800, is on the same page and
+cross-foots to both the stated promoter percentage and the stated NAV, which 25,486,027
+cannot do. Corrected in `reports/rhp_check_set.csv`, with the securities premium now
+recorded in its own right so the misread cannot recur silently.
+
+**Also fixed:** `derive_post_issue.derive` produced no post-issue NAV at all when the fresh
+issue was stated as a share count, because the NAV needs rupees. It now multiplies the
+share count by the final offer price, and says that it did.
+
+Evidence: `h48_validate.py` (29 self-tests), `reports/H48_VALIDATION.md`,
+`reports/H48_VALIDATION.csv`. H48 stands; this narrows it.
