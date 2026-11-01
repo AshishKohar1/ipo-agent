@@ -126,17 +126,32 @@ def _resolve_filing_page(sess, url: str) -> tuple[str | None, str]:
     return u, "resolved from filing page"
 
 
-def _git(*args: str) -> None:
-    subprocess.run(["git", *args], cwd=ROOT, check=False,
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+def _git(*args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", *args], cwd=ROOT, check=False,
+                          capture_output=True, text=True)
 
 
 def _commit(n: int) -> None:
+    """Commit the checkpoint and push it (the user's instruction of 2026-11-02).
+
+    Chained separately, never with `&&` (F2). The push is deliberately NOT retried with
+    `pull --rebase --autostash`: the live workflow can be pushing to main at the same
+    time, and an autostash would reach into a working tree this session may be editing.
+    A rejected push is printed loudly and left for the session to reconcile - the commit
+    is already safe on disk, and a lost push is visible, which a silently rebased working
+    tree would not be.
+    """
     _git("add", str(PROGRESS.relative_to(ROOT)))
     _git("commit", "-q", "-m",
          f"Task 3 (H9 batch): {n} RHP PDFs restored\n\n"
          f"Checkpoint only - the PDFs themselves are gitignored under _local/.\n\n"
          f"Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>")
+    r = _git("push", "origin", "HEAD:main")
+    if r.returncode:
+        print(f"    !! PUSH REJECTED at {n} items: "
+              f"{(r.stderr or '').strip().splitlines()[-1:] or 'no stderr'}", flush=True)
+    else:
+        print(f"    pushed at {n} items", flush=True)
 
 
 def run(limit: int | None = None) -> int:
@@ -167,14 +182,23 @@ def run(limit: int | None = None) -> int:
                     print(f"[{i}/{len(todo)}] FAILED {company}: {note}", flush=True)
                     continue
             _throttle()
-            resp = sess.get(pdf_url, timeout=180)
+            # Streamed, with a read timeout rather than a whole-request one. 22 of the
+            # first 137 documents died as ChunkedEncodingError/IncompleteRead - SEBI
+            # drops the connection part-way through a large PDF - and this is ONE more
+            # patient attempt, not a retry: still a single request per document per run,
+            # which is what H47 rule 5 constrains.
+            resp = sess.get(pdf_url, timeout=(30, 300), stream=True)
             if resp.status_code != 200:
                 _append({"list": r["list"], "company": company, "doc_type": r["doc_type"],
                          "url": url, "expected_sha": expected, "status": "failed",
                          "note": f"HTTP {resp.status_code}", "ran_at": pd.Timestamp.now()})
                 print(f"[{i}/{len(todo)}] FAILED {company}: HTTP {resp.status_code}", flush=True)
                 continue
-            body, pnote = _pdf_bytes(resp.content)
+            chunks = []
+            for chunk in resp.iter_content(chunk_size=1 << 20):
+                if chunk:
+                    chunks.append(chunk)
+            body, pnote = _pdf_bytes(b"".join(chunks))
             if body is None:
                 _append({"list": r["list"], "company": company, "doc_type": r["doc_type"],
                          "url": url, "expected_sha": expected, "status": "failed",

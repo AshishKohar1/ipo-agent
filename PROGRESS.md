@@ -18,6 +18,7 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 - **Gate C2:** superseded by H44/H45 and the check set — the field list is frozen and a reader is graded before it runs. Not an open gate
 - **Machine: macOS from 2026-11-02.** The Windows laptop's disk died; `main` is authoritative. Python 3.14.10 in `.venv`, every pin a prebuilt wheel, `check_env.py` 15/15. Stage 1's Linux/cloud `pip install` half is still unverified on a real cloud session, but the live workflow has been installing `requirements.txt` on `ubuntu-24.04` every weekday since, which is the same question answered in production
 - **Lost with the disk** (all gitignored, all re-fetchable): `_local/`, `data/rhp_text_cache/`, `data/bhavcopy_cache/`, `data/bhavcopy_raw_cache/`, `_local/check_set_dump/`
+- **yfinance is LEGACY-ONLY** (user's decision, 2026-11-02). The pin stays in `requirements.txt` and the package stays installed, because `data/price_history.csv` and the symbol walk in `run_overnight.py` were built with it and their provenance is yfinance. It is **banned for any new data and for listing-day prices** — those come from the bhavcopy on the listing date (2d), never from a quote API that silently restates for splits and bonuses. Do not run `run_overnight.py`'s yfinance paths (`job3_price_history`, the symbol and first-bar walks).
 
 ## PHASE 3 — CLOSED. Kept as the record of what was done, not as work to do.
 
