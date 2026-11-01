@@ -343,6 +343,74 @@ def self_test() -> int:
     else:
         print("  (no output yet - the multiple checks need a build first)")
 
+    print(chr(10) + "[5] the cache is filled on demand, and never filled with junk")
+    # Task 5, 2026-11-02. There is NO bulk bhavcopy re-fetch after the disk loss: a date
+    # is fetched the first time it is asked for and never again. These four checks are
+    # hermetic - a stub fetcher, a temp cache dir, no network - so they prove the
+    # behaviour rather than describing it.
+    import io as _io, shutil, tempfile, zipfile as _zf
+    # the module global is rebound through globals() rather than `global`, because
+    # RAW_CACHE is already read earlier in this function and a `global` statement after
+    # first use is a SyntaxError
+    _real_cache = RAW_CACHE
+
+    def _point_cache_at(path):
+        globals()["RAW_CACHE"] = path
+    _tmp = Path(tempfile.mkdtemp(prefix="bhav_cache_test_"))
+
+    def _zipped(csv: str) -> bytes:
+        buf = _io.BytesIO()
+        with _zf.ZipFile(buf, "w") as z:
+            z.writestr("bhav.csv", csv)
+        return buf.getvalue()
+
+    class _Stub:
+        """Answers with a scripted payload and counts every request."""
+
+        def __init__(self, payload):
+            self.payload, self.calls, self.warmed = payload, 0, 0
+
+        def warm(self, home):
+            self.warmed += 1
+
+        def get(self, url, referer=None):
+            self.calls += 1
+            return self.payload, "stub"
+
+    good = _zipped("SYMBOL,TOTTRDVAL,TOTTRDQTY\nX,1234.0,10.0\n")
+    day = pd.Timestamp("2025-01-02")
+    try:
+        _point_cache_at(_tmp / "a")
+        f = _Stub(good)
+        df, src = _raw(f, day, "nse")
+        cached = list((_tmp / "a").glob("*.csv.gz")) + list((_tmp / "a").glob("*.csv"))
+        chk("a date with no cache entry IS fetched on demand",
+            df is not None and f.calls == 1 and src != "cache", (f.calls, src))
+        chk("and the result is written to the cache", len(cached) == 1, cached)
+
+        f2 = _Stub(good)
+        df2, src2 = _raw(f2, day, "nse")
+        chk("the second ask is served from the cache with NO request",
+            df2 is not None and f2.calls == 0 and src2 == "cache", (f2.calls, src2))
+
+        _point_cache_at(_tmp / "b")
+        fh = _Stub(b"<html><head><title>Error</title></head><body>no data</body></html>")
+        dfh, whyh = _raw(fh, day, "nse")
+        chk("an HTML error page is NOT cached and NOT returned as data",
+            dfh is None and not list((_tmp / "b").glob("*")), (dfh is None, whyh))
+
+        _point_cache_at(_tmp / "c")
+        fe = _Stub(_zipped("SYMBOL,TOTTRDVAL,TOTTRDQTY\n"))
+        dfe, whye = _raw(fe, day, "nse")
+        chk("a zero-row bhavcopy is NOT cached either - it is a failed download",
+            dfe is None and not list((_tmp / "c").glob("*")), (dfe is None, whye))
+    finally:
+        _point_cache_at(_real_cache)
+        shutil.rmtree(_tmp, ignore_errors=True)
+
+    chk("and no code path re-fetches a date that is already cached",
+        "if cp.exists():" in inspect.getsource(_raw))
+
     print(f"{chr(10)}{ok} ok, {fail} failed")
     return 1 if fail else 0
 
