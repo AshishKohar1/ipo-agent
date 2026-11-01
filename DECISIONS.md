@@ -2122,3 +2122,84 @@ Stated rather than performed.
 
 Evidence: `rhp_pages.py` (20 self-tests), `rhp_readers.py` (63), `rhp_reader_gate.py` (17),
 `run_share_count.py` (9), `reports/READER_GATE.md`, `reports/SHARE_COUNT_450.md`.
+
+### H51 — the repository is PUBLIC, and H47's private-repo condition is waived (2026-11-02)
+
+**The user's decision, recorded as given:** the repository at
+github.com/AshishKohar1/ipo-agent is public by their decision of 2 November 2026. H47's
+condition that "the repository stays private" is **waived by the user**. Visibility is not
+to be changed by me.
+
+**This is a waiver, not a reinterpretation.** H47 rule 1 reads "Raw NSE/niftyindices data
+is never published, shared or redistributed; only aggregate results and conclusions may be
+shared", and rule 2 "commits data only to the private repo — never to a public location".
+A public repository publishes every tracked file to anyone, so rules 1 and 2 as written are
+now contradicted in fact, not merely relaxed. The user accepts that. What follows is the
+exposure, on the record, so that no future reader of this file has to reconstruct it.
+
+**Three properties of the exposure that are easy to get wrong:**
+
+1. **It is retroactive and permanent.** All 383 commits are public, not just the current
+   tree. The `pre-housekeep` tag holds files later moved or deleted. Returning the
+   repository to private later does **not** un-publish anything already cloned, forked,
+   cached by GitHub, or indexed.
+2. **It is not limited to the files below.** `data/live_fetch_log.csv` records the exact
+   NSE/niftyindices URL and timestamp of every request this project has ever made, and the
+   `.github/workflows/live-model-l.yml` run logs quote report bodies into the step summary.
+3. **The aggregate-only carve-out in H47 rule 1 no longer carves anything out**, because
+   the raw rows are published alongside the aggregates.
+
+#### Files under `data/` holding raw NSE or niftyindices data
+
+Raw means the rows are substantially as the host served them: a fetched series, list or
+table, not a figure derived through this project's modelling.
+
+| file | rows | host | what it holds |
+|---|---|---|---|
+| `NIFTY50_TRI.csv` | 4,395 | niftyindices.com | Nifty 50 Total Return Index daily series, 2009–2026 (`getTotalReturnIndexString`) |
+| `index_history.csv` | 83,698 | nsearchives.nseindia.com + niftyindices.com | daily closes for the broad and sector index set |
+| `nifty_pe_history.csv` | 13,824 | niftyindices.com | Nifty P/E and P/B history (`getpepbHistoricaldataDBtoString`) |
+| `nse_index_catalogue.csv` | 122 | niftyindices.com | the index catalogue |
+| `india_vix_history.csv` | 2,167 | nseindia.com | India VIX daily series |
+| `market_context.csv` | 376 | niftyindices.com | the 15 index closes captured by the 19:30 leg |
+| `NSE_EQUITY_L.csv` | 2,601 | nsearchives.nseindia.com | `EQUITY_L.csv`, NSE's listed-equity master |
+| `nse_trading_holidays.csv` | 20 | nseindia.com | trading holidays, current year |
+| `nse_holiday_master.json` | 34 KB | nseindia.com | the holiday API response, all segments |
+| `nse_name_changes.csv` | 2,328 | nsearchives.nseindia.com | `namechange.csv` |
+| `nse_symbol_changes.csv` | 1,066 | nsearchives.nseindia.com | `symbolchange.csv` |
+| `sector_map.csv` | 919 | nseindia.com | per-symbol sector from `api/quote-equity` |
+| `sector_map_quotes.csv` | 258 | nseindia.com | the quote rows those sectors were read from |
+| `listing_prices.csv` | 631 | nsearchives.nseindia.com (+ BSE) | listing-day bhavcopy prices |
+| `listing_prices_progress.csv` | — | as above | the capture's own progress ledger |
+| `day1_turnover.csv` | 506 | nsearchives.nseindia.com | day-1 turnover, read from the bhavcopy |
+| `new_listings.csv` | 42 | nseindia.com | `api/public-past-issues`, the outcome harvest |
+| `issue_dates_recovered.csv` | 737 | nseindia.com | true issue-open dates recovered from NSE |
+| `corporate_actions.csv` | 1,505 | nseindia.com | splits and bonuses behind the H-target price adjustment |
+| `corporate_actions_progress.json` | 160 KB | nseindia.com | the per-symbol response ledger for the above |
+| `subscription_snapshots.csv` | 77 | nseindia.com + chittorgarh.com | the 15:00 subscription snapshots |
+| `final_subscription.csv` | 1 | nseindia.com + chittorgarh.com | final subscription at close |
+| `daywise_subscription.csv` | 3 | nseindia.com | the day-wise rows that exist at all (H1) |
+| `hdfire_poll.csv` | 100 | nseindia.com + chittorgarh.com | the 13–15 Oct intraday poll |
+| `predictions_log.csv` | 26 | carries NSE figures | each logged decision, with the subscription it was made on |
+| `IPO-PastIssue-17-09-2021-to-17-09-2026.xlsx` | — | nseindia.com | the NSE past-issues export used as the spine |
+| `live_fetch_log.csv` | — | metadata, not rows | every request's exact URL and timestamp |
+
+**Not on this list, and why:** `price_history.csv` and the `holding_target*` files are
+yfinance-derived or modelling output, not NSE rows; `chittorgarh_*`, `rhp_*`,
+`manual_rhp_*` and `verified_rhp_manifest.csv` come from Chittorgarh, SEBI and BSE, which
+H47 does not govern (BSE's policies bar reproduction and redistribution, which a public
+repository arguably does engage — recorded here as a known question, not a decision);
+`master_with_symbols.csv`, the tracker workbooks and `Initial Public Offering (Updated).xlsx`
+are the master and IPOMatrix aggregator data.
+
+#### What is NOT waived
+
+H47 rules 3, 4, 5 and 6 stand unchanged and in full. In particular **rule 5 — a 403 or a
+refused connection is one answer per host per run, never an obstacle to work around.** Also
+unchanged: the B1 blacklist, the bar on bypassing a login, CAPTCHA, paywall or
+click-through, the robots.txt rule, and H36 on Tapetide.
+
+**My recommendation, on the record and overruled:** I advised keeping the repository
+private, because publication is the one condition of H47 that cannot be undone once done.
+The user considered it and decided otherwise. This entry exists so the decision is
+auditable, not to re-litigate it.

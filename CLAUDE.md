@@ -81,13 +81,18 @@ CAGR is 0.218. Never merge them.
    NAV, revenue, PAT, net worth, borrowings. Those come from the aggregator and the master,
    with the RHP as the verifying second source. RHP extraction covers only the **H6** list:
    what nothing else publishes.
-8. **NSE and niftyindices are used under H47 (ratified 2026-10-23).** Their terms
-   prohibit automated collection and storage without written consent; the user accepts
-   that risk for personal, non-commercial use on six conditions. The two that bind every
-   run: **raw NSE/niftyindices data is never published, shared or redistributed** — only
-   aggregate results — and **a 403 or a refused connection is never worked around.** One
-   attempt per host per run; on a block the pipeline fails over to BSE or Chittorgarh and
-   reports `NSE blocked — failed over to X`. No header rotation, no retry loop, no proxy.
+8. **NSE and niftyindices are used under H47 (ratified 2026-10-23), as amended by H51
+   (2026-11-02).** Their terms prohibit automated collection and storage without written
+   consent; the user accepts that risk for personal, non-commercial use.
+   **H51: the repository is PUBLIC by the user's decision, and H47's "stays private"
+   condition (rules 1 and 2) is waived.** Raw NSE/niftyindices rows are therefore
+   published — retroactively, across all history, and permanently. `DECISIONS.md` H51
+   lists every `data/` file that carries them. Do not change the repository's visibility,
+   and do not treat the aggregate-only wording of H47 rule 1 as still binding.
+   **What still binds every run: a 403 or a refused connection is never worked around.**
+   One attempt per host per run; on a block the pipeline fails over to BSE or Chittorgarh
+   and reports `NSE blocked — failed over to X`. No header rotation, no retry loop, no
+   proxy. H47 rules 3, 4, 5 and 6 stand in full.
 9. **Never ingest an AI-generated summary table as data (H8).** One was reviewed and
    rejected — two unrelated companies with identical net worth, a "100% OFS" issue also
    claiming capex use of proceeds, six values marked approximate, no page citations. Use
