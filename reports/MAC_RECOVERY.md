@@ -84,3 +84,78 @@ written. Rule H19 + H24, `trigger_at` 2:
 | L2 | 2026-10 | 72.22% | 80% | 36 | yes | 1 of 2 | **no** |
 
 Both targets under-deliver and both are armed at 1 of 2. **No action, by design.**
+
+---
+
+## Tasks 3–6 (2026-11-02)
+
+### Task 3 — RHP PDFs re-fetched
+
+| list | expected | fetched | sha match | mismatch | no hash | failed |
+|---|---|---|---|---|---|---|
+| `rhp_progress` | 414 | 414 | 414 | 0 | 0 | 0 |
+| `rhp_sources` | 24 | 23 | 0 | 0 | 23 | 1 |
+| `verified_rhp_manifest` | 8 | 8 | 8 | 0 | 0 | 0 |
+| **TOTAL** | **446** | **445** | **422** | **0** | **23** | **1** |
+
+3.6 GB, nothing quarantined. The one failure is Samhi Hotels Limited: no prospectus
+marker in the first 0 pages with text — a scanned PDF, rejected rather than guessed at.
+The 23 `no hash` rows are `rhp_sources` entries that never carried a recorded SHA-256;
+their hashes are now recorded.
+
+H52: all four DRHP-only companies (Allied Blenders, Northern Arc, Amanta Healthcare,
+Sri Lotus) are **excluded** — SEBI has neither an RHP nor a final prospectus for them.
+Verified against a 3/3 control of companies whose SEBI RHP is on record.
+
+### Task 4 — text cache rebuilt
+
+| | documents | pages |
+|---|---|---|
+| fetch log at `status = ok` | 450 | 217,836 |
+| matched to a restored PDF and rebuilt | **430** | **207,542** (95.3%) |
+| unmatched: DRHP-only, excluded by H52 | 4 | — |
+| unmatched: in no provenance list, not restored | 16 | 10,294 |
+
+430 of 430 built, 0 failed, 191 MB, 1.37 h at 6 workers. **430 = 450 − 4 − 16.** This is
+not a match to 446, 450 or 454 and is not claimed as one.
+
+The gate does **not** reproduce `READER_GATE.md` byte-for-byte, and the reason is not the
+cache — see **H53**. The cache reproduces commit `6434b2c`'s report byte-for-byte
+(`d179db3f…`, both files) and holds all 124 hand-quoted ground-truth lines. The committed
+report was generated mid-commit at `c11e45c`, before that commit's own 36 truth rows and
+its PBT-less-PAT fallback. The regenerated report is authoritative.
+
+`_local/check_set_dump` rebuilt: 20 files, 644 KB.
+
+### Task 5 — bhavcopy, no bulk re-fetch
+
+`data/bhavcopy_cache` and `data/bhavcopy_raw_cache` are **empty** (lost with the disk) and
+nothing re-fetched them. The on-demand contract is proved by six hermetic self-tests in
+`model_h_turnover.py` (23 ok, 0 failed), with a stub fetcher and no network:
+
+| test | result |
+|---|---|
+| a date with no cache entry IS fetched on demand | ok |
+| and the result is written to the cache | ok |
+| the second ask is served from the cache with NO request | ok |
+| an HTML error page is NOT cached and NOT returned as data | ok |
+| a zero-row bhavcopy is NOT cached either — it is a failed download | ok |
+| and no code path re-fetches a date that is already cached | ok |
+
+### Task 6 — Model H readiness
+
+See `reports/MODEL_H_READINESS.md`. Both targets are ready; the blocker is two of the six
+stable-core variables (`rhp_uses_of_proceeds_n`, `turnover_x_issue_size`) and the empty
+P/B leg of H45 (`ipo_pb_pre_issue` 0 of 433). H29 is not tested and Model H remains
+display-only by its own terms.
+
+### One defect found and fixed across the repo
+
+Every `path` column in this repo's CSVs was written on Windows as
+`_local\rhp_valuation\X.pdf`. On POSIX that is one 38-character filename, so **eight**
+hand-rolled joins silently resolved to files that cannot exist — and every caller then
+filtered on `.exists()` or `TC.get(...) is None`, so the failure was invisible:
+`work_list()` returned zero documents and the build would have reported "nothing to do"
+and exited 0. `rhp_reader_gate.py`'s was the worst: `Path(r.path)`, neither absolute nor
+separator-corrected, so `score()` returned an empty frame and `summarise()` died on
+`KeyError: 'field'`. All eight now go through `repo_paths.repo_file()` (9 self-tests).
