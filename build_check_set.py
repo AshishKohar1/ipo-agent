@@ -28,6 +28,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+from repo_paths import repo_file                             # noqa: E402
+
 DATA = ROOT / "data"
 OUT = ROOT / "reports" / "rhp_check_set_docs.csv"
 N = 20
@@ -118,7 +120,7 @@ def self_test() -> int:
     chk("all 2019+", (d["listing_date"] >= ERA).all())
     chk("no duplicates", d["company"].nunique() == len(d))
     chk("every one is on disk",
-        all((ROOT / str(p)).exists() for p in d["path"]))
+        all(repo_file(p).exists() for p in d["path"]))
 
     print("\n[2] spread across years and sectors")
     chk("at least 6 of the 7 years", d["year"].nunique() >= 6,

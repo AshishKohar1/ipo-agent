@@ -2262,3 +2262,91 @@ and what `build_text_cache.py`'s own cost estimate quotes. The three provenance 
 at all. So the rebuild starts from 445 of the old 454, and **the 446 figure in the original
 brief was 418 + 28 counting the DRHPs**. None of these numbers is 446-as-rebuilt, and the
 gate must be reproduced on the check set, which contains none of the four.
+
+## H53 — the committed READER_GATE.md was stale by one development step, and the rebuilt text cache is faithful
+
+**Date:** 2026-11-02. **Context:** the macOS rebuild (Task 4). The brief required the
+rebuilt cache to reproduce `reports/READER_GATE.md` exactly, and it did not.
+
+### What the rebuild produced
+
+| field | truth rows | produced | correct | precision | gate | baseline said |
+|---|---|---|---|---|---|---|
+| `depreciation_amortisation` | 4 | 1 | 0 | 0.0% | **FAIL** | FAIL (2 truth rows) |
+| `finance_costs` | 5 | 2 | 1 | 50.0% | **FAIL** | FAIL (3 truth rows) |
+| `net_worth` | 4 | 1 | 1 | 100.0% | PASS | PASS (3 truth rows) |
+| `shares_outstanding_pre_issue` | 6 | 5 | 5 | 100.0% | PASS | PASS (4 truth rows) |
+| `tax_expense` | 2 | 1 | 1 | 100.0% | PASS | **FAIL, `nan%`** (2 truth rows) |
+
+### The cache is not the problem — proven twice
+
+**1. The gate at the parent commit reproduces the parent commit's report byte-for-byte.**
+Running `rhp_reader_gate.py` with `6434b2c`'s reader and truth set, over the cache built
+on macOS on 2026-11-02, gives:
+
+| file | committed at 6434b2c | rebuilt-cache run |
+|---|---|---|
+| `READER_GATE.md` | `d179db3f8197bca29b1540e1224b9f324f01abc8` | `d179db3f8197bca29b1540e1224b9f324f01abc8` |
+| `READER_GATE.csv` | `4fb70704838031f2dcdc67bcf180733a7893f81b` | `4fb70704838031f2dcdc67bcf180733a7893f81b` |
+
+Identical. A cache whose text had drifted could not do this: the report quotes the
+extracted lines verbatim, down to the broken digits in `9 36.80`.
+
+**2. Every hand-read line is in the rebuilt cache.** All 124 `status = value` rows of
+`reports/rhp_check_set.csv` carry a printed page and a quoted line, transcribed by hand
+from the document. Each one is present in the rebuilt cache at that page:
+
+| document | hand-quoted lines | found in the rebuilt cache |
+|---|---|---|
+| Computer Age Management Services Ltd | 15 | 15 |
+| Craftsman Automation Limited | 15 | 15 |
+| Global Health Limited | 18 | 18 |
+| Likhitha Infrastructure Ltd | 11 | 11 |
+| Polycab India Ltd | 47 | 47 |
+| Prince Pipes and Fittings Ltd | 13 | 13 |
+| Vishwaraj Sugar Industries Ltd | 5 | 5 |
+| **TOTAL** | **124** | **124** |
+
+A literal substring test scores this 96.8%, not 100%. The eight shortfalls are all in the
+transcription, not the cache: the human wrote `Rs` for `₹` and `[*]` for `[●]`, joined
+several printed lines with ` / `, and silently closed line wraps — the document prints
+`Not` and `Applicable` on separate lines, and `at a` / `price of` likewise. Every figure
+is there. The comparator was wrong, not the text.
+
+### What was actually stale
+
+`READER_GATE.md` as committed at `c11e45c` equals **`c11e45c`'s reader run against
+`6434b2c`'s truth set** — byte for byte, in every row and every withheld reason, with one
+exception. `c11e45c` added 36 truth rows (Craftsman Automation and Global Health, the
+"two more documents transcribed" of its own commit message) and rewrote `rhp_readers.py`
+by 554 lines, but the report committed beside them was generated before the truth rows
+were appended. Hence 14 truth rows in the report against 21 in the file: the missing 7 are
+exactly Craftsman's 3 and Global Health's 4 gradeable fields.
+
+The one remaining cell is Polycab India's `tax_expense`. The committed report withholds it
+with `row not present on the page`; the same reader on the same cache now returns 2,055.96
+as `ok (derived)`, which is the truth value, from `Profit before tax 5,764.10` less
+`Profit for the year 3,708.14`. That is the PBT-less-PAT fallback this very commit was
+named for ("Task 3: tax from PBT less PAT"). So the report predates the fallback as well:
+it was generated mid-commit, after the reader stopped accepting the `Total tax expense
+763.86` line that `6434b2c` read, and before the fallback that replaced it worked.
+
+### Decision
+
+1. **`reports/READER_GATE.md` and `.csv` are regenerated and the new ones are
+   authoritative.** They are the first run of the committed reader against the committed
+   truth set. The baseline is not a target to reproduce; it is an artefact of a report
+   written before the inputs it was committed with.
+2. **`tax_expense` now passes the gate at 100% precision** on one produced value, and
+   `net_worth` passes on one. Both are thin: a 95% precision floor measured on a single
+   value is a coin, not a gate. Three of five readers pass, two fail, and the binding
+   number is still the one in H50 — recall is low because the readers withhold.
+3. **A report is regenerated in the same step as the code or truth it scores, or not
+   committed.** This one cost a full diagnosis to tell staleness from corruption, and the
+   only reason it could be told apart was that the cache happened to be faithful.
+4. **The text cache records the extractor's name but not its version** (`"extractor":
+   "pdfplumber.extract_text()"`), and `requirements.txt` pins `pdfplumber==0.11.10` but
+   not `pdfminer.six`, which does the extraction and is installed here at `20260107`.
+   Drift was disproven this time by evidence, not by the pin. Recorded as a known gap:
+   the cache cannot tell you what built it. Not changed in this session — the brief
+   forbids changing pins silently.

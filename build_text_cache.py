@@ -31,6 +31,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+from repo_paths import repo_file                             # noqa: E402
+
 from extract import textcache as TC                            # noqa: E402
 
 FETCH_LOG = ROOT / "data" / "rhp_valuation_fetch.csv"
@@ -41,11 +43,9 @@ def work_list() -> pd.DataFrame:
     f = pd.read_csv(FETCH_LOG)
     f = f[f["status"].astype(str).str.startswith("ok")].copy()
     f = f.drop_duplicates(subset=["company"], keep="last")
-    # The recorded paths were written on Windows and read `_local\rhp_valuation\X.pdf`.
-    # On POSIX a backslash is an ordinary filename character, so `ROOT / that` is one long
-    # file that cannot exist and work_list() silently returned ZERO documents. (2026-11-02,
-    # macOS move.)
-    f["abs"] = f["path"].map(lambda p: ROOT / str(p).replace("\\", "/"))
+    # The recorded paths were written on Windows; `repo_file` is why this does not
+    # silently return ZERO documents on POSIX. See repo_paths.py.
+    f["abs"] = f["path"].map(repo_file)
     return f[f["abs"].map(lambda p: p.exists())]
 
 
@@ -189,7 +189,19 @@ def self_test() -> int:
 
     print("\n[5] round trip on a real document")
     w = work_list()
-    chk("the work list is the 450 fetched documents", len(w) == 450, len(w))
+    # Was `== 450`, the whole fetch log, until the macOS rebuild (2026-11-02). The
+    # restored corpus is 430: 450 ok rows in the fetch log, MINUS the 4 that are only
+    # DRHPs and were excluded by H52, MINUS 16 that appear in no provenance list and
+    # were not re-fetched. A number, not a floor, so a document going missing fails here
+    # rather than quietly shrinking the cache.
+    chk("the work list is the 430 restored documents (450 - 4 H52 - 16 unrestored)",
+        len(w) == 430, len(w))
+    cs = pd.read_csv(ROOT / "reports" / "rhp_check_set_docs.csv")
+    have = {str(c).strip().lower() for c in w["company"]}
+    short = [c for c in cs["company"].astype(str)
+             if c.strip().lower() not in have]
+    chk("and all 20 check-set documents are among them, so the gate can be reproduced",
+        not short, short)
     built = [r for _, r in w.iterrows() if TC.get(r["abs"]) is not None]
     if built:
         r = built[0]

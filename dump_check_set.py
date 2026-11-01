@@ -29,6 +29,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+from repo_paths import repo_file                             # noqa: E402
+
 import extract.base as B                                             # noqa: E402
 from extract import textcache as TC                                  # noqa: E402
 
@@ -111,7 +113,7 @@ def docs() -> pd.DataFrame:
 
 
 def dump_one(row) -> tuple[str, int]:
-    path = ROOT / str(row["path"])
+    path = repo_file(row["path"])
     rec = TC.get(path)
     if rec is None:
         return f"# {row['company']}: NOT CACHED\n", 0

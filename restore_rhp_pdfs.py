@@ -31,6 +31,7 @@ from pathlib import Path
 import pandas as pd
 
 import fetch_rhp
+from repo_paths import repo_file
 from fetch_rhp import PDFS, _pdf_bytes, _session, _verify_is_prospectus
 
 ROOT = Path(__file__).resolve().parent
@@ -109,7 +110,7 @@ def _done_keys() -> set[str]:
     ok = d[d["status"].isin(["ok", "ok_no_hash"])]
     keys = set()
     for _, r in ok.iterrows():
-        path = ROOT / str(r["path"]) if pd.notna(r["path"]) else None
+        path = repo_file(r["path"]) if pd.notna(r["path"]) else None
         if path is not None and path.exists():
             keys.add(str(r["url"]))
     return keys

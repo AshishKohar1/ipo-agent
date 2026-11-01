@@ -26,6 +26,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import rhp_readers as RR                                    # noqa: E402
+from repo_paths import repo_file                             # noqa: E402
 
 TRUTH = ROOT / "reports" / "rhp_check_set.csv"
 DOCS = ROOT / "reports" / "rhp_check_set_docs.csv"
@@ -77,7 +78,10 @@ def score(reader_rows: pd.DataFrame | None = None) -> pd.DataFrame:
         tt = t[t["company"] == r.company]
         if tt.empty:
             continue
-        rec = TC.get(Path(r.path))
+        # `Path(r.path)` was BOTH relative and Windows-separated: every lookup
+        # missed, score() returned an empty frame, and summarise() died on
+        # KeyError 'field'. See repo_paths.py. (2026-11-02, macOS move.)
+        rec = TC.get(repo_file(r.path))
         if rec is None:
             continue
         got = RR.read_document(rec["pages"])["fields"]

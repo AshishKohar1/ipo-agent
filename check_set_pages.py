@@ -29,6 +29,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+from repo_paths import repo_file                             # noqa: E402
+
 import extract.base as B                                             # noqa: E402
 from extract import textcache as TC                                  # noqa: E402
 
@@ -48,7 +50,7 @@ def _doc(company: str) -> tuple[B.Doc, dict]:
     if not len(hit):
         raise SystemExit(f"{company!r} is not in the check set. --list to see the 20.")
     r = hit.iloc[0]
-    path = ROOT / str(r["path"])
+    path = repo_file(r["path"])
     rec = TC.get(path)
     if rec is None:
         raise SystemExit(f"{r['company']} is not in the text cache yet.")
@@ -117,7 +119,7 @@ def self_test() -> int:
     d = docs()
     chk("20 in the check set", len(d) == 20, len(d))
     miss = [r["company"] for _, r in d.iterrows()
-            if TC.get(ROOT / str(r["path"])) is None]
+            if TC.get(repo_file(r["path"])) is None]
     chk("all 20 are in the text cache", not miss, miss)
     found = {}
     for _, r in d.iterrows():

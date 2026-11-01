@@ -45,6 +45,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+
+from repo_paths import repo_file                             # noqa: E402
 import dataio                                                  # noqa: E402
 
 DATA = ROOT / "data"
@@ -267,7 +269,7 @@ def extract(limit: int | None = None, deadline=None, only: list[str] | None = No
         if deadline is not None and pd.Timestamp.now() >= pd.Timestamp(deadline):
             print(f"  HARD STOP at {deadline} reached after {i - 1} documents")
             break
-        pdf = ROOT / str(r["path"])
+        pdf = repo_file(r["path"])
         comp = str(r["company"])
         if not pdf.exists():
             rows.append({"company": comp, "variable": "_document", "value": None,
@@ -454,7 +456,7 @@ def extract_shares_only(limit: int | None = None, write: bool = True) -> pd.Data
           f"{len(pend)} to do")
     rows, t0 = [], time.time()
     for i, r in enumerate(pend, 1):
-        pdf = ROOT / str(r["path"])
+        pdf = repo_file(r["path"])
         comp = str(r["company"])
         if not pdf.exists():
             continue

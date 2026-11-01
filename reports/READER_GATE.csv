@@ -1,5 +1,5 @@
 company,field,truth_latest,truth_all,got,reader_unit,on_a_stated_line,on_the_right_column,withheld,reason,line
-Polycab India Ltd,tax_expense,2055.96,"[807.12, 1283.62, 2055.96]",,,False,False,True,row not present on the page,None
+Polycab India Ltd,tax_expense,2055.96,"[807.12, 1283.62, 2055.96]",2055.96,INR million,True,True,False,ok (derived),"Profit before tax 5,764.10 3 ,616.47 2 ,654.16  ||  Profit for the year 3,708.14 - - - - 2 ,332.85 - - - - 1 ,847.04"
 Polycab India Ltd,finance_costs,936.8,"[659.49, 936.8, 1473.52]",36.8,INR million,False,False,False,ok,"Finance costs - - - - 9 36.80 - - - - 659.49 - - - - 1 ,473.52"
 Polycab India Ltd,depreciation_amortisation,1329.5,"[1111.15, 1278.83, 1329.5]",1244.55,INR million,False,False,False,ok,"Depreciation & Amortisation expenses 1,244.55 74.71 10.24 - 1,329.50 1 ,239.89 3 4.40 4.54 - 1 ,278.83 1 ,090.74 20.39 0"
 Polycab India Ltd,shares_outstanding_pre_issue,141205838.0,[141205838.0],141205838.0,,True,True,False,ok,"141,205,838 Equity Shares"
@@ -13,3 +13,10 @@ Computer Age Management Services Ltd,shares_outstanding_pre_issue,48786800.0,[48
 Likhitha Infrastructure Ltd,net_worth,6995.58,"[3242.94, 5031.23, 6995.58]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
 Likhitha Infrastructure Ltd,finance_costs,136.4,"[84.62, 136.4, 168.49]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
 Likhitha Infrastructure Ltd,shares_outstanding_pre_issue,14625000.0,[14625000.0],,,False,False,True,"no ISSUED, SUBSCRIBED ... BEFORE THE OFFER line with an Equity Shares count",None
+Craftsman Automation Limited,finance_costs,1484.0,"[1124.83, 1405.49, 1484.0]",1484.0,INR million,True,True,False,ok,"Finance costs 772.40 7.50 1,484.00 9.89 1,405.49 7.67 1,124.83 7.39"
+Craftsman Automation Limited,depreciation_amortisation,1949.88,"[1491.53, 1761.48, 1949.88]",,,False,False,True,row not present on the page,None
+Craftsman Automation Limited,shares_outstanding_pre_issue,20121600.0,[20121600.0],20121600.0,,True,True,False,ok,"20,121,600 Equity Shares"
+Global Health Limited,net_worth,16160.11,"[13495.37, 13823.42, 16160.11]",,,False,False,True,no dated row survives as a full fiscal year,None
+Global Health Limited,finance_costs,794.85,"[515.47, 671.74, 794.85]",,,False,False,True,no dated row survives as a full fiscal year,None
+Global Health Limited,depreciation_amortisation,1297.11,"[1150.4, 1232.14, 1297.11]",,,False,False,True,no dated row survives as a full fiscal year,None
+Global Health Limited,shares_outstanding_pre_issue,253303930.0,[253303930.0],253303930.0,,True,True,False,ok,"253,303,930 Equity Shares"
