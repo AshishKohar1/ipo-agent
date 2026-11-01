@@ -2203,3 +2203,62 @@ click-through, the robots.txt rule, and H36 on Tapetide.
 private, because publication is the one condition of H47 that cannot be undone once done.
 The user considered it and decided otherwise. This entry exists so the decision is
 auditable, not to re-litigate it.
+
+### H52 — SEBI has no RHP for the four DRHP rows, so all four are excluded (2026-11-02)
+
+**The user's instruction, on finding four `DRHP` rows in `data/rhp_sources.csv`:** rule 3
+stands, no DRHPs; for each one, resolve the RHP from SEBI; if there is no RHP, use the final
+prospectus and label it; verify with `_verify_is_prospectus()` and record URL + SHA-256; and
+if none exists on SEBI, exclude it and say so.
+
+**It is the last branch, for all four.** `resolve_sebi` was re-run on 2026-11-02 for
+`doc_type="RHP"` and then `doc_type="PROSPECTUS"`:
+
+| company | listed | RHP on SEBI | final prospectus on SEBI | verdict |
+|---|---|---|---|---|
+| Allied Blenders and Distillers Limited | 2024-07-02 | not found | not found | **EXCLUDED** |
+| Northern Arc Capital Limited | 2024-09-24 | not found | not found | **EXCLUDED** |
+| Amanta Healthcare Ltd. | 2025-09-09 | not found | not found | **EXCLUDED** |
+| Sri Lotus Developers and Realty Limited | 2025-08-06 | not found | not found | **EXCLUDED** |
+
+**Why four identical "not found" results are believable rather than a broken resolver.**
+Four identical negatives are exactly what a silently broken resolver produces, so the
+resolver was tested against a control first: three companies whose SEBI RHP is already
+recorded in `data/rhp_progress.csv`.
+
+| control | result |
+|---|---|
+| Euro Pratik Sales Ltd. | FOUND, and the URL matches the recorded one |
+| Dev Accelerator Ltd. | FOUND, and the URL matches the recorded one |
+| Shringar House of Mangalsutra Ltd. | FOUND, and the URL matches the recorded one |
+
+The resolver works. And the result is not new: all four already sit in
+`data/rhp_progress.csv` at **`status = source_unresolved`** with the note
+`SEBI: no RHP matching name+date for queries [...]`. The 2026-11-02 run reproduces the
+pipeline's own earlier verdict rather than discovering anything. That is also why
+`rhp_sources.csv` carried a DRHP for them in the first place: a human went and found the
+draft by hand because SEBI had no RHP.
+
+**What was NOT done, deliberately.** The fetch log `data/rhp_valuation_fetch.csv` holds a
+URL and a verified SHA-256 for each of the four, and three of those are SEBI
+`attachdocs` paths — so a document could have been fetched for all four in one pass. It was
+not, because those are the DRHPs: filed seven months before listing in each case, far
+outside the 90-day window `fetch_rhp.DATE_WINDOW` allows an RHP. Fetching them would have
+satisfied the letter of "restore the documents" while breaking rule 3. Note that
+`_verify_is_prospectus()` would have **passed** all three: a draft red herring prospectus
+carries a prospectus marker, the company name and well over 100 pages. The guard cannot
+tell a DRHP from an RHP and was never meant to — which is the reason the document type has
+to be established at resolution, not at verification.
+
+**Recorded in the data, not just here.** `data/rhp_sources.csv` gains `h52_status` and
+`h52_note`; the four rows read `EXCLUDED_NO_RHP_ON_SEBI`, so the file no longer looks like
+it lists four fetchable documents. The 24 non-DRHP rows are untouched.
+
+**Consequence for the text cache, stated as arithmetic and not as a match.** The old build
+was **454 documents / 217,836 pages**, which is what `data/rhp_valuation_fetch.csv` records
+and what `build_text_cache.py`'s own cost estimate quotes. The three provenance lists name
+**446** distinct documents once the four DRHPs are dropped, of which **445** were restored —
+`Samhi Hotels Limited` is the one failure, rejected because the PDF has no extractable text
+at all. So the rebuild starts from 445 of the old 454, and **the 446 figure in the original
+brief was 418 + 28 counting the DRHPs**. None of these numbers is 446-as-rebuilt, and the
+gate must be reproduced on the check set, which contains none of the four.
