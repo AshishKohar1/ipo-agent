@@ -66,6 +66,7 @@ def worklist() -> pd.DataFrame:
     m = pd.read_csv(DATA / "verified_rhp_manifest.csv")
     for _, r in m.iterrows():
         rows.append({"list": "verified_rhp_manifest", "company": r["company"],
+                     "verify_name": r["company"],
                      "doc_type": r["doc_type"], "url": r["url"],
                      "expected_sha": r["sha256"],
                      "target": Path(str(r["local_file"])).name})
@@ -74,6 +75,7 @@ def worklist() -> pd.DataFrame:
     for _, r in p[p["status"] == "done"].iterrows():
         sha = str(r["sha256"])
         rows.append({"list": "rhp_progress", "company": r["company"],
+                     "verify_name": r["company"],
                      "doc_type": r["doc_type"], "url": r["url"], "expected_sha": sha,
                      "target": f"{sha[:16]}_{r['doc_type']}.pdf"})
 
@@ -81,7 +83,14 @@ def worklist() -> pd.DataFrame:
     for _, r in s.iterrows():
         if str(r["doc_type"]).upper() == "DRHP":
             continue                                    # rule 3
+        # H28: the cover carries the name the company had AT FILING, and
+        # `actual_company_name_on_document` is exactly that - Eternal Limited's RHP says
+        # Zomato Limited, Acutaas Chemicals' says Ami Organics. Verifying against the
+        # current name rejected four good documents on the first pass.
         rows.append({"list": "rhp_sources", "company": r["csv_company_name"],
+                     "verify_name": (r["actual_company_name_on_document"]
+                                     if pd.notna(r["actual_company_name_on_document"])
+                                     else r["csv_company_name"]),
                      "doc_type": r["doc_type"], "url": r["source_url"],
                      "expected_sha": None, "target": None})
 
@@ -207,7 +216,8 @@ def run(limit: int | None = None) -> int:
                 continue
 
             got = hashlib.sha256(body).hexdigest()
-            ok_doc, why = _verify_is_prospectus(body, company)
+            vname = str(r["verify_name"]) if pd.notna(r["verify_name"]) else company
+            ok_doc, why = _verify_is_prospectus(body, vname)
             # `or` is wrong here: pandas stores the absent target as NaN, and a NaN
             # float is TRUTHY, so `r["target"] or ...` returned NaN and every one of the
             # 24 unhashed rows died as `PosixPath / float`. Ask pandas, not truthiness.
@@ -230,7 +240,8 @@ def run(limit: int | None = None) -> int:
                 _append({"list": r["list"], "company": company, "doc_type": r["doc_type"],
                          "url": url, "expected_sha": expected, "got_sha": got,
                          "status": "failed", "bytes": len(body),
-                         "note": f"verify_is_prospectus rejected: {why}",
+                         "note": f"verify_is_prospectus rejected (cover name tried: "
+                                 f"{vname!r}): {why}",
                          "ran_at": pd.Timestamp.now()})
                 print(f"[{i}/{len(todo)}] REJECTED {company}: {why}", flush=True)
                 continue
@@ -326,6 +337,13 @@ def self_test() -> int:
         'if pd.isna(r["target"])' in body
         and 'target = r["target"] or' not in body)
 
+    chk("a renamed company is verified against the name ON the document (H28)",
+        str(w[w["company"] == "Eternal Limited"]["verify_name"].iloc[0]) == "Zomato Limited",
+        str(w[w["company"] == "Eternal Limited"]["verify_name"].tolist()))
+    chk("and an un-renamed row verifies against its own name",
+        (w[w["list"] == "rhp_progress"]["verify_name"]
+         == w[w["list"] == "rhp_progress"]["company"]).all())
+
     print("[3] it cannot be mistaken for a bulk harvester")
     chk("one throttle constant, >= 3 s", SEBI_MIN_GAP >= 3.0, str(SEBI_MIN_GAP))
     chk("every request goes through _throttle", body.count("sess.get(") == body.count("_throttle()") - 1)
@@ -334,7 +352,7 @@ def self_test() -> int:
         'f"HTTP {resp.status_code}"' in body and body.count("sess.get(") == 2)
     chk("prospectus verification is fetch_rhp's own, not a copy",
         _verify_is_prospectus is fetch_rhp._verify_is_prospectus)
-    chk("prospectus verification is not optional", "_verify_is_prospectus(body, company)" in body)
+    chk("prospectus verification is not optional", "_verify_is_prospectus(body, vname)" in body)
 
     print("[4] a mismatch is quarantined, never used")
     chk("quarantine is outside the fetched tree", QUARANTINE.name != PDFS.name)
