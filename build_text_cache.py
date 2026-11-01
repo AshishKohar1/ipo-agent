@@ -41,7 +41,11 @@ def work_list() -> pd.DataFrame:
     f = pd.read_csv(FETCH_LOG)
     f = f[f["status"].astype(str).str.startswith("ok")].copy()
     f = f.drop_duplicates(subset=["company"], keep="last")
-    f["abs"] = f["path"].map(lambda p: ROOT / str(p))
+    # The recorded paths were written on Windows and read `_local\rhp_valuation\X.pdf`.
+    # On POSIX a backslash is an ordinary filename character, so `ROOT / that` is one long
+    # file that cannot exist and work_list() silently returned ZERO documents. (2026-11-02,
+    # macOS move.)
+    f["abs"] = f["path"].map(lambda p: ROOT / str(p).replace("\\", "/"))
     return f[f["abs"].map(lambda p: p.exists())]
 
 
