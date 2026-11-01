@@ -13,22 +13,29 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 - **Model L is go-live ready** on H17 (ratified): L1 bids at Total >= 28.39x, L2 at >= 54.02x, no probability in the decision path. Three Actions jobs and nothing else: 15:00 IST email, 19:30 IST day-end capture, Saturday 10:30 audit
 - **Model H: NOT started and much further out.** Baseline only, AUC 0.525 (1y) / 0.562 (3y), RHP blocks still placeholders, and 37 prospectuses still missing. Scorecard parked per instruction
 - **Open for the user:** the 12-month email backtest under-delivers both promises (L1 85.7% vs 90%, L2 72.2% vs 80%). Tripwire armed at 1 of 2 on both; **no action by design**. **H24 (2026-10-10)** now also requires half a window's firing rows to be new before it counts - consecutive 12-month windows share 11 of 12 months, and rolling the current window forward a month leaves 0 of 45 L1 fires new
-- **Needs a date in the diary:** the HDFIRE intraday test, **13-15 October**. Confirmed from NSE's calendar as mainboard (series EQ). The poller is built and wired; it decides whether H22 is confirmed
-- **Needs YOU:** jobs 1 and 2 (email + dead-man) are set up. Still to add: **job 3, the 19:30 day-end capture at 14:00 UTC**, and **jobs 4-6, the HDFIRE polls** (`LIVE_SETUP.md` section 1b). GitHub's scheduler was **5h31m to 9h06m late on nine consecutive runs**, so the external trigger is what actually makes the 15:00 email land
-- **Gate C2:** AWAITING_USER since 2026-10-01
-- **Caveat:** Stage 1's Linux/`pip install` half is still unverified on a real cloud session
+- **HDFIRE intraday test: DONE** (13-15 Oct). `reports/HDFIRE_INTRADAY.md`, 100 polls. H40 confirmed H22 — NSE first for the live figure, Chittorgarh as fallback. The four poll crons were removed on 2026-10-19; `hdfire_poll.py` and `mode=poll` are kept deliberately, so the next intraday test needs a window and a cron, not new code
+- **External trigger: jobs 1, 2 and 3 are all live.** Evidence in the run history: the 14:15-15:00 IST email attempts and the 19:30 IST day-end leg both arrive as `workflow_dispatch`, and GitHub's own `schedule` runs land hours later and exit green on the marker. Jobs 4-6 were the HDFIRE polls and the user deleted them on 2026-10-19 with that test. GitHub's scheduler was **5h31m to 9h06m late on nine consecutive runs**, which is why the external trigger is what actually makes the 15:00 email land
+- **Gate C2:** superseded by H44/H45 and the check set — the field list is frozen and a reader is graded before it runs. Not an open gate
+- **Machine: macOS from 2026-11-02.** The Windows laptop's disk died; `main` is authoritative. Python 3.14.10 in `.venv`, every pin a prebuilt wheel, `check_env.py` 15/15. Stage 1's Linux/cloud `pip install` half is still unverified on a real cloud session, but the live workflow has been installing `requirements.txt` on `ubuntu-24.04` every weekday since, which is the same question answered in production
+- **Lost with the disk** (all gitignored, all re-fetchable): `_local/`, `data/rhp_text_cache/`, `data/bhavcopy_cache/`, `data/bhavcopy_raw_cache/`, `_local/check_set_dump/`
 
-## PHASE 3 — RUN THIS AFTER 15 Oct 2026, 20:00 IST. NOT BEFORE.
+## PHASE 3 — CLOSED. Kept as the record of what was done, not as work to do.
 
-Written 13 Oct 2026 ~04:00 IST, during the live-path freeze. Every item below touches a
-file in `.live-path` or depends on data the HDFIRE window has not produced yet, so none of
-it may start until the freeze lifts. The user will send **"Run Phase 3"**.
+**Do not run this section.** It was written 13 Oct 2026 ~04:00 IST during the live-path
+freeze, as a queue to run after 15 Oct 20:00 IST. The freeze lifted, the queue was worked
+through between 16 and 19 October, and the instruction "run Phase 3" is no longer live. The
+sub-sections below are left in place because they record the reasoning; their status is:
 
-**Before starting, check the freeze is actually over:**
+| item | status | evidence |
+|---|---|---|
+| 3.1 Finish `reports/HDFIRE_INTRADAY.md` | **DONE** | the report, 100 polls across 13-15 Oct; H40 confirms H22 |
+| 3.2 Move `ipo-ingest-outcomes` into mode `final` | **DONE** | `ingest_outcomes.py` runs in the day-end leg; its exit code is deferred so a harvest failure cannot cost the capture |
+| 3.3 Move `ipo-retrain-monthly` to a rule-based job | **DONE** | `retrain_review.py`, dispatch `mode=retrain`, `reports/retrain/2026-10.md` |
+| 3.4 cron-job.org settings for the user | **DONE** | jobs 1-3 are firing; the email and day-end legs arrive as `workflow_dispatch` |
+| 3.5 Decommission plan | **DONE** | H41 — the user deleted both routines and the three poll jobs on 2026-10-19 |
+| 3.6 Queued comment fixes | **DONE** | applied; the four poll crons and their `case` mappings are removed from the workflow |
 
-```bash
-python -c "import datetime,zoneinfo; print(datetime.datetime.now(zoneinfo.ZoneInfo('Asia/Kolkata')))"
-```
+Anything still open is in the Summary block at the top of this file, not here.
 
 ### 3.1 Finish `reports/HDFIRE_INTRADAY.md`
 
@@ -600,7 +607,11 @@ reverse: re-creating a routine costs minutes, and the data paths are unchanged.
 
 ---
 
-## Queued for after 15 Oct (live-path freeze)
+## Queued for after 15 Oct (live-path freeze) — CLOSED, record only
+
+**The freeze lifted on 15 Oct 2026 at 20:00 IST and this queue was worked through.** It is
+kept for its reasoning, not as work to do; see Phase 3.6 above. `.live-path` itself is kept
+because the next live test will want it.
 
 Nothing here is a defect in behaviour. They are comment and citation fixes in files frozen
 from **12 Oct 18:00 IST to 15 Oct 20:00 IST**, because HDFIRE (13–15 Oct) is Model L's

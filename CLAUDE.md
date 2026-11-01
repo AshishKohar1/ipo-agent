@@ -109,39 +109,43 @@ CAGR is 0.218. Never merge them.
 - `python check_env.py` checks this contract, the packages and the network. It must
   pass before any overnight run.
 
-## Current state (updated 2026-10-01 after PLAN Amendment 02)
+## Current state
 
-`PROGRESS.md` is authoritative for stage status; this table is the orientation summary.
+**`PROGRESS.md` is authoritative for stage status, gates and what to do next.** The
+orientation table that used to sit here was last true on 2026-10-01 and went stale within
+days; it is deliberately not reproduced, because a stale summary of a fifty-decision
+project is worse than no summary. Read, in this order: `PROGRESS.md` (its Summary block),
+`DECISIONS.md` from **H17 to H51**, and the commit messages from `379a51f` to `c11e45c` —
+the last human work before the laptop died. Everything after `c11e45c` is automated live
+runs.
 
-| Item | Status |
+Three things that table asserted which a reader must not inherit:
+
+| the old table said | what is true |
 |---|---|
-| Master dataset | 652 mainboard IPOs, 2010 – May 2026, in `data/` via `dataio.load_master()`. **Its `Date` column is the listing date, not the issue-open date.** True open dates for 2021+ in `data/issue_dates_recovered.csv` (313 of 652) |
-| `data/master_with_symbols.csv` | 578 of 652 with symbols; `exclude_reason` flags 29 rows, dropped from every model |
-| Benchmark | Official Nifty 50 TRI (NSE Indices), 2009 – Sep 2026, `data/NIFTY50_TRI.csv` |
-| Holding targets vs TRI | `excess_1y` 491 rows (40.3% beat); `excess_3y` 331 rows (36.0%) |
-| Framework | `models/framework.py` — numpy logistic regression, walk-forward + embargo, recency weighting, `vif()`, `threshold_section5()`, calibration, model cards |
-| **Stage 0** | ✅ DONE — repo on GitHub, acceptance verified against the remote |
-| **Stage 1** | ✅ DONE on the laptop — `check_env.py` 13/13, `stage1_env_check.py` all pass, 11/11 domains. **Linux/cloud `pip install` still unverified** |
-| **Stage 2 / Gate A** | ✅ CLOSED 2026-09-30 — **Set A** for both targets (A1); Set C standing challenger (A2); Sets B/D rejected but categories still displayed (A3) |
-| **Stage 3** | ✅ DONE — isotonic calibration adopted (G1, G2), independently verified 14/14 by `verify_stage3.py`. Fire iff calibrated p ≥ 0.90 (L1) / ≥ 0.80 (L2) |
-| **Stage 4A / Gate F2** | ✅ CLOSED 2026-10-01 by H1. The ID walk solved company→Chittorgarh-id, but the day-wise table is **transient**: 0 of 50 pre-2026 pages carry it |
-| **Stage 4B** | ❌ **CANCELLED** (H1) — no permitted source for day-wise history |
-| **Stage 5** | ❌ **CANCELLED** (H1) — `L_day1`/`L_day2`/forecaster have no training data |
-| **Stage 14** | ✅ DONE — Amendment 02 applied |
-| **Stage 15** | RHP extractor rebuild on the H6 fields + night batch → **Gate C2**, target ≥60% coverage |
-| **Stage 16** | Finalise and freeze `L_final_3pm` → **Gate B** |
-| **Stage 17 / 18** | Night backfills: aggregator headline financials (H5); anchor and lock-in from Chittorgarh |
-| **Stage 19** | Productionise + go live (absorbs Stages 6 and 7) |
-| Model H | `models/model_h.py` baseline only: AUC 0.525 (1y), 0.562 (3y). RHP blocks are placeholders |
-| RHP fetcher | SEBI + BSE SME resolvers, 5/5 verified; `data/verified_rhp_manifest.csv` has all 8 PDFs with URL + SHA-256 |
-| RHP extraction | Stage 8 reached 24% on the headline financials and did **not** close Gate C; superseded by Stage 15, which measures coverage on the H6 fields instead. Framework (`extract/`), provenance model and TOC-driven section location with **measured** page offsets are kept |
-| GMP | **not a model feature and never fetched** (B5, D1). Display-only field in live reports, logged for later evaluation (D2) |
-| Live schedule | **Three** GitHub Actions jobs and nothing else: 15:00 IST weekday bid email, 19:30 IST weekday day-end capture, Saturday 10:30 capture audit. Two app routines survive: `ipo-retrain-monthly`, `ipo-ingest-outcomes`. The 15:00 leg refuses to send outside 14:00-16:00 IST and is **never** caught up — broker cutoff 4:00 PM (E1). See `LIVE_SETUP.md` |
+| Gate B AWAITING_USER on `model_l_v1.0` | **H17 supersedes it.** Model L is live on `model_l_v1.1`: L1 bids at Total >= 28.39x, L2 at >= 54.02x, and no probability enters the decision path |
+| Gate C2 AWAITING_USER on RHP coverage | **superseded by H44/H45 and the check set.** The field list is frozen, a reader is graded before it runs, and the check set is the measurement |
+| Model H "baseline only" | still unfit, but the shape is settled: H29 failed by under 1pp, **H35 is the fallback**, H48-H50 are done, readers are 2/5 passing, check set 7/20 |
 
-**Environment:** Windows Application Control on the laptop blocks scikit-learn's and
-statsmodels.tsa's DLLs. Use the validated numpy logistic regression (never add
-scikit-learn); import `Logit` from `statsmodels.discrete.discrete_model`, never
-`statsmodels.api`. The laptop has ~8 GB RAM — process large jobs one item at a time.
+**Environment (macOS, from 2026-11-02).** The Windows laptop's disk died. GitHub `main` is
+authoritative and this Mac is the development machine: macOS 26.6 on arm64, Python 3.14.10
+in `.venv` (`python3.14 -m venv .venv`), every `requirements.txt` pin installing as a
+prebuilt wheel. `check_env.py` passes **15/15** here.
+
+- **Rule 10 still holds: never add scikit-learn.** Use the validated numpy logistic
+  regression. The *reason* has changed — it was Windows Application Control blocking the
+  DLLs, and now it is simply that the models were fitted and frozen without it — but the
+  rule has not.
+- `statsmodels.api` imports fine on macOS. Keep importing `Logit` from
+  `statsmodels.discrete.discrete_model` anyway: `check_env.py` asserts that path.
+- The "~8 GB RAM, one item at a time" constraint was the laptop's. Keep the H9 night-batch
+  discipline regardless — it is about resumability, not memory.
+- Gitignored, and **lost with the disk**: `_local/`, `data/rhp_text_cache/`,
+  `data/bhavcopy_cache/`, `data/bhavcopy_raw_cache/`, `_local/check_set_dump/`, `.venv`.
+  Everything else is re-fetchable, and `data/verified_rhp_manifest.csv` carries a URL plus
+  SHA-256 for every PDF.
+- **There is no `.env`, and none is to be created.** No module reads one; the Gmail
+  credentials live only in GitHub Secrets.
 
 ## Run order
 
