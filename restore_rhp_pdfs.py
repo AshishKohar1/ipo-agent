@@ -208,7 +208,11 @@ def run(limit: int | None = None) -> int:
 
             got = hashlib.sha256(body).hexdigest()
             ok_doc, why = _verify_is_prospectus(body, company)
-            target = r["target"] or f"{got[:16]}_{r['doc_type']}.pdf"
+            # `or` is wrong here: pandas stores the absent target as NaN, and a NaN
+            # float is TRUTHY, so `r["target"] or ...` returned NaN and every one of the
+            # 24 unhashed rows died as `PosixPath / float`. Ask pandas, not truthiness.
+            target = (f"{got[:16]}_{r['doc_type']}.pdf"
+                      if pd.isna(r["target"]) else str(r["target"]))
 
             if expected and got != expected:
                 q = QUARANTINE / target
@@ -300,6 +304,10 @@ def self_test() -> int:
         set(w[w["list"] == "verified_rhp_manifest"]["expected_sha"])
         <= set(hashed["expected_sha"]))
 
+    # everything below self_test's own source, so an assertion cannot match its own
+    # label string
+    body = Path(__file__).read_text(encoding="utf-8").split("def self_test")[0]
+
     print("[2] naming matches what fetch_rhp itself writes")
     p = pd.read_csv(DATA / "rhp_progress.csv")
     r0 = p[p["status"] == "done"].iloc[0]
@@ -308,12 +316,17 @@ def self_test() -> int:
         want in set(w["target"].dropna()), want)
     chk("an unhashed row has no target until its bytes are seen",
         w[w["list"] == "rhp_sources"]["target"].isna().all())
+    # the absent target arrives from pandas as NaN, which is TRUTHY - `x or default`
+    # therefore yields NaN and the path join dies. All 24 unhashed rows failed this way
+    # on the first full pass.
+    _absent = w[w["list"] == "rhp_sources"]["target"].iloc[0]
+    chk("the absent target is NaN, and NaN is truthy - so `or` must not be used",
+        pd.isna(_absent) and bool(_absent) is True)
+    chk("the target fallback asks pd.isna, not truthiness",
+        'if pd.isna(r["target"])' in body
+        and 'target = r["target"] or' not in body)
 
     print("[3] it cannot be mistaken for a bulk harvester")
-    # everything below self_test's own source, so an assertion cannot match its own
-    # label string - the first version of this test did exactly that and passed/failed
-    # on its own prose rather than on the code
-    body = Path(__file__).read_text(encoding="utf-8").split("def self_test")[0]
     chk("one throttle constant, >= 3 s", SEBI_MIN_GAP >= 3.0, str(SEBI_MIN_GAP))
     chk("every request goes through _throttle", body.count("sess.get(") == body.count("_throttle()") - 1)
     chk("no attempt loop wrapping a request", "for attempt in" not in body and "while " not in body)
