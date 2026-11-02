@@ -2508,3 +2508,38 @@ the opposite case: two routes within 1.2%, stated chosen, agreement recorded.
 a document contradicting itself is a different fact from a document being quiet.
 
 21 tests, every route exercised by a real case.
+
+### H55 — a reader needs 10 correct values as well as 95% precision; below that the verdict is INSUFFICIENT
+
+**Date:** 2026-11-02. **Context:** after H53 regenerated `READER_GATE.md`, three of the
+five readers "passed" the 95% precision floor — on **1, 1 and 5** correct values. 100% of
+one value is a coin landing heads.
+
+**The rule.** A reader runs on all documents only if precision ≥ 95% **and** correct
+values ≥ **10**. Otherwise the verdict is **INSUFFICIENT**, which is neither a pass nor a
+reader defect: it says the check set has not yet earned an opinion. The minimum is tested
+**before** precision, so the verdict names the real problem — calling an unmeasured reader
+FAIL would blame it for the check set, and calling it PASS is what this decision exists to
+stop. Only **correct** values count; withheld rows do not, however many there are.
+
+**Effect — every verdict changes:**
+
+| field | truth rows | produced | correct | precision | before H55 | after H55 |
+|---|---|---|---|---|---|---|
+| `depreciation_amortisation` | 4 | 1 | 0 | 0.0% | FAIL | **INSUFFICIENT** |
+| `finance_costs` | 5 | 2 | 1 | 50.0% | FAIL | **INSUFFICIENT** |
+| `net_worth` | 4 | 1 | 1 | 100.0% | PASS | **INSUFFICIENT** |
+| `shares_outstanding_pre_issue` | 6 | 5 | 5 | 100.0% | PASS | **INSUFFICIENT** |
+| `tax_expense` | 2 | 1 | 1 | 100.0% | PASS | **INSUFFICIENT** |
+
+**Not one of the five readers has been measured.** That is the honest state, and it was
+hidden behind three PASS marks resting on seven values between them.
+
+**The fix for INSUFFICIENT is transcription, not reader work.** 13 of the 20 check-set
+documents have no ground truth at all; 124 truth rows cover 7 documents. Grading a reader
+harder cannot manufacture the values to grade it on. `rhp_reader_gate.py` exits non-zero
+unless every reader PASSES — INSUFFICIENT is not a pass, so no reader runs on 442
+documents on the strength of a single value.
+
+Ten tests, including the 9-vs-10 boundary, the 19-correct-1-wrong case that is exactly
+95.0%, and a check that withheld rows cannot pad the minimum.

@@ -1,16 +1,16 @@
 # The five readers, scored against the hand-read check set
 
-Gate: a reader runs on all 450 RHPs only at **precision >= 95.0%** on the values it produces. Precision is measured on what it said, not on what it withheld: silence is useless, a confident wrong value is corrupting.
+Gate (H55): a reader runs on all documents only at **precision >= 95.0%** on the values it produces **and at least 10 correct values**. Precision is measured on what it said, not on what it withheld: silence is useless, a confident wrong value is corrupting. Below the minimum sample the verdict is **INSUFFICIENT** - the reader has not been measured, which is a fact about the check set and not about the reader. 100% of one value is a coin landing heads.
 
 ## Per field
 
-| field | truth rows | produced | withheld | correct | precision | right line | recall | gate |
+| field | truth rows | produced | withheld | correct | precision | right line | recall | verdict (needs >=95.0% and >=10 correct) |
 |---|---|---|---|---|---|---|---|---|
-| `depreciation_amortisation` | 4 | 1 | 3 | 0 | **0.0%** | 0.0% | 0.0% | **FAIL** |
-| `finance_costs` | 5 | 2 | 3 | 1 | **50.0%** | 50.0% | 20.0% | **FAIL** |
-| `net_worth` | 4 | 1 | 3 | 1 | **100.0%** | 100.0% | 25.0% | PASS |
-| `shares_outstanding_pre_issue` | 6 | 5 | 1 | 5 | **100.0%** | 100.0% | 83.3% | PASS |
-| `tax_expense` | 2 | 1 | 1 | 1 | **100.0%** | 100.0% | 50.0% | PASS |
+| `depreciation_amortisation` | 4 | 1 | 3 | 0 | **0.0%** | 0.0% | 0.0% | **INSUFFICIENT** |
+| `finance_costs` | 5 | 2 | 3 | 1 | **50.0%** | 50.0% | 20.0% | **INSUFFICIENT** |
+| `net_worth` | 4 | 1 | 3 | 1 | **100.0%** | 100.0% | 25.0% | **INSUFFICIENT** |
+| `shares_outstanding_pre_issue` | 6 | 5 | 1 | 5 | **100.0%** | 100.0% | 83.3% | **INSUFFICIENT** |
+| `tax_expense` | 2 | 1 | 1 | 1 | **100.0%** | 100.0% | 50.0% | **INSUFFICIENT** |
 
 `right line` is the share of produced values that match SOME year the document prints for that field; `precision` is the share that match the year the anchor should have picked. The gap between them is the column error, which is the expensive one: a correct figure filed against the wrong year corrupts every ratio built on it.
 

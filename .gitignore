@@ -30,3 +30,6 @@ _local/check_set_dump/
 # macOS Finder metadata. The project moved to a Mac on 2026-11-02 (the Windows laptop's
 # disk died); Finder writes one of these into any directory it has opened.
 .DS_Store
+
+# Table cache: 0.42 GB of parsed tables, rebuildable from the PDFs (H9 batch).
+_local/rhp_table_cache/
