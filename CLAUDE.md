@@ -115,7 +115,7 @@ CAGR is 0.218. Never merge them.
 orientation table that used to sit here was last true on 2026-10-01 and went stale within
 days; it is deliberately not reproduced, because a stale summary of a fifty-decision
 project is worse than no summary. Read, in this order: `PROGRESS.md` (its Summary block),
-`DECISIONS.md` from **H17 to H51**, and the commit messages from `379a51f` to `c11e45c` —
+`DECISIONS.md` from **H17 to H57**, and the commit messages from `379a51f` to `c11e45c` —
 the last human work before the laptop died. Everything after `c11e45c` is automated live
 runs.
 
@@ -125,7 +125,7 @@ Three things that table asserted which a reader must not inherit:
 |---|---|
 | Gate B AWAITING_USER on `model_l_v1.0` | **H17 supersedes it.** Model L is live on `model_l_v1.1`: L1 bids at Total >= 28.39x, L2 at >= 54.02x, and no probability enters the decision path |
 | Gate C2 AWAITING_USER on RHP coverage | **superseded by H44/H45 and the check set.** The field list is frozen, a reader is graded before it runs, and the check set is the measurement |
-| Model H "baseline only" | still unfit, but the shape is settled: H29 failed by under 1pp, **H35 is the fallback**, H48-H50 are done, readers are 2/5 passing, check set 7/20 |
+| Model H "baseline only" | still unfit, but the shape is settled: H29 failed by under 1pp, **H35 is the fallback and is not yet run** (two spec choices open — `reports/H35_OPEN_CHOICES.md`), H48-H50 are done, **all five readers are INSUFFICIENT under H55** (none has 10 correct values), check set 7/20 |
 
 **Environment (macOS, from 2026-11-02).** The Windows laptop's disk died. GitHub `main` is
 authoritative and this Mac is the development machine: macOS 26.6 on arm64, Python 3.14.10
@@ -140,6 +140,13 @@ prebuilt wheel. `check_env.py` passes **15/15** here.
   `statsmodels.discrete.discrete_model` anyway: `check_env.py` asserts that path.
 - The "~8 GB RAM, one item at a time" constraint was the laptop's. Keep the H9 night-batch
   discipline regardless — it is about resumability, not memory.
+- **Two caches, both gitignored.** `data/rhp_text_cache/` holds every page's text for 444
+  documents (198 MB); `_local/rhp_table_cache/` holds every table on every page, parsed
+  with `{vertical_strategy: text, horizontal_strategy: text}` and keyed by SHA-256
+  (~300 MB). Adding a variable means writing a reader against these, not opening a PDF.
+  Both record the extraction library versions; `textcache.lib_drift()` reports a mismatch.
+- **Rule 3 is enforced at the title line** (H57). `data/rhp_doc_type.csv` classifies all
+  444 documents; the two DRHPs in the corpus are excluded from every reader run and fit.
 - Gitignored, and **lost with the disk**: `_local/`, `data/rhp_text_cache/`,
   `data/bhavcopy_cache/`, `data/bhavcopy_raw_cache/`, `_local/check_set_dump/`, `.venv`.
   Everything else is re-fetchable, and `data/verified_rhp_manifest.csv` carries a URL plus

@@ -7,6 +7,53 @@
 Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-30) and
 `PLAN_AMENDMENT_02.md` (2026-10-01).
 
+## Session 2026-11-02 (evening) — recovery close-out, H53-H57
+
+- **16 "missing" documents resolved.** They were the manual list validated on 2026-10-19
+  (`reports/MANUAL_RHP_VALIDATION.csv`, 38 rows, all ACCEPT) — a FOURTH provenance list,
+  now read by `restore_rhp_pdfs.py`. 14 of 16 restored, all SHA-verified. Corpus is
+  **444 documents / 214,609 pages** cached (450 − 4 H52 − 1 DRHP − 1 unserved).
+- **Samhi Hotels: a text-bearing copy DOES exist** — 570 pages, SHA `579bcf9f…`, verified
+  2026-10-19 — but SEBI dropped the connection three times and then refused. Left
+  unfetched under H47 ("a refused connection is never worked around"). **No OCR, and none
+  needed.** The earlier `rhp_sources` copy is a 1-page scan, which is a different document.
+- **H57: rule 3 was not being enforced.** `_verify_is_prospectus()` matched `RED HERRING
+  PROSPECTUS` inside `DRAFT RED HERRING PROSPECTUS`. Two DRHPs are in the corpus
+  (Mahindra Logistics, Nippon Life India AMC, both Aug 2017) and a third (Supriya
+  Lifescience) was refused by the new guard on its first live run. `data/rhp_doc_type.csv`
+  classifies all 444: **421 RHP, 14 PROSPECTUS, 7 UNCLEAR, 2 DRHP**.
+- **H53 closed out.** `pdfminer.six`, `pillow`, `pypdfium2` and `cryptography` are pinned;
+  every cache record carries `lib_versions`; `lib_drift()` reports a mismatch without
+  invalidating 214k pages over a patch bump.
+- **H54: H43's P/B routes restored.** `ipo_pb_pre_issue` **0 → 183** (H43 had 163);
+  `ipo_pb` 7 → 20. The old route read two variables that do not exist in
+  `rhp_valuation_values.csv`, so it could never fire. `ipo_pb` is 20 not 24 because four
+  of H43's rested on extractor 1.7.0 share counts that 1.8.1 refuses. The new rule-2
+  cross-check caught **PNC Infratech** on its first run: stated NAV gives P/B 2.00,
+  derived gives 219.89 — withheld.
+- **H55: all five readers are INSUFFICIENT.** A reader now needs ≥10 correct values as
+  well as ≥95% precision. The previous "3 of 5 pass" rested on 1, 1 and 5 values. **Not
+  one reader has been measured.** The fix is transcription, not reader work.
+- **Table cache (Task 3 part 1) built and running** as an overnight H9 batch:
+  `build_table_cache.py`, every table on every page, keyed by SHA-256, settings and
+  library versions in each file, resumable per document. ~5 h, ~300 MB, gitignored.
+- **H29 correction:** `reports/MODEL_H_READINESS.md` had said "NOT TESTED". Wrong — H29 was
+  **run and failed**: 83 picks, 53.01% vs 54%, Wilson lo 42.38% vs 43.13%, AUC 0.5338.
+- **H35 not run.** Its spec leaves two choices open (missing-value policy; tercile cut
+  source) that change the answer — see `reports/H35_OPEN_CHOICES.md`. Awaiting the user.
+- **Combined-fit readiness:** `reports/MODEL_H_COMBINED_READINESS.md`. 5 variables firm,
+  12 "maybe", 135 wins allows 13 — condition met. Four of the five firm variables are
+  market heat, and **no RHP-sourced variable is firm**.
+
+### Still open after this session
+
+| item | state |
+|---|---|
+| Task 3 page index + master pass | table cache building; index and master pass not started |
+| Task 5: transcribe the 13 untouched check-set RHPs | **not started** — the blocker for every H55 verdict |
+| Task 6: run H35 | **blocked** on the two choices above |
+| Samhi Hotels | excluded; SEBI refused the verified 570-page copy |
+
 ## Summary (updated at the end of every session)
 - **Finished:** Stages 0-3, 4A, 14, 15a/15b, 16, 16b, 17+18, 19, 20-23, 25, 26, 27, 28, **29-34 (2026-10-08)** and **35-40 (2026-10-09)**, **41-46 (2026-10-10)**
 - **In progress:** nothing. Working tree clean
