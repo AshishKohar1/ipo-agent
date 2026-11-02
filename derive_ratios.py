@@ -45,6 +45,10 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 import dataio                                                        # noqa: E402
+# Reused, never re-implemented: the share-count guard and the Chittorgarh table are H43's
+# and the post-issue share derivation is H48's. A second copy would drift from the first.
+from derive_pb import _cg_table, share_count_plausible              # noqa: E402
+from derive_post_issue import post_issue_shares                     # noqa: E402
 from derive_pb import (newest_per_variable, share_count_plausible,   # noqa: E402
                        _ver_key)
 
@@ -52,6 +56,7 @@ DATA = ROOT / "data"
 OUT = DATA / "valuation_ratios_h45.csv"
 MIN_PEERS = 2                  # H45 (c): a basket of one is not a basket
 CR = 1e7                       # one crore, for shares x price -> Rs crore
+TOL_PCT = 5.0                  # hard rule 2: max pairwise relative difference
 
 
 # ------------------------------------------------------------------ the formulas
@@ -228,10 +233,122 @@ def _get(row, name):
     return None if v is None or pd.isna(v) else float(v)
 
 
+# ======================================================================================
+# P/B routes, restored from H43 (decision H54, 2026-11-02)
+# ======================================================================================
+# H45 rewrote this module and in doing so dropped H43's `nav_fy1` route and both derived
+# post-issue routes. What replaced them read `nav_pre_issue` (extracted for 0 of 450
+# companies) and fell back to `net_worth_fy1 / shares_outstanding_pre_issue` - two
+# variable names that DO NOT EXIST in rhp_valuation_values.csv, so the fallback could
+# never fire. Result: ipo_pb_pre_issue 0 of 433 and ipo_pb 7, against H43's 163 and 24.
+#
+# Nothing about H45's withholding policy changes. A missing input is still NULL with a
+# reason; what is restored is the inputs that were there all along.
+EXPENSES_NOTE = ("ISSUE EXPENSES IGNORED, which overstates book value and so UNDERSTATES "
+                 "this P/B")
+
+
+def _num(x):
+    """A finite float, or None. Chittorgarh columns arrive as strings and as NaN."""
+    try:
+        f = float(pd.to_numeric(x, errors="coerce"))
+    except (TypeError, ValueError):
+        return None
+    return None if pd.isna(f) else f
+
+
+def pre_issue_nav(stated, nav_fy1, net_worth_cr, pre_shares):
+    """Pre-issue NAV per share, by H43's precedence. -> (nav, method, note)
+
+    `nav_fy1` is the most recent fiscal year's NAV per share and IS pre-issue book value:
+    it is struck before the offer by construction. H43 established this and it is the
+    route that carries the coverage - 203 companies have an `ok` nav_fy1, against 0 for
+    `nav_pre_issue`, which every RHP prints as `[*]` because it depends on a price the
+    book has not yet fixed (H48).
+    """
+    if stated is not None and stated > 0:
+        return stated, "rhp_stated_pre_issue_nav", ""
+    if nav_fy1 is not None and nav_fy1 > 0:
+        return nav_fy1, "nav_fy1_as_pre_issue", (
+            "nav_fy1 - the most recent fiscal year's NAV per share, which IS pre-issue "
+            "book value: it is struck before the offer by construction")
+    if (net_worth_cr is not None and pre_shares is not None and pre_shares > 0
+            and net_worth_cr > 0):
+        return (net_worth_cr * CR / pre_shares), "derived_pre_issue_nav", (
+            f"net worth {net_worth_cr} cr / {pre_shares:.0f} pre-issue shares")
+    return None, "none", ""
+
+
+def post_issue_nav_routes(stated, net_worth_cr, fresh_cr, shares_post_rhp,
+                          shares_post_h48):
+    """Every post-issue NAV route that has its inputs. -> {method: (nav, note)}
+
+    Three, in H43/H48 order of preference: the RHP's own stated figure, H48's derived
+    share count, and H43 method 3 on the RHP's stated post-issue count. The last two
+    differ ONLY in where the share count comes from, which is exactly why they are worth
+    cross-checking against each other.
+    """
+    out = {}
+    if stated is not None and stated > 0:
+        out["rhp_stated_post_issue_nav"] = (stated, "")
+    if net_worth_cr is not None and fresh_cr is not None and net_worth_cr + fresh_cr > 0:
+        for method, sh in (("h48_derived_shares", shares_post_h48),
+                           ("h43_method3_rhp_shares", shares_post_rhp)):
+            if sh is not None and sh > 0:
+                bvps = (net_worth_cr + fresh_cr) * CR / sh
+                if bvps > 0:
+                    out[method] = (bvps, f"(net worth {net_worth_cr} cr + fresh issue "
+                                         f"{fresh_cr} cr) / {sh:.0f} shares = book value "
+                                         f"{bvps:.2f}/share. {EXPENSES_NOTE}")
+    return out
+
+
+# Preference order, as H43/H48 set it. `reconcile_routes` picked `sorted(routes)[0]`
+# in its first version, which is ALPHABETICAL - so `h43_method3_rhp_shares` beat
+# `rhp_stated_post_issue_nav`, the exact opposite of the stated precedence. The order
+# lives here so it cannot be re-derived from a variable name again.
+POST_PREFERENCE = ("rhp_stated_post_issue_nav", "h48_derived_shares",
+                   "h43_method3_rhp_shares")
+
+
+def reconcile_routes(routes: dict, tol_pct: float = 5.0):
+    """Hard rule 2 across every PAIR. -> (value, method, reason)
+
+    A disagreement over `tol_pct` withholds the ratio and logs every route, rather than
+    silently preferring the first. One route is used as it stands - there is nothing to
+    reconcile against, and H45 already says single-source values are flagged, not dropped.
+    """
+    if not routes:
+        return None, "none", "no post-issue NAV route has its inputs"
+    order = [m for m in POST_PREFERENCE if m in routes]
+    order += [m for m in sorted(routes) if m not in order]      # any future route, last
+    items = [(m, routes[m]) for m in order]
+    if len(items) == 1:
+        m, (v, note) = items[0]
+        return v, m, (f"single route {m}" + (f"; {note}" if note else ""))
+    worst, wa, wb = 0.0, None, None
+    for i in range(len(items)):
+        for j in range(i + 1, len(items)):
+            a, b = items[i][1][0], items[j][1][0]
+            gap = 100 * abs(a - b) / max(abs(a), abs(b))
+            if gap > worst:
+                worst, wa, wb = gap, (items[i][0], a), (items[j][0], b)
+    allv = "; ".join(f"{m}={v:.4f}" for m, (v, _) in items)
+    if worst > tol_pct:
+        return None, "withheld_disagreement", (
+            f"WITHHELD (rule 2): {wa[0]}={wa[1]:.4f} against {wb[0]}={wb[1]:.4f} is a "
+            f"{worst:.1f}% disagreement over the {tol_pct}% limit. All routes: {allv}")
+    m, (v, _) = items[0]
+    return v, m, (f"{m} chosen by precedence; {len(items)} routes agree within "
+                  f"{worst:.1f}%; {allv}")
+
+
 def build(write: bool = True) -> pd.DataFrame:
     val, pg, src, ver = _wide()
     m = _offer_prices()
     by_n = {r["_n"]: r for _, r in m.iterrows()}
+    cg = _cg_table()
+    cg_by = {r["_n"]: r for _, r in cg.iterrows()} if not cg.empty else {}
 
     rows = []
     for company in val.index:
@@ -252,26 +369,53 @@ def build(write: bool = True) -> pd.DataFrame:
         o["eps_diluted_fy1"] = _get(v, "eps_diluted_fy1")
         o["eps_diluted_fy1_page"] = pg.loc[company].get("eps_diluted_fy1")
 
-        # --- (b) P/B. Post-issue follows H43; pre-issue is new here.
-        nav_post = _get(v, "nav_post_issue")
-        method = "rhp_stated_post_issue_nav" if nav_post is not None else "none"
-        o["ipo_pb"], o["ipo_pb_reason"] = pb(po, nav_post)
-        o["ipo_pb_method"] = method if o["ipo_pb"] is not None else "none"
+        # --- (b) P/B, with H43's full precedence restored (H54)
+        cgr = cg_by.get(dataio.norm_name(company)) if cg_by else None
+        nw_cr = _num(cgr.get("net_worth_cr")) if cgr is not None else None
+        fresh_cr = _num(cgr.get("fresh_issue_cr")) if cgr is not None else None
 
-        nav_pre = _get(v, "nav_pre_issue")
+        # pre-issue: stated -> nav_fy1 -> net worth / pre-issue shares
         pre_shares = _get(v, "shares_outstanding_pre_issue")
-        nw = _get(v, "net_worth_fy1")
-        pre_method = "rhp_stated_pre_issue_nav"
-        if nav_pre is None and nw is not None and pre_shares is not None and pre_shares > 0:
-            # Rs crore / shares -> Rs per share
-            nav_pre = nw * CR / pre_shares
-            pre_method = "derived_pre_issue_nav"
-        elif nav_pre is None:
-            pre_method = "none"
+        nav_pre, pre_method, pre_note = pre_issue_nav(
+            _get(v, "nav_pre_issue"), _get(v, "nav_fy1"), nw_cr, pre_shares)
         o["ipo_pb_pre_issue"], o["ipo_pb_pre_issue_reason"] = pb(po, nav_pre)
         o["ipo_pb_pre_issue_method"] = (pre_method if o["ipo_pb_pre_issue"] is not None
                                         else "none")
         o["nav_pre_issue_used"] = nav_pre
+        if pre_note and o["ipo_pb_pre_issue"] is not None:
+            o["ipo_pb_pre_issue_reason"] = (
+                (o["ipo_pb_pre_issue_reason"] or "ok") + "; " + pre_note)
+
+        # post-issue: RHP-stated -> H48-derived shares -> H43 method 3, every available
+        # pair reconciled. The share count goes through H43's own two-sided guard.
+        sh_rhp = _get(v, "shares_outstanding_post_issue")
+        sh_ok, sh_why, mcap_ratio = share_count_plausible(sh_rhp, po, issue_cr)
+        o["post_issue_shares_check"] = sh_why
+        o["post_issue_shares_mcap_over_issue"] = (None if mcap_ratio is None
+                                                  else round(mcap_ratio, 3))
+        if sh_rhp is not None and not sh_ok:
+            sh_rhp = None                   # refused; the reason is on the row
+        sh_h48, sh_h48_why = post_issue_shares(
+            pre_shares, fresh_amount_inr=(None if fresh_cr is None else fresh_cr * CR),
+            offer_price=po)
+        o["post_issue_shares_h48"] = sh_h48
+        o["post_issue_shares_h48_reason"] = sh_h48_why
+        routes = post_issue_nav_routes(_get(v, "nav_post_issue"), nw_cr, fresh_cr,
+                                       sh_rhp, sh_h48)
+        o["ipo_pb_routes_available"] = "|".join(sorted(routes)) or "none"
+        nav_post, post_method, post_reason = reconcile_routes(routes, TOL_PCT)
+        o["ipo_pb"], pbr = pb(po, nav_post)
+        # A ratio withheld because two routes DISAGREE is a different fact from one
+        # withheld because no route had its inputs, and the column has to say which:
+        # the first means the document contradicts itself, the second only that it is
+        # quiet. Collapsing both to "none" loses the rule-2 finding.
+        if post_method == "withheld_disagreement":
+            o["ipo_pb_method"] = "withheld_disagreement"
+            o["ipo_pb_reason"] = post_reason
+        else:
+            o["ipo_pb_method"] = post_method if o["ipo_pb"] is not None else "none"
+            o["ipo_pb_reason"] = (pbr or "ok") + "; " + post_reason
+        o["nav_post_issue_used"] = nav_post
 
         # --- (c) peer premiums
         peer_pes = [_get(v, f"peer_{i}_pe") for i in range(1, 13)]
@@ -458,6 +602,80 @@ def self_test() -> int:
     chk("every ratio has a reason column beside it",
         all(f'"{c}_reason"' in src or f'{c}_reason' in src
             for c in ("ipo_pe", "ipo_pb", "pat_cagr", "fcf_yield")))
+
+    print("\n[H54] the P/B routes, and the regression that lost them")
+    # Every route exercised by a real case, taken from the documents named.
+    chk("stated pre-issue NAV wins when present",
+        pre_issue_nav(30.0, 25.0, None, None)[1] == "rhp_stated_pre_issue_nav")
+    chk("nav_fy1 is the second route, and is FLAGGED as standing in for pre-issue NAV",
+        pre_issue_nav(None, 25.0, None, None)[1] == "nav_fy1_as_pre_issue")
+    chk("and it carries the reason it is legitimate, not a bare flag",
+        "struck before the offer" in pre_issue_nav(None, 25.0, None, None)[2])
+    chk("net worth / pre-issue shares is the third route",
+        pre_issue_nav(None, None, 500.0, 2e7)[1] == "derived_pre_issue_nav")
+    chk("and 500 cr over 20,000,000 shares is 250/share",
+        abs(pre_issue_nav(None, None, 500.0, 2e7)[0] - 250.0) < 1e-6)
+    chk("a non-positive book value yields no route, never a negative P/B",
+        pre_issue_nav(None, -3.0, None, None)[1] == "none")
+
+    r = post_issue_nav_routes(60.0, 500.0, 100.0, 1e8, 1.1e8)
+    chk("all three post-issue routes fire when all three have inputs", len(r) == 3, r)
+    chk("every DERIVED post-issue row says issue expenses are ignored",
+        all(EXPENSES_NOTE in n for m, (_, n) in r.items() if m != "rhp_stated_post_issue_nav"))
+    chk("the RHP's own stated figure is preferred over both derived routes",
+        reconcile_routes({"h43_method3_rhp_shares": (10.0, ""),
+                          "rhp_stated_post_issue_nav": (10.2, "")})[1]
+        == "rhp_stated_post_issue_nav")
+    chk("precedence is a declared order, not alphabetical on the method name",
+        POST_PREFERENCE[0] == "rhp_stated_post_issue_nav"
+        and POST_PREFERENCE.index("h48_derived_shares")
+        < POST_PREFERENCE.index("h43_method3_rhp_shares"))
+    chk("two routes disagreeing by more than 5% withhold the ratio (rule 2)",
+        reconcile_routes({"rhp_stated_post_issue_nav": (10.0, ""),
+                          "h43_method3_rhp_shares": (14.0, "")})[0] is None)
+    chk("and the withheld row logs BOTH values, so the disagreement is inspectable",
+        all(x in reconcile_routes({"rhp_stated_post_issue_nav": (10.0, ""),
+                                   "h43_method3_rhp_shares": (14.0, "")})[2]
+            for x in ("10.0000", "14.0000")))
+    chk("every pair is compared, not just the chosen one against the next",
+        reconcile_routes({"rhp_stated_post_issue_nav": (10.0, ""),
+                          "h48_derived_shares": (10.2, ""),
+                          "h43_method3_rhp_shares": (14.0, "")})[0] is None)
+    chk("no route at all is a reason, not a crash",
+        reconcile_routes({})[0] is None and "no post-issue NAV route" in reconcile_routes({})[2])
+    # `src` is the WHOLE module, so a test phrased against it matches its own text.
+    # A test that can pass on its own description is not a test.
+    body = src.split("def self_test")[0]
+    chk("the share-count guard is H43's own, not a second copy",
+        "from derive_pb import" in body and "def share_count_plausible" not in body)
+    chk("the post-issue share derivation is H48's own, not a second copy",
+        "from derive_post_issue import" in body and "def post_issue_shares" not in body)
+
+    chk("a rule-2 withholding is labelled as such, not merged into `none`",
+        "withheld_disagreement" in body.split("def self_test")[0]
+        and 'o["ipo_pb_method"] = "withheld_disagreement"' in body)
+
+    print("\n[H54] regression: coverage must not fall below H43 for the same documents")
+    import dataio as _dio
+    pb43 = ROOT / "data" / "pb_ratios.csv"
+    if pb43.exists() and OUT.exists():
+        h = pd.read_csv(pb43); n = pd.read_csv(OUT)
+        for d in (h, n):
+            d["_n"] = d["company"].map(lambda c: _dio.norm_name(c) if pd.notna(c) else "")
+        hp = set(h[pd.to_numeric(h["ipo_pb_pre_issue"], errors="coerce").notna()]["_n"])
+        npre = set(n[pd.to_numeric(n["ipo_pb_pre_issue"], errors="coerce").notna()]["_n"])
+        chk("every document H43 priced pre-issue is still priced", not (hp - npre),
+            sorted(hp - npre)[:5])
+        chk("and the count is at least H43's 163", len(npre) >= 163, len(npre))
+        # ipo_pb is deliberately NOT asserted at >= 24. H43's 24 included four documents
+        # (Cochin Shipyard, Krystal Integrated, Salasar Techno, Varun Beverages) whose
+        # post-issue share count came from extractor 1.7.0; 1.8.1 REFUSES three of them
+        # and returns 824,000 for Cochin, which the two-sided plausibility guard rejects
+        # as too small. Losing them is the version floor working, not a regression.
+        chk("ipo_pb is at least 20, the count after the 1.8.0 floor",
+            pd.to_numeric(n["ipo_pb"], errors="coerce").notna().sum() >= 20)
+    else:
+        print("      (pb_ratios.csv or the output is absent, so the regression is not run)")
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

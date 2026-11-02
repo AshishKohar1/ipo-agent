@@ -2426,3 +2426,85 @@ marker and 100-page tests.
    that they were ever admitted, and both are 2017 listings outside the 2019+ set.
 4. Any later corpus addition is classified before use. A document whose type cannot be
    established is `UNCLEAR` and is not silently promoted to RHP.
+
+### H54 — H43's P/B routes are restored into `derive_ratios.py`, and why 24 became 20
+
+**Date:** 2026-11-02. **Context:** `data/valuation_ratios_h45.csv` carried
+`ipo_pb_pre_issue` for **0 of 433** rows and `ipo_pb` for 7, against H43's 163 and 24.
+
+### What was actually broken
+
+Confirmed before changing anything. H45 rewrote the module and the new pre-issue route read:
+
+1. `nav_pre_issue` — extracted `ok` for **0 of 450** companies. Every RHP prints `[*]`,
+   because post- and pre-issue NAV depend on a price the book has not fixed (H48).
+2. else `net_worth_fy1 / shares_outstanding_pre_issue` — **neither variable exists in
+   `rhp_valuation_values.csv`.** Not empty: absent from the schema. The fallback could
+   never fire, so the route was dead on both legs.
+
+`nav_fy1`, which H43 used and which has an `ok` number for **203** companies, was dropped.
+`git log -S'nav_fy1'` shows it only ever existed in `derive_pb.py` (commit `314a23c`,
+2026-10-19) — H45's module never had it. Looking for net worth in the RHP was also an **H5
+violation**: H5 says net worth comes from the aggregator and the master, which is exactly
+where H43 got it (Chittorgarh).
+
+### Restored precedence
+
+**Pre-issue NAV:** stated `nav_pre_issue` → `nav_fy1` (flagged `nav_fy1_as_pre_issue`,
+carrying H43's justification: the latest fiscal year's NAV per share **is** pre-issue book
+value, struck before the offer by construction) → net worth ÷ pre-issue shares (flagged
+`derived_pre_issue_nav`).
+
+**Post-issue NAV:** RHP-stated → H48-derived share count → H43 method 3 on the RHP's stated
+post-issue count. The last two differ only in where the share count comes from, which is
+why they are worth cross-checking. Order is a declared constant `POST_PREFERENCE`, after
+the first version of `reconcile_routes` picked `sorted(routes)[0]` — alphabetical, so
+`h43_method3_rhp_shares` beat `rhp_stated_post_issue_nav`, the opposite of the precedence.
+
+**Cross-check:** every available PAIR, not just the chosen one against the next. Over 5%
+the ratio is NULL and all routes are logged. H43's two-sided share-count guard and H48's
+share derivation are **imported, not copied** — a second copy would drift.
+
+### Result
+
+| ratio | H43 (`pb_ratios.csv`) | H45 before | after |
+|---|---|---|---|
+| `ipo_pb_pre_issue` | 163 | **0** | **183** |
+| `ipo_pb` | 24 | 7 | **20** |
+
+| method | rows |
+|---|---|
+| `nav_fy1_as_pre_issue` | 183 |
+| `h43_method3_rhp_shares` | 14 |
+| `rhp_stated_post_issue_nav` | 6 |
+| `withheld_disagreement` | 1 |
+| `none` (post-issue) | 412 |
+
+Every one of H43's 163 pre-issue documents is still priced, plus 20 more.
+
+### Why `ipo_pb` is 20 and not 24 — and why that is correct
+
+H43's 24 included four documents whose post-issue share count came from **extractor
+1.7.0**: Cochin Shipyard (135,936,000), Krystal Integrated (11,524,394), Salasar Techno
+(13,277,300), Varun Beverages (284,622,187). Extractor **1.8.0 and 1.8.1 return
+`not_found`** for three of them and **824,000** for Cochin Shipyard — which H43's own
+two-sided guard rejects as *"IMPLAUSIBLE share count, TOO SMALL"*. `derive_ratios._wide()`
+floors at 1.8.0 precisely to keep values the current readers refuse out of the ratios.
+
+So these four are not lost coverage; they are H43 resting on numbers the extractor has
+since withdrawn. The regression test asserts `ipo_pb_pre_issue >= 163` and full document
+coverage against H43, and `ipo_pb >= 20` with this reason recorded beside it — **not**
+`>= 24`, which would demand resurrecting refused values.
+
+### The cross-check earned its place on the first run
+
+**PNC Infratech Ltd**: the RHP's stated post-issue NAV gives P/B **2.00**, the derived
+route gives **219.89** — a 99.1% disagreement. Withheld under rule 2, both logged. A
+P/B of 220 is not a valuation, it is a unit error, and precedence alone would have
+published the stated 2.00 without ever noticing the contradiction. `PSP Projects Ltd` is
+the opposite case: two routes within 1.2%, stated chosen, agreement recorded.
+
+`withheld_disagreement` is kept as its own method value rather than collapsed into `none`:
+a document contradicting itself is a different fact from a document being quiet.
+
+21 tests, every route exercised by a real case.
