@@ -6,6 +6,16 @@ numpy==2.5.1
 requests==2.34.2
 yfinance==1.7.0
 pdfplumber==0.11.10
+# pdfplumber is a thin wrapper: the text actually comes out of pdfminer.six, and pillow /
+# pypdfium2 / cryptography decide whether a page is readable at all. Leaving those
+# unpinned meant the text cache - 444 documents, 214k pages, hours to rebuild - could
+# change under us with no pin changing and nothing recording it. H53 established by
+# evidence that the macOS rebuild had NOT drifted; that was luck, not a guarantee.
+# Pinned 2026-11-02 to the versions that built the current cache.
+pdfminer.six==20260107
+pillow==13.0.0
+pypdfium2==5.14.0
+cryptography==50.0.2
 openpyxl==3.1.5
 statsmodels==0.15.0
 # joblib is listed EXPLICITLY, not inherited. It arrives on the laptop only because

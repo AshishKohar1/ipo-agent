@@ -64,6 +64,52 @@ CHUNK = 50          # pages per open; see build_one
 _memo: dict[str, dict] = {}
 
 
+# The libraries whose version can change the extracted text. pdfplumber is a wrapper;
+# pdfminer.six does the extraction, and pillow / pypdfium2 / cryptography decide whether a
+# page is readable at all. H53 found the cache recorded the extractor's NAME and no
+# version, so a drift would have been undetectable - and the only reason drift could be
+# ruled out on the macOS rebuild was that an older report happened to be reproducible.
+EXTRACTION_LIBS = ("pdfplumber", "pdfminer.six", "pillow", "pypdfium2", "cryptography")
+
+
+def lib_versions() -> dict[str, str]:
+    """Installed versions of the libraries that decide what the text says."""
+    from importlib.metadata import version, PackageNotFoundError
+    out = {}
+    for name in EXTRACTION_LIBS:
+        try:
+            out[name] = version(name)
+        except PackageNotFoundError:
+            out[name] = "absent"
+    return out
+
+
+def lib_drift(limit: int | None = None) -> list[tuple[str, dict, dict]]:
+    """Cached documents whose recorded library versions differ from the installed ones.
+
+    This is a report, NOT a cache invalidation. A version bump does not make the cached
+    text wrong - H53 showed a rebuild that was byte-identical across a pdfminer.six
+    change - it makes it UNVERIFIED. Silently invalidating 444 documents and 214k pages
+    on a patch bump would be worse than saying so.
+    """
+    import gzip as _gz
+    import json as _js
+    want, out = lib_versions(), []
+    for i, cp in enumerate(sorted(CACHE.glob("*.json.gz"))):
+        if limit is not None and i >= limit:
+            break
+        try:
+            with _gz.open(cp, "rt", encoding="utf-8") as fh:
+                rec = _js.load(fh)
+        except Exception:                                      # noqa: BLE001
+            out.append((cp.stem, {"error": "unreadable"}, want))
+            continue
+        got = rec.get("lib_versions")
+        if got != want:
+            out.append((cp.stem, got or {}, want))
+    return out
+
+
 def cache_path(path) -> Path:
     return CACHE / (Path(path).stem + ".json.gz")
 
@@ -128,6 +174,7 @@ def build_one(path, company: str | None = None, url: str | None = None,
            "toc": B.parse_toc(path, n, texts=first10),
            "offset": B.measure_offset(path, n, texts=probe),
            "extractor": "pdfplumber.extract_text()",
+           "lib_versions": lib_versions(),
            "pages": pages}
     CACHE.mkdir(parents=True, exist_ok=True)
     # Atomic: a kill mid-write must not leave a half-written cache that reads as valid.

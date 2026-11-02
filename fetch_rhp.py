@@ -74,6 +74,42 @@ def _session() -> requests.Session:
     return s
 
 
+def _title_kind(texts: list[str]) -> str:
+    """RHP / DRHP / PROSPECTUS / UNCLEAR, from the TITLE LINE of the first text page.
+
+    Rule 3 forbids DRHPs, but the marker test below matches "RED HERRING PROSPECTUS"
+    inside "DRAFT RED HERRING PROSPECTUS", so for a year it admitted drafts. Two were
+    found in the corpus on 2026-11-02 - Mahindra Logistics and Nippon Life India AMC,
+    both filed August 2017 - and both had passed verification.
+
+    The test must be the title, never a substring of the front matter: an RHP's own cover
+    routinely back-references the draft it was filed as ("The Draft Red Herring Prospectus
+    was filed with SEBI on ..."), and Computer Age Management Services' cover does exactly
+    that. Searching the first four pages for the phrase flags 37 of 430 documents, of
+    which 35 are genuine RHPs. Searching the first six LINES flags two, and both are real.
+
+    UNCLEAR is not a rejection: a scanned cover pushes the first text page to the table of
+    contents (Manoj Vaibhav Gems, Rossari Biotech), and those are settled by the marker
+    and page-count tests that follow.
+    """
+    first = next((t for t in texts if t.strip()), "")
+    head = " | ".join(l.strip().upper() for l in first.splitlines() if l.strip()[:1])[:400]
+    # Whichever comes FIRST wins, because the title precedes the body. A DRHP leads with
+    # "DRAFT RED HERRING PROSPECTUS"; an RHP leads with "RED HERRING PROSPECTUS" and only
+    # then back-references its draft. Testing for presence instead of position rejects a
+    # genuine RHP whose back-reference happens to sit high on the cover - the costly
+    # error, since it loses a real document.
+    d = re.search(r"\bDRAFT\s+RED\s+HERRING\s+PROSPECTUS", head)
+    r = re.search(r"\bRED\s*HERRING\s*PROSPECTUS", head)
+    if d and (r is None or d.start() <= r.start()):
+        return "DRHP"
+    if r:
+        return "RHP"
+    if re.search(r"\bPROSPECTUS\b", head):
+        return "PROSPECTUS"
+    return "UNCLEAR"
+
+
 def _verify_is_prospectus(pdf_bytes: bytes, company: str) -> tuple[bool, str]:
     """
     Never trust a URL. Open the PDF and confirm it is the right document
@@ -112,6 +148,12 @@ def _verify_is_prospectus(pdf_bytes: bytes, company: str) -> tuple[bool, str]:
             n_scanned = idx - len(texts)
     except Exception as e:
         return False, f"unreadable pdf: {e}"
+
+    # Rule 3: no DRHPs. Checked on the title line only - see _title_kind.
+    kind = _title_kind(texts)
+    if kind == "DRHP":
+        return False, ("the title line reads DRAFT RED HERRING PROSPECTUS - rule 3 "
+                       "forbids DRHPs")
 
     if not re.search(r"RED HERRING PROSPECTUS|PROSPECTUS", head):
         return False, (f"no prospectus marker in the first {len(texts)} page(s) with text"

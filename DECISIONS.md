@@ -2350,3 +2350,79 @@ it was generated mid-commit, after the reader stopped accepting the `Total tax e
    Drift was disproven this time by evidence, not by the pin. Recorded as a known gap:
    the cache cannot tell you what built it. Not changed in this session — the brief
    forbids changing pins silently.
+
+### H53, appended 2026-11-02 — the extraction stack is pinned, and the cache records what built it
+
+H53 §4 recorded that the cache could not say what produced it. Closed:
+
+| library | role | was | now |
+|---|---|---|---|
+| `pdfplumber` | wrapper; page objects | `==0.11.10` | `==0.11.10` |
+| `pdfminer.six` | **does the text extraction** | **unpinned** | `==20260107` |
+| `pillow` | image decode; decides if a page is readable | unpinned | `==13.0.0` |
+| `pypdfium2` | page rendering | unpinned | `==5.14.0` |
+| `cryptography` | encrypted PDFs | unpinned | `==50.0.2` |
+
+Every cache record now carries `lib_versions` for those five, and
+`extract.textcache.lib_drift()` reports any cached document built with a different stack.
+The 444 existing records were **backfilled**, not re-measured, and each says so in
+`lib_versions_source`: all 444 were built in this venv on 2026-11-02 with `pip list`
+unchanged, so the field is an assertion with a stated basis rather than a measurement.
+
+`lib_drift()` **reports; it does not invalidate.** H53 proved a rebuild can be
+byte-identical across a `pdfminer.six` change, so a version bump makes the cache
+*unverified*, not wrong. Silently discarding 444 documents and 214k pages on a patch bump
+would cost more than it protects. Six tests in `build_text_cache.py` cover this, including
+one that fails if any cached document's stack differs from the installed one — verified to
+fail by substituting `pdfminer.six 20250506`, which flagged 5 of the first 5 records.
+
+### H57 — rule 3 was not enforced: `_verify_is_prospectus()` could not tell a DRHP from an RHP
+
+**Date:** 2026-11-02. H52 predicted this in writing — "the guard cannot tell a DRHP from an
+RHP and was never meant to" — and it turned out not to be hypothetical.
+
+The marker test was `re.search(r"RED HERRING PROSPECTUS|PROSPECTUS", head)`, which matches
+the phrase **inside** `DRAFT RED HERRING PROSPECTUS`. So for as long as the guard has
+existed, a draft passed it.
+
+**Found in the corpus:**
+
+| company | pages | title line | where |
+|---|---|---|---|
+| Mahindra Logistics Ltd | 562 | `DRAFT RED HERRING PROSPECTUS \| Dated August 3, 2017 \| (This Draft Red Herring Prospectus will be updated upon filing with the RoC)` | already cached |
+| Nippon Life India Asset Management Ltd | 466 | `DRAFT RED HERRING PROSPECTUS \| Dated August 18, 2017 \| (This Draft Red Herring Prospectus will be updated upon filing with the RoC)` | already cached |
+| Supriya Lifescience Limited | — | `DRAFT RED HERRING PROSPECTUS` | **refused at the gate** on its first live run |
+
+Supriya is not lost: its `rhp_sources` copy is a genuine 377-page RHP and is kept. Only
+the fetch-log duplicate was a draft.
+
+**The test is the TITLE LINE, by position, not a substring.** An RHP's own cover routinely
+back-references the draft it was filed as — Computer Age Management Services' does. The
+numbers decided the design:
+
+| rule | documents flagged of 444 | genuine DRHPs among them |
+|---|---|---|
+| phrase anywhere in the first 4 pages with text | 37 | 2 |
+| phrase anywhere in the first 6 lines | 3 | 2 |
+| **whichever of DRAFT/RHP appears FIRST in the head** | **2** | **2** |
+
+The first rule would have discarded 35 real RHPs, two of them in the check set. Rejecting
+a genuine RHP is the expensive error, so position wins.
+
+`UNCLEAR` is **not** a rejection: a scanned cover pushes the first text page to the table
+of contents (Manoj Vaibhav Gems, Rossari Biotech), and those are still settled by the
+marker and 100-page tests.
+
+**Decisions**
+
+1. `_title_kind()` is added to `fetch_rhp.py` and `_verify_is_prospectus()` refuses a DRHP.
+   Eight tests in `restore_rhp_pdfs.py`, every fixture a real cover.
+2. `data/rhp_doc_type.csv` records the classification for all 444 cached documents:
+   **421 RHP, 14 PROSPECTUS, 7 UNCLEAR, 2 DRHP**, with `allowed_under_rule_3`.
+   The 14 final prospectuses are permitted — rule 3 allows one where SEBI has no RHP,
+   labelled, and they are now labelled.
+3. **The two cached DRHPs are excluded from every reader run and every fit.** They are
+   left on disk and in the cache, flagged, rather than deleted: deleting them would hide
+   that they were ever admitted, and both are 2017 listings outside the 2019+ set.
+4. Any later corpus addition is classified before use. A document whose type cannot be
+   established is `UNCLEAR` and is not silently promoted to RHP.

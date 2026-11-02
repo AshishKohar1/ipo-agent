@@ -190,12 +190,14 @@ def self_test() -> int:
     print("\n[5] round trip on a real document")
     w = work_list()
     # Was `== 450`, the whole fetch log, until the macOS rebuild (2026-11-02). The
-    # restored corpus is 430: 450 ok rows in the fetch log, MINUS the 4 that are only
-    # DRHPs and were excluded by H52, MINUS 16 that appear in no provenance list and
-    # were not re-fetched. A number, not a floor, so a document going missing fails here
-    # rather than quietly shrinking the cache.
-    chk("the work list is the 430 restored documents (450 - 4 H52 - 16 unrestored)",
-        len(w) == 430, len(w))
+    # restored corpus is 444: 450 ok rows in the fetch log, MINUS the 4 that are only
+    # DRHPs (H52), MINUS Supriya Lifescience, whose fetch-log copy is also a DRHP and is
+    # refused by rule 3 (its rhp_sources copy IS a 377-page RHP and is kept), MINUS Samhi
+    # Hotels, which SEBI would not serve - three dropped connections and then a refusal,
+    # and H47 forbids working that around. A number, not a floor, so a document going
+    # missing fails here rather than quietly shrinking the cache.
+    chk("the work list is the 444 restored documents (450 - 4 H52 - 1 DRHP - 1 unserved)",
+        len(w) == 444, len(w))
     cs = pd.read_csv(ROOT / "reports" / "rhp_check_set_docs.csv")
     have = {str(c).strip().lower() for c in w["company"]}
     short = [c for c in cs["company"].astype(str)
@@ -216,6 +218,31 @@ def self_test() -> int:
             live == got)
     else:
         print("      (nothing cached yet, so the round trip is not run)")
+
+    print("\n[6] the cache records what built it, and says so when that changes")
+    chk("the extraction libraries are named, not just pdfplumber",
+        set(TC.EXTRACTION_LIBS) >= {"pdfplumber", "pdfminer.six", "pillow",
+                                    "pypdfium2", "cryptography"})
+    chk("every one of them is pinned in requirements.txt",
+        all(f"{n}==" in (ROOT / "requirements.txt").read_text(encoding="utf-8")
+            for n in TC.EXTRACTION_LIBS),
+        [n for n in TC.EXTRACTION_LIBS
+         if f"{n}==" not in (ROOT / "requirements.txt").read_text(encoding="utf-8")])
+    inst = TC.lib_versions()
+    req = (ROOT / "requirements.txt").read_text(encoding="utf-8")
+    chk("and each pin is the version actually installed",
+        all(f"{n}=={v}" in req for n, v in inst.items()),
+        [f"{n}=={v}" for n, v in inst.items() if f"{n}=={v}" not in req])
+    chk("a new record carries lib_versions",
+        '"lib_versions": lib_versions()' in tsrc)
+    # THE mismatch test the brief asks for: this fails, loudly, if the cache was built
+    # with a library version that is no longer installed.
+    drift = TC.lib_drift()
+    chk("no cached document was built with a different extraction stack",
+        not drift, f"{len(drift)} of 444 drifted, e.g. {drift[:2]}")
+    chk("lib_drift reports rather than invalidating, so a bump costs no rebuild",
+        "cache invalidation" in inspect.getsource(TC.lib_drift).lower()
+        or "NOT a cache invalidation" in inspect.getsource(TC.lib_drift))
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1

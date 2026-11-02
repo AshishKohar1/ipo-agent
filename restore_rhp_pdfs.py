@@ -41,6 +41,17 @@ PROGRESS = DATA / "rhp_restore_progress.csv"
 
 SEBI_MIN_GAP = 3.0          # seconds between SEBI requests (B2 floor, applied to SEBI too)
 COMMIT_EVERY = 10
+# H52 excluded these four: SEBI publishes neither an RHP nor a final prospectus for them,
+# only a DRHP, which rule 3 forbids. Identified by the SHA-256 the fetch log recorded, not
+# by name - H28 is explicit that a name cannot identify a company, and one of the four was
+# fetched from the issuer's own website rather than SEBI.
+H52_EXCLUDED_SHA = {
+    "57cc42cfc1ec3dba990ff917febd5220459d5e1d6e57004999959f638d9ca764",  # Allied Blenders
+    "067e731d86cad8392d54f308942f15c004a060f68522c65d44198f0df505d3ec",  # Amanta Healthcare
+    "5ecc5e25ee3dacc838382c1bf6f0389cce9901c4b03f581bc1e687e7eabc88e4",  # Northern Arc
+    "6e0ab67de48b6fab6a8cf74be87cf27d681c025c20c6319039f431a75a6641a7",  # Sri Lotus
+}
+
 COLS = ["list", "company", "doc_type", "url", "expected_sha", "got_sha", "status",
         "path", "bytes", "note", "ran_at"]
 
@@ -53,6 +64,25 @@ def _throttle() -> None:
     if wait > 0:
         time.sleep(wait)
     _last_request = time.monotonic()
+
+
+def _verify_name_for(company: str) -> str:
+    """The name to look for on the cover, from the name the fetch log recorded.
+
+    The fetch log carries working labels, not cover names: `IKIO Technologies Limited
+    (formerly IKIO Lighting Limited)`, `Macrotech Developers Limited (Lodha Group)`,
+    `Apeejay Surrendra Group (conglomerate)`. A `formerly X` parenthetical IS the name on
+    the cover (H28), so it wins; any other parenthetical is an annotation and is dropped.
+    """
+    m = re.search(r"\(\s*formerly\s+(?:known\s+as\s+)?([^)]+?)\s*\)", company, re.I)
+    if m:
+        return m.group(1).strip()
+    # `Affle (India) Ltd` -> the parenthetical is part of the name, so only drop a
+    # parenthetical that is a whole annotation word or phrase, never a bracketed word
+    # that sits inside the name.
+    stripped = re.sub(r"\s*\((?:conglomerate|group|lodha group|[^)]*\bgroup\b[^)]*)\)\s*",
+                      " ", company, flags=re.I)
+    return stripped.strip()
 
 
 def worklist() -> pd.DataFrame:
@@ -95,7 +125,30 @@ def worklist() -> pd.DataFrame:
                      "doc_type": r["doc_type"], "url": r["source_url"],
                      "expected_sha": None, "target": None})
 
+    # FOURTH list, added last so the dedup below keeps the more-verified lists first.
+    # `rhp_valuation_fetch.csv` is the index the text cache is actually built from, and
+    # 16 documents appear in NO other provenance list. Each carries a URL and a recorded
+    # SHA-256. Only rows whose recorded file is absent are queued: this list is 450 rows
+    # and re-fetching the 430 already on disk would be pointless traffic.
+    v = pd.read_csv(DATA / "rhp_valuation_fetch.csv")
+    v = v[v["status"].astype(str).str.startswith("ok")].drop_duplicates("company", keep="last")
+    for _, r in v.iterrows():
+        if str(r["sha256_recorded"]) in H52_EXCLUDED_SHA:
+            continue                                    # rule 3, via H52
+        if repo_file(r["path"]).exists():
+            continue
+        rows.append({"list": "rhp_valuation_fetch", "company": r["company"],
+                     "verify_name": _verify_name_for(str(r["company"])),
+                     "doc_type": "RHP", "url": r["url"],
+                     "expected_sha": r["sha256_recorded"],
+                     "target": repo_file(r["path"]).name,
+                     # This list's files must land where the fetch log says they are,
+                     # because `build_text_cache.py` reads that column to find them.
+                     "dest": str(repo_file(r["path"]).parent.relative_to(ROOT))})
+
     df = pd.DataFrame(rows)
+    if "dest" not in df.columns:
+        df["dest"] = None
     hashed = df[df["expected_sha"].notna()].drop_duplicates(subset="expected_sha", keep="first")
     unhashed = df[df["expected_sha"].isna()]
     return pd.concat([hashed, unhashed], ignore_index=True)
@@ -247,7 +300,9 @@ def run(limit: int | None = None) -> int:
                 print(f"[{i}/{len(todo)}] REJECTED {company}: {why}", flush=True)
                 continue
 
-            path = PDFS / target
+            dest = (PDFS if pd.isna(r.get("dest")) else ROOT / str(r["dest"]))
+            dest.mkdir(parents=True, exist_ok=True)
+            path = dest / target
             path.write_bytes(body)
             _append({"list": r["list"], "company": company, "doc_type": r["doc_type"],
                      "url": url, "expected_sha": expected, "got_sha": got,
@@ -358,8 +413,13 @@ def self_test() -> int:
     print("[4] a mismatch is quarantined, never used")
     chk("quarantine is outside the fetched tree", QUARANTINE.name != PDFS.name)
     chk("the mismatch branch writes to QUARANTINE", "QUARANTINE / target" in body)
-    chk("the mismatch branch never writes to PDFS",
-        body.index("QUARANTINE / target") < body.index("path = PDFS / target"))
+    # The store line was `path = PDFS / target` until the fourth provenance list needed
+    # its own destination; the anchor is now `path = dest / target`. This test failing on
+    # that rename is the test working.
+    chk("the mismatch branch never reaches the store",
+        body.index("QUARANTINE / target") < body.index("path = dest / target"))
+    chk("the destination is per-row, so a list's files land where its index says",
+        "dest = (PDFS if pd.isna(r.get(\"dest\"))" in body)
 
     print("[5] the checkpoint is append-only and resumable")
     chk("append mode", 'mode="a"' in body)
@@ -367,8 +427,54 @@ def self_test() -> int:
     chk("a quarantined row is retried", "sha_mismatch" not in body.split("def _done_keys")[1].split("def ")[0])
     chk("exactly one to_csv in the module, and it is the checkpoint",
         body.count("to_csv(") == 1 and "to_csv(PROGRESS" in body)
-    chk("the three provenance lists are only ever read",
-        body.count("read_csv(DATA /") == 3 and "PROGRESS = DATA /" in body)
+    chk("the FOUR provenance lists are only ever read, never written",
+        body.count("read_csv(DATA /") == 4 and "PROGRESS = DATA /" in body)
+
+    print("\n[6] rule 3: a DRHP is rejected on its title line, an RHP is not")
+    from fetch_rhp import _title_kind
+    # Real covers, transcribed from the cached text of the documents named.
+    chk("Mahindra Logistics' Aug-2017 draft is a DRHP",
+        _title_kind(["DRAFT RED HERRING PROSPECTUS\nDated August 3, 2017\n"
+                     "(This Draft Red Herring Prospectus will be updated upon filing "
+                     "with the RoC)"]) == "DRHP")
+    chk("Nippon Life India AMC's Aug-2017 draft is a DRHP",
+        _title_kind(["DRAFT RED HERRING PROSPECTUS\nDated August 18, 2017\n"
+                     "(This Draft Red Herring Prospectus will be updated upon filing "
+                     "with the RoC)"]) == "DRHP")
+    chk("Bharti Hexacom's RHP is NOT a DRHP, though its cover names the draft",
+        _title_kind(["RED HERRING PROSPECTUS\nDated March 22, 2024\n"
+                     "(Please read Section 32 of the Companies Act, 2013)"]) == "RHP")
+    # The regression the first version of this rule caused: presence anywhere in the
+    # window flagged 37 of 430 documents, 35 of them genuine RHPs.
+    chk("an RHP whose cover back-references its draft high up is still an RHP",
+        _title_kind(["ni.sserpnretsew.www\nRED HERRING PROSPECTUS\n"
+                     "Dated: September 11, 2020\n"
+                     "The Draft Red Herring Prospectus was filed with SEBI"]) == "RHP")
+    chk("a final prospectus is PROSPECTUS, which rule 3 permits when labelled",
+        _title_kind(["PROSPECTUS\nDATED: SEPTEMBER 20, 2024"]) == "PROSPECTUS")
+    chk("Hathway's cover has no spaces between the words and still reads as an RHP",
+        _title_kind(["REDHERRINGPROSPECTUS\nDATEDJANUARY27,2010"]) == "RHP")
+    chk("a scanned cover gives UNCLEAR, which is NOT a rejection",
+        _title_kind(["TABLE OF CONTENTS\nSECTION I - GENERAL"]) == "UNCLEAR")
+    chk("leading blank pages are skipped to the first page with text",
+        _title_kind(["", "   ", "RED HERRING PROSPECTUS"]) == "RHP")
+
+    print("\n[7] the fourth provenance list, and its names")
+    chk("rhp_valuation_fetch is in the worklist",
+        "rhp_valuation_fetch" in set(worklist()["list"]))
+    chk("the four H52 exclusions are identified by SHA-256, not by name",
+        len(H52_EXCLUDED_SHA) == 4 and all(len(h) == 64 for h in H52_EXCLUDED_SHA))
+    chk("a `formerly X` label verifies against X, the name on the cover (H28)",
+        _verify_name_for("IKIO Technologies Limited (formerly IKIO Lighting Limited)")
+        == "IKIO Lighting Limited")
+    chk("a `(Lodha Group)` annotation is dropped",
+        _verify_name_for("Macrotech Developers Limited (Lodha Group)")
+        == "Macrotech Developers Limited")
+    chk("`(conglomerate)` is dropped",
+        _verify_name_for("Apeejay Surrendra Group (conglomerate)")
+        == "Apeejay Surrendra Group")
+    chk("but `Affle (India) Ltd` keeps its bracketed word, part of the name",
+        _verify_name_for("Affle (India) Ltd") == "Affle (India) Ltd")
 
     print(f"\n{passed} passed, {failed} failed")
     return 1 if failed else 0
