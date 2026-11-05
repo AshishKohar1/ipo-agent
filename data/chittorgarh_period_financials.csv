@@ -852,3 +852,41 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1115,Krishna Institute of Medical Sciences,31 Mar 2021,2021-03-31,FULL_FY,1,INR_crore,1436.15,1340.1,205.48,863.73,786.14,270.47,,381.05,https://www.chittorgarh.com/ipo/x/1115/,2026-11-06 01:50:36.962126
 1115,Krishna Institute of Medical Sciences,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,1195.89,1128.73,115.07,598.13,523.64,320.78,,251.08,https://www.chittorgarh.com/ipo/x/1115/,2026-11-06 01:50:36.962126
 1115,Krishna Institute of Medical Sciences,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,1119.71,923.87,-48.81,540.66,466.17,288.1,,86.82,https://www.chittorgarh.com/ipo/x/1115/,2026-11-06 01:50:36.962126
+1839,Kross,31 Mar 2024,2024-03-31,FULL_FY,1,INR_crore,352.0,621.46,44.88,146.81,119.76,117.9,,,https://www.chittorgarh.com/ipo/x/1839/,2026-11-06 01:50:40.692049
+1839,Kross,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,250.57,489.36,30.93,102.11,88.58,88.26,,,https://www.chittorgarh.com/ipo/x/1839/,2026-11-06 01:50:40.692049
+1839,Kross,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,197.82,297.88,12.17,72.4,58.88,86.06,,,https://www.chittorgarh.com/ipo/x/1839/,2026-11-06 01:50:40.692049
+1138,Krsnaa Diagnostics,31 Mar 2021,2021-03-31,FULL_FY,1,INR_crore,604.53,661.48,184.93,231.87,-17.02,231.78,,358.83,https://www.chittorgarh.com/ipo/x/1138/,2026-11-06 01:50:43.913421
+1138,Krsnaa Diagnostics,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,629.98,271.38,-111.95,-196.98,-217.16,231.25,,-101.26,https://www.chittorgarh.com/ipo/x/1138/,2026-11-06 01:50:43.913421
+1138,Krsnaa Diagnostics,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,528.99,214.32,-58.06,-84.92,-105.11,169.21,,-32.52,https://www.chittorgarh.com/ipo/x/1138/,2026-11-06 01:50:43.913421
+1665,Krystal Integrated Services,30 Sep 2023,2023-09-30,STUB,1,INR_crore,449.83,455.67,20.56,183.68,170.09,103.36,,,https://www.chittorgarh.com/ipo/x/1665/,2026-11-06 01:50:47.352503
+1665,Krystal Integrated Services,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,343.47,710.97,38.41,163.41,155.27,47.99,,,https://www.chittorgarh.com/ipo/x/1665/,2026-11-06 01:50:47.352503
+1665,Krystal Integrated Services,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,404.39,554.86,26.15,163.86,156.04,72.55,,,https://www.chittorgarh.com/ipo/x/1665/,2026-11-06 01:50:47.352503
+1665,Krystal Integrated Services,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,338.47,474.31,16.65,136.08,129.76,65.31,,,https://www.chittorgarh.com/ipo/x/1665/,2026-11-06 01:50:47.352503
+2064,LG Electronics India,30 Jun 2025,2025-06-30,STUB,1,INR_crore,11516.44,6337.36,513.26,6447.85,5805.5,0.0,,716.27,https://www.chittorgarh.com/ipo/x/2064/,2026-11-06 01:50:50.324449
+2064,LG Electronics India,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,11517.15,24630.63,2203.35,5933.75,5291.4,0.0,,3110.12,https://www.chittorgarh.com/ipo/x/2064/,2026-11-06 01:50:50.324449
+2064,LG Electronics India,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,8498.44,21557.12,1511.07,3735.82,3659.12,0.0,,2224.87,https://www.chittorgarh.com/ipo/x/2064/,2026-11-06 01:50:50.324449
+2064,LG Electronics India,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,8992.12,20108.58,1344.93,4319.82,4243.12,0.0,,1895.12,https://www.chittorgarh.com/ipo/x/2064/,2026-11-06 01:50:50.324449
+1338,Landmark Cars,30 Jun 2022,2022-06-30,STUB,1,INR_crore,1209.37,801.9,18.14,268.27,,464.37,,,https://www.chittorgarh.com/ipo/x/1338/,2026-11-06 01:50:53.805782
+1338,Landmark Cars,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,1085.38,2989.12,66.18,246.94,0.0,308.49,,,https://www.chittorgarh.com/ipo/x/1338/,2026-11-06 01:50:53.805782
+1338,Landmark Cars,31 Mar 2021,2021-03-31,FULL_FY,3,INR_crore,887.9,1966.34,11.15,181.78,0.0,327.44,,,https://www.chittorgarh.com/ipo/x/1338/,2026-11-06 01:50:53.805782
+1338,Landmark Cars,31 Mar 2020,2020-03-31,FULL_FY,4,INR_crore,831.77,2228.93,-28.94,169.13,0.0,357.91,,,https://www.chittorgarh.com/ipo/x/1338/,2026-11-06 01:50:53.805782
+1338,Landmark Cars,31 Mar 2019,2019-03-31,FULL_FY,5,INR_crore,1008.03,2834.62,-24.43,187.96,0.0,478.78,,,https://www.chittorgarh.com/ipo/x/1338/,2026-11-06 01:50:53.805782
+1178,Latent View Analytics,30 Jun 2021,2021-06-30,STUB,1,INR_crore,588.01,91.74,22.31,462.04,461.23,67.4,,28.69,https://www.chittorgarh.com/ipo/x/1178/,2026-11-06 01:50:56.777792
+1178,Latent View Analytics,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,519.2,326.71,91.46,437.79,436.97,22.61,,112.88,https://www.chittorgarh.com/ipo/x/1178/,2026-11-06 01:50:56.777792
+1178,Latent View Analytics,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,397.85,329.67,72.85,347.92,347.11,0.0,,95.85,https://www.chittorgarh.com/ipo/x/1178/,2026-11-06 01:50:56.777792
+1178,Latent View Analytics,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,323.68,295.9,59.67,266.87,266.06,0.0,,78.05,https://www.chittorgarh.com/ipo/x/1178/,2026-11-06 01:50:56.777792
+606,Laurus Labs,30 Jun 2016,2016-06-30,STUB,1,INR_crore,2594.18,939.68,82.01,951.38,852.63,845.43,,213.63,https://www.chittorgarh.com/ipo/x/606/,2026-11-06 01:50:59.948501
+606,Laurus Labs,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,2308.35,1788.42,143.57,867.4,785.02,928.85,,389.6,https://www.chittorgarh.com/ipo/x/606/,2026-11-06 01:50:59.948501
+606,Laurus Labs,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,1892.55,1360.38,73.52,727.27,645.14,735.31,,239.41,https://www.chittorgarh.com/ipo/x/606/,2026-11-06 01:50:59.948501
+606,Laurus Labs,31 Mar 2014,2014-03-31,FULL_FY,4,INR_crore,1273.06,1168.53,97.22,358.42,280.58,500.36,,217.68,https://www.chittorgarh.com/ipo/x/606/,2026-11-06 01:50:59.948501
+1961,Laxmi Dental,30 Sep 2024,2024-09-30,STUB,1,INR_crore,158.22,117.9,22.74,67.09,,40.91,,,https://www.chittorgarh.com/ipo/x/1961/,2026-11-06 01:51:03.149408
+1961,Laxmi Dental,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,134.52,195.26,25.23,44.57,,42.03,,,https://www.chittorgarh.com/ipo/x/1961/,2026-11-06 01:51:03.149408
+1961,Laxmi Dental,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,96.54,163.84,-4.16,19.48,,31.44,,,https://www.chittorgarh.com/ipo/x/1961/,2026-11-06 01:51:03.149408
+1961,Laxmi Dental,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,102.75,138.07,-18.68,22.94,,29.63,,,https://www.chittorgarh.com/ipo/x/1961/,2026-11-06 01:51:03.149408
+2030,Laxmi India Finance,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,1412.52,248.04,36.01,257.47,236.99,1137.06,,163.88,https://www.chittorgarh.com/ipo/x/2030/,2026-11-06 01:51:06.384001
+2030,Laxmi India Finance,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,984.85,175.02,22.47,201.22,181.87,766.68,,114.59,https://www.chittorgarh.com/ipo/x/2030/,2026-11-06 01:51:06.384001
+2030,Laxmi India Finance,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,778.71,130.67,15.97,152.33,134.23,615.49,,85.96,https://www.chittorgarh.com/ipo/x/2030/,2026-11-06 01:51:06.384001
+1096,Laxmi Organic Industries,30 Sep 2020,2020-09-30,STUB,1,INR_crore,1037.13,814.36,45.48,471.45,427.39,192.18,,86.34,https://www.chittorgarh.com/ipo/x/1096/,2026-11-06 01:51:09.588185
+1096,Laxmi Organic Industries,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,1070.63,1538.62,70.21,425.96,381.9,158.84,,143.71,https://www.chittorgarh.com/ipo/x/1096/,2026-11-06 01:51:09.588185
+1096,Laxmi Organic Industries,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,1014.49,1574.32,72.39,448.89,399.8,175.33,,158.62,https://www.chittorgarh.com/ipo/x/1096/,2026-11-06 01:51:09.588185
+1096,Laxmi Organic Industries,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,894.73,1396.08,75.7,378.37,369.31,215.06,,154.41,https://www.chittorgarh.com/ipo/x/1096/,2026-11-06 01:51:09.588185
