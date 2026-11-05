@@ -1005,3 +1005,40 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1077,Mrs.Bectors Food Specialities,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,565.72,764.98,30.4,317.3,262.03,131.17,,92.85,https://www.chittorgarh.com/ipo/x/1077/,2026-11-06 01:52:50.572468
 1077,Mrs.Bectors Food Specialities,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,577.04,786.03,33.15,294.75,237.48,160.24,,96.15,https://www.chittorgarh.com/ipo/x/1077/,2026-11-06 01:52:50.572468
 1077,Mrs.Bectors Food Specialities,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,511.06,695.76,35.89,266.61,209.35,133.1,,85.5,https://www.chittorgarh.com/ipo/x/1077/,2026-11-06 01:52:50.572468
+1586,Mukka Proteins,30 Sep 2023,2023-09-30,STUB,1,INR_crore,641.18,612.88,32.98,159.11,144.92,317.73,,,https://www.chittorgarh.com/ipo/x/1586/,2026-11-06 01:52:54.045627
+1586,Mukka Proteins,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,575.16,1183.8,47.53,128.92,112.57,254.83,,,https://www.chittorgarh.com/ipo/x/1586/,2026-11-06 01:52:54.045627
+1586,Mukka Proteins,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,392.3,776.15,25.82,87.25,68.51,173.5,,,https://www.chittorgarh.com/ipo/x/1586/,2026-11-06 01:52:54.045627
+1586,Mukka Proteins,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,353.93,609.95,11.01,64.54,60.8,159.19,,,https://www.chittorgarh.com/ipo/x/1586/,2026-11-06 01:52:54.045627
+623,Music Broadcast,30 Sep 2016,2016-09-30,STUB,1,INR_crore,527.83,138.21,29.76,140.16,95.11,250.24,,45.51,https://www.chittorgarh.com/ipo/x/623/,2026-11-06 01:52:57.254809
+623,Music Broadcast,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,485.29,245.51,42.51,110.4,65.36,255.74,,78.59,https://www.chittorgarh.com/ipo/x/623/,2026-11-06 01:52:57.254809
+623,Music Broadcast,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,397.73,207.51,47.06,60.59,18.67,284.82,,62.3,https://www.chittorgarh.com/ipo/x/623/,2026-11-06 01:52:57.254809
+623,Music Broadcast,31 Mar 2014,2014-03-31,FULL_FY,4,INR_crore,169.96,157.27,24.33,13.63,-28.29,103.16,,42.36,https://www.chittorgarh.com/ipo/x/623/,2026-11-06 01:52:57.254809
+300,Muthoot Finance,30 Nov 2010,2010-11-30,STUB,1,INR_crore,10776.18,1301.66,291.48,1131.46,811.51,9082.92,,,https://www.chittorgarh.com/ipo/x/300/,2026-11-06 01:53:00.443742
+300,Muthoot Finance,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,6440.14,1089.38,227.58,584.19,283.55,5280.53,,,https://www.chittorgarh.com/ipo/x/300/,2026-11-06 01:53:00.443742
+300,Muthoot Finance,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,3760.04,620.4,97.72,361.45,321.23,3165.59,,,https://www.chittorgarh.com/ipo/x/300/,2026-11-06 01:53:00.443742
+300,Muthoot Finance,31 Mar 2008,2008-03-31,FULL_FY,4,INR_crore,2285.77,368.64,63.6,213.11,217.36,1915.31,,,https://www.chittorgarh.com/ipo/x/300/,2026-11-06 01:53:00.443742
+1582,Muthoot Microfin,31 Mar 2023,2023-03-31,FULL_FY,1,INR_crore,8529.2,1446.34,163.89,1625.85,1282.15,6493.18,,,https://www.chittorgarh.com/ipo/x/1582/,2026-11-06 01:53:03.715420
+1582,Muthoot Microfin,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,5591.46,842.94,47.4,1336.58,1040.1,3996.61,,,https://www.chittorgarh.com/ipo/x/1582/,2026-11-06 01:53:03.715420
+1582,Muthoot Microfin,31 Mar 2021,2021-03-31,FULL_FY,3,INR_crore,4183.85,696.28,7.05,889.89,642.84,3015.66,,,https://www.chittorgarh.com/ipo/x/1582/,2026-11-06 01:53:03.715420
+1902,NTPC Green Energy,30 Sep 2024,2024-09-30,STUB,1,INR_crore,32408.3,1132.74,175.3,8189.18,596.08,17057.5,,,https://www.chittorgarh.com/ipo/x/1902/,2026-11-06 01:53:06.861052
+1902,NTPC Green Energy,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,27206.42,2037.66,344.72,6232.14,512.6,12796.74,,,https://www.chittorgarh.com/ipo/x/1902/,2026-11-06 01:53:06.861052
+1902,NTPC Green Energy,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,18431.4,170.63,171.23,,167.88,,,,https://www.chittorgarh.com/ipo/x/1902/,2026-11-06 01:53:06.861052
+513,Narayana Hrudayalaya,30 Sep 2015,2015-09-30,STUB,1,INR_crore,1337.52,724.61,33.89,825.19,625.19,102.63,,,https://www.chittorgarh.com/ipo/x/513/,2026-11-06 01:53:10.091315
+513,Narayana Hrudayalaya,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,1293.34,1317.62,28.92,791.3,591.3,253.68,,,https://www.chittorgarh.com/ipo/x/513/,2026-11-06 01:53:10.091315
+513,Narayana Hrudayalaya,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,1127.93,1091.32,36.03,569.68,569.35,269.43,,,https://www.chittorgarh.com/ipo/x/513/,2026-11-06 01:53:10.091315
+513,Narayana Hrudayalaya,31 Mar 2013,2013-03-31,FULL_FY,4,INR_crore,927.35,827.35,18.45,533.49,533.17,202.51,,,https://www.chittorgarh.com/ipo/x/513/,2026-11-06 01:53:10.091315
+2448,National Securities Depository,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,2984.84,1535.19,343.12,2005.34,232.31,,,492.94,https://www.chittorgarh.com/ipo/x/2448/,2026-11-06 01:53:13.297153
+2448,National Securities Depository,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,2257.74,1365.71,275.45,1684.1,216.32,,,381.13,https://www.chittorgarh.com/ipo/x/2448/,2026-11-06 01:53:13.297153
+2448,National Securities Depository,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,2093.48,1099.81,234.81,1428.86,199.08,,,328.6,https://www.chittorgarh.com/ipo/x/2448/,2026-11-06 01:53:13.297153
+1092,Nazara Technologies,30 Sep 2020,2020-09-30,STUB,1,INR_crore,798.66,207.01,-10.11,481.98,484.21,,,12.66,https://www.chittorgarh.com/ipo/x/1092/,2026-11-06 01:53:16.531448
+1092,Nazara Technologies,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,776.83,262.15,-26.62,463.47,495.94,,,9.11,https://www.chittorgarh.com/ipo/x/1092/,2026-11-06 01:53:16.531448
+1092,Nazara Technologies,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,514.58,186.1,6.71,413.75,396.12,,,32.75,https://www.chittorgarh.com/ipo/x/1092/,2026-11-06 01:53:16.531448
+1092,Nazara Technologies,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,470.76,181.94,1.02,364.63,341.03,0.02,,58.62,https://www.chittorgarh.com/ipo/x/1092/,2026-11-06 01:53:16.531448
+984,Neogen Chemicals,31 Dec 2018,2018-12-31,STUB,1,INR_crore,237.41,159.69,12.22,61.49,41.64,111.76,,,https://www.chittorgarh.com/ipo/x/984/,2026-11-06 01:53:19.745478
+984,Neogen Chemicals,31 Mar 2018,2018-03-31,FULL_FY,2,INR_crore,180.05,164.68,10.5,50.06,30.23,79.72,,,https://www.chittorgarh.com/ipo/x/984/,2026-11-06 01:53:19.745478
+984,Neogen Chemicals,31 Mar 2017,2017-03-31,FULL_FY,3,INR_crore,152.32,121.78,7.68,41.97,22.03,66.91,,,https://www.chittorgarh.com/ipo/x/984/,2026-11-06 01:53:19.745478
+984,Neogen Chemicals,31 Mar 2016,2016-03-31,FULL_FY,4,INR_crore,80.48,109.05,5.18,27.55,7.55,24.83,,,https://www.chittorgarh.com/ipo/x/984/,2026-11-06 01:53:19.745478
+2548,Nephrocare Health Services,30 Sep 2025,2025-09-30,STUB,1,INR_crore,1193.68,483.97,14.23,716.06,704.14,207.04,,110.31,https://www.chittorgarh.com/ipo/x/2548/,2026-11-06 01:53:22.934437
+2548,Nephrocare Health Services,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,996.46,769.92,67.1,594.21,578.68,225.8,,166.64,https://www.chittorgarh.com/ipo/x/2548/,2026-11-06 01:53:22.934437
+2548,Nephrocare Health Services,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,806.02,574.72,35.13,423.55,408.57,243.37,,99.66,https://www.chittorgarh.com/ipo/x/2548/,2026-11-06 01:53:22.934437
+2548,Nephrocare Health Services,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,666.23,443.26,-11.79,384.73,383.5,196.21,,48.6,https://www.chittorgarh.com/ipo/x/2548/,2026-11-06 01:53:22.934437
