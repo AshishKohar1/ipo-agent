@@ -890,3 +890,42 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1096,Laxmi Organic Industries,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,1070.63,1538.62,70.21,425.96,381.9,158.84,,143.71,https://www.chittorgarh.com/ipo/x/1096/,2026-11-06 01:51:09.588185
 1096,Laxmi Organic Industries,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,1014.49,1574.32,72.39,448.89,399.8,175.33,,158.62,https://www.chittorgarh.com/ipo/x/1096/,2026-11-06 01:51:09.588185
 1096,Laxmi Organic Industries,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,894.73,1396.08,75.7,378.37,369.31,215.06,,154.41,https://www.chittorgarh.com/ipo/x/1096/,2026-11-06 01:51:09.588185
+846,Lemon Tree Hotels,31 Dec 2017,2017-12-31,STUB,1,INR_crore,1322.38,174.31,12.6,951.25,164.88,288.27,,51.72,https://www.chittorgarh.com/ipo/x/846/,2026-11-06 01:51:13.665107
+846,Lemon Tree Hotels,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,1306.21,223.77,5.35,927.23,146.02,299.78,,65.0,https://www.chittorgarh.com/ipo/x/846/,2026-11-06 01:51:13.665107
+846,Lemon Tree Hotels,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,1311.29,194.55,-16.34,915.34,137.3,321.45,,46.15,https://www.chittorgarh.com/ipo/x/846/,2026-11-06 01:51:13.665107
+846,Lemon Tree Hotels,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,1296.52,224.2,-1.04,927.6,152.9,316.08,,68.39,https://www.chittorgarh.com/ipo/x/846/,2026-11-06 01:51:13.665107
+2551,Lenskart Solutions,30 Jun 2025,2025-06-30,STUB,1,INR_crore,10845.68,1946.1,61.17,6176.87,5855.43,335.48,,336.63,https://www.chittorgarh.com/ipo/x/2551/,2026-11-06 01:51:16.907180
+2551,Lenskart Solutions,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,10471.02,7009.28,297.34,6108.3,5795.0,345.94,,971.06,https://www.chittorgarh.com/ipo/x/2551/,2026-11-06 01:51:16.907180
+2551,Lenskart Solutions,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,9531.02,5609.87,-10.15,5642.38,5466.5,497.15,,672.09,https://www.chittorgarh.com/ipo/x/2551/,2026-11-06 01:51:16.907180
+2551,Lenskart Solutions,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,9528.28,3927.97,-63.76,5444.48,5411.96,917.21,,259.71,https://www.chittorgarh.com/ipo/x/2551/,2026-11-06 01:51:16.907180
+1062,Likhitha Infrastructure,31 Mar 2020,2020-03-31,FULL_FY,1,INR_crore,100.86,162.79,19.88,69.96,55.33,2.35,,31.22,https://www.chittorgarh.com/ipo/x/1062/,2026-11-06 01:51:20.117602
+1062,Likhitha Infrastructure,31 Mar 2019,2019-03-31,FULL_FY,2,INR_crore,84.57,140.55,17.86,50.31,45.81,9.85,,29.97,https://www.chittorgarh.com/ipo/x/1062/,2026-11-06 01:51:20.117602
+1062,Likhitha Infrastructure,31 Mar 2018,2018-03-31,FULL_FY,3,INR_crore,67.23,88.61,7.16,32.43,27.93,2.35,,12.7,https://www.chittorgarh.com/ipo/x/1062/,2026-11-06 01:51:20.117602
+297,Lovable Lingerie,31 Dec 2010,2010-12-31,STUB,1,INR_crore,49.56,86.57,12.61,36.91,25.71,0.34,,,https://www.chittorgarh.com/ipo/x/297/,2026-11-06 01:51:23.316819
+297,Lovable Lingerie,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,46.49,86.79,9.79,24.36,16.86,0.33,,,https://www.chittorgarh.com/ipo/x/297/,2026-11-06 01:51:23.316819
+297,Lovable Lingerie,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,47.56,68.82,6.02,14.68,13.18,6.39,,,https://www.chittorgarh.com/ipo/x/297/,2026-11-06 01:51:23.316819
+297,Lovable Lingerie,31 Mar 2008,2008-03-31,FULL_FY,4,INR_crore,34.1,63.08,3.94,11.99,10.49,7.04,,,https://www.chittorgarh.com/ipo/x/297/,2026-11-06 01:51:23.316819
+739,MAS Financial Services,30 Jun 2017,2017-06-30,STUB,1,INR_crore,2291.4,97.82,23.04,383.6,292.14,1145.57,,,https://www.chittorgarh.com/ipo/x/739/,2026-11-06 01:51:26.529799
+739,MAS Financial Services,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,2024.48,341.52,67.42,327.23,236.81,970.94,,,https://www.chittorgarh.com/ipo/x/739/,2026-11-06 01:51:26.529799
+739,MAS Financial Services,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,1812.65,288.7,50.01,179.33,119.85,1045.13,,,https://www.chittorgarh.com/ipo/x/739/,2026-11-06 01:51:26.529799
+739,MAS Financial Services,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,1487.79,226.53,38.82,157.12,97.65,857.27,,,https://www.chittorgarh.com/ipo/x/739/,2026-11-06 01:51:26.529799
+467,MEP Infrastructure Developers,31 Oct 2014,2014-10-31,STUB,1,INR_crore,826.35,525.56,3.79,246.3,134.81,346.5,,26.12,https://www.chittorgarh.com/ipo/x/467/,2026-11-06 01:51:29.743190
+467,MEP Infrastructure Developers,31 Mar 2014,2014-03-31,FULL_FY,2,INR_crore,476.12,498.32,4.31,217.51,117.51,134.74,,36.17,https://www.chittorgarh.com/ipo/x/467/,2026-11-06 01:51:29.743190
+467,MEP Infrastructure Developers,31 Mar 2013,2013-03-31,FULL_FY,3,INR_crore,420.07,913.2,16.49,213.2,113.2,85.5,,55.36,https://www.chittorgarh.com/ipo/x/467/,2026-11-06 01:51:29.743190
+467,MEP Infrastructure Developers,31 Mar 2012,2012-03-31,FULL_FY,4,INR_crore,927.45,774.85,18.09,196.71,96.71,328.26,,84.93,https://www.chittorgarh.com/ipo/x/467/,2026-11-06 01:51:29.743190
+282,MOIL,30 Sep 2010,2010-09-30,STUB,1,INR_crore,2220.35,692.49,330.72,2008.21,1840.21,0.0,,,https://www.chittorgarh.com/ipo/x/282/,2026-11-06 01:51:33.189546
+282,MOIL,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,1961.06,1087.85,466.35,1676.72,1508.72,0.0,,,https://www.chittorgarh.com/ipo/x/282/,2026-11-06 01:51:33.189546
+282,MOIL,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,1666.35,1439.41,663.79,1320.94,1292.94,0.0,,,https://www.chittorgarh.com/ipo/x/282/,2026-11-06 01:51:33.189546
+282,MOIL,31 Mar 2008,2008-03-31,FULL_FY,4,INR_crore,1035.38,1015.45,479.82,786.25,758.25,0.0,,,https://www.chittorgarh.com/ipo/x/282/,2026-11-06 01:51:33.189546
+969,MSTC,30 Sep 2018,2018-09-30,STUB,1,INR_crore,4256.63,1491.55,-15.88,327.92,292.72,301.94,,80.3,https://www.chittorgarh.com/ipo/x/969/,2026-11-06 01:51:36.148297
+969,MSTC,31 Mar 2018,2018-03-31,FULL_FY,2,INR_crore,4737.86,2793.15,-6.48,366.16,330.96,766.18,,113.2,https://www.chittorgarh.com/ipo/x/969/,2026-11-06 01:51:36.148297
+969,MSTC,31 Mar 2017,2017-03-31,FULL_FY,3,INR_crore,4599.81,1876.2,139.15,406.03,388.43,688.35,,262.64,https://www.chittorgarh.com/ipo/x/969/,2026-11-06 01:51:36.148297
+969,MSTC,31 Mar 2016,2016-03-31,FULL_FY,4,INR_crore,4162.18,3307.8,-247.1,314.67,305.87,653.33,,-85.35,https://www.chittorgarh.com/ipo/x/969/,2026-11-06 01:51:36.148297
+338,MT Educare,30 Sep 2011,2011-09-30,STUB,1,INR_crore,128.23,72.29,9.75,56.91,21.74,,,,https://www.chittorgarh.com/ipo/x/338/,2026-11-06 01:51:39.371740
+338,MT Educare,31 Mar 2011,2011-03-31,FULL_FY,2,INR_crore,108.83,107.35,8.25,47.75,13.4,4.5,,,https://www.chittorgarh.com/ipo/x/338/,2026-11-06 01:51:39.371740
+338,MT Educare,31 Mar 2010,2010-03-31,FULL_FY,3,INR_crore,86.67,85.79,5.23,41.14,40.1,,,,https://www.chittorgarh.com/ipo/x/338/,2026-11-06 01:51:39.371740
+338,MT Educare,31 Mar 2009,2009-03-31,FULL_FY,4,INR_crore,79.95,75.17,2.62,35.83,35.66,5.0,,,https://www.chittorgarh.com/ipo/x/338/,2026-11-06 01:51:39.371740
+1088,MTAR Technologies,31 Dec 2020,2020-12-31,STUB,1,INR_crore,381.91,177.99,28.07,239.26,218.86,16.0,,53.75,https://www.chittorgarh.com/ipo/x/1088/,2026-11-06 01:51:42.579075
+1088,MTAR Technologies,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,346.27,218.14,31.32,225.08,198.32,29.13,,62.33,https://www.chittorgarh.com/ipo/x/1088/,2026-11-06 01:51:42.579075
+1088,MTAR Technologies,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,305.16,185.91,39.2,234.98,206.77,28.73,,55.96,https://www.chittorgarh.com/ipo/x/1088/,2026-11-06 01:51:42.579075
+1088,MTAR Technologies,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,281.03,160.55,5.42,205.52,177.31,19.79,,32.82,https://www.chittorgarh.com/ipo/x/1088/,2026-11-06 01:51:42.579075
