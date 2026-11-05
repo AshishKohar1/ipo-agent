@@ -1340,3 +1340,38 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1168,S.J.S.Enterprises,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,383.54,255.15,47.77,315.22,284.78,9.21,,79.7,https://www.chittorgarh.com/ipo/x/1168/,2026-11-06 01:57:43.025753
 1168,S.J.S.Enterprises,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,332.26,221.27,41.29,279.65,249.21,6.17,,68.61,https://www.chittorgarh.com/ipo/x/1168/,2026-11-06 01:57:43.025753
 1168,S.J.S.Enterprises,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,304.05,240.76,37.6,238.56,208.12,23.29,,64.32,https://www.chittorgarh.com/ipo/x/1168/,2026-11-06 01:57:43.025753
+563,S.P.Apparels,31 Mar 2016,2016-03-31,FULL_FY,1,INR_crore,578.04,541.74,37.36,128.45,111.31,227.03,,,https://www.chittorgarh.com/ipo/x/563/,2026-11-06 01:57:46.674550
+563,S.P.Apparels,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,530.41,482.47,10.92,89.14,72.34,225.99,,,https://www.chittorgarh.com/ipo/x/563/,2026-11-06 01:57:46.674550
+563,S.P.Apparels,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,537.04,453.33,7.15,79.27,62.47,261.2,,,https://www.chittorgarh.com/ipo/x/563/,2026-11-06 01:57:46.674550
+1502,SAMHI Hotels,31 Mar 2023,2023-03-31,FULL_FY,1,INR_crore,2263.0,761.42,-338.59,-871.43,-816.18,2787.54,,,https://www.chittorgarh.com/ipo/x/1502/,2026-11-06 01:57:49.832866
+1502,SAMHI Hotels,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,2386.58,333.1,-443.25,-702.63,-646.47,2597.69,,,https://www.chittorgarh.com/ipo/x/1502/,2026-11-06 01:57:49.832866
+1502,SAMHI Hotels,31 Mar 2021,2021-03-31,FULL_FY,3,INR_crore,2488.0,179.25,-477.73,-259.28,-203.12,2424.4,,,https://www.chittorgarh.com/ipo/x/1502/,2026-11-06 01:57:49.832866
+1470,SBFC Finance,31 Mar 2023,2023-03-31,FULL_FY,1,INR_crore,5746.44,740.36,149.74,1466.88,,3745.83,,,https://www.chittorgarh.com/ipo/x/1470/,2026-11-06 01:57:53.077264
+1470,SBFC Finance,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,4515.03,530.7,64.52,1026.78,,2948.82,,,https://www.chittorgarh.com/ipo/x/1470/,2026-11-06 01:57:53.077264
+1470,SBFC Finance,31 Mar 2021,2021-03-31,FULL_FY,3,INR_crore,4231.19,511.53,85.01,944.72,,2772.55,,,https://www.chittorgarh.com/ipo/x/1470/,2026-11-06 01:57:53.077264
+1470,SBFC Finance,31 Mar 2020,2020-03-31,FULL_FY,4,INR_crore,4207.99,444.85,35.5,752.09,,3056.38,,,https://www.chittorgarh.com/ipo/x/1470/,2026-11-06 01:57:53.077264
+713,SBI Life Insurance Co.,30 Jun 2017,2017-06-30,STUB,1,INR_crore,102410.5,,313.45,5878.8,4778.23,,,,https://www.chittorgarh.com/ipo/x/713/,2026-11-06 01:57:56.441001
+713,SBI Life Insurance Co.,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,99225.25,,954.65,5552.08,4464.78,,,,https://www.chittorgarh.com/ipo/x/713/,2026-11-06 01:57:56.441001
+713,SBI Life Insurance Co.,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,80724.56,,844.1,4733.1,3690.67,,,,https://www.chittorgarh.com/ipo/x/713/,2026-11-06 01:57:56.441001
+713,SBI Life Insurance Co.,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,72236.6,,814.87,4056.34,2990.99,,,,https://www.chittorgarh.com/ipo/x/713/,2026-11-06 01:57:56.441001
+2794,SEDEMAC Mechatronics,31 Dec 2025,2025-12-31,STUB,1,INR_crore,676.01,775.31,71.5,411.23,366.74,46.89,,161.07,https://www.chittorgarh.com/ipo/x/2794/,2026-11-06 01:57:59.464708
+2794,SEDEMAC Mechatronics,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,491.16,662.54,47.05,303.88,303.35,49.62,,125.07,https://www.chittorgarh.com/ipo/x/2794/,2026-11-06 01:57:59.464708
+2794,SEDEMAC Mechatronics,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,402.24,535.9,5.88,124.43,124.03,150.62,,83.12,https://www.chittorgarh.com/ipo/x/2794/,2026-11-06 01:57:59.464708
+2794,SEDEMAC Mechatronics,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,331.28,429.87,8.57,115.22,114.93,109.61,,54.24,https://www.chittorgarh.com/ipo/x/2794/,2026-11-06 01:57:59.464708
+1682,SRM Contractors,31 Dec 2023,2023-12-31,STUB,1,INR_crore,168.87,242.28,21.07,37.24,67.48,42.32,,,https://www.chittorgarh.com/ipo/x/1682/,2026-11-06 01:58:02.670631
+1682,SRM Contractors,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,137.36,300.65,18.75,63.16,46.41,47.16,,,https://www.chittorgarh.com/ipo/x/1682/,2026-11-06 01:58:02.670631
+1682,SRM Contractors,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,120.22,265.51,17.57,44.41,42.89,31.52,,,https://www.chittorgarh.com/ipo/x/1682/,2026-11-06 01:58:02.670631
+1682,SRM Contractors,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,112.47,161.95,8.27,26.85,25.32,31.96,,,https://www.chittorgarh.com/ipo/x/1682/,2026-11-06 01:58:02.670631
+320,SRS,31 Mar 2011,2011-03-31,FULL_FY,1,INR_crore,660.11,2077.53,37.39,313.05,314.32,273.77,,,https://www.chittorgarh.com/ipo/x/320/,2026-11-06 01:58:05.865638
+320,SRS,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,482.7,1329.86,26.16,276.74,276.93,162.29,,,https://www.chittorgarh.com/ipo/x/320/,2026-11-06 01:58:05.865638
+320,SRS,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,404.99,514.46,5.59,214.27,214.27,154.3,,,https://www.chittorgarh.com/ipo/x/320/,2026-11-06 01:58:05.865638
+2082,Saatvik Green Energy,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,1635.74,2192.47,213.93,337.66,315.25,458.1,,353.93,https://www.chittorgarh.com/ipo/x/2082/,2026-11-06 01:58:09.325471
+2082,Saatvik Green Energy,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,688.04,1097.18,100.47,120.67,117.36,263.42,,156.84,https://www.chittorgarh.com/ipo/x/2082/,2026-11-06 01:58:09.325471
+2082,Saatvik Green Energy,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,263.0,617.63,4.75,20.27,16.89,144.49,,23.87,https://www.chittorgarh.com/ipo/x/2082/,2026-11-06 01:58:09.325471
+494,Sadbhav Infrastructure Project,31 Mar 2015,2015-03-31,FULL_FY,1,INR_crore,2204.15,107.31,-61.14,843.59,532.63,1221.91,,,https://www.chittorgarh.com/ipo/x/494/,2026-11-06 01:58:12.317254
+494,Sadbhav Infrastructure Project,31 Mar 2014,2014-03-31,FULL_FY,2,INR_crore,1590.35,115.83,0.81,827.48,801.47,671.31,,,https://www.chittorgarh.com/ipo/x/494/,2026-11-06 01:58:12.317254
+494,Sadbhav Infrastructure Project,31 Mar 2013,2013-03-31,FULL_FY,3,INR_crore,1229.37,116.68,11.63,826.67,800.66,347.56,,,https://www.chittorgarh.com/ipo/x/494/,2026-11-06 01:58:12.317254
+1898,Sagility India,30 Jun 2024,2024-06-30,STUB,1,INR_crore,10388.01,1247.76,22.29,7608.16,2704.28,943.91,,,https://www.chittorgarh.com/ipo/x/1898/,2026-11-06 01:58:15.559136
+1898,Sagility India,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,10664.2,4781.5,228.27,6443.13,1855.44,1933.52,,,https://www.chittorgarh.com/ipo/x/1898/,2026-11-06 01:58:15.559136
+1898,Sagility India,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,10590.48,4236.06,143.57,6206.67,4013.38,2347.94,,,https://www.chittorgarh.com/ipo/x/1898/,2026-11-06 01:58:15.559136
+1898,Sagility India,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,10096.28,944.39,-4.67,4026.62,2073.8,4239.23,,,https://www.chittorgarh.com/ipo/x/1898/,2026-11-06 01:58:15.559136
