@@ -178,3 +178,42 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1767,Bansal Wire Industries,31 Mar 2024,2024-03-31,FULL_FY,1,INR_crore,1264.01,2470.89,78.8,422.37,358.64,681.14,,,https://www.chittorgarh.com/ipo/x/1767/,2026-11-06 01:40:52.302854
 1767,Bansal Wire Industries,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,749.05,2422.57,59.93,282.51,273.41,422.19,,,https://www.chittorgarh.com/ipo/x/1767/,2026-11-06 01:40:52.302854
 1767,Bansal Wire Industries,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,695.48,2205.07,57.29,223.01,213.91,413.15,,,https://www.chittorgarh.com/ipo/x/1767/,2026-11-06 01:40:52.302854
+1102,Barbeque-Nation Hospitality,30 Nov 2020,2020-11-30,STUB,1,INR_crore,908.59,236.61,-100.65,0.48,-13.52,246.98,,12.59,https://www.chittorgarh.com/ipo/x/1102/,2026-11-06 01:40:55.693027
+1102,Barbeque-Nation Hospitality,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,955.46,850.79,-32.93,75.78,61.79,244.96,,168.04,https://www.chittorgarh.com/ipo/x/1102/,2026-11-06 01:40:55.693027
+1102,Barbeque-Nation Hospitality,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,819.09,742.54,-38.39,170.98,156.99,157.86,,149.39,https://www.chittorgarh.com/ipo/x/1102/,2026-11-06 01:40:55.693027
+1102,Barbeque-Nation Hospitality,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,723.16,590.45,-5.8,180.96,167.16,127.66,,140.37,https://www.chittorgarh.com/ipo/x/1102/,2026-11-06 01:40:55.693027
+273,Bedmutha Industries,31 Mar 2010,2010-03-31,FULL_FY,1,INR_crore,151.25,161.84,9.96,26.24,16.64,82.07,,,https://www.chittorgarh.com/ipo/x/273/,2026-11-06 01:40:58.908059
+273,Bedmutha Industries,31 Mar 2009,2009-03-31,FULL_FY,2,INR_crore,82.26,151.66,7.03,18.42,10.44,47.34,,,https://www.chittorgarh.com/ipo/x/273/,2026-11-06 01:40:58.908059
+273,Bedmutha Industries,31 Mar 2008,2008-03-31,FULL_FY,3,INR_crore,69.66,115.03,3.61,12.97,4.56,44.53,,,https://www.chittorgarh.com/ipo/x/273/,2026-11-06 01:40:58.908059
+2083,Belrise Industries,31 Dec 2024,2024-12-31,STUB,1,INR_crore,6587.69,6064.76,245.47,2577.55,2252.24,2599.8,,,https://www.chittorgarh.com/ipo/x/2083/,2026-11-06 01:41:02.080480
+2083,Belrise Industries,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,6041.65,7555.67,352.7,2331.92,2014.43,2440.98,,,https://www.chittorgarh.com/ipo/x/2083/,2026-11-06 01:41:02.080480
+2083,Belrise Industries,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,5679.15,6620.78,356.7,2038.2,2024.16,2271.4,,,https://www.chittorgarh.com/ipo/x/2083/,2026-11-06 01:41:02.080480
+2083,Belrise Industries,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,5196.07,5410.68,307.24,1734.45,1715.31,2597.96,,,https://www.chittorgarh.com/ipo/x/2083/,2026-11-06 01:41:02.080480
+2462,Bharat Coking Coal,30 Sep 2025,2025-09-30,STUB,1,INR_crore,18711.13,6311.51,123.88,5830.89,1006.52,1559.13,,459.93,https://www.chittorgarh.com/ipo/x/2462/,2026-11-06 01:41:05.329633
+2462,Bharat Coking Coal,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,17283.48,14401.63,1240.19,6551.23,1805.73,,,2356.06,https://www.chittorgarh.com/ipo/x/2462/,2026-11-06 01:41:05.329633
+2462,Bharat Coking Coal,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,14727.73,14652.53,1564.46,5355.47,664.72,,,2493.89,https://www.chittorgarh.com/ipo/x/2462/,2026-11-06 01:41:05.329633
+2462,Bharat Coking Coal,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,13312.86,13018.57,664.78,3791.01,-853.1,,,891.31,https://www.chittorgarh.com/ipo/x/2462/,2026-11-06 01:41:05.329633
+827,Bharat Dynamics,30 Sep 2017,2017-09-30,STUB,1,INR_crore,8284.98,2190.25,172.59,1630.64,1539.0,,,,https://www.chittorgarh.com/ipo/x/827/,2026-11-06 01:41:08.505984
+827,Bharat Dynamics,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,8600.79,5198.07,490.32,2212.46,2090.27,,,,https://www.chittorgarh.com/ipo/x/827/,2026-11-06 01:41:08.505984
+827,Bharat Dynamics,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,9640.63,4601.38,562.07,1851.24,1753.49,,,,https://www.chittorgarh.com/ipo/x/827/,2026-11-06 01:41:08.505984
+827,Bharat Dynamics,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,8411.97,3253.23,443.55,1652.67,1537.67,,,,https://www.chittorgarh.com/ipo/x/827/,2026-11-06 01:41:08.505984
+703,Bharat Road Network,31 Mar 2017,2017-03-31,FULL_FY,1,INR_crore,574.72,20.15,-30.75,421.73,367.09,149.95,,,https://www.chittorgarh.com/ipo/x/703/,2026-11-06 01:41:11.667761
+703,Bharat Road Network,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,406.85,7.35,-46.68,-110.55,-120.54,512.71,,,https://www.chittorgarh.com/ipo/x/703/,2026-11-06 01:41:11.667761
+703,Bharat Road Network,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,318.9,43.52,-6.31,-63.86,-73.86,376.76,,,https://www.chittorgarh.com/ipo/x/703/,2026-11-06 01:41:11.667761
+530,Bharat Wire Ropes,30 Nov 2015,2015-11-30,STUB,1,INR_crore,243.44,43.74,1.09,70.85,41.93,98.99,,,https://www.chittorgarh.com/ipo/x/530/,2026-11-06 01:41:14.926325
+530,Bharat Wire Ropes,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,152.04,76.72,1.98,70.42,41.5,22.24,,9.24,https://www.chittorgarh.com/ipo/x/530/,2026-11-06 01:41:14.926325
+530,Bharat Wire Ropes,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,141.96,82.29,1.5,68.67,39.75,20.92,,8.97,https://www.chittorgarh.com/ipo/x/530/,2026-11-06 01:41:14.926325
+530,Bharat Wire Ropes,31 Mar 2013,2013-03-31,FULL_FY,4,INR_crore,146.51,74.4,1.48,67.16,38.25,29.29,,9.24,https://www.chittorgarh.com/ipo/x/530/,2026-11-06 01:41:14.926325
+317,Bharatiya Global Infomedia,31 Mar 2011,2011-03-31,FULL_FY,1,INR_crore,57.62,71.01,4.55,31.93,23.36,5.94,,,https://www.chittorgarh.com/ipo/x/317/,2026-11-06 01:41:18.167638
+317,Bharatiya Global Infomedia,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,47.64,46.37,2.87,27.72,20.88,6.61,,,https://www.chittorgarh.com/ipo/x/317/,2026-11-06 01:41:18.167638
+317,Bharatiya Global Infomedia,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,38.22,33.61,0.07,22.93,16.21,6.28,,,https://www.chittorgarh.com/ipo/x/317/,2026-11-06 01:41:18.167638
+1694,Bharti Hexacom,31 Dec 2023,2023-12-31,STUB,1,INR_crore,19603.0,5420.8,281.8,3978.8,4166.1,6253.0,,,https://www.chittorgarh.com/ipo/x/1694/,2026-11-06 01:41:21.430756
+1694,Bharti Hexacom,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,18252.9,6719.2,549.2,3972.2,3959.5,6269.3,,,https://www.chittorgarh.com/ipo/x/1694/,2026-11-06 01:41:21.430756
+1694,Bharti Hexacom,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,16674.3,5494.0,1674.6,3573.2,3410.5,7198.3,,,https://www.chittorgarh.com/ipo/x/1694/,2026-11-06 01:41:21.430756
+1694,Bharti Hexacom,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,15003.5,4704.3,1033.9,1898.7,1736.0,5975.2,,,https://www.chittorgarh.com/ipo/x/1694/,2026-11-06 01:41:21.430756
+1332,Bikaji Foods International,30 Jun 2022,2022-06-30,STUB,1,INR_crore,1146.28,423.82,15.7,834.8,,156.39,,,https://www.chittorgarh.com/ipo/x/1332/,2026-11-06 01:41:24.555979
+1332,Bikaji Foods International,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,1102.13,1621.45,76.03,819.26,0.0,141.23,,,https://www.chittorgarh.com/ipo/x/1332/,2026-11-06 01:41:24.555979
+1332,Bikaji Foods International,30 Jun 2021,2021-06-30,STUB,3,INR_crore,871.96,337.08,12.41,618.45,,101.13,,,https://www.chittorgarh.com/ipo/x/1332/,2026-11-06 01:41:24.555979
+1332,Bikaji Foods International,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,817.15,1322.21,90.34,604.1,0.0,86.15,,,https://www.chittorgarh.com/ipo/x/1332/,2026-11-06 01:41:24.555979
+1332,Bikaji Foods International,31 Mar 2020,2020-03-31,FULL_FY,5,INR_crore,676.64,1082.9,56.37,529.17,0.0,52.3,,,https://www.chittorgarh.com/ipo/x/1332/,2026-11-06 01:41:24.555979
+1332,Bikaji Foods International,31 Mar 2019,2019-03-31,FULL_FY,6,INR_crore,630.9,910.65,50.93,469.77,0.0,72.31,,,https://www.chittorgarh.com/ipo/x/1332/,2026-11-06 01:41:24.555979
