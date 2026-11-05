@@ -142,3 +142,39 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1405,Avalon Technologies,31 Mar 2022,2022-03-31,FULL_FY,1,INR_crore,587.96,851.65,68.16,,,294.05,,,https://www.chittorgarh.com/ipo/x/1405/,2026-11-06 01:40:19.775585
 1405,Avalon Technologies,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,512.48,695.9,23.08,,,295.33,,,https://www.chittorgarh.com/ipo/x/1405/,2026-11-06 01:40:19.775585
 1405,Avalon Technologies,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,449.65,653.15,12.33,,,248.48,,,https://www.chittorgarh.com/ipo/x/1405/,2026-11-06 01:40:19.775585
+615,Avenue Supermarts,31 Dec 2016,2016-12-31,STUB,1,INR_crore,3765.42,8793.38,386.4,1897.84,1336.3,1239.98,,,https://www.chittorgarh.com/ipo/x/615/,2026-11-06 01:40:23.623564
+615,Avenue Supermarts,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,3081.54,8599.63,318.53,1511.44,949.9,1021.96,,,https://www.chittorgarh.com/ipo/x/615/,2026-11-06 01:40:23.623564
+615,Avenue Supermarts,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,2347.8,6454.39,210.67,1192.91,631.37,740.71,,,https://www.chittorgarh.com/ipo/x/615/,2026-11-06 01:40:23.623564
+615,Avenue Supermarts,31 Mar 2014,2014-03-31,FULL_FY,4,INR_crore,1791.25,4699.32,159.6,950.28,403.53,494.58,,,https://www.chittorgarh.com/ipo/x/615/,2026-11-06 01:40:23.623564
+2026,Aye Finance,30 Sep 2025,2025-09-30,STUB,1,INR_crore,7116.01,863.02,64.6,1727.37,1689.58,5218.5,,,https://www.chittorgarh.com/ipo/x/2026/,2026-11-06 01:40:26.840773
+2026,Aye Finance,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,6338.63,1504.99,175.25,1658.87,1621.08,4526.33,,,https://www.chittorgarh.com/ipo/x/2026/,2026-11-06 01:40:26.840773
+2026,Aye Finance,30 Sep 2024,2024-09-30,STUB,3,INR_crore,5819.05,717.05,107.8,1593.17,1555.39,4083.1,,,https://www.chittorgarh.com/ipo/x/2026/,2026-11-06 01:40:26.840773
+2026,Aye Finance,31 Mar 2024,2024-03-31,FULL_FY,4,INR_crore,4869.59,1071.75,171.68,1232.65,1192.72,3498.99,,,https://www.chittorgarh.com/ipo/x/2026/,2026-11-06 01:40:26.840773
+2026,Aye Finance,31 Mar 2023,2023-03-31,FULL_FY,5,INR_crore,3126.0,643.34,39.87,754.49,724.04,2296.16,,,https://www.chittorgarh.com/ipo/x/2026/,2026-11-06 01:40:26.840773
+1597,Azad Engineering,30 Sep 2023,2023-09-30,STUB,1,INR_crore,636.63,169.54,26.89,,221.14,324.94,,,https://www.chittorgarh.com/ipo/x/1597/,2026-11-06 01:40:30.197654
+1597,Azad Engineering,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,589.21,261.52,8.47,,202.51,300.6,,,https://www.chittorgarh.com/ipo/x/1597/,2026-11-06 01:40:30.197654
+1597,Azad Engineering,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,404.32,199.26,29.46,,118.88,197.18,,,https://www.chittorgarh.com/ipo/x/1597/,2026-11-06 01:40:30.197654
+1597,Azad Engineering,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,256.05,125.03,11.5,,89.42,87.71,,,https://www.chittorgarh.com/ipo/x/1597/,2026-11-06 01:40:30.197654
+1632,BLS E-Services,30 Sep 2023,2023-09-30,STUB,1,INR_crore,213.77,158.05,14.68,120.37,,0.0,,,https://www.chittorgarh.com/ipo/x/1632/,2026-11-06 01:40:33.264027
+1632,BLS E-Services,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,179.47,246.29,20.33,106.94,,0.0,,,https://www.chittorgarh.com/ipo/x/1632/,2026-11-06 01:40:33.264027
+1632,BLS E-Services,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,55.93,98.4,5.38,15.07,,8.76,,,https://www.chittorgarh.com/ipo/x/1632/,2026-11-06 01:40:33.264027
+1632,BLS E-Services,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,40.59,65.23,3.15,9.68,,11.02,,,https://www.chittorgarh.com/ipo/x/1632/,2026-11-06 01:40:33.264027
+2212,BMW Ventures,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,676.09,2067.33,32.82,210.12,,428.39,,87.39,https://www.chittorgarh.com/ipo/x/2212/,2026-11-06 01:40:36.480486
+2212,BMW Ventures,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,646.15,1942.03,29.94,186.71,,395.3,,72.56,https://www.chittorgarh.com/ipo/x/2212/,2026-11-06 01:40:36.480486
+2212,BMW Ventures,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,481.79,2018.12,32.66,156.48,,283.58,,67.85,https://www.chittorgarh.com/ipo/x/2212/,2026-11-06 01:40:36.480486
+611,BSE,30 Jun 2016,2016-06-30,STUB,1,INR_crore,3099.74,273.56,86.18,2344.02,2333.28,,,193.11,https://www.chittorgarh.com/ipo/x/611/,2026-11-06 01:40:39.668150
+611,BSE,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,2917.67,515.89,131.91,2253.61,2242.87,,,300.51,https://www.chittorgarh.com/ipo/x/611/,2026-11-06 01:40:39.668150
+611,BSE,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,2875.8,439.18,75.65,2203.32,2192.59,,,305.31,https://www.chittorgarh.com/ipo/x/611/,2026-11-06 01:40:39.668150
+611,BSE,31 Mar 2014,2014-03-31,FULL_FY,4,INR_crore,2592.3,332.83,74.77,2085.16,2074.78,,,287.45,https://www.chittorgarh.com/ipo/x/611/,2026-11-06 01:40:39.668150
+1825,Baazar Style Retail,31 Mar 2024,2024-03-31,FULL_FY,1,INR_crore,1165.97,982.83,21.94,212.56,180.2,178.23,,,https://www.chittorgarh.com/ipo/x/1825/,2026-11-06 01:40:42.884077
+1822,Bajaj Housing Finance,30 Jun 2024,2024-06-30,STUB,1,INR_crore,88538.83,2208.73,482.61,14719.91,4252.83,73347.06,,,https://www.chittorgarh.com/ipo/x/1822/,2026-11-06 01:40:46.070358
+1822,Bajaj Housing Finance,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,81827.09,7617.71,1731.22,12233.5,5520.81,69129.32,,,https://www.chittorgarh.com/ipo/x/1822/,2026-11-06 01:40:46.070358
+1822,Bajaj Housing Finance,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,64654.14,5665.44,1257.8,10503.19,3791.03,53745.39,,,https://www.chittorgarh.com/ipo/x/1822/,2026-11-06 01:40:46.070358
+1822,Bajaj Housing Finance,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,48527.08,3767.13,709.62,6741.36,1858.03,41492.32,,,https://www.chittorgarh.com/ipo/x/1822/,2026-11-06 01:40:46.070358
+822,Bandhan Bank,30 Sep 2017,2017-09-30,STUB,1,INR_crore,32402.84,2618.08,657.65,5104.11,4008.97,805.82,,,https://www.chittorgarh.com/ipo/x/822/,2026-11-06 01:40:49.288998
+822,Bandhan Bank,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,30236.09,2306.96,589.51,4446.46,3351.31,1028.94,,,https://www.chittorgarh.com/ipo/x/822/,2026-11-06 01:40:49.288998
+822,Bandhan Bank,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,24471.56,2013.16,522.44,3856.94,2761.8,1829.55,,,https://www.chittorgarh.com/ipo/x/822/,2026-11-06 01:40:49.288998
+822,Bandhan Bank,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,19756.5,1434.08,240.74,3334.5,2239.36,3051.65,,,https://www.chittorgarh.com/ipo/x/822/,2026-11-06 01:40:49.288998
+1767,Bansal Wire Industries,31 Mar 2024,2024-03-31,FULL_FY,1,INR_crore,1264.01,2470.89,78.8,422.37,358.64,681.14,,,https://www.chittorgarh.com/ipo/x/1767/,2026-11-06 01:40:52.302854
+1767,Bansal Wire Industries,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,749.05,2422.57,59.93,282.51,273.41,422.19,,,https://www.chittorgarh.com/ipo/x/1767/,2026-11-06 01:40:52.302854
+1767,Bansal Wire Industries,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,695.48,2205.07,57.29,223.01,213.91,413.15,,,https://www.chittorgarh.com/ipo/x/1767/,2026-11-06 01:40:52.302854
