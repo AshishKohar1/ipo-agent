@@ -253,3 +253,41 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 631,CL Educate,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,378.93,173.85,4.92,259.79,247.85,37.64,,,https://www.chittorgarh.com/ipo/x/631/,2026-11-06 01:41:56.797332
 631,CL Educate,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,325.34,155.85,7.66,239.3,227.66,28.15,,,https://www.chittorgarh.com/ipo/x/631/,2026-11-06 01:41:56.797332
 631,CL Educate,31 Mar 2014,2014-03-31,FULL_FY,4,INR_crore,183.89,124.74,2.36,113.29,103.37,25.95,,,https://www.chittorgarh.com/ipo/x/631/,2026-11-06 01:41:56.797332
+1203,CMS Info Systems,31 Aug 2021,2021-08-31,STUB,1,INR_crore,1578.09,629.72,84.47,1059.37,1059.37,0.0,,153.09,https://www.chittorgarh.com/ipo/x/1203/,2026-11-06 01:42:00.317426
+1203,CMS Info Systems,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,1611.81,1321.92,168.52,984.48,984.48,0.0,,309.44,https://www.chittorgarh.com/ipo/x/1203/,2026-11-06 01:42:00.317426
+1203,CMS Info Systems,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,1332.74,1388.29,134.71,850.39,850.39,0.0,,258.96,https://www.chittorgarh.com/ipo/x/1203/,2026-11-06 01:42:00.317426
+1203,CMS Info Systems,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,1092.7,1159.32,96.14,745.9,747.88,0.0,,211.09,https://www.chittorgarh.com/ipo/x/1203/,2026-11-06 01:42:00.317426
+1021,CSB Bank,30 Sep 2019,2019-09-30,STUB,1,INR_crore,17323.26,816.71,44.27,1535.99,2265.62,,,113.58,https://www.chittorgarh.com/ipo/x/1021/,2026-11-06 01:42:03.524457
+1021,CSB Bank,31 Mar 2019,2019-03-31,FULL_FY,2,INR_crore,16453.46,1483.43,-65.69,974.0,1208.34,,,34.96,https://www.chittorgarh.com/ipo/x/1021/,2026-11-06 01:42:03.524457
+1021,CSB Bank,31 Mar 2018,2018-03-31,FULL_FY,3,INR_crore,15334.66,1422.23,-127.09,353.64,1143.88,41.8,,94.96,https://www.chittorgarh.com/ipo/x/1021/,2026-11-06 01:42:03.524457
+1021,CSB Bank,31 Mar 2017,2017-03-31,FULL_FY,4,INR_crore,15770.03,1617.5,-57.99,546.15,1143.88,41.8,,171.7,https://www.chittorgarh.com/ipo/x/1021/,2026-11-06 01:42:03.524457
+1249,Campus Activewear,31 Dec 2021,2021-12-31,STUB,1,INR_crore,884.69,843.95,84.8,402.55,250.38,174.18,,101.86,https://www.chittorgarh.com/ipo/x/1249/,2026-11-06 01:42:06.744151
+1249,Campus Activewear,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,684.75,715.08,26.86,312.64,161.13,135.6,,119.81,https://www.chittorgarh.com/ipo/x/1249/,2026-11-06 01:42:06.744151
+1249,Campus Activewear,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,719.22,734.12,62.37,284.75,132.99,243.26,,54.29,https://www.chittorgarh.com/ipo/x/1249/,2026-11-06 01:42:06.744151
+1249,Campus Activewear,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,505.55,596.7,38.6,201.77,199.05,174.76,,165.22,https://www.chittorgarh.com/ipo/x/1249/,2026-11-06 01:42:06.744151
+2429,Canara HSBC Life Insurance Co.,30 Jun 2025,2025-06-30,STUB,1,INR_crore,44047.98,42.35,23.41,1540.28,590.28,,,31.28,https://www.chittorgarh.com/ipo/x/2429/,2026-11-06 01:42:09.941014
+2429,Canara HSBC Life Insurance Co.,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,41852.09,234.01,116.98,1516.86,566.86,,,149.91,https://www.chittorgarh.com/ipo/x/2429/,2026-11-06 01:42:09.941014
+2429,Canara HSBC Life Insurance Co.,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,37815.8,240.88,113.32,1418.88,468.88,,,146.56,https://www.chittorgarh.com/ipo/x/2429/,2026-11-06 01:42:09.941014
+2429,Canara HSBC Life Insurance Co.,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,30548.89,261.59,91.19,1353.07,403.07,,,118.82,https://www.chittorgarh.com/ipo/x/2429/,2026-11-06 01:42:09.941014
+2428,Canara Robeco Asset Management Co.,30 Jun 2025,2025-06-30,STUB,1,INR_crore,735.1,121.34,60.98,660.6,461.19,,,81.77,https://www.chittorgarh.com/ipo/x/2428/,2026-11-06 01:42:13.124546
+2428,Canara Robeco Asset Management Co.,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,674.03,404.0,190.7,600.06,400.64,,,264.08,https://www.chittorgarh.com/ipo/x/2428/,2026-11-06 01:42:13.124546
+2428,Canara Robeco Asset Management Co.,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,516.81,318.78,151.0,454.49,404.64,,,201.14,https://www.chittorgarh.com/ipo/x/2428/,2026-11-06 01:42:13.124546
+2428,Canara Robeco Asset Management Co.,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,377.97,204.8,79.0,328.55,278.7,,,112.89,https://www.chittorgarh.com/ipo/x/2428/,2026-11-06 01:42:13.124546
+271,Cantabil Retail India,31 Mar 2010,2010-03-31,FULL_FY,1,INR_crore,170.99,263.64,14.68,29.57,21.43,62.64,,,https://www.chittorgarh.com/ipo/x/271/,2026-11-06 01:42:16.302666
+271,Cantabil Retail India,31 Mar 2009,2009-03-31,FULL_FY,2,INR_crore,102.15,154.78,6.21,14.8,9.71,44.54,,,https://www.chittorgarh.com/ipo/x/271/,2026-11-06 01:42:16.302666
+271,Cantabil Retail India,31 Mar 2008,2008-03-31,FULL_FY,3,INR_crore,53.01,87.21,2.86,8.72,3.66,32.53,,,https://www.chittorgarh.com/ipo/x/271/,2026-11-06 01:42:16.302666
+2476,Capillary Technologies India,30 Sep 2025,2025-09-30,STUB,1,INR_crore,892.33,362.56,1.03,509.38,149.34,88.94,,39.82,https://www.chittorgarh.com/ipo/x/2476/,2026-11-06 01:42:19.534030
+2476,Capillary Technologies India,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,838.65,611.87,14.15,481.42,170.26,100.09,,78.57,https://www.chittorgarh.com/ipo/x/2476/,2026-11-06 01:42:19.534030
+2476,Capillary Technologies India,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,871.07,535.44,-68.35,452.13,30.89,77.17,,-1.49,https://www.chittorgarh.com/ipo/x/2476/,2026-11-06 01:42:19.534030
+2476,Capillary Technologies India,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,466.41,266.25,-88.56,99.75,31.99,147.47,,-58.34,https://www.chittorgarh.com/ipo/x/2476/,2026-11-06 01:42:19.534030
+1641,Capital Small Finance Bank,30 Sep 2023,2023-09-30,STUB,1,INR_crore,8390.69,415.22,54.39,711.76,676.41,572.76,,,https://www.chittorgarh.com/ipo/x/1641/,2026-11-06 01:42:22.746174
+1641,Capital Small Finance Bank,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,7990.77,725.48,93.6,610.61,576.36,721.38,,,https://www.chittorgarh.com/ipo/x/1641/,2026-11-06 01:42:22.746174
+1641,Capital Small Finance Bank,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,7153.92,632.4,62.57,515.78,481.74,498.43,,,https://www.chittorgarh.com/ipo/x/1641/,2026-11-06 01:42:22.746174
+1641,Capital Small Finance Bank,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,6371.24,557.27,40.78,450.79,416.88,616.72,,,https://www.chittorgarh.com/ipo/x/1641/,2026-11-06 01:42:22.746174
+1137,CarTrade Tech,31 Mar 2021,2021-03-31,FULL_FY,1,INR_crore,1930.2,281.52,101.07,1680.58,1720.04,0.0,,71.2,https://www.chittorgarh.com/ipo/x/1137/,2026-11-06 01:42:26.009071
+1137,CarTrade Tech,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,1470.41,318.45,31.29,1262.23,1293.71,0.0,,59.79,https://www.chittorgarh.com/ipo/x/1137/,2026-11-06 01:42:26.009071
+1137,CarTrade Tech,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,1427.09,266.81,25.92,1231.45,1248.77,0.0,,53.03,https://www.chittorgarh.com/ipo/x/1137/,2026-11-06 01:42:26.009071
+1945,Carraro India,30 Sep 2024,2024-09-30,STUB,1,INR_crore,1093.41,922.74,49.73,419.44,,195.78,,,https://www.chittorgarh.com/ipo/x/1945/,2026-11-06 01:42:29.191847
+1945,Carraro India,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,1072.89,1806.55,62.56,369.82,,212.55,,,https://www.chittorgarh.com/ipo/x/1945/,2026-11-06 01:42:29.191847
+1945,Carraro India,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,1072.39,1733.3,48.46,337.38,,188.33,,,https://www.chittorgarh.com/ipo/x/1945/,2026-11-06 01:42:29.191847
+1945,Carraro India,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,1012.44,1520.05,22.43,292.49,,178.14,,,https://www.chittorgarh.com/ipo/x/1945/,2026-11-06 01:42:29.191847
