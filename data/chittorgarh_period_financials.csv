@@ -700,3 +700,39 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 839,ICICI Securities,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,2040.16,1403.9,337.61,,323.98,395.41,,,https://www.chittorgarh.com/ipo/x/839/,2026-11-06 01:48:26.209364
 839,ICICI Securities,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,1392.02,1123.56,235.74,,233.16,172.86,,,https://www.chittorgarh.com/ipo/x/839/,2026-11-06 01:48:26.209364
 839,ICICI Securities,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,1361.14,1209.46,243.96,,191.06,226.53,,,https://www.chittorgarh.com/ipo/x/839/,2026-11-06 01:48:26.209364
+922,IRCON International,31 Mar 2018,2018-03-31,FULL_FY,1,INR_crore,12778.22,4212.4,411.58,3748.09,3667.7,,,,https://www.chittorgarh.com/ipo/x/922/,2026-11-06 01:48:29.714560
+922,IRCON International,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,9231.41,3301.35,383.98,3811.35,3737.55,,,,https://www.chittorgarh.com/ipo/x/922/,2026-11-06 01:48:29.714560
+922,IRCON International,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,8139.41,2908.64,393.11,3643.92,3640.96,,,,https://www.chittorgarh.com/ipo/x/922/,2026-11-06 01:48:29.714560
+1543,IRM Energy,30 Jun 2023,2023-06-30,STUB,1,INR_crore,838.21,248.63,26.91,373.33,,321.24,,,https://www.chittorgarh.com/ipo/x/1543/,2026-11-06 01:48:32.934879
+1543,IRM Energy,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,792.9,1045.1,63.14,346.42,,303.83,,,https://www.chittorgarh.com/ipo/x/1543/,2026-11-06 01:48:32.934879
+1543,IRM Energy,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,554.8,549.19,128.03,243.72,193.3,202.59,,,https://www.chittorgarh.com/ipo/x/1543/,2026-11-06 01:48:32.934879
+1543,IRM Energy,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,338.11,212.54,34.89,117.6,67.57,163.35,,,https://www.chittorgarh.com/ipo/x/1543/,2026-11-06 01:48:32.934879
+1543,IRM Energy,31 Mar 2020,2020-03-31,FULL_FY,5,INR_crore,267.16,166.13,21.07,74.74,30.31,146.74,,,https://www.chittorgarh.com/ipo/x/1543/,2026-11-06 01:48:32.934879
+1119,India Pesticides,31 Mar 2021,2021-03-31,FULL_FY,1,INR_crore,517.06,655.38,134.51,389.48,378.32,30.3,,189.49,https://www.chittorgarh.com/ipo/x/1119/,2026-11-06 01:48:36.143227
+1119,India Pesticides,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,365.7,489.73,70.8,256.84,253.66,28.04,,103.66,https://www.chittorgarh.com/ipo/x/1119/,2026-11-06 01:48:36.143227
+1119,India Pesticides,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,317.24,346.04,43.92,187.02,183.84,61.06,,70.63,https://www.chittorgarh.com/ipo/x/1119/,2026-11-06 01:48:36.143227
+998,IndiaMART InterMESH,31 Mar 2019,2019-03-31,FULL_FY,1,INR_crore,81.88,53.33,1.26,16.07,13.21,,,8.23,https://www.chittorgarh.com/ipo/x/998/,2026-11-06 01:48:39.379944
+998,IndiaMART InterMESH,31 Mar 2018,2018-03-31,FULL_FY,2,INR_crore,54.96,41.01,-7.24,-31.23,-32.23,32.77,,4.66,https://www.chittorgarh.com/ipo/x/998/,2026-11-06 01:48:39.379944
+998,IndiaMART InterMESH,31 Mar 2017,2017-03-31,FULL_FY,3,INR_crore,35.59,32.23,-1.31,-25.31,-26.23,22.87,,-5.44,https://www.chittorgarh.com/ipo/x/998/,2026-11-06 01:48:39.379944
+746,Indian Energy Exchange,30 Jun 2017,2017-06-30,STUB,1,INR_crore,460.53,61.66,30.63,305.62,275.3,,,,https://www.chittorgarh.com/ipo/x/746/,2026-11-06 01:48:42.536886
+746,Indian Energy Exchange,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,551.71,237.42,113.57,274.99,244.67,,,,https://www.chittorgarh.com/ipo/x/746/,2026-11-06 01:48:42.536886
+746,Indian Energy Exchange,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,423.76,200.14,100.34,270.94,240.61,,,,https://www.chittorgarh.com/ipo/x/746/,2026-11-06 01:48:42.536886
+746,Indian Energy Exchange,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,405.74,176.38,90.02,239.95,209.62,,,,https://www.chittorgarh.com/ipo/x/746/,2026-11-06 01:48:42.536886
+1569,Indian Renewable Energy Development Agency,30 Sep 2023,2023-09-30,STUB,1,INR_crore,51208.36,2320.46,579.32,6580.61,2550.36,39850.19,,,https://www.chittorgarh.com/ipo/x/1569/,2026-11-06 01:48:45.949910
+1569,Indian Renewable Energy Development Agency,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,50446.98,3483.04,864.63,5935.17,2310.96,40165.23,,,https://www.chittorgarh.com/ipo/x/1569/,2026-11-06 01:48:45.949910
+1569,Indian Renewable Energy Development Agency,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,36708.41,2874.16,633.53,5268.11,1776.05,27613.07,,,https://www.chittorgarh.com/ipo/x/1569/,2026-11-06 01:48:45.949910
+1569,Indian Renewable Energy Development Agency,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,30293.39,2657.74,346.38,2995.6,1386.12,24000.0,,,https://www.chittorgarh.com/ipo/x/1569/,2026-11-06 01:48:45.949910
+1079,Indigo Paints,30 Sep 2020,2020-09-30,STUB,1,INR_crore,411.29,260.24,27.21,,177.05,30.13,,48.09,https://www.chittorgarh.com/ipo/x/1079/,2026-11-06 01:48:48.996172
+1079,Indigo Paints,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,421.96,626.44,47.82,197.05,149.73,50.07,,90.99,https://www.chittorgarh.com/ipo/x/1079/,2026-11-06 01:48:48.996172
+1079,Indigo Paints,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,373.18,537.26,26.87,147.46,100.31,60.13,,54.09,https://www.chittorgarh.com/ipo/x/1079/,2026-11-06 01:48:48.996172
+1079,Indigo Paints,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,297.39,403.11,12.86,127.46,80.56,35.83,,25.8,https://www.chittorgarh.com/ipo/x/1079/,2026-11-06 01:48:48.996172
+2038,Indiqube Spaces,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,4685.12,1102.93,-139.62,-3.11,-23.3,343.96,,660.19,https://www.chittorgarh.com/ipo/x/2038/,2026-11-06 01:48:52.174632
+2038,Indiqube Spaces,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,3667.91,867.66,-341.51,130.63,129.44,164.02,,263.42,https://www.chittorgarh.com/ipo/x/2038/,2026-11-06 01:48:52.174632
+2038,Indiqube Spaces,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,2969.32,601.28,-198.11,-308.1,-308.28,623.16,,258.23,https://www.chittorgarh.com/ipo/x/2038/,2026-11-06 01:48:52.174632
+1934,Indo Farm Equipment,30 Jun 2024,2024-06-30,STUB,1,INR_crore,644.27,75.54,2.45,342.25,,245.36,,,https://www.chittorgarh.com/ipo/x/1934/,2026-11-06 01:48:55.408149
+1934,Indo Farm Equipment,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,647.95,375.95,15.6,317.06,,270.54,,,https://www.chittorgarh.com/ipo/x/1934/,2026-11-06 01:48:55.408149
+1934,Indo Farm Equipment,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,622.84,371.82,15.37,290.37,,280.65,,,https://www.chittorgarh.com/ipo/x/1934/,2026-11-06 01:48:55.408149
+1934,Indo Farm Equipment,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,619.83,352.52,13.72,274.8,,275.0,,,https://www.chittorgarh.com/ipo/x/1934/,2026-11-06 01:48:55.408149
+333,Indo Thai Securities,31 Mar 2011,2011-03-31,FULL_FY,1,INR_crore,13.96,4.55,1.06,7.76,4.83,1.51,,,https://www.chittorgarh.com/ipo/x/333/,2026-11-06 01:48:58.591702
+333,Indo Thai Securities,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,13.61,5.05,1.95,6.83,2.88,1.72,,,https://www.chittorgarh.com/ipo/x/333/,2026-11-06 01:48:58.591702
+333,Indo Thai Securities,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,11.71,2.63,0.54,4.88,2.34,1.66,,,https://www.chittorgarh.com/ipo/x/333/,2026-11-06 01:48:58.591702
