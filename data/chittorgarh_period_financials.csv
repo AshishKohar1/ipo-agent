@@ -326,3 +326,39 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 507,Coffee Day Enterprises,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,2093.59,30.73,-127.46,390.74,374.51,1241.58,,,https://www.chittorgarh.com/ipo/x/507/,2026-11-06 01:43:01.463403
 507,Coffee Day Enterprises,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,2074.61,46.82,-79.68,446.67,430.78,1368.15,,,https://www.chittorgarh.com/ipo/x/507/,2026-11-06 01:43:01.463403
 507,Coffee Day Enterprises,31 Mar 2013,2013-03-31,FULL_FY,4,INR_crore,1839.74,10.63,-73.8,539.97,524.08,730.98,,,https://www.chittorgarh.com/ipo/x/507/,2026-11-06 01:43:01.463403
+1055,Computer Age Management Services,30 Jun 2020,2020-06-30,STUB,1,INR_crore,835.45,163.46,40.83,528.2,479.41,,,45.0,https://www.chittorgarh.com/ipo/x/1055/,2026-11-06 01:43:05.349177
+1055,Computer Age Management Services,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,802.53,721.34,173.46,539.81,491.05,,,61.98,https://www.chittorgarh.com/ipo/x/1055/,2026-11-06 01:43:05.349177
+1055,Computer Age Management Services,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,736.32,711.81,130.9,441.29,392.53,,,260.66,https://www.chittorgarh.com/ipo/x/1055/,2026-11-06 01:43:05.349177
+1055,Computer Age Management Services,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,697.85,657.82,146.31,443.52,394.76,,,217.31,https://www.chittorgarh.com/ipo/x/1055/,2026-11-06 01:43:05.349177
+1472,Concord Biotech,31 Mar 2023,2023-03-31,FULL_FY,1,INR_crore,1513.98,888.48,240.08,1290.0,,31.24,,,https://www.chittorgarh.com/ipo/x/1472/,2026-11-06 01:43:08.533627
+1472,Concord Biotech,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,1312.8,736.35,174.93,1103.22,,60.59,,,https://www.chittorgarh.com/ipo/x/1472/,2026-11-06 01:43:08.533627
+1472,Concord Biotech,31 Mar 2021,2021-03-31,FULL_FY,3,INR_crore,1182.55,630.75,234.89,999.37,,86.35,,,https://www.chittorgarh.com/ipo/x/1472/,2026-11-06 01:43:08.533627
+1941,Concord Enviro Systems,31 Aug 2024,2024-08-31,STUB,1,INR_crore,640.09,208.02,0.52,319.71,300.59,167.53,,,https://www.chittorgarh.com/ipo/x/1941/,2026-11-06 01:43:11.753302
+1941,Concord Enviro Systems,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,627.68,512.27,41.44,320.82,303.09,153.19,,,https://www.chittorgarh.com/ipo/x/1941/,2026-11-06 01:43:11.753302
+1941,Concord Enviro Systems,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,592.22,350.5,5.49,279.23,258.64,131.06,,,https://www.chittorgarh.com/ipo/x/1941/,2026-11-06 01:43:11.753302
+1941,Concord Enviro Systems,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,536.9,337.57,16.48,266.81,261.12,125.76,,,https://www.chittorgarh.com/ipo/x/1941/,2026-11-06 01:43:11.753302
+2433,Corona Remedies,30 Jun 2025,2025-06-30,STUB,1,INR_crore,1012.38,348.56,46.2,607.02,545.86,106.65,,71.8,https://www.chittorgarh.com/ipo/x/2433/,2026-11-06 01:43:14.968823
+2433,Corona Remedies,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,929.86,1202.35,149.43,606.34,545.18,62.7,,245.91,https://www.chittorgarh.com/ipo/x/2433/,2026-11-06 01:43:14.968823
+2433,Corona Remedies,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,830.58,1020.93,90.5,480.41,419.25,134.14,,161.19,https://www.chittorgarh.com/ipo/x/2433/,2026-11-06 01:43:14.968823
+2433,Corona Remedies,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,595.02,891.1,84.93,408.52,347.36,2.33,,135.03,https://www.chittorgarh.com/ipo/x/2433/,2026-11-06 01:43:14.968823
+1095,Craftsman Automation,31 Dec 2020,2020-12-31,STUB,1,INR_crore,2246.29,1029.91,50.66,716.19,761.55,890.11,,294.64,https://www.chittorgarh.com/ipo/x/1095/,2026-11-06 01:43:18.166972
+1095,Craftsman Automation,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,2303.14,1501.06,41.07,663.48,708.84,1040.65,,406.55,https://www.chittorgarh.com/ipo/x/1095/,2026-11-06 01:43:18.166972
+1095,Craftsman Automation,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,2325.4,1831.64,97.37,627.84,673.2,985.26,,456.68,https://www.chittorgarh.com/ipo/x/1095/,2026-11-06 01:43:18.166972
+1095,Craftsman Automation,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,1999.43,1522.86,31.53,541.23,586.6,846.68,,305.18,https://www.chittorgarh.com/ipo/x/1095/,2026-11-06 01:43:18.166972
+900,CreditAccess Grameen,31 Mar 2018,2018-03-31,FULL_FY,1,INR_crore,5218.35,875.21,124.64,1427.08,1299.46,3602.86,,,https://www.chittorgarh.com/ipo/x/900/,2026-11-06 01:43:21.366892
+900,CreditAccess Grameen,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,3564.07,709.26,80.3,690.41,605.12,2668.24,,,https://www.chittorgarh.com/ipo/x/900/,2026-11-06 01:43:21.366892
+900,CreditAccess Grameen,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,2807.98,466.72,83.24,459.24,386.92,2233.32,,,https://www.chittorgarh.com/ipo/x/900/,2026-11-06 01:43:21.366892
+1595,Credo Brands Marketing,30 Jun 2023,2023-06-30,STUB,1,INR_crore,592.38,119.43,8.58,289.88,,11.3,,,https://www.chittorgarh.com/ipo/x/1595/,2026-11-06 01:43:24.577978
+1595,Credo Brands Marketing,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,574.48,509.32,77.51,281.35,,10.08,,,https://www.chittorgarh.com/ipo/x/1595/,2026-11-06 01:43:24.577978
+1595,Credo Brands Marketing,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,476.05,354.84,35.74,235.73,,13.46,,,https://www.chittorgarh.com/ipo/x/1595/,2026-11-06 01:43:24.577978
+1595,Credo Brands Marketing,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,416.99,261.15,3.44,192.33,,15.23,,,https://www.chittorgarh.com/ipo/x/1595/,2026-11-06 01:43:24.577978
+2096,Crizac,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,879.62,884.78,152.93,505.71,,0.08,,212.82,https://www.chittorgarh.com/ipo/x/2096/,2026-11-06 01:43:27.774278
+2096,Crizac,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,592.91,763.44,118.9,341.81,,0.08,,72.64,https://www.chittorgarh.com/ipo/x/2096/,2026-11-06 01:43:27.774278
+2096,Crizac,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,304.99,517.85,112.14,221.37,,0.08,,107.29,https://www.chittorgarh.com/ipo/x/2096/,2026-11-06 01:43:27.774278
+1446,Cyient DLM,31 Mar 2023,2023-03-31,FULL_FY,1,INR_crore,1104.72,838.34,31.73,197.87,145.01,314.47,,,https://www.chittorgarh.com/ipo/x/1446/,2026-11-06 01:43:30.972328
+1446,Cyient DLM,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,776.91,728.48,39.8,77.11,75.75,293.19,,,https://www.chittorgarh.com/ipo/x/1446/,2026-11-06 01:43:30.972328
+1446,Cyient DLM,31 Mar 2021,2021-03-31,FULL_FY,3,INR_crore,645.03,636.91,11.81,37.65,36.29,233.77,,,https://www.chittorgarh.com/ipo/x/1446/,2026-11-06 01:43:30.972328
+1446,Cyient DLM,31 Mar 2020,2020-03-31,FULL_FY,4,INR_crore,593.49,464.91,-6.7,25.71,24.34,261.37,,,https://www.chittorgarh.com/ipo/x/1446/,2026-11-06 01:43:30.972328
+1936,DAM Capital Advisors,31 Mar 2024,2024-03-31,FULL_FY,1,INR_crore,214.68,182.0,70.52,162.61,148.47,4.93,,,https://www.chittorgarh.com/ipo/x/1936/,2026-11-06 01:43:34.190311
+1936,DAM Capital Advisors,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,1201.16,85.04,8.67,95.13,80.99,3.29,,,https://www.chittorgarh.com/ipo/x/1936/,2026-11-06 01:43:34.190311
+1936,DAM Capital Advisors,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,166.72,94.51,21.9,87.97,73.84,1.41,,,https://www.chittorgarh.com/ipo/x/1936/,2026-11-06 01:43:34.190311
