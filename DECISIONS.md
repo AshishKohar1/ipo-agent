@@ -2679,3 +2679,56 @@ all stays UNCLEAR rather than being promoted. Five tests.
 445 = 450 fetch-log `ok` rows − 4 (H52, DRHP only) − 1 (Supriya's fetch-log duplicate, a
 DRHP; its `rhp_sources` copy is a 377-page RHP and is kept). Both caches cover all 445:
 text 198 MB, tables 296 MB.
+
+### H58 — tools and second-source audit (2026-11-05). One site of eight is permitted.
+
+No financial data was fetched for this audit. Only `robots.txt` and terms-of-use pages
+were read, which is what the audit requires.
+
+#### Part 1 — what is installed in this environment
+
+| tool | what it can reach | useful for IPO financials? |
+|---|---|---|
+| **Claude built-in browser** (`mcp__Claude_Browser__*`) | any public web page, as a real browser with tabs | **Yes, as a reader.** Subject to the same terms/robots test as any client. No bypass of logins or CAPTCHAs |
+| **WebFetch / WebSearch** | public pages, converted to markdown | **Yes.** Used for this audit. The harness refuses some hosts outright (see below) |
+| `financial-analysis` plugin — factset, lseg, sp-global, moodys, morningstar, pitchbook, daloopa, aiera, chronograph | institutional financial data | **Potentially decisive — but every one needs OAuth and none is authorised.** Unavailable until authorised via `/mcp` |
+| `financial-analysis:mtnewswire` | newswire | **Failed to connect** (`ENDPOINT_NOT_FOUND`), not unconfigured |
+| `data` plugin — bigquery, amplitude, hex, atlassian | warehouses, analytics | No. Needs auth; holds no Indian IPO data |
+| `data:definite` | — | **Failed to connect** (`ENDPOINT_NOT_FOUND`) |
+| Gmail / Calendar / Drive connectors | the user's own mail, calendar, files | No, except for anything the user has filed themselves |
+| `superpowers` | TDD, systematic debugging, verification | **Yes, indirectly.** Used throughout this run |
+| `computer-use`, `claude-in-chrome` | the user's desktop; the user's real Chrome | Possible but not needed; the built-in browser suffices and is isolated |
+| `claude-seo` (dataforseo), `marketing` (ahrefs, similarweb), `vidiq`, `postiz`, `earshot`, `hyperframes`, `runway`, `canva`, `zapier`, `scheduled-tasks`, iOS simulator, `visualize`, `terminal` | SEO, marketing, media, scheduling, audio/video | No |
+
+**The honest headline: the only financial-data MCPs in this environment that could second-source
+pre-IPO financials are the `financial-analysis` set, and not one of them is authorised.**
+FactSet, LSEG, S&P Global, Morningstar or Daloopa would each settle rule 2 properly. They
+need `/mcp` authorisation, which Claude cannot start.
+
+#### Part 2 — candidate second sources for pre-IPO financials
+
+| site | fields available | terms allow automated reading? (quote) | robots allows path? | verdict |
+|---|---|---|---|---|
+| **Tickertape** (tickertape.in) | annual net worth, PAT, revenue, borrowings, EPS, ratios for listed companies — so the RHP's latest full FY once the company reports it | **Yes, narrowly.** §10.1.6 forbids copying "except for downloading material from the Service for his /her own personal, non-commercial use". §7.3 bars using **S&P** data to train or implement AI; §7.4 bars reproducing ratings. §9.5 bars load with "a detrimental effect on the Platform" | **Yes.** Only `/smallcase/`, `/space/`, `/us-stocks/pricing-atpl` disallowed; the `ClaudeBot` group carries the same three | **USE** — personal and non-commercial only, ≥3 s per request, **no S&P-derived field** (ratings, S&P scores), stop on any error |
+| **Screener.in** | consolidated P&L, balance sheet, ratios | **No.** Licence is "for personal, non-commercial transitory viewing only" and forbids "modify or copy the materials" | Yes for `/company/` (only `/company/source/quarter/*` disallowed) | **DO NOT USE** — storing a value is copying, and the licence is viewing only |
+| **Trendlyne** | fundamentals, IPO pages, shareholding | **No, explicitly.** §6: "You may not resell, redistribute, broadcast or transfer the information **or use the information in a searchable, machine-readable database**" | Yes — and it names us: `User-agent: ClaudeBot / Crawl-delay: 10` | **DO NOT USE** — a machine-readable database is precisely what this project is. Robots permits; terms forbid; both must permit |
+| **BSE** (bseindia.com) | public-issue pages, offer documents | Not read — see next column | **Unknown: `robots.txt` returned HTTP 403** to this client | **No change.** BSE stays permitted as an official source for RHP/SME resolution and NSE failover under rule 3 and H18. **No new field scraping**, because its robots.txt could not be read and H47 forbids working a 403 around |
+| **NSE** (nseindia.com) | issue pages, bhavcopy, indices | Already settled: terms prohibit automated collection; the user accepted the risk | Already settled | **No new decision.** Governed by **H47 as amended by H51**, unchanged |
+| **Moneycontrol** | pre-IPO financials, IPO pages | Not read | Not read | **DO NOT USE** — the harness refuses the host outright ("unable to fetch"). Neither gate could be checked |
+| **Economic Times Markets** | IPO news, financials | Not read | Not read | **DO NOT USE** — same harness refusal |
+| **IPO Central** (ipocentral.in) | IPO summaries, financial tables | **Not read: terms page returned HTTP 403** | Yes (only `/wp-admin/` and `/*/feed/` disallowed) | **DO NOT USE** — robots permits but the terms could not be read, and an unread licence is not a permission |
+
+**Rule applied: a site is USE only when terms AND robots both permit.** Unread counts as
+not permitted. A 403 is never worked around, on any host — the same rule H47 imposes for NSE.
+
+#### Consequence for Task 4
+
+Rule 2 wants two independent sources. After this audit the available second sources are:
+
+1. **Tickertape**, for the latest full fiscal year of companies that have since listed.
+2. **The RHP itself**, via the text and table caches and the existing readers.
+
+Chittorgarh (the primary) and IPOMatrix share a parent and are **not** independent — hard
+rule 2 already says so. So for any value Tickertape does not carry, the only second source
+is the RHP, and where that is absent the value stays `single_source_unverified` (H26).
+That is a real ceiling on Task 4, and it is set by what the licences permit, not by effort.
