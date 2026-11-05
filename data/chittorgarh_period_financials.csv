@@ -1265,3 +1265,42 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 564,RBL Bank,31 Mar 2016,2016-03-31,FULL_FY,1,INR_crore,39160.09,3234.85,292.49,2988.24,2663.51,10536.22,,,https://www.chittorgarh.com/ipo/x/564/,2026-11-06 01:56:37.329435
 564,RBL Bank,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,27103.65,2356.49,207.18,2229.4,1935.95,6962.7,,,https://www.chittorgarh.com/ipo/x/564/,2026-11-06 01:56:37.329435
 564,RBL Bank,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,18197.08,1612.59,92.67,2013.7,1612.16,3895.54,,,https://www.chittorgarh.com/ipo/x/564/,2026-11-06 01:56:37.329435
+1588,RBZ Jewellers,30 Sep 2023,2023-09-30,STUB,1,INR_crore,234.76,125.52,12.09,104.57,74.02,101.84,,,https://www.chittorgarh.com/ipo/x/1588/,2026-11-06 01:56:41.843448
+1588,RBZ Jewellers,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,206.84,289.63,22.33,92.47,61.93,95.79,,,https://www.chittorgarh.com/ipo/x/1588/,2026-11-06 01:56:41.843448
+1588,RBZ Jewellers,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,154.03,252.53,14.41,70.03,65.6,59.71,,,https://www.chittorgarh.com/ipo/x/1588/,2026-11-06 01:56:41.843448
+1588,RBZ Jewellers,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,123.74,107.71,9.75,55.55,51.19,54.9,,,https://www.chittorgarh.com/ipo/x/1588/,2026-11-06 01:56:41.843448
+328,RDB Rasayans,31 Mar 2011,2011-03-31,FULL_FY,1,INR_crore,34.85,45.55,1.8,17.88,4.66,12.52,,,https://www.chittorgarh.com/ipo/x/328/,2026-11-06 01:56:45.027011
+328,RDB Rasayans,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,31.08,29.97,0.78,16.07,2.86,10.61,,,https://www.chittorgarh.com/ipo/x/328/,2026-11-06 01:56:45.027011
+328,RDB Rasayans,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,30.2,29.95,1.95,15.29,11.99,11.18,,,https://www.chittorgarh.com/ipo/x/328/,2026-11-06 01:56:45.027011
+886,RITES,31 Dec 2017,2017-12-31,STUB,1,INR_crore,4947.13,1061.06,252.54,2171.99,1963.08,,,,https://www.chittorgarh.com/ipo/x/886/,2026-11-06 01:56:48.240837
+886,RITES,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,4802.22,1563.27,361.66,2041.1,1837.75,,,,https://www.chittorgarh.com/ipo/x/886/,2026-11-06 01:56:48.240837
+886,RITES,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,4408.9,1226.73,282.51,1863.52,1758.05,,,,https://www.chittorgarh.com/ipo/x/886/,2026-11-06 01:56:48.240837
+886,RITES,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,3605.42,1159.11,312.21,1676.16,1569.56,,,,https://www.chittorgarh.com/ipo/x/886/,2026-11-06 01:56:48.240837
+281,RPP Infra Projects,30 Jun 2010,2010-06-30,STUB,1,INR_crore,111.87,36.86,2.18,26.44,10.4,34.25,,,https://www.chittorgarh.com/ipo/x/281/,2026-11-06 01:56:51.490789
+281,RPP Infra Projects,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,106.06,146.89,8.26,24.55,8.22,28.31,,,https://www.chittorgarh.com/ipo/x/281/,2026-11-06 01:56:51.490789
+281,RPP Infra Projects,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,65.55,101.23,4.12,17.47,14.75,16.1,,,https://www.chittorgarh.com/ipo/x/281/,2026-11-06 01:56:51.490789
+281,RPP Infra Projects,31 Mar 2008,2008-03-31,FULL_FY,4,INR_crore,63.14,72.14,2.05,14.25,11.54,19.75,,,https://www.chittorgarh.com/ipo/x/281/,2026-11-06 01:56:51.490789
+1355,Radiant Cash Management Services,30 Jun 2022,2022-06-30,STUB,1,INR_crore,203.95,84.38,15.32,155.19,0.0,25.54,,,https://www.chittorgarh.com/ipo/x/1355/,2026-11-06 01:56:54.677079
+1355,Radiant Cash Management Services,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,190.57,286.97,38.21,139.76,0.0,26.75,,,https://www.chittorgarh.com/ipo/x/1355/,2026-11-06 01:56:54.677079
+1355,Radiant Cash Management Services,31 Mar 2021,2021-03-31,FULL_FY,3,INR_crore,162.14,224.16,32.43,127.1,0.0,11.05,,,https://www.chittorgarh.com/ipo/x/1355/,2026-11-06 01:56:54.677079
+1355,Radiant Cash Management Services,31 Mar 2020,2020-03-31,FULL_FY,4,INR_crore,157.62,251.78,36.5,119.57,0.0,21.13,,,https://www.chittorgarh.com/ipo/x/1355/,2026-11-06 01:56:54.677079
+1355,Radiant Cash Management Services,31 Mar 2019,2019-03-31,FULL_FY,5,INR_crore,141.44,223.13,25.02,105.72,0.0,17.73,,,https://www.chittorgarh.com/ipo/x/1355/,2026-11-06 01:56:54.677079
+980,Rail Vikas Nigam,30 Sep 2018,2018-09-30,STUB,1,INR_crore,8732.41,3770.4,253.62,4062.12,1977.1,,,333.36,https://www.chittorgarh.com/ipo/x/980/,2026-11-06 01:56:57.888507
+980,Rail Vikas Nigam,31 Mar 2018,2018-03-31,FULL_FY,2,INR_crore,8568.55,7822.29,569.92,3925.25,1840.23,,,713.53,https://www.chittorgarh.com/ipo/x/980/,2026-11-06 01:56:57.888507
+980,Rail Vikas Nigam,31 Mar 2017,2017-03-31,FULL_FY,3,INR_crore,8859.57,6162.88,443.46,3556.88,1471.86,,,583.77,https://www.chittorgarh.com/ipo/x/980/,2026-11-06 01:56:57.888507
+980,Rail Vikas Nigam,31 Mar 2016,2016-03-31,FULL_FY,4,INR_crore,22215.68,4720.29,429.43,3422.43,1337.41,,,526.76,https://www.chittorgarh.com/ipo/x/980/,2026-11-06 01:56:57.888507
+2067,Rajputana Stainless,30 Sep 2025,2025-09-30,STUB,1,INR_crore,448.8,502.77,24.41,176.65,108.16,85.91,,45.92,https://www.chittorgarh.com/ipo/x/2067/,2026-11-06 01:57:01.053764
+2067,Rajputana Stainless,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,420.36,937.49,39.85,151.95,83.75,99.75,,73.79,https://www.chittorgarh.com/ipo/x/2067/,2026-11-06 01:57:01.053764
+2067,Rajputana Stainless,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,324.01,915.5,31.63,112.27,78.36,79.76,,59.41,https://www.chittorgarh.com/ipo/x/2067/,2026-11-06 01:57:01.053764
+2067,Rajputana Stainless,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,297.34,950.69,24.04,81.17,46.73,79.83,,43.85,https://www.chittorgarh.com/ipo/x/2067/,2026-11-06 01:57:01.053764
+265,Ramky Infrastructure,31 Mar 2010,2010-03-31,FULL_FY,1,INR_crore,1806.47,2009.34,104.23,426.26,376.84,473.9,,,https://www.chittorgarh.com/ipo/x/265/,2026-11-06 01:57:04.304199
+265,Ramky Infrastructure,31 Mar 2009,2009-03-31,FULL_FY,2,INR_crore,1370.09,1468.78,67.97,322.03,272.61,389.9,,,https://www.chittorgarh.com/ipo/x/265/,2026-11-06 01:57:04.304199
+265,Ramky Infrastructure,31 Mar 2008,2008-03-31,FULL_FY,3,INR_crore,996.85,1056.04,51.02,254.06,204.64,264.44,,,https://www.chittorgarh.com/ipo/x/265/,2026-11-06 01:57:04.304199
+1634,Rashi Peripherals,30 Sep 2023,2023-09-30,STUB,1,INR_crore,4058.64,5473.27,72.02,772.74,686.24,1395.2,,,https://www.chittorgarh.com/ipo/x/1634/,2026-11-06 01:57:07.512395
+1634,Rashi Peripherals,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,2798.6,9468.95,123.34,700.12,760.36,1065.76,,,https://www.chittorgarh.com/ipo/x/1634/,2026-11-06 01:57:07.512395
+1634,Rashi Peripherals,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,2669.76,9321.92,182.51,575.07,557.84,881.74,,,https://www.chittorgarh.com/ipo/x/1634/,2026-11-06 01:57:07.512395
+1634,Rashi Peripherals,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,1594.39,5930.24,136.35,394.19,395.99,488.99,,,https://www.chittorgarh.com/ipo/x/1634/,2026-11-06 01:57:07.512395
+1189,Rategain Travel Technologies,31 Aug 2021,2021-08-31,STUB,1,INR_crore,428.19,131.22,-8.34,244.2,236.19,112.93,,-0.19,https://www.chittorgarh.com/ipo/x/1189/,2026-11-06 01:57:10.743476
+1189,Rategain Travel Technologies,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,439.8,264.09,-28.58,244.92,244.12,118.49,,6.16,https://www.chittorgarh.com/ipo/x/1189/,2026-11-06 01:57:10.743476
+1189,Rategain Travel Technologies,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,397.11,457.61,-20.1,137.72,136.98,145.0,,28.7,https://www.chittorgarh.com/ipo/x/1189/,2026-11-06 01:57:10.743476
+1189,Rategain Travel Technologies,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,284.9,272.7,11.03,143.23,142.49,54.34,,21.76,https://www.chittorgarh.com/ipo/x/1189/,2026-11-06 01:57:10.743476
