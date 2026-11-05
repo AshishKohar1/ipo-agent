@@ -286,10 +286,13 @@ def self_test() -> int:
     if dt.exists():
         t = pd.read_csv(dt)
         banned = set(t[~t["allowed_under_rule_3"].astype(bool)]["sha256"].astype(str))
-        chk("H57's DRHPs are excluded", not (set(w["sha256"]) & banned),
+        chk("any DRHP is excluded from the work list", not (set(w["sha256"]) & banned),
             set(w["sha256"]) & banned)
-        chk("and there are exactly two of them", len(banned) == 2, len(banned))
-        chk("so the work list is the cache minus those two",
+        # Was `== 2` while Mahindra Logistics and Nippon Life India AMC sat in the corpus.
+        # Both were replaced by their final prospectuses on 2026-11-05, so the right
+        # assertion is now that NONE is left - a DRHP reappearing must fail here.
+        chk("and no DRHP is left in the corpus at all", len(banned) == 0, len(banned))
+        chk("so the work list is the whole classified corpus",
             len(w) == len(t) - len(banned), f"{len(w)} vs {len(t)}-{len(banned)}")
 
     print("\n[6] round trip on a real document, if one is built")

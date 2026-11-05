@@ -189,15 +189,14 @@ def self_test() -> int:
 
     print("\n[5] round trip on a real document")
     w = work_list()
-    # Was `== 450`, the whole fetch log, until the macOS rebuild (2026-11-02). The
-    # restored corpus is 444: 450 ok rows in the fetch log, MINUS the 4 that are only
-    # DRHPs (H52), MINUS Supriya Lifescience, whose fetch-log copy is also a DRHP and is
-    # refused by rule 3 (its rhp_sources copy IS a 377-page RHP and is kept), MINUS Samhi
-    # Hotels, which SEBI would not serve - three dropped connections and then a refusal,
-    # and H47 forbids working that around. A number, not a floor, so a document going
-    # missing fails here rather than quietly shrinking the cache.
-    chk("the work list is the 444 restored documents (450 - 4 H52 - 1 DRHP - 1 unserved)",
-        len(w) == 444, len(w))
+    # 445 as of 2026-11-05: 450 ok rows in the fetch log, MINUS the 4 that are only DRHPs
+    # (H52), MINUS Supriya Lifescience, whose fetch-log copy is also a DRHP and is refused
+    # by rule 3 (its rhp_sources copy IS a 377-page RHP and is kept). Samhi Hotels is back
+    # in - SEBI served its 570-page FINAL PROSPECTUS where three attempts at the RHP slot
+    # had failed. A number, not a floor, so a document going missing fails here rather
+    # than quietly shrinking the cache.
+    chk("the work list is the 445 restored documents (450 - 4 H52 - 1 DRHP)",
+        len(w) == 445, len(w))
     cs = pd.read_csv(ROOT / "reports" / "rhp_check_set_docs.csv")
     have = {str(c).strip().lower() for c in w["company"]}
     short = [c for c in cs["company"].astype(str)

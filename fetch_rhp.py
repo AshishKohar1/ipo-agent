@@ -110,6 +110,27 @@ def _title_kind(texts: list[str]) -> str:
     return "UNCLEAR"
 
 
+def _self_reference_kind(texts: list[str]) -> str:
+    """RHP / DRHP / UNCLEAR from how the document refers to ITSELF.
+
+    The second test, for the documents whose title line cannot be read: a scanned cover
+    pushes the first page with text to the table of contents, so `_title_kind` returns
+    UNCLEAR for seven of 444. Every prospectus defines its own terms with the phrase
+    "in this Red Herring Prospectus" (or "this Draft Red Herring Prospectus"), dozens of
+    times, and that phrase names the document in hand rather than some other issuer's.
+
+    Measured on the seven: 21 to 54 "this Red Herring Prospectus" each and ZERO "this
+    Draft". A DRAFT self-reference wins wherever it appears, because a final RHP has no
+    reason to call itself a draft.
+    """
+    head = " ".join(texts).upper()
+    if re.search(r"THIS\s+DRAFT\s+RED\s+HERRING\s+PROSPECTUS", head):
+        return "DRHP"
+    if re.search(r"(THIS|IN\s+THIS)\s+RED\s*HERRING\s*PROSPECTUS", head):
+        return "RHP"
+    return "UNCLEAR"
+
+
 def _verify_is_prospectus(pdf_bytes: bytes, company: str) -> tuple[bool, str]:
     """
     Never trust a URL. Open the PDF and confirm it is the right document

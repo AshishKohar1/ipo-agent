@@ -2621,3 +2621,61 @@ the test, decided in advance, and the verdict stands.
 **What this closes.** Both the per-IPO claim (H29, AUC 0.5338) and the coarser cohort
 claim (H35) have now been measured against bars set in advance, and both failed. Model H
 remains **display-only** and there is no market-heat statement to display either.
+
+### H57, follow-up 2026-11-05 — the two DRHPs are replaced, the 7 UNCLEAR are settled, Samhi is in
+
+**The DRHPs came from SEBI's own categorisation, not from a resolver bug.**
+`resolve_sebi(doc_type="RHP")` for both 2017 filings returns a document whose title line
+reads `DRAFT RED HERRING PROSPECTUS` — and the SHA-256 it returns is **byte-identical** to
+the DRHP already in the corpus (`77ca65ea…`, `86e6538c…`). SEBI files the draft under the
+RHP heading for these, so the pipeline was fetching exactly what it asked for. Only the
+new title-line guard could have caught it.
+
+| company | RHP slot | PROSPECTUS fallback | new SHA-256 | pages |
+|---|---|---|---|---|
+| Mahindra Logistics Ltd | **DRHP, rejected** | **verified** | `88844af589afda59…` | 573 |
+| Nippon Life India Asset Management Ltd | **DRHP, rejected** | **verified** | `1d2e1f51e3688447…` | 486 |
+| Samhi Hotels Limited | no extractable text (1-page scan) | **verified** | `3bc07ffd496d27c9…` | **570** |
+
+All three are **final prospectuses, labelled as such** — rule 3 permits one where SEBI has
+no RHP. The two DRHPs are moved to `_local/rhp_quarantine/<sha16>_DRHP_rule3.pdf`, not
+deleted: deleting them would hide that they were ever admitted. Provenance (URL, old and
+new hash, quarantine path, fetch time) is in `data/rhp_replacements.csv`.
+
+**Samhi Hotels is resolved after defeating three sessions.** The answer was never OCR. Its
+RHP slot holds a one-page scan with no text; its **PROSPECTUS** slot holds the full
+570-page document — the same page count the 2026-10-19 manual validation recorded. One
+attempt this run, as instructed, and it succeeded.
+
+**The 7 UNCLEAR covers are all RHPs**, hand-checked and now settled by a second,
+documented test. A scanned or blank cover pushes the first page with text to the table of
+contents, so the title line cannot be read; every prospectus nonetheless defines its own
+terms with the phrase "in this Red Herring Prospectus", which names the document in hand.
+
+| company | "this Red Herring Prospectus" | "this Draft…" | verdict | evidence line |
+|---|---|---|---|---|
+| Apollo Micro Systems Ltd | 42 | 0 | **RHP** | "This Red Herring Prospectus uses certain definitions and abbreviations…" (p2) |
+| Central Depository Services Ltd | 54 | 0 | **RHP** | "…thereto, as of the date of this Red Herring Prospectus." (p3) |
+| Hindustan Media Ventures Limited | 21 | 0 | **RHP** | "In this Red Herring Prospectus, unless the context otherwise indicates…" (p3) |
+| Manoj Vaibhav Gems | 50 | 0 | **RHP** | "…the purposes of disclosure in this Red Herring Prospectus and Prospectus" (p5) |
+| Restaurant Brands Asia Ltd | 49 | 0 | **RHP** | "…requirements specified in the SEBI ICDR Regulations and this Red Herring Prospectus" (p5) |
+| Rossari Biotech Ltd | 50 | 0 | **RHP** | "…meanings in this Red Herring Prospectus, and references to any statute…" (p3) |
+| Speciality Restaurants Ltd | 42 | 0 | **RHP** | "Unless the context otherwise indicates or requires the following terms in this Red Herring Prospectus…" (p2) |
+
+21 to 54 self-references each, **zero** drafts. `_self_reference_kind()` in `fetch_rhp.py`
+implements it: a DRAFT self-reference wins wherever it appears, and no self-reference at
+all stays UNCLEAR rather than being promoted. Five tests.
+
+### The corpus now
+
+| | documents |
+|---|---|
+| RHP | **428** |
+| final PROSPECTUS (rule 3, labelled) | **17** |
+| DRHP | **0** |
+| UNCLEAR | **0** |
+| **total** | **445** |
+
+445 = 450 fetch-log `ok` rows − 4 (H52, DRHP only) − 1 (Supriya's fetch-log duplicate, a
+DRHP; its `rhp_sources` copy is a 377-page RHP and is kept). Both caches cover all 445:
+text 198 MB, tables 296 MB.

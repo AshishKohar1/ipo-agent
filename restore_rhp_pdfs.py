@@ -459,6 +459,24 @@ def self_test() -> int:
     chk("leading blank pages are skipped to the first page with text",
         _title_kind(["", "   ", "RED HERRING PROSPECTUS"]) == "RHP")
 
+    print("\n[6b] a scanned cover is settled by how the document refers to ITSELF")
+    from fetch_rhp import _self_reference_kind
+    chk("a document that says 'this Red Herring Prospectus' is an RHP",
+        _self_reference_kind(["Unless the context otherwise indicates, terms in this "
+                              "Red Herring Prospectus have the meanings given below."])
+        == "RHP")
+    chk("one that says 'this Draft Red Herring Prospectus' is a DRHP",
+        _self_reference_kind(["Terms used in this Draft Red Herring Prospectus have "
+                              "the meanings given below."]) == "DRHP")
+    chk("a DRAFT self-reference anywhere wins, even against many RHP ones",
+        _self_reference_kind(["this Red Herring Prospectus " * 40
+                              + " this Draft Red Herring Prospectus"]) == "DRHP")
+    chk("no self-reference at all stays UNCLEAR, and is not promoted",
+        _self_reference_kind(["TABLE OF CONTENTS", "SECTION I - GENERAL"]) == "UNCLEAR")
+    chk("a mention of the RHP that is not about THIS document does not count",
+        _self_reference_kind(["The Red Herring Prospectus of another issuer"])
+        == "UNCLEAR")
+
     print("\n[7] the fourth provenance list, and its names")
     chk("rhp_valuation_fetch is in the worklist",
         "rhp_valuation_fetch" in set(worklist()["list"]))
