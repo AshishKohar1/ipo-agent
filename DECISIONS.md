@@ -2543,3 +2543,27 @@ documents on the strength of a single value.
 
 Ten tests, including the 9-vs-10 boundary, the 19-correct-1-wrong case that is exactly
 95.0%, and a check that withheld rows cannot pad the minimum.
+
+### H56 — the two choices H35's spec left open, decided by the user BEFORE the run
+
+**Date:** 2026-11-05. Recorded **before** `run_h35.py` existed, so neither choice can
+have been picked to suit a result. `reports/H35_OPEN_CHOICES.md` set out the options.
+
+**Choice 1 — missing values: OPTION B is binding.** Average the z-scores that are present,
+all six signed hotter = higher. `listing_gain_minus_sector_day` is extracted for 288 of the
+491 rows with a corrected 1y target (58.7%); complete cases are 284 of 491, and the gap is
+concentrated in 2012-2015, where criterion 2 counts *test years*. B keeps every test year,
+so criterion 2 measures what it was written to measure.
+
+**Option A (complete cases) is a DIAGNOSTIC ONLY and cannot change the verdict.** It is
+reported beside B. If A and B disagree, that disagreement is a finding about robustness; it
+does not overturn B. This asymmetry is fixed here, in advance, for the same reason H35
+itself was: a tie-break chosen after seeing two numbers is not a tie-break.
+
+**Choice 2 — tercile cut-offs: the training fold only.** Consistent with H35's own in-fold
+standardisation rule. Cutting on pooled test rows would use test-period information to
+define the bands, which is the leakage the walk-forward exists to prevent; cutting within
+each test year forces a third into each band every year and answers a different question.
+
+**Unchanged and not open to interpretation:** the six variables, equal weights, no fitted
+coefficients, scheme C (expanding) with the Y-2 embargo, and the three pass criteria.
