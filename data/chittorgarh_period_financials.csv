@@ -291,3 +291,38 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1945,Carraro India,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,1072.89,1806.55,62.56,369.82,,212.55,,,https://www.chittorgarh.com/ipo/x/1945/,2026-11-06 01:42:29.191847
 1945,Carraro India,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,1072.39,1733.3,48.46,337.38,,188.33,,,https://www.chittorgarh.com/ipo/x/1945/,2026-11-06 01:42:29.191847
 1945,Carraro India,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,1012.44,1520.05,22.43,292.49,,178.14,,,https://www.chittorgarh.com/ipo/x/1945/,2026-11-06 01:42:29.191847
+1798,Ceigall India,31 Mar 2024,2024-03-31,FULL_FY,1,INR_crore,2592.19,3066.19,304.91,906.41,,1811.02,,,https://www.chittorgarh.com/ipo/x/1798/,2026-11-06 01:42:32.645684
+1798,Ceigall India,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,1827.82,2087.04,167.7,593.06,,1252.58,,,https://www.chittorgarh.com/ipo/x/1798/,2026-11-06 01:42:32.645684
+1798,Ceigall India,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,959.14,1146.5,126.43,431.25,,652.12,,,https://www.chittorgarh.com/ipo/x/1798/,2026-11-06 01:42:32.645684
+1552,Cello World,30 Jun 2023,2023-06-30,STUB,1,INR_crore,1686.05,479.88,82.83,1226.56,149.61,328.64,,,https://www.chittorgarh.com/ipo/x/1552/,2026-11-06 01:42:35.838381
+1552,Cello World,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,1551.69,1813.44,285.07,665.73,238.75,335.11,,,https://www.chittorgarh.com/ipo/x/1552/,2026-11-06 01:42:35.838381
+1552,Cello World,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,1333.66,1375.11,219.52,444.04,87.26,462.91,,,https://www.chittorgarh.com/ipo/x/1552/,2026-11-06 01:42:35.838381
+1552,Cello World,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,1146.51,1059.58,165.55,289.59,-107.04,334.07,,,https://www.chittorgarh.com/ipo/x/1552/,2026-11-06 01:42:35.838381
+620,Central Depository Services (India),31 Mar 2017,2017-03-31,FULL_FY,1,INR_crore,517.04,155.23,67.85,462.29,357.79,,,,https://www.chittorgarh.com/ipo/x/620/,2026-11-06 01:42:39.020894
+620,Central Depository Services (India),31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,480.57,133.13,76.84,426.2,321.7,,,,https://www.chittorgarh.com/ipo/x/620/,2026-11-06 01:42:39.020894
+620,Central Depository Services (India),31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,455.52,119.62,45.71,377.08,272.58,,,,https://www.chittorgarh.com/ipo/x/620/,2026-11-06 01:42:39.020894
+917,Chalet Hotels,30 Sep 2018,2018-09-30,STUB,1,INR_crore,3756.4,498.2,-41.63,467.44,319.4,2569.89,,135.66,https://www.chittorgarh.com/ipo/x/917/,2026-11-06 01:42:42.460075
+917,Chalet Hotels,31 Mar 2018,2018-03-31,FULL_FY,2,INR_crore,3825.24,918.53,23.18,502.37,201.6,2699.67,,339.5,https://www.chittorgarh.com/ipo/x/917/,2026-11-06 01:42:42.460075
+917,Chalet Hotels,31 Mar 2017,2017-03-31,FULL_FY,3,INR_crore,3742.55,924.53,130.14,471.17,296.34,2611.7,,430.94,https://www.chittorgarh.com/ipo/x/917/,2026-11-06 01:42:42.460075
+917,Chalet Hotels,31 Mar 2016,2016-03-31,FULL_FY,4,INR_crore,3559.7,596.48,-113.11,521.21,1178.54,2331.15,,155.13,https://www.chittorgarh.com/ipo/x/917/,2026-11-06 01:42:42.460075
+1060,Chemcon Speciality Chemicals,31 Mar 2020,2020-03-31,FULL_FY,1,INR_crore,225.79,266.02,48.85,142.71,114.59,44.51,,70.26,https://www.chittorgarh.com/ipo/x/1060/,2026-11-06 01:42:45.450504
+1060,Chemcon Speciality Chemicals,31 Mar 2019,2019-03-31,FULL_FY,2,INR_crore,173.03,305.33,43.04,95.77,65.25,33.11,,66.08,https://www.chittorgarh.com/ipo/x/1060/,2026-11-06 01:42:45.450504
+1060,Chemcon Speciality Chemicals,31 Mar 2018,2018-03-31,FULL_FY,3,INR_crore,97.07,158.39,26.38,53.62,45.68,16.89,,45.1,https://www.chittorgarh.com/ipo/x/1060/,2026-11-06 01:42:45.450504
+1141,Chemplast Sanmar,31 Mar 2021,2021-03-31,FULL_FY,1,INR_crore,4486.09,3815.11,410.24,-1865.68,-451.13,2110.23,,1127.22,https://www.chittorgarh.com/ipo/x/1141/,2026-11-06 01:42:48.713400
+1141,Chemplast Sanmar,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,4107.54,1265.51,46.13,846.03,1845.48,1288.68,,254.52,https://www.chittorgarh.com/ipo/x/1141/,2026-11-06 01:42:48.713400
+1141,Chemplast Sanmar,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,3801.56,1266.77,118.46,1411.53,1795.24,252.85,,298.05,https://www.chittorgarh.com/ipo/x/1141/,2026-11-06 01:42:48.713400
+2573,Clean Max Enviro Energy Solutions,30 Sep 2025,2025-09-30,STUB,1,INR_crore,16945.65,969.35,19.0,2598.34,,10121.46,,637.85,https://www.chittorgarh.com/ipo/x/2573/,2026-11-06 01:42:51.858238
+2573,Clean Max Enviro Energy Solutions,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,13279.25,1610.34,19.43,2545.44,,7973.7,,1015.07,https://www.chittorgarh.com/ipo/x/2573/,2026-11-06 01:42:51.858238
+2573,Clean Max Enviro Energy Solutions,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,9076.55,1425.31,-37.64,1817.96,,5514.56,,741.57,https://www.chittorgarh.com/ipo/x/2573/,2026-11-06 01:42:51.858238
+2573,Clean Max Enviro Energy Solutions,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,7000.14,960.98,-59.47,1209.93,,3843.42,,405.92,https://www.chittorgarh.com/ipo/x/2573/,2026-11-06 01:42:51.858238
+258,Coal India,30 Jun 2010,2010-06-30,STUB,1,INR_crore,26640.97,3325.06,3169.3,18752.59,12436.23,1519.27,,,https://www.chittorgarh.com/ipo/x/258/,2026-11-06 01:42:55.096029
+258,Coal India,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,23967.95,4356.82,3779.92,15583.3,9266.93,1464.3,,,https://www.chittorgarh.com/ipo/x/258/,2026-11-06 01:42:55.096029
+258,Coal India,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,22254.0,4130.27,3290.18,14115.77,7799.4,1786.63,,,https://www.chittorgarh.com/ipo/x/258/,2026-11-06 01:42:55.096029
+258,Coal India,31 Mar 2008,2008-03-31,FULL_FY,4,INR_crore,19656.02,2980.99,2401.12,12310.61,5994.25,1510.83,,,https://www.chittorgarh.com/ipo/x/258/,2026-11-06 01:42:55.096029
+684,Cochin Shipyard,31 Mar 2017,2017-03-31,FULL_FY,1,INR_crore,3316.44,2208.5,312.18,2031.02,1917.74,123.0,,,https://www.chittorgarh.com/ipo/x/684/,2026-11-06 01:42:58.254500
+684,Cochin Shipyard,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,3348.86,2096.88,291.75,1824.2,1710.92,123.0,,,https://www.chittorgarh.com/ipo/x/684/,2026-11-06 01:42:58.254500
+684,Cochin Shipyard,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,2891.29,1660.45,69.28,1553.93,1440.65,123.0,,,https://www.chittorgarh.com/ipo/x/684/,2026-11-06 01:42:58.254500
+507,Coffee Day Enterprises,30 Jun 2015,2015-06-30,STUB,1,INR_crore,2126.73,12.19,-31.0,303.75,185.66,1421.58,,,https://www.chittorgarh.com/ipo/x/507/,2026-11-06 01:43:01.463403
+507,Coffee Day Enterprises,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,2093.59,30.73,-127.46,390.74,374.51,1241.58,,,https://www.chittorgarh.com/ipo/x/507/,2026-11-06 01:43:01.463403
+507,Coffee Day Enterprises,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,2074.61,46.82,-79.68,446.67,430.78,1368.15,,,https://www.chittorgarh.com/ipo/x/507/,2026-11-06 01:43:01.463403
+507,Coffee Day Enterprises,31 Mar 2013,2013-03-31,FULL_FY,4,INR_crore,1839.74,10.63,-73.8,539.97,524.08,730.98,,,https://www.chittorgarh.com/ipo/x/507/,2026-11-06 01:43:01.463403
