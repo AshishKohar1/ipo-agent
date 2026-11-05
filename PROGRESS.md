@@ -7,6 +7,49 @@
 Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-30) and
 `PLAN_AMENDMENT_02.md` (2026-10-01).
 
+## Session 2026-11-05 — H35 run and failed; H56, H57 follow-up, H58
+
+- **H35 FAILED on both targets. Nothing is wired.** `run_h35.py`, 38 self-tests written
+  test-first. Pooled contrast is large and significant — coolest third beats the TRI 51.1%
+  against the hottest third's 36.6%, a 14.47pp gap at p = 0.0088 — so criteria 1 and 3
+  pass. **Criterion 2 fails: only 3 of 9 measurable test years agree in sign.** The effect
+  is between-year, not within-year. `excess_3y` fails all three. Option A agreed with B on
+  every criterion, so H56's choice did not decide it. `reports/H35_RESULT.md`.
+- **H56** recorded the two choices (option B binding, A diagnostic only; tercile cuts from
+  the training fold) **before** `run_h35.py` existed.
+- **Both Model H claims are now measured and both failed:** H29 per-IPO (AUC 0.5338, short
+  by under 1pp on two of three) and H35 cohort. Model H stays display-only, and there is no
+  market-heat statement to display either.
+- **H57 follow-up: the corpus is clean.** 445 documents — **428 RHP, 17 final PROSPECTUS,
+  0 DRHP, 0 UNCLEAR**. SEBI's own RHP slot returns the DRAFT for the two 2017 filings
+  (byte-identical SHAs), so the pipeline was fetching what it asked for; both resolve under
+  PROSPECTUS. **Samhi Hotels is in at 570 pages** — its RHP slot is a 1-page scan, its
+  PROSPECTUS slot the full document. No OCR was needed. The 7 UNCLEAR covers are all RHPs,
+  settled by self-reference (21-54 "this Red Herring Prospectus" each, zero drafts).
+- **Table cache finished:** 445 documents, 296 MB, `_local/rhp_table_cache/`.
+- **H58 source audit: one site of eight is permitted.** **Tickertape USE** (robots allows
+  every relevant path; terms §10.1.6 permits downloading for personal non-commercial use;
+  ≥3 s, no S&P-derived field). Screener.in and Trendlyne **DO NOT USE** on their terms —
+  Trendlyne §6 forbids using the information "in a searchable, machine-readable database",
+  which is exactly this project, even though its robots.txt names ClaudeBot. Moneycontrol
+  and Economic Times: the harness refuses the host. IPO Central: robots permits, terms 403.
+  BSE: robots.txt 403, so no new field scraping; RHP/failover use unchanged.
+  **No `financial-analysis` MCP (FactSet, LSEG, S&P Global, Morningstar, Daloopa) is
+  authorised** — any one of them would settle rule 2 properly.
+- **Task 4 step 1 done.** 482 of 2,861 Chittorgarh rows are mainboard (H33).
+  `fin_period` is a date: **146 FULL_FY (31 Mar), 279 STUB, 57 missing**; no stub is
+  annualised. Unit verified on the page — "Amount in ₹ Crore" — and 10 random rows
+  re-fetched: **40 of 40 values match**. `data/chittorgarh_mainboard_periods.csv`.
+
+### Still open
+
+| item | state | blocker |
+|---|---|---|
+| Task 4 steps 2-4 (H59) | not started | the 279 stubs need the prior full-year column, which IS on the page (three periods side by side) but `chittorgarh_backfill.parse()` keeps only the latest. Needs a parser extension + a ~425-page H9 batch at 3.2 s (~23 min) |
+| Task 5 (stability of the new variables) | not started | depends on Task 4 |
+| Task 6.1 page index + master pass | table cache **done**; index and master pass not started | — |
+| Task 6.2 transcribe the 13 check-set RHPs | not started | the blocker for every H55 verdict: all five readers are INSUFFICIENT |
+
 ## Session 2026-11-02 (evening) — recovery close-out, H53-H57
 
 - **16 "missing" documents resolved.** They were the manual list validated on 2026-10-19
