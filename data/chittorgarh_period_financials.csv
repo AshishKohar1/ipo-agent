@@ -1,0 +1,36 @@
+ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr,total_income_cr,pat_cr,net_worth_cr,reserves_cr,borrowings_cr,revenue_cr,ebitda_cr,url,fetched_at
+1897,ACME Solar Holdings,30 Jun 2024,2024-06-30,STUB,1,INR_crore,13985.14,340.01,1.39,1942.12,1837.68,9319.91,,,https://www.chittorgarh.com/ipo/x/1897/,2026-11-06 01:38:13.828846
+1897,ACME Solar Holdings,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,13394.13,1466.27,697.78,2590.87,1836.43,8217.59,,,https://www.chittorgarh.com/ipo/x/1897/,2026-11-06 01:38:13.828846
+1897,ACME Solar Holdings,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,12186.95,1361.37,-3.17,1900.56,1146.12,8657.35,,,https://www.chittorgarh.com/ipo/x/1897/,2026-11-06 01:38:13.828846
+1897,ACME Solar Holdings,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,10887.62,1562.73,62.01,1908.76,1154.32,7563.6,,,https://www.chittorgarh.com/ipo/x/1897/,2026-11-06 01:38:13.828846
+1209,AGS Transact Technologies,31 Aug 2021,2021-08-31,STUB,1,INR_crore,2917.03,762.3,-18.11,543.74,425.15,,,194.06,https://www.chittorgarh.com/ipo/x/1209/,2026-11-06 01:38:17.221012
+1209,AGS Transact Technologies,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,2913.83,1797.15,54.79,558.66,440.08,,,476.76,https://www.chittorgarh.com/ipo/x/1209/,2026-11-06 01:38:17.221012
+1209,AGS Transact Technologies,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,2241.4,1833.53,83.01,498.96,380.37,,,495.46,https://www.chittorgarh.com/ipo/x/1209/,2026-11-06 01:38:17.221012
+1209,AGS Transact Technologies,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,2054.43,1823.63,66.19,424.93,306.35,,,442.88,https://www.chittorgarh.com/ipo/x/1209/,2026-11-06 01:38:17.221012
+1563,ASK Automotive,30 Jun 2023,2023-06-30,STUB,1,INR_crore,1443.34,657.55,34.83,,639.03,268.03,,,https://www.chittorgarh.com/ipo/x/1563/,2026-11-06 01:38:20.422462
+1563,ASK Automotive,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,1281.21,2566.28,122.95,643.77,604.34,231.82,,,https://www.chittorgarh.com/ipo/x/1563/,2026-11-06 01:38:20.422462
+1563,ASK Automotive,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,1105.56,2024.26,82.66,631.91,591.73,119.78,,,https://www.chittorgarh.com/ipo/x/1563/,2026-11-06 01:38:20.422462
+1563,ASK Automotive,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,948.25,1567.77,106.2,622.23,581.54,54.02,,,https://www.chittorgarh.com/ipo/x/1563/,2026-11-06 01:38:20.422462
+672,AU Small Finance Bank,31 Mar 2017,2017-03-31,FULL_FY,1,INR_crore,9817.64,1430.52,842.71,1999.56,1715.31,5930.78,,,https://www.chittorgarh.com/ipo/x/672/,2026-11-06 01:38:23.608926
+672,AU Small Finance Bank,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,6273.01,1051.95,247.15,1000.67,956.59,3817.43,,,https://www.chittorgarh.com/ipo/x/672/,2026-11-06 01:38:23.608926
+672,AU Small Finance Bank,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,3979.9,689.41,139.45,766.45,722.37,2552.2,,,https://www.chittorgarh.com/ipo/x/672/,2026-11-06 01:38:23.608926
+925,Aavas Financiers,31 Mar 2018,2018-03-31,FULL_FY,1,INR_crore,4010.15,143.87,29.0,1098.47,1106.94,2595.78,,,https://www.chittorgarh.com/ipo/x/925/,2026-11-06 01:38:26.806005
+925,Aavas Financiers,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,3817.45,457.25,92.93,566.33,1029.06,1793.39,,,https://www.chittorgarh.com/ipo/x/925/,2026-11-06 01:38:26.806005
+925,Aavas Financiers,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,2450.67,305.49,57.14,203.82,508.16,1446.77,,,https://www.chittorgarh.com/ipo/x/925/,2026-11-06 01:38:26.806005
+296,Acropetal Technologies,31 Dec 2010,2010-12-31,STUB,1,INR_crore,221.02,106.37,18.13,103.16,65.16,107.99,,,https://www.chittorgarh.com/ipo/x/296/,2026-11-06 01:38:30.028060
+296,Acropetal Technologies,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,173.34,108.09,19.55,85.03,47.03,77.6,,,https://www.chittorgarh.com/ipo/x/296/,2026-11-06 01:38:30.028060
+296,Acropetal Technologies,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,143.11,92.8,16.59,67.03,42.03,62.23,,,https://www.chittorgarh.com/ipo/x/296/,2026-11-06 01:38:30.028060
+296,Acropetal Technologies,31 Mar 2008,2008-03-31,FULL_FY,4,INR_crore,92.25,59.7,13.06,45.44,26.03,37.2,,,https://www.chittorgarh.com/ipo/x/296/,2026-11-06 01:38:30.028060
+1151,Aditya Birla Sun Life AMC,30 Jun 2021,2021-06-30,STUB,1,INR_crore,2085.88,336.25,154.94,1802.16,1658.16,0.0,,216.2,https://www.chittorgarh.com/ipo/x/1151/,2026-11-06 01:38:33.256329
+1151,Aditya Birla Sun Life AMC,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,1984.55,1205.84,526.28,1704.61,1686.61,0.0,,738.89,https://www.chittorgarh.com/ipo/x/1151/,2026-11-06 01:38:33.256329
+1151,Aditya Birla Sun Life AMC,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,1571.96,1234.77,494.4,1316.87,1298.87,0.0,,702.69,https://www.chittorgarh.com/ipo/x/1151/,2026-11-06 01:38:33.256329
+1151,Aditya Birla Sun Life AMC,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,1498.46,1407.25,446.8,1220.57,1202.57,0.0,,683.9,https://www.chittorgarh.com/ipo/x/1151/,2026-11-06 01:38:33.256329
+2036,Aditya Infotech,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,3174.54,3122.93,351.37,1017.66,994.49,412.84,,258.39,https://www.chittorgarh.com/ipo/x/2036/,2026-11-06 01:38:36.459321
+2036,Aditya Infotech,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,1644.18,2795.96,115.17,424.2,421.33,405.45,,236.48,https://www.chittorgarh.com/ipo/x/2036/,2026-11-06 01:38:36.459321
+2036,Aditya Infotech,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,1708.76,2295.56,108.31,311.59,308.65,409.6,,181.05,https://www.chittorgarh.com/ipo/x/2036/,2026-11-06 01:38:36.459321
+2290,Advance Agrolife,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,351.47,502.88,25.64,100.87,55.87,80.45,,48.25,https://www.chittorgarh.com/ipo/x/2290/,2026-11-06 01:38:39.642986
+2290,Advance Agrolife,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,259.56,457.21,24.73,75.26,70.76,45.46,,40.21,https://www.chittorgarh.com/ipo/x/2290/,2026-11-06 01:38:39.642986
+2290,Advance Agrolife,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,179.47,397.97,14.87,50.6,46.1,25.29,,25.22,https://www.chittorgarh.com/ipo/x/2290/,2026-11-06 01:38:39.642986
+560,Advanced Enzyme Technologies,31 Mar 2016,2016-03-31,FULL_FY,1,INR_crore,451.65,294.64,79.33,278.73,256.96,68.39,,138.23,https://www.chittorgarh.com/ipo/x/560/,2026-11-06 01:38:42.850735
+560,Advanced Enzyme Technologies,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,418.09,224.27,50.94,210.03,188.27,77.65,,90.86,https://www.chittorgarh.com/ipo/x/560/,2026-11-06 01:38:42.850735
+560,Advanced Enzyme Technologies,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,408.28,240.48,21.35,166.37,144.6,126.61,,103.78,https://www.chittorgarh.com/ipo/x/560/,2026-11-06 01:38:42.850735
