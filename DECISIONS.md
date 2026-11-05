@@ -2567,3 +2567,57 @@ each test year forces a third into each band every year and answers a different 
 
 **Unchanged and not open to interpretation:** the six variables, equal weights, no fitted
 coefficients, scheme C (expanding) with the Y-2 embargo, and the three pass criteria.
+
+#### H56, result — H35 FAILS on both targets. Nothing is wired.
+
+Run 2026-11-05 by `run_h35.py` (38 self-tests, written test-first). Full tables in
+`reports/H35_RESULT.md`.
+
+**excess_1y, option B (binding).** 491 IPOs, 198 beat the TRI (40.3%). 427 test rows
+scored, coolest 90, hottest 232.
+
+| tercile | n | % beat Nifty | mean excess_1y | median |
+|---|---|---|---|---|
+| COOLEST | 90 | **51.11** | 16.82 | 1.28 |
+| MID | 105 | 50.48 | 12.84 | 0.45 |
+| HOTTEST | 232 | **36.64** | 2.10 | -14.26 |
+
+| criterion | required | achieved (B, binding) | achieved (A, diagnostic) | |
+|---|---|---|---|---|
+| coolest − hottest, pooled | ≥ 10pp | **14.47pp** | 16.57pp | **PASS** |
+| sign holds across test years | ≥ 75% | **33%** | 29% | **FAIL** |
+| one-sided two-proportion test | p < 0.05 | **0.00883** | 0.02029 | **PASS** |
+
+**excess_3y (secondary), option B:** coolest 44.30%, hottest 39.25%; gap 5.05pp, sign
+agreement 50%, p 0.24466 — **all three fail**.
+
+**Verdict: FAIL on excess_1y and on excess_3y. No market-heat line is added to any
+report, and nothing is wired.** H34 was a fail, H29 was a fail by under 1pp, and H35 is a
+fail. Option A agrees with option B on every criterion, so the H56 choice did not decide
+the outcome.
+
+### What failed, and why it is the interesting part
+
+The pooled contrast is **large and significant**: coolest third beats the index 51.1% of
+the time against 36.6% for the hottest, p = 0.0088. Criterion 1 and criterion 3 both pass
+comfortably. **Criterion 2 kills it: only 3 of 9 measurable test years agree in sign.**
+
+That is criterion 2 working exactly as intended. The pooled gap is mostly a
+**between-year** effect — hot vintages as a whole did worse — and almost not a
+within-year one. Year by year the sign flips: 2018 +50pp, 2019 +75pp, but 2012 −75pp,
+2020 −62.5pp, 2017 −20pp, 2023 −7pp.
+
+**A structural note, recorded because it constrains any future attempt and not as an
+argument against this verdict.** Under H56's in-fold tercile cuts, a uniformly hot year
+lands wholly in HOTTEST: 2021 scored 0 coolest against 59 hottest, 2024 0 against 69, and
+2013/2015/2016 had no hottest rows at all. Five of fourteen test years therefore
+contribute nothing to criterion 2, and the pooled arms are built largely from different
+years. So criterion 1 (pooled) and criterion 2 (within-year) are close to measuring
+opposite things under these cuts, and a design that satisfies both would need per-year
+cuts — which H56 rejected, for the good reason that per-year cuts answer a different
+question. H35 as written cannot pass on a cross-year effect alone. That is a fact about
+the test, decided in advance, and the verdict stands.
+
+**What this closes.** Both the per-IPO claim (H29, AUC 0.5338) and the coarser cohort
+claim (H35) have now been measured against bars set in advance, and both failed. Model H
+remains **display-only** and there is no market-heat statement to display either.
