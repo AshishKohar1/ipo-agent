@@ -2732,3 +2732,69 @@ Chittorgarh (the primary) and IPOMatrix share a parent and are **not** independe
 rule 2 already says so. So for any value Tickertape does not carry, the only second source
 is the RHP, and where that is absent the value stays `single_source_unverified` (H26).
 That is a real ceiling on Task 4, and it is set by what the licences permit, not by effort.
+
+### H59 — the valuation block's primary source: full financial years, from all period columns (2026-11-06)
+
+Task 4 of the 5 November brief, steps 1 and 1(a). H5 says the aggregator is primary for
+headline financials; this decision records how a *full financial year* is obtained from it.
+
+**Scope.** Mainboard only (H33): 482 of Chittorgarh's 2,861 harvested ids.
+
+**The unit is read, never inferred.** Each page states `Amount in ₹ Crore`. Every row
+carries `unit = INR_crore` and the source URL. Verified by hand on 10 random rows against
+the page's own table text: **40 of 40 values match** (and 40/40 on a separate 10 rows on
+2026-11-05).
+
+**A stub period is never annualised.** `period_kind` is established from the period DATE —
+31 March is a full Indian financial year, any other month-end is a stub — because the page
+gives a date and never a label such as "9M". `chittorgarh_periods.py` is tested to contain
+no scaling, no fill and no interpolation; the test tokenises the module and strips comments
+and docstrings first, so it measures the code rather than the prose describing it.
+
+**All period columns are read.** `chittorgarh_backfill.parse()` keeps only `fin.columns[1]`,
+the most recent period, which is why 279 of 482 rows carried a stub and 57 carried nothing.
+The page shows up to five periods side by side, so the full year a stub row needs was
+already on the page that had been fetched. `parse_periods()` returns one row per
+(ipo_id, period); `parse()` is untouched, so `data/chittorgarh_backfill.csv` keeps its
+schema and its history. `find_table()` and `fnum()` are reused, not copied.
+
+| | before (latest column only) | after |
+|---|---|---|
+| IPOs with a full-year value | 146 | **479** |
+| IPOs on a stub with no full year | 279 | **3** |
+| IPOs with no financial table | 57 | **0** |
+
+**Outputs.** `data/chittorgarh_period_financials.csv` (1,779 period rows, 482 ids) and
+`data/chittorgarh_mainboard_fy.csv` (one row per IPO: the newest full year, the prior full
+year in separately labelled `fy_prev_*` columns, the stub kept in `latest_period`, and
+`fy_source` naming the page column the value came from or `no_full_fy_on_page`).
+`usable_for_h59` is exactly "a full year was found". HTML is cached in
+`_local/cg_html_cache/` (gitignored), so a re-parse costs no request.
+
+**Politeness (B2).** robots.txt re-read at the start of the run — permitted, `User-agent:*`
+disallows only `/ipo/ipo_discussions.asp`. One request per id, ≥3.2 s apart, single
+User-Agent, never a browser one. 482 of 482 ids returned HTTP 200; zero errors, zero parse
+failures; checkpointed and pushed every 10 ids (H9).
+
+**Reconciled against our own previous harvest.** Column 1 is the period `parse()` kept.
+Across seven fields, 2,611 values are byte-identical and **not one differs by more than 5%**
+(rule 2). `fin_period` is identical on 425 of 482 rows; the 57 that differ are the 57 that
+previously held no period at all.
+
+**The 57, stated honestly.** All are 2010–2013 IPOs whose pages today carry a full
+`Period Ended` table that unchanged `parse()` reads correctly. The cause of the 1 October
+miss **cannot be established** — that run's HTML was not kept. It is not a parser change.
+From this run on the HTML is cached, so the read is reproducible.
+
+**`revenue_cr` is 0% by construction**, not by loss: Chittorgarh's table has no "Revenue"
+row. It carries **Total Income**, which is read at 99.0%.
+
+**OPEN, awaiting the user — three December-year-end companies.** Varun Beverages (598),
+International Gemmological Institute (1930) and Hexaware Technologies (1985) close their
+books on 31 December. Each page shows three consecutive 31 Dec columns — genuine
+twelve-month years. The rule as written calls them stubs, so all three stand at NULL with
+`fy_source = no_full_fy_on_page`. An evidence-based test — a non-March month-end counts as
+a full year only when the page shows at least two of it twelve months apart AND shows no
+31 March column — selects **exactly these three** across all 482 ids and nothing else.
+That is a rule change, so nothing was changed. See
+`reports/H59_FULL_YEAR_HARVEST.md`.

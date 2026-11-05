@@ -244,6 +244,26 @@ def _git_checkpoint(n: int):
         print(f"    [checkpoint committed at {n} ids]", flush=True)
 
 
+def write_fy_table() -> pd.DataFrame:
+    """Collapse the harvested long table to one full-year row per IPO and write it."""
+    long = pd.read_csv(OUT)
+    t = full_fy_table(long)
+    t.to_csv(FY_TABLE, index=False, encoding="utf-8")
+    return t
+
+
+def coverage(t: pd.DataFrame) -> pd.DataFrame:
+    """Per field: how many IPOs now carry a full-year value, and on what basis."""
+    rows = []
+    for c in VALUE_COLS:
+        rows.append({"field": c,
+                     "full_fy_values": int(t[c].notna().sum()),
+                     "of_ipos": len(t),
+                     "coverage_pct": round(100.0 * t[c].notna().sum() / max(len(t), 1), 1),
+                     "prev_fy_values": int(t[f"fy_prev_{c}"].notna().sum())})
+    return pd.DataFrame(rows)
+
+
 def status():
     if not Path(OUT).exists():
         print("nothing harvested yet")
@@ -251,6 +271,58 @@ def status():
     d = pd.read_csv(OUT)
     print(f"rows {len(d)} | ids {d['ipo_id'].nunique()}")
     print(d["period_kind"].value_counts(dropna=False).to_string())
+
+# ------------------------------------------------- one row per IPO, on a full year only
+VALUE_COLS = [c for _, c in FIELDS]
+FY_TABLE = ROOT / "data" / "chittorgarh_mainboard_fy.csv"
+
+
+def full_fy_table(long: pd.DataFrame) -> pd.DataFrame:
+    """The long per-period table collapsed to one row per ipo_id, on a FULL YEAR only.
+
+    Task 4.1(a): a stub period is marked and the full-year figure is taken from another
+    column of the SAME page; where the page shows no 31-March column the values stay NULL
+    with the reason recorded. Nothing is scaled, nothing is carried from another company
+    and nothing is carried from the stub.
+    """
+    out = []
+    for ipo_id, g in long.groupby("ipo_id", sort=True):
+        g = g.sort_values("col_index")
+        latest = g.iloc[0]
+        fy = g[g["period_kind"] == "FULL_FY"].sort_values("fin_period_parsed",
+                                                          ascending=False)
+        r = {"ipo_id": int(ipo_id),
+             "company": next((c for c in g["company"] if isinstance(c, str)), None),
+             "latest_period": latest.get("fin_period"),
+             "latest_period_kind": latest.get("period_kind"),
+             "n_periods_on_page": int((g["period_kind"] != "MISSING").sum()),
+             "unit": UNIT, "url": BASE.format(id=int(ipo_id))}
+        if len(fy):
+            top = fy.iloc[0]
+            r["fy_period"] = top["fin_period"]
+            r["fy_period_parsed"] = top["fin_period_parsed"]
+            r["fy_source"] = f"same_page_column_{int(top['col_index'])}"
+            for c in VALUE_COLS:
+                r[c] = top.get(c)
+            r["usable_for_h59"] = True
+            if len(fy) > 1:
+                prev = fy.iloc[1]
+                r["fy_prev_period"] = prev["fin_period"]
+                for c in VALUE_COLS:
+                    r[f"fy_prev_{c}"] = prev.get(c)
+        else:
+            r["fy_period"] = None
+            r["fy_period_parsed"] = None
+            r["fy_source"] = "no_full_fy_on_page"
+            for c in VALUE_COLS:
+                r[c] = None
+            r["usable_for_h59"] = False
+        out.append(r)
+    cols = (["ipo_id", "company", "latest_period", "latest_period_kind",
+             "n_periods_on_page", "fy_period", "fy_period_parsed", "fy_source",
+             "usable_for_h59", "unit", "url"] + VALUE_COLS
+            + ["fy_prev_period"] + [f"fy_prev_{c}" for c in VALUE_COLS])
+    return pd.DataFrame(out).reindex(columns=cols)
 
 
 def self_test() -> int:
@@ -372,6 +444,60 @@ def self_test() -> int:
     chk("a checkpoint at least every 10 items (H9)", COMMIT_EVERY <= 10, str(COMMIT_EVERY))
 
 
+    print("[8] full_fy_table: the full year a stub row needs, or NULL - never a guess")
+    long = pd.DataFrame([
+        # a stub filer whose page also shows two full years
+        {"ipo_id": 11, "company": "A", "fin_period": "30 Jun 2024",
+         "fin_period_parsed": "2024-06-30", "period_kind": "STUB", "col_index": 1,
+         "net_worth_cr": 1942.12, "pat_cr": 1.39},
+        {"ipo_id": 11, "company": "A", "fin_period": "31 Mar 2024",
+         "fin_period_parsed": "2024-03-31", "period_kind": "FULL_FY", "col_index": 2,
+         "net_worth_cr": 2590.87, "pat_cr": 697.78},
+        {"ipo_id": 11, "company": "A", "fin_period": "31 Mar 2023",
+         "fin_period_parsed": "2023-03-31", "period_kind": "FULL_FY", "col_index": 3,
+         "net_worth_cr": 1900.56, "pat_cr": -3.17},
+        # a full-year filer: nothing to fill
+        {"ipo_id": 22, "company": "B", "fin_period": "31 Mar 2024",
+         "fin_period_parsed": "2024-03-31", "period_kind": "FULL_FY", "col_index": 1,
+         "net_worth_cr": 422.37, "pat_cr": 78.8},
+        # a stub filer whose page shows NO full year at all
+        {"ipo_id": 33, "company": "C", "fin_period": "30 Sep 2023",
+         "fin_period_parsed": "2023-09-30", "period_kind": "STUB", "col_index": 1,
+         "net_worth_cr": 50.0, "pat_cr": 5.0},
+        # a page with no financial table at all
+        {"ipo_id": 44, "company": None, "fin_period": None, "fin_period_parsed": None,
+         "period_kind": "MISSING", "col_index": None},
+    ])
+    t = full_fy_table(long).set_index("ipo_id")
+    chk("one row per ipo_id", len(t) == 4 and sorted(t.index) == [11, 22, 33, 44])
+    chk("a stub filer gets the newest full year from the same page",
+        t.loc[11, "fy_period"] == "31 Mar 2024" and t.loc[11, "net_worth_cr"] == 2590.87
+        and t.loc[11, "pat_cr"] == 697.78, str(dict(t.loc[11])))
+    chk("the stub is kept, labelled, and not used as the year",
+        t.loc[11, "latest_period"] == "30 Jun 2024"
+        and t.loc[11, "latest_period_kind"] == "STUB", str(dict(t.loc[11])))
+    chk("the fill is traceable to its column",
+        t.loc[11, "fy_source"] == "same_page_column_2", str(t.loc[11, "fy_source"]))
+    chk("a full-year filer is unchanged and marked as such",
+        t.loc[22, "fy_period"] == "31 Mar 2024" and t.loc[22, "net_worth_cr"] == 422.37
+        and t.loc[22, "fy_source"] == "same_page_column_1", str(dict(t.loc[22])))
+    chk("no full year on the page -> NULL and a reason, NEVER the stub's number",
+        pd.isna(t.loc[33, "fy_period"]) and pd.isna(t.loc[33, "net_worth_cr"])
+        and t.loc[33, "fy_source"] == "no_full_fy_on_page", str(dict(t.loc[33])))
+    chk("no table on the page -> NULL and a reason",
+        pd.isna(t.loc[44, "net_worth_cr"]) and t.loc[44, "fy_source"] == "no_full_fy_on_page",
+        str(dict(t.loc[44])))
+    chk("usable_for_h59 is exactly 'a full year was found'",
+        [bool(t.loc[i, "usable_for_h59"]) for i in (11, 22, 33, 44)] == [1, 1, 0, 0],
+        str([t.loc[i, "usable_for_h59"] for i in (11, 22, 33, 44)]))
+    chk("provenance: the source url is on every collapsed row",
+        t.loc[11, "url"] == "https://www.chittorgarh.com/ipo/x/11/", str(t.loc[11, "url"]))
+    chk("the prior full year is carried as a SEPARATE labelled column, not merged",
+        t.loc[11, "fy_prev_period"] == "31 Mar 2023"
+        and t.loc[11, "fy_prev_net_worth_cr"] == 1900.56
+        and pd.isna(t.loc[22, "fy_prev_period"]), str(dict(t.loc[11])))
+
+
     print(f"\n{ok} passed, {fail} failed")
     return 1 if fail else 0
 
@@ -382,8 +508,15 @@ if __name__ == "__main__":
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--fy-table", action="store_true")
     a = ap.parse_args()
-    if a.status:
+    if a.fy_table:
+        t = write_fy_table()
+        print(t["latest_period_kind"].value_counts(dropna=False).to_string())
+        print(t["fy_source"].str.replace(r"_\d+$", "_N", regex=True)
+              .value_counts(dropna=False).to_string())
+        print(coverage(t).to_string(index=False))
+    elif a.status:
         status()
     elif a.self_test:
         raise SystemExit(self_test())
