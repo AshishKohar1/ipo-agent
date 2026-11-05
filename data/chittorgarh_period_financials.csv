@@ -1156,3 +1156,39 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 2475,PNGS Reva Diamond Jewellery,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,226.84,259.11,59.47,100.19,95.33,90.65,,79.61,https://www.chittorgarh.com/ipo/x/2475/,2026-11-06 01:55:00.008069
 2475,PNGS Reva Diamond Jewellery,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,158.33,196.24,42.41,-28.5,-37.64,,,56.14,https://www.chittorgarh.com/ipo/x/2475/,2026-11-06 01:55:00.008069
 2475,PNGS Reva Diamond Jewellery,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,123.93,199.35,51.75,-52.02,-60.74,,,68.73,https://www.chittorgarh.com/ipo/x/2475/,2026-11-06 01:55:00.008069
+660,PSP Projects,31 Dec 2016,2016-12-31,STUB,1,INR_crore,274.15,249.42,21.48,87.58,58.78,77.07,,32.45,https://www.chittorgarh.com/ipo/x/660/,2026-11-06 01:55:03.667969
+660,PSP Projects,31 Mar 2016,2016-03-31,FULL_FY,2,INR_crore,228.71,467.71,24.93,66.09,62.89,44.36,,39.35,https://www.chittorgarh.com/ipo/x/660/,2026-11-06 01:55:03.667969
+660,PSP Projects,31 Mar 2015,2015-03-31,FULL_FY,3,INR_crore,186.38,286.97,14.05,46.92,46.12,32.93,,22.41,https://www.chittorgarh.com/ipo/x/660/,2026-11-06 01:55:03.667969
+298,PTC India Financial Services,31 Dec 2010,2010-12-31,STUB,1,INR_crore,1168.29,82.54,31.22,664.47,231.33,477.37,,,https://www.chittorgarh.com/ipo/x/298/,2026-11-06 01:55:06.893875
+298,PTC India Financial Services,31 Mar 2010,2010-03-31,FULL_FY,2,INR_crore,959.04,53.49,25.45,635.94,200.11,310.8,,,https://www.chittorgarh.com/ipo/x/298/,2026-11-06 01:55:06.893875
+298,PTC India Financial Services,31 Mar 2009,2009-03-31,FULL_FY,3,INR_crore,630.55,11.6,8.53,609.35,174.66,20.0,,,https://www.chittorgarh.com/ipo/x/298/,2026-11-06 01:55:06.893875
+298,PTC India Financial Services,31 Mar 2008,2008-03-31,FULL_FY,4,INR_crore,112.83,3.14,1.64,110.58,20.58,0.0,,,https://www.chittorgarh.com/ipo/x/298/,2026-11-06 01:55:06.893875
+2306,Pace Digitek,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,2648.96,2462.2,279.1,1080.33,1134.21,160.7,,505.13,https://www.chittorgarh.com/ipo/x/2306/,2026-11-06 01:55:10.114136
+2306,Pace Digitek,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,2253.87,2460.27,229.87,450.06,534.58,493.19,,423.75,https://www.chittorgarh.com/ipo/x/2306/,2026-11-06 01:55:10.114136
+2306,Pace Digitek,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,840.15,514.66,16.53,228.79,313.31,192.11,,39.75,https://www.chittorgarh.com/ipo/x/2306/,2026-11-06 01:55:10.114136
+1253,Paradeep Phosphates,31 Dec 2021,2021-12-31,STUB,1,INR_crore,7186.27,5973.69,362.78,2188.79,1613.34,2240.91,,593.06,https://www.chittorgarh.com/ipo/x/1253/,2026-11-06 01:55:13.304362
+1253,Paradeep Phosphates,31 Mar 2021,2021-03-31,FULL_FY,2,INR_crore,4423.17,5183.94,223.27,1827.51,1252.06,1251.17,,561.26,https://www.chittorgarh.com/ipo/x/1253/,2026-11-06 01:55:13.304362
+1253,Paradeep Phosphates,31 Mar 2020,2020-03-31,FULL_FY,3,INR_crore,5010.33,4227.78,193.22,1603.53,1028.08,2297.95,,493.83,https://www.chittorgarh.com/ipo/x/1253/,2026-11-06 01:55:13.304362
+1253,Paradeep Phosphates,31 Mar 2019,2019-03-31,FULL_FY,4,INR_crore,5627.66,4397.21,158.96,1482.71,907.26,3123.0,,480.75,https://www.chittorgarh.com/ipo/x/1253/,2026-11-06 01:55:13.304362
+545,Parag Milk Foods,31 Dec 2015,2015-12-31,STUB,1,INR_crore,974.51,1214.89,33.5,289.72,223.56,363.78,,,https://www.chittorgarh.com/ipo/x/545/,2026-11-06 01:55:16.495316
+545,Parag Milk Foods,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,925.22,1421.21,30.33,133.81,117.84,429.85,,,https://www.chittorgarh.com/ipo/x/545/,2026-11-06 01:55:16.495316
+545,Parag Milk Foods,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,813.47,1080.26,19.24,103.48,87.51,513.18,,,https://www.chittorgarh.com/ipo/x/545/,2026-11-06 01:55:16.495316
+545,Parag Milk Foods,31 Mar 2013,2013-03-31,FULL_FY,4,INR_crore,675.42,924.52,22.22,84.24,68.27,446.91,,,https://www.chittorgarh.com/ipo/x/545/,2026-11-06 01:55:16.495316
+2297,Park Medi World,30 Sep 2025,2025-09-30,STUB,1,INR_crore,2320.93,823.39,139.14,1153.05,1187.77,733.91,,217.14,https://www.chittorgarh.com/ipo/x/2297/,2026-11-06 01:55:19.663171
+2297,Park Medi World,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,2133.7,1425.97,213.22,1021.86,1049.4,682.07,,372.17,https://www.chittorgarh.com/ipo/x/2297/,2026-11-06 01:55:19.663171
+2297,Park Medi World,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,1912.1,1263.08,152.01,815.98,858.63,686.71,,310.3,https://www.chittorgarh.com/ipo/x/2297/,2026-11-06 01:55:19.663171
+2297,Park Medi World,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,1592.82,1272.18,228.19,667.55,653.09,575.68,,390.34,https://www.chittorgarh.com/ipo/x/2297/,2026-11-06 01:55:19.663171
+2318,Patel Retail,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,382.86,825.99,25.28,134.57,,180.54,,62.43,https://www.chittorgarh.com/ipo/x/2318/,2026-11-06 01:55:23.183048
+2318,Patel Retail,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,333.02,817.71,22.53,94.4,,185.75,,55.84,https://www.chittorgarh.com/ipo/x/2318/,2026-11-06 01:55:23.183048
+2318,Patel Retail,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,303.12,1019.8,16.38,71.87,,182.81,,43.24,https://www.chittorgarh.com/ipo/x/2318/,2026-11-06 01:55:23.183048
+490,Pennar Engineered Building Systems,31 Mar 2015,2015-03-31,FULL_FY,1,INR_crore,318.52,452.36,21.98,128.5,97.79,40.53,,48.88,https://www.chittorgarh.com/ipo/x/490/,2026-11-06 01:55:26.101926
+490,Pennar Engineered Building Systems,31 Mar 2014,2014-03-31,FULL_FY,2,INR_crore,264.05,369.75,17.22,106.63,76.16,34.61,,39.83,https://www.chittorgarh.com/ipo/x/490/,2026-11-06 01:55:26.101926
+490,Pennar Engineered Building Systems,31 Mar 2013,2013-03-31,FULL_FY,3,INR_crore,237.68,290.96,14.76,70.39,42.9,49.44,,36.98,https://www.chittorgarh.com/ipo/x/490/,2026-11-06 01:55:26.101926
+2266,PhysicsWallah,30 Jun 2025,2025-06-30,STUB,1,INR_crore,5075.67,905.41,-127.01,1867.92,787.92,1.55,,-21.22,https://www.chittorgarh.com/ipo/x/2266/,2026-11-06 01:55:29.321291
+2266,PhysicsWallah,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,4156.38,3039.09,-243.26,1945.37,467.06,0.33,,193.2,https://www.chittorgarh.com/ipo/x/2266/,2026-11-06 01:55:29.321291
+2266,PhysicsWallah,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,2480.74,2015.35,-1131.13,-861.79,-1254.74,1687.4,,-829.35,https://www.chittorgarh.com/ipo/x/2266/,2026-11-06 01:55:29.321291
+2266,PhysicsWallah,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,2082.18,772.54,-84.08,62.29,-187.65,956.15,,13.86,https://www.chittorgarh.com/ipo/x/2266/,2026-11-06 01:55:29.321291
+2487,Pine Labs,30 Jun 2025,2025-06-30,STUB,1,INR_crore,10904.32,653.08,4.79,2327.55,,888.74,,120.56,https://www.chittorgarh.com/ipo/x/2487/,2026-11-06 01:55:32.524729
+2487,Pine Labs,31 Mar 2025,2025-03-31,FULL_FY,2,INR_crore,10715.74,2327.09,-145.49,-2244.27,,829.49,,356.72,https://www.chittorgarh.com/ipo/x/2487/,2026-11-06 01:55:32.524729
+2487,Pine Labs,31 Mar 2024,2024-03-31,FULL_FY,3,INR_crore,9648.56,1824.16,-341.9,-2035.24,,532.92,,158.2,https://www.chittorgarh.com/ipo/x/2487/,2026-11-06 01:55:32.524729
+2487,Pine Labs,31 Mar 2023,2023-03-31,FULL_FY,4,INR_crore,9363.21,1690.44,-265.15,-1764.77,,329.51,,196.8,https://www.chittorgarh.com/ipo/x/2487/,2026-11-06 01:55:32.524729
