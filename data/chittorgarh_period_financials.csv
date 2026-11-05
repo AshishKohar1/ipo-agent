@@ -929,3 +929,40 @@ ipo_id,company,fin_period,fin_period_parsed,period_kind,col_index,unit,assets_cr
 1088,MTAR Technologies,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,346.27,218.14,31.32,225.08,198.32,29.13,,62.33,https://www.chittorgarh.com/ipo/x/1088/,2026-11-06 01:51:42.579075
 1088,MTAR Technologies,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,305.16,185.91,39.2,234.98,206.77,28.73,,55.96,https://www.chittorgarh.com/ipo/x/1088/,2026-11-06 01:51:42.579075
 1088,MTAR Technologies,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,281.03,160.55,5.42,205.52,177.31,19.79,,32.82,https://www.chittorgarh.com/ipo/x/1088/,2026-11-06 01:51:42.579075
+1107,Macrotech Developers,31 Dec 2020,2020-12-31,STUB,1,INR_crore,40594.62,3160.49,-264.3,3841.11,4416.27,18662.19,,563.58,https://www.chittorgarh.com/ipo/x/1107/,2026-11-06 01:51:49.319226
+1107,Macrotech Developers,31 Mar 2020,2020-03-31,FULL_FY,2,INR_crore,40692.56,12560.99,744.84,4111.54,4675.6,18423.16,,1920.27,https://www.chittorgarh.com/ipo/x/1107/,2026-11-06 01:51:49.319226
+1107,Macrotech Developers,31 Mar 2019,2019-03-31,FULL_FY,3,INR_crore,49863.94,11978.87,1643.98,3390.29,3979.91,25640.56,,3167.03,https://www.chittorgarh.com/ipo/x/1107/,2026-11-06 01:51:49.319226
+1107,Macrotech Developers,31 Mar 2018,2018-03-31,FULL_FY,4,INR_crore,47811.28,13726.57,1789.39,1765.41,1859.05,22616.11,,3289.66,https://www.chittorgarh.com/ipo/x/1107/,2026-11-06 01:51:49.319226
+551,Mahanagar Gas,31 Mar 2016,2016-03-31,FULL_FY,1,INR_crore,2356.3,2121.63,308.69,1527.98,1438.63,4.38,,,https://www.chittorgarh.com/ipo/x/551/,2026-11-06 01:51:52.493701
+551,Mahanagar Gas,31 Mar 2015,2015-03-31,FULL_FY,2,INR_crore,2165.59,2135.64,301.0,1407.47,1318.12,15.59,,,https://www.chittorgarh.com/ipo/x/551/,2026-11-06 01:51:52.493701
+551,Mahanagar Gas,31 Mar 2014,2014-03-31,FULL_FY,3,INR_crore,1974.3,1919.65,297.25,1296.96,1207.62,7.98,,,https://www.chittorgarh.com/ipo/x/551/,2026-11-06 01:51:52.493701
+753,Mahindra Logistics,30 Jun 2017,2017-06-30,STUB,1,INR_crore,833.37,812.63,14.39,363.46,295.46,,,,https://www.chittorgarh.com/ipo/x/753/,2026-11-06 01:51:55.731259
+753,Mahindra Logistics,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,768.99,2597.65,44.78,348.79,280.79,,,,https://www.chittorgarh.com/ipo/x/753/,2026-11-06 01:51:55.731259
+753,Mahindra Logistics,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,553.32,2007.81,37.4,303.77,243.95,,,,https://www.chittorgarh.com/ipo/x/753/,2026-11-06 01:51:55.731259
+753,Mahindra Logistics,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,502.45,1891.17,40.38,265.76,205.94,,,,https://www.chittorgarh.com/ipo/x/753/,2026-11-06 01:51:55.731259
+1937,Mamata Machinery,30 Jun 2024,2024-06-30,STUB,1,INR_crore,240.85,29.19,0.22,132.82,,4.34,,,https://www.chittorgarh.com/ipo/x/1937/,2026-11-06 01:51:58.966448
+1937,Mamata Machinery,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,237.49,241.31,36.13,131.88,,11.6,,,https://www.chittorgarh.com/ipo/x/1937/,2026-11-06 01:51:58.966448
+1937,Mamata Machinery,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,228.47,210.13,22.51,127.38,,18.63,,,https://www.chittorgarh.com/ipo/x/1937/,2026-11-06 01:51:58.966448
+1937,Mamata Machinery,31 Mar 2022,2022-03-31,FULL_FY,4,INR_crore,216.33,196.57,21.7,103.56,,20.86,,,https://www.chittorgarh.com/ipo/x/1937/,2026-11-06 01:51:58.966448
+1866,Manba Finance,31 Mar 2024,2024-03-31,FULL_FY,1,INR_crore,973.75,191.63,31.42,200.61,162.46,752.27,,,https://www.chittorgarh.com/ipo/x/1866/,2026-11-06 01:52:02.168697
+1866,Manba Finance,31 Mar 2023,2023-03-31,FULL_FY,2,INR_crore,787.25,133.32,16.58,168.43,155.54,595.93,,,https://www.chittorgarh.com/ipo/x/1866/,2026-11-06 01:52:02.168697
+1866,Manba Finance,31 Mar 2022,2022-03-31,FULL_FY,3,INR_crore,561.46,106.62,9.74,151.74,138.96,394.4,,,https://www.chittorgarh.com/ipo/x/1866/,2026-11-06 01:52:02.168697
+2069,Mangal Electrical Industries,31 Mar 2025,2025-03-31,FULL_FY,1,INR_crore,366.46,551.39,47.31,162.16,,149.12,,81.84,https://www.chittorgarh.com/ipo/x/2069/,2026-11-06 01:52:05.377611
+2069,Mangal Electrical Industries,31 Mar 2024,2024-03-31,FULL_FY,2,INR_crore,246.54,452.13,20.95,114.99,,92.12,,42.63,https://www.chittorgarh.com/ipo/x/2069/,2026-11-06 01:52:05.377611
+2069,Mangal Electrical Industries,31 Mar 2023,2023-03-31,FULL_FY,3,INR_crore,221.26,357.81,24.74,93.97,,96.64,,44.42,https://www.chittorgarh.com/ipo/x/2069/,2026-11-06 01:52:05.377611
+1412,Mankind Pharma,31 Dec 2022,2022-12-31,STUB,1,INR_crore,9273.75,6777.82,1015.98,7145.89,7094.12,167.93,,,https://www.chittorgarh.com/ipo/x/1412/,2026-11-06 01:52:08.581764
+1412,Mankind Pharma,31 Mar 2022,2022-03-31,FULL_FY,2,INR_crore,9147.74,7977.58,1452.96,6155.23,6106.06,868.03,,,https://www.chittorgarh.com/ipo/x/1412/,2026-11-06 01:52:08.581764
+1412,Mankind Pharma,31 Dec 2021,2021-12-31,STUB,3,INR_crore,8043.88,6218.29,1260.24,5965.46,5916.86,268.7,,,https://www.chittorgarh.com/ipo/x/1412/,2026-11-06 01:52:08.581764
+1412,Mankind Pharma,31 Mar 2021,2021-03-31,FULL_FY,4,INR_crore,6372.63,6385.38,1293.03,4722.0,4674.39,234.53,,,https://www.chittorgarh.com/ipo/x/1412/,2026-11-06 01:52:08.581764
+1412,Mankind Pharma,31 Mar 2020,2020-03-31,FULL_FY,5,INR_crore,5073.29,5975.65,1056.15,3485.31,3436.34,126.92,,,https://www.chittorgarh.com/ipo/x/1412/,2026-11-06 01:52:08.581764
+472,Manpasand Beverages,31 Dec 2014,2014-12-31,STUB,1,INR_crore,328.53,239.47,12.64,179.74,147.31,88.54,,36.74,https://www.chittorgarh.com/ipo/x/472/,2026-11-06 01:52:11.832190
+472,Manpasand Beverages,31 Mar 2014,2014-03-31,FULL_FY,2,INR_crore,198.63,294.36,20.5,94.25,92.28,65.05,,45.75,https://www.chittorgarh.com/ipo/x/472/,2026-11-06 01:52:11.832190
+472,Manpasand Beverages,31 Mar 2013,2013-03-31,FULL_FY,3,INR_crore,163.78,240.56,22.37,73.59,72.19,47.47,,39.08,https://www.chittorgarh.com/ipo/x/472/,2026-11-06 01:52:11.832190
+472,Manpasand Beverages,31 Mar 2012,2012-03-31,FULL_FY,4,INR_crore,98.69,86.14,6.1,50.99,50.17,27.39,,14.34,https://www.chittorgarh.com/ipo/x/472/,2026-11-06 01:52:11.832190
+710,Matrimony.com,30 Jun 2017,2017-06-30,STUB,1,INR_crore,131.71,77.0,8.46,7.52,-3.11,43.34,,13.41,https://www.chittorgarh.com/ipo/x/710/,2026-11-06 01:52:15.006774
+710,Matrimony.com,31 Mar 2017,2017-03-31,FULL_FY,2,INR_crore,121.95,267.68,22.53,-1.18,-11.8,44.38,,37.74,https://www.chittorgarh.com/ipo/x/710/,2026-11-06 01:52:15.006774
+710,Matrimony.com,31 Mar 2016,2016-03-31,FULL_FY,3,INR_crore,121.15,253.73,-23.1,-24.51,-33.71,48.35,,12.64,https://www.chittorgarh.com/ipo/x/710/,2026-11-06 01:52:15.006774
+710,Matrimony.com,31 Mar 2015,2015-03-31,FULL_FY,4,INR_crore,100.35,240.63,-4.47,-1.41,-10.6,27.23,,22.48,https://www.chittorgarh.com/ipo/x/710/,2026-11-06 01:52:15.006774
+1064,Mazagon Dock Shipbuilders,31 Mar 2020,2020-03-31,FULL_FY,1,INR_crore,20966.03,5535.31,477.06,3069.13,2867.44,0.0,,825.63,https://www.chittorgarh.com/ipo/x/1064/,2026-11-06 01:52:18.355007
+1064,Mazagon Dock Shipbuilders,31 Mar 2019,2019-03-31,FULL_FY,2,INR_crore,20847.93,5204.67,532.47,3216.92,2992.82,0.0,,851.52,https://www.chittorgarh.com/ipo/x/1064/,2026-11-06 01:52:18.355007
+1064,Mazagon Dock Shipbuilders,31 Mar 2018,2018-03-31,FULL_FY,3,INR_crore,19370.37,5027.63,496.17,2834.05,2609.95,0.0,,711.97,https://www.chittorgarh.com/ipo/x/1064/,2026-11-06 01:52:18.355007
