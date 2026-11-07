@@ -1,0 +1,483 @@
+ipo_id,company,fy_period,fy_period_parsed,norm,tt_url,tt_code,tt_name,resolved
+250,Hindustan Media Ventures,31 Mar 2010,2010-03-31,hindustanmediaventures,https://www.tickertape.in/stocks/hindustan-media-ventures-HINS,HINS,hindustan media ventures,True
+251,Midfield Industries,31 Mar 2010,2010-03-31,midfieldindustries,,,,False
+255,Prakash Steelage,31 Mar 2010,2010-03-31,prakashsteelage,https://www.tickertape.in/stocks/prakash-steelage-PRAA,PRAA,prakash steelage,True
+256,Gujarat Pipavav Port,31 Mar 2010,2010-03-31,gujaratpipavavport,https://www.tickertape.in/stocks/gujarat-pipavav-port-GPPL,GPPL,gujarat pipavav port,True
+258,Coal India,31 Mar 2010,2010-03-31,coal,https://www.tickertape.in/stocks/coal-india-COAL,COAL,coal india,True
+259,VA Tech Wabag,31 Mar 2010,2010-03-31,vatechwabag,https://www.tickertape.in/stocks/va-tech-wabag-VATE,VATE,va tech wabag,True
+260,Indosolar,31 Mar 2010,2010-03-31,indosolar,https://www.tickertape.in/stocks/indosolar-INDL,INDL,indosolar,True
+261,Eros International Media,31 Mar 2010,2010-03-31,erosinternationalmedia,,,,False
+265,Ramky Infrastructure,31 Mar 2010,2010-03-31,ramkyinfrastructure,https://www.tickertape.in/stocks/ramky-infrastructure-RAMK,RAMK,ramky infrastructure,True
+266,Orient Green Power Co.,31 Mar 2010,2010-03-31,orientgreenpower,https://www.tickertape.in/stocks/orient-green-power-company-ORIN,ORIN,orient green power company,True
+269,Tecpro Systems,31 Mar 2010,2010-03-31,tecprosystems,,,,False
+270,Ashoka Buildcon,31 Mar 2010,2010-03-31,ashokabuildcon,https://www.tickertape.in/stocks/ashoka-buildcon-ABDL,ABDL,ashoka buildcon,True
+271,Cantabil Retail India,31 Mar 2010,2010-03-31,cantabilretail,https://www.tickertape.in/stocks/cantabil-retail-india-CRIL,CRIL,cantabil retail india,True
+272,Sea TV Network,31 Mar 2010,2010-03-31,seatvnetwork,https://www.tickertape.in/stocks/sea-tv-network-SEAT,SEAT,sea tv network,True
+273,Bedmutha Industries,31 Mar 2010,2010-03-31,bedmuthaindustries,https://www.tickertape.in/stocks/bedmutha-industries-BMIL,BMIL,bedmutha industries,True
+275,Oberoi Realty,31 Mar 2010,2010-03-31,oberoirealty,https://www.tickertape.in/stocks/oberoi-realty-OEBO,OEBO,oberoi realty,True
+277,Prestige Estates Projects,31 Mar 2010,2010-03-31,prestigeestatesprojects,https://www.tickertape.in/stocks/prestige-estates-projects-PREG,PREG,prestige estates projects,True
+280,Gravita India,31 Mar 2010,2010-03-31,gravita,https://www.tickertape.in/stocks/gravita-india-GRAI,GRAI,gravita india,True
+281,RPP Infra Projects,31 Mar 2010,2010-03-31,rppinfraprojects,https://www.tickertape.in/stocks/rpp-infra-projects-RPPI,RPPI,rpp infra projects,True
+282,MOIL,31 Mar 2010,2010-03-31,moil,https://www.tickertape.in/stocks/moil-MOIL,MOIL,moil,True
+286,Ravikumar Distilleries,31 Mar 2010,2010-03-31,ravikumardistilleries,https://www.tickertape.in/stocks/ravi-kumar-distilleries-RAVK,RAVK,ravi kumar distilleries,True
+290,C.Mahendra Exports,31 Mar 2010,2010-03-31,cmahendraexports,,,,False
+293,Omkar Speciality Chemicals,31 Mar 2010,2010-03-31,omkarspecialitychemicals,https://www.tickertape.in/stocks/omkar-speciality-chemicals-OMKS,OMKS,omkar speciality chemicals,True
+294,Fineotex Chemical,31 Mar 2010,2010-03-31,fineotexchemical,https://www.tickertape.in/stocks/fineotex-chemical-FINE,FINE,fineotex chemical,True
+296,Acropetal Technologies,31 Mar 2010,2010-03-31,acropetaltechnologies,,,,False
+297,Lovable Lingerie,31 Mar 2010,2010-03-31,lovablelingerie,https://www.tickertape.in/stocks/lovable-lingerie-LOVA,LOVA,lovable lingerie,True
+298,PTC India Financial Services,31 Mar 2010,2010-03-31,ptcfinancialservices,https://www.tickertape.in/stocks/ptc-india-financial-services-PTCN,PTCN,ptc india financial services,True
+299,Shilpi Cable Technologies,31 Mar 2010,2010-03-31,shilpicabletechnologies,,,,False
+300,Muthoot Finance,31 Mar 2010,2010-03-31,muthootfinance,https://www.tickertape.in/stocks/muthoot-finance-MUTT,MUTT,muthoot finance,True
+301,Servalakshmi Paper,31 Mar 2010,2010-03-31,servalakshmipaper,,,,False
+303,Innoventive Industries,31 Mar 2010,2010-03-31,innoventiveindustries,,,,False
+305,Vaswani Industries,31 Mar 2010,2010-03-31,vaswaniindustries,https://www.tickertape.in/stocks/vaswani-industries-VASW,VASW,vaswani industries,True
+309,Galaxy Surfactants,31 Mar 2010,2010-03-31,galaxysurfactants,https://www.tickertape.in/stocks/galaxy-surfactants-GALX,GALX,galaxy surfactants,True
+312,Timbor Home,31 Mar 2010,2010-03-31,timborhome,,,,False
+313,VMS Industries,31 Mar 2010,2010-03-31,vmsindustries,https://www.tickertape.in/stocks/vms-industries-VMS,VMS,vms industries,True
+314,Birla Pacific Medspa,31 Mar 2010,2010-03-31,birlapacificmedspa,,,,False
+315,Rushil Decor,31 Mar 2010,2010-03-31,rushildecor,https://www.tickertape.in/stocks/rushil-decor-RUSH,RUSH,rushil decor,True
+317,Bharatiya Global Infomedia,31 Mar 2011,2011-03-31,bharatiyaglobalinfomedia,https://www.tickertape.in/stocks/bharatiya-global-infomedia-BHRT,BHRT,bharatiya global infomedia,True
+320,SRS,31 Mar 2011,2011-03-31,srs,,,,False
+322,Brooks Laboratories,31 Mar 2011,2011-03-31,brookslaboratories,https://www.tickertape.in/stocks/brooks-laboratories-BROO,BROO,brooks laboratories,True
+323,TD Power Systems,31 Mar 2011,2011-03-31,tdpowersystems,https://www.tickertape.in/stocks/td-power-systems-TDPS,TDPS,td power systems,True
+324,PG Electroplast,31 Mar 2011,2011-03-31,pgelectroplast,https://www.tickertape.in/stocks/pg-electroplast-PGEL,PGEL,pg electroplast,True
+326,Taksheel Solutions,31 Mar 2011,2011-03-31,taksheelsolutions,,,,False
+328,RDB Rasayans,31 Mar 2011,2011-03-31,rdbrasayans,https://www.tickertape.in/stocks/rdb-rasayans-RDB,RDB,rdb rasayans,True
+332,Onelife Capital Advisors,31 Mar 2011,2011-03-31,onelifecapitaladvisors,https://www.tickertape.in/stocks/onelife-capital-advisors-ONEL,ONEL,onelife capital advisors,True
+333,Indo Thai Securities,31 Mar 2011,2011-03-31,indothaisecurities,https://www.tickertape.in/stocks/indo-thai-securities-ITSL,ITSL,indo thai securities,True
+336,Olympic Cards,31 Mar 2011,2011-03-31,olympiccards,https://www.tickertape.in/stocks/olympic-cards-OLP,OLP,olympic cards,True
+338,MT Educare,31 Mar 2011,2011-03-31,mteducare,https://www.tickertape.in/stocks/mt-educare-MTED,MTED,mt educare,True
+339,Tribhovandas Bhimji Zaveri,31 Mar 2011,2011-03-31,tribhovandasbhimjizaveri,https://www.tickertape.in/stocks/tribhovandas-bhimji-zaveri-TBZL,TBZL,tribhovandas bhimji zaveri,True
+342,Speciality Restaurants,31 Mar 2011,2011-03-31,specialityrestaurants,https://www.tickertape.in/stocks/speciality-restaurants-SPRE,SPRE,speciality restaurants,True
+345,VKS Projects,31 Mar 2011,2011-03-31,vksprojects,,,,False
+356,Tara Jewels,31 Mar 2012,2012-03-31,tarajewels,,,,False
+359,PC Jeweller,31 Mar 2012,2012-03-31,pcjeweller,https://www.tickertape.in/stocks/pc-jeweller-PCJE,PCJE,pc jeweller,True
+363,V-Mart Retail,31 Mar 2012,2012-03-31,vmartretail,https://www.tickertape.in/stocks/v-mart-retail-VMAR,VMAR,v mart retail,True
+364,Sai Silks (Kalamandir),31 Mar 2012,2012-03-31,saisilks,,,,False
+369,Repco Home Finance,31 Mar 2012,2012-03-31,repcohomefinance,https://www.tickertape.in/stocks/repco-home-finance-RHFL,RHFL,repco home finance,True
+377,Just Dial,31 Mar 2012,2012-03-31,justdial,https://www.tickertape.in/stocks/just-dial-JUST,JUST,just dial,True
+418,Wonderla Holidays,31 Mar 2013,2013-03-31,wonderlaholidays,https://www.tickertape.in/stocks/wonderla-holidays-WOHL,WOHL,wonderla holidays,True
+428,Snowman Logistics,31 Mar 2014,2014-03-31,snowmanlogistics,https://www.tickertape.in/stocks/snowman-logistics-SNOW,SNOW,snowman logistics,True
+430,Sharda Cropchem,31 Mar 2014,2014-03-31,shardacropchem,https://www.tickertape.in/stocks/sharda-cropchem-SHCR,SHCR,sharda cropchem,True
+431,Shemaroo Entertainment,31 Mar 2014,2014-03-31,shemarooentertainment,https://www.tickertape.in/stocks/shemaroo-entertainment-SHEM,SHEM,shemaroo entertainment,True
+437,Monte Carlo Fashions,31 Mar 2014,2014-03-31,montecarlofashions,https://www.tickertape.in/stocks/monte-carlo-fashions-MOCF,MOCF,monte carlo fashions,True
+438,Inox Wind,31 Mar 2014,2014-03-31,inoxwind,https://www.tickertape.in/stocks/inox-wind-INWN,INWN,inox wind,True
+455,Ortel Communications,31 Mar 2014,2014-03-31,ortelcommunications,https://www.tickertape.in/stocks/ortel-communications-ORTE,ORTE,ortel communications,True
+466,VRL Logistics,31 Mar 2014,2014-03-31,vrllogistics,https://www.tickertape.in/stocks/vrl-logistics-VRLL,VRLL,vrl logistics,True
+467,MEP Infrastructure Developers,31 Mar 2014,2014-03-31,mepinfrastructuredevelopers,https://www.tickertape.in/stocks/mep-infrastructure-developers-MPIN,MPIN,mep infrastructure developers,True
+468,UFO Moviez India,31 Mar 2014,2014-03-31,ufomoviez,https://www.tickertape.in/stocks/ufo-moviez-india-UFOM,UFOM,ufo moviez india,True
+469,PNC Infratech,31 Mar 2014,2014-03-31,pncinfratech,https://www.tickertape.in/stocks/pnc-infratech-PNCI,PNCI,pnc infratech,True
+472,Manpasand Beverages,31 Mar 2014,2014-03-31,manpasandbeverages,,,,False
+481,Syngene International,31 Mar 2015,2015-03-31,syngeneinternational,https://www.tickertape.in/stocks/syngene-international-SYNN,SYNN,syngene international,True
+486,Power Mech Projects,31 Mar 2015,2015-03-31,powermechprojects,https://www.tickertape.in/stocks/power-mech-projects-POMP,POMP,power mech projects,True
+490,Pennar Engineered Building Systems,31 Mar 2015,2015-03-31,pennarengineeredbuildingsystems,,,,False
+492,InterGlobe Aviation,31 Mar 2015,2015-03-31,interglobeaviation,https://www.tickertape.in/stocks/interglobe-aviation-INGL,INGL,interglobe aviation,True
+494,Sadbhav Infrastructure Project,31 Mar 2015,2015-03-31,sadbhavinfrastructureproject,,,,False
+507,Coffee Day Enterprises,31 Mar 2015,2015-03-31,coffeedayenterprises,https://www.tickertape.in/stocks/coffee-day-enterprises-CODE,CODE,coffee day enterprises,True
+511,Dr.Lal PathLabs,31 Mar 2015,2015-03-31,drlalpathlabs,https://www.tickertape.in/stocks/dr-lal-pathlabs-DLPA,DLPA,dr lal pathlabs,True
+512,Alkem Laboratories,31 Mar 2015,2015-03-31,alkemlaboratories,https://www.tickertape.in/stocks/alkem-laboratories-ALKE,ALKE,alkem laboratories,True
+513,Narayana Hrudayalaya,31 Mar 2015,2015-03-31,narayanahrudayalaya,https://www.tickertape.in/stocks/narayana-hrudayalaya-NARY,NARY,narayana hrudayalaya,True
+517,Precision Camshafts,31 Mar 2015,2015-03-31,precisioncamshafts,https://www.tickertape.in/stocks/precision-camshafts-PRCM,PRCM,precision camshafts,True
+520,TeamLease Services,31 Mar 2015,2015-03-31,teamleaseservices,https://www.tickertape.in/stocks/teamlease-services-TLSV,TLSV,teamlease services,True
+521,Quick Heal Technologies,31 Mar 2015,2015-03-31,quickhealtechnologies,https://www.tickertape.in/stocks/quick-heal-technologies-QUIC,QUIC,quick heal technologies,True
+529,Healthcare Global Enterprises,31 Mar 2015,2015-03-31,healthcareglobalenterprises,https://www.tickertape.in/stocks/healthcare-global-enterprises-HEAC,HEAC,healthcare global enterprises,True
+530,Bharat Wire Ropes,31 Mar 2015,2015-03-31,bharatwireropes,https://www.tickertape.in/stocks/bharat-wire-ropes-BHWR,BHWR,bharat wire ropes,True
+536,Equitas Holdings,31 Mar 2015,2015-03-31,equitasholdings,,,,False
+541,Thyrocare Technologies,31 Mar 2015,2015-03-31,thyrocaretechnologies,https://www.tickertape.in/stocks/thyrocare-technologies-THYO,THYO,thyrocare technologies,True
+543,Ujjivan Financial Services,31 Mar 2015,2015-03-31,ujjivanfinancialservices,,,,False
+545,Parag Milk Foods,31 Mar 2015,2015-03-31,paragmilkfoods,https://www.tickertape.in/stocks/parag-milk-foods-PAMF,PAMF,parag milk foods,True
+551,Mahanagar Gas,31 Mar 2016,2016-03-31,mahanagargas,https://www.tickertape.in/stocks/mahanagar-gas-MGAS,MGAS,mahanagar gas,True
+552,Quess Corp,31 Mar 2016,2016-03-31,quesscorp,https://www.tickertape.in/stocks/quess-corp-QUEC,QUEC,quess corp,True
+560,Advanced Enzyme Technologies,31 Mar 2016,2016-03-31,advancedenzymetechnologies,https://www.tickertape.in/stocks/advanced-enzyme-technologies-ADEN,ADEN,advanced enzyme technologies,True
+562,Dilip Buildcon,31 Mar 2016,2016-03-31,dilipbuildcon,https://www.tickertape.in/stocks/dilip-buildcon-DIBL,DIBL,dilip buildcon,True
+563,S.P.Apparels,31 Mar 2016,2016-03-31,spapparels,https://www.tickertape.in/stocks/s-p-apparels-SPAP,SPAP,s p apparels,True
+564,RBL Bank,31 Mar 2016,2016-03-31,rblbank,https://www.tickertape.in/stocks/rbl-bank-RATB,RATB,rbl bank,True
+571,ICICI Prudential Life Insurance Co.,31 Mar 2016,2016-03-31,iciciprudentiallifeinsurance,https://www.tickertape.in/stocks/icici-prudential-life-insurance-company-ICIR,ICIR,icici prudential life insurance company,True
+574,GNA Axles,31 Mar 2016,2016-03-31,gnaaxles,https://www.tickertape.in/stocks/gna-axles-GNAA,GNAA,gna axles,True
+593,Endurance Technologies,31 Mar 2016,2016-03-31,endurancetechnologies,,,,False
+598,Varun Beverages,31 Dec 2015,2015-12-31,varunbeverages,https://www.tickertape.in/stocks/varun-beverages-VARB,VARB,varun beverages,True
+599,PNB Housing Finance,31 Mar 2016,2016-03-31,pnbhousingfinance,https://www.tickertape.in/stocks/pnb-housing-finance-PNBH,PNBH,pnb housing finance,True
+602,Sheela Foam,31 Mar 2016,2016-03-31,sheelafoam,https://www.tickertape.in/stocks/sheela-foam-SHEF,SHEF,sheela foam,True
+606,Laurus Labs,31 Mar 2016,2016-03-31,lauruslabs,https://www.tickertape.in/stocks/laurus-labs-LAUL,LAUL,laurus labs,True
+611,BSE,31 Mar 2016,2016-03-31,bse,https://www.tickertape.in/stocks/bse-BSEL,BSEL,bse,True
+615,Avenue Supermarts,31 Mar 2016,2016-03-31,avenuesupermarts,https://www.tickertape.in/stocks/avenue-supermarts-AVEU,AVEU,avenue supermarts,True
+620,Central Depository Services (India),31 Mar 2017,2017-03-31,centraldepositoryservices,https://www.tickertape.in/stocks/central-depository-services-india-CENA,CENA,central depository services india,True
+623,Music Broadcast,31 Mar 2016,2016-03-31,musicbroadcast,https://www.tickertape.in/stocks/music-broadcast-MUSI,MUSI,music broadcast,True
+631,CL Educate,31 Mar 2016,2016-03-31,cleducate,https://www.tickertape.in/stocks/cl-educate-CARU,CARU,cl educate,True
+635,Shankara Building Products,31 Mar 2016,2016-03-31,shankarabuildingproducts,https://www.tickertape.in/stocks/shankara-building-products-SHAB,SHAB,shankara building products,True
+660,PSP Projects,31 Mar 2016,2016-03-31,pspprojects,https://www.tickertape.in/stocks/psp-projects-PSPP,PSPP,psp projects,True
+667,Tejas Networks,31 Mar 2017,2017-03-31,tejasnetworks,https://www.tickertape.in/stocks/tejas-networks-TEJS,TEJS,tejas networks,True
+668,Eris Lifesciences,31 Mar 2017,2017-03-31,erislifesciences,https://www.tickertape.in/stocks/eris-lifesciences-ERIS,ERIS,eris lifesciences,True
+669,GTPL Hathway,31 Mar 2016,2016-03-31,gtplhathway,https://www.tickertape.in/stocks/gtpl-hathway-GTPH,GTPH,gtpl hathway,True
+672,AU Small Finance Bank,31 Mar 2017,2017-03-31,ausmallfinancebank,https://www.tickertape.in/stocks/au-small-finance-bank-AUFI,AUFI,au small finance bank,True
+683,Salasar Techno Engineering,31 Mar 2017,2017-03-31,salasartechnoengineering,https://www.tickertape.in/stocks/salasar-techno-engineering-SALA,SALA,salasar techno engineering,True
+684,Cochin Shipyard,31 Mar 2017,2017-03-31,cochinshipyard,https://www.tickertape.in/stocks/cochin-shipyard-COCH,COCH,cochin shipyard,True
+698,Apex Frozen Foods,31 Mar 2017,2017-03-31,apexfrozenfoods,https://www.tickertape.in/stocks/apex-frozen-foods-APEX,APEX,apex frozen foods,True
+703,Bharat Road Network,31 Mar 2017,2017-03-31,bharatroadnetwork,https://www.tickertape.in/stocks/bharat-road-network-BHRN,BHRN,bharat road network,True
+705,Dixon Technologies (India),31 Mar 2017,2017-03-31,dixontechnologies,https://www.tickertape.in/stocks/dixon-technologies-india-DIXO,DIXO,dixon technologies india,True
+707,Prataap Snacks,31 Mar 2017,2017-03-31,prataapsnacks,https://www.tickertape.in/stocks/prataap-snacks-PRAT,PRAT,prataap snacks,True
+710,Matrimony.com,31 Mar 2017,2017-03-31,matrimonycom,https://www.tickertape.in/stocks/matrimonycom-MATI,MATI,matrimonycom,True
+713,SBI Life Insurance Co.,31 Mar 2017,2017-03-31,sbilifeinsurance,https://www.tickertape.in/stocks/sbi-life-insurance-company-SBIL,SBIL,sbi life insurance company,True
+714,ICICI Lombard General Insurance Co.,31 Mar 2017,2017-03-31,icicilombardgeneralinsurance,https://www.tickertape.in/stocks/icici-lombard-general-insurance-company-ICIL,ICIL,icici lombard general insurance company,True
+734,Godrej Agrovet,31 Mar 2017,2017-03-31,godrejagrovet,https://www.tickertape.in/stocks/godrej-agrovet-GODE,GODE,godrej agrovet,True
+739,MAS Financial Services,31 Mar 2017,2017-03-31,masfinancialservices,https://www.tickertape.in/stocks/mas-financial-services-MASF,MASF,mas financial services,True
+746,Indian Energy Exchange,31 Mar 2017,2017-03-31,indianenergyexchange,https://www.tickertape.in/stocks/indian-energy-exchange-IIAN,IIAN,indian energy exchange,True
+753,Mahindra Logistics,31 Mar 2017,2017-03-31,mahindralogistics,https://www.tickertape.in/stocks/mahindra-logistics-MALO,MALO,mahindra logistics,True
+754,"New India Assurance Co.,The",31 Mar 2017,2017-03-31,newassurance,https://www.tickertape.in/stocks/new-india-assurance-company-THEE,THEE,new india assurance company,True
+755,Khadim India,31 Mar 2017,2017-03-31,khadim,https://www.tickertape.in/stocks/khadim-india-KHAD,KHAD,khadim india,True
+771,Future Supply Chain Solutions,31 Mar 2017,2017-03-31,futuresupplychainsolutions,,,,False
+772,Shalby,31 Mar 2017,2017-03-31,shalby,https://www.tickertape.in/stocks/shalby-SHAY,SHAY,shalby,True
+788,Apollo Micro Systems,31 Mar 2017,2017-03-31,apollomicrosystems,https://www.tickertape.in/stocks/apollo-micro-systems-APLL,APLL,apollo micro systems,True
+791,Newgen Software Technologies,31 Mar 2017,2017-03-31,newgensoftwaretechnologies,https://www.tickertape.in/stocks/newgen-software-technologies-NEWG,NEWG,newgen software technologies,True
+792,Amber Enterprises India,31 Mar 2017,2017-03-31,amberenterprises,https://www.tickertape.in/stocks/amber-enterprises-india-AMBE,AMBE,amber enterprises india,True
+798,Galaxy Surfactants,31 Mar 2017,2017-03-31,galaxysurfactants,https://www.tickertape.in/stocks/galaxy-surfactants-GALX,GALX,galaxy surfactants,True
+810,Aster DM Healthcare,31 Mar 2017,2017-03-31,asterdmhealthcare,https://www.tickertape.in/stocks/aster-dm-healthcare-ATRD,ATRD,aster dm healthcare,True
+816,H.G.Infra Engineering,31 Mar 2017,2017-03-31,hginfraengineering,,,,False
+822,Bandhan Bank,31 Mar 2017,2017-03-31,bandhanbank,https://www.tickertape.in/stocks/bandhan-bank-BANH,BANH,bandhan bank,True
+827,Bharat Dynamics,31 Mar 2017,2017-03-31,bharatdynamics,https://www.tickertape.in/stocks/bharat-dynamics-BARA,BARA,bharat dynamics,True
+831,Hindustan Aeronautics,31 Mar 2017,2017-03-31,hindustanaeronautics,https://www.tickertape.in/stocks/hindustan-aeronautics-HIAE,HIAE,hindustan aeronautics,True
+834,Sandhar Technologies,31 Mar 2017,2017-03-31,sandhartechnologies,https://www.tickertape.in/stocks/sandhar-technologies-SNTL,SNTL,sandhar technologies,True
+835,Mishra Dhatu Nigam,31 Mar 2017,2017-03-31,mishradhatunigam,https://www.tickertape.in/stocks/mishra-dhatu-nigam-MISR,MISR,mishra dhatu nigam,True
+839,ICICI Securities,31 Mar 2017,2017-03-31,icicisecurities,,,,False
+846,Lemon Tree Hotels,31 Mar 2017,2017-03-31,lemontreehotels,https://www.tickertape.in/stocks/lemon-tree-hotels-LEMO,LEMO,lemon tree hotels,True
+866,IndoStar Capital Finance,31 Mar 2017,2017-03-31,indostarcapitalfinance,https://www.tickertape.in/stocks/indostar-capital-finance-INAC,INAC,indostar capital finance,True
+886,RITES,31 Mar 2017,2017-03-31,rites,https://www.tickertape.in/stocks/rites-RITS,RITS,rites,True
+887,Fine Organic Industries,31 Mar 2017,2017-03-31,fineorganicindustries,https://www.tickertape.in/stocks/fine-organic-industries-FINO,FINO,fine organic industries,True
+891,Varroc Engineering,31 Mar 2018,2018-03-31,varrocengineering,https://www.tickertape.in/stocks/varroc-engineering-VARE,VARE,varroc engineering,True
+897,HDFC Asset Management Co.,31 Mar 2018,2018-03-31,hdfcassetmanagement,https://www.tickertape.in/stocks/hdfc-asset-management-company-HDFA,HDFA,hdfc asset management company,True
+900,CreditAccess Grameen,31 Mar 2018,2018-03-31,creditaccessgrameen,https://www.tickertape.in/stocks/creditaccess-grameen-CRDE,CRDE,creditaccess grameen,True
+904,TCNS Clothing Co.,31 Mar 2018,2018-03-31,tcnsclothing,,,,False
+917,Chalet Hotels,31 Mar 2018,2018-03-31,chalethotels,https://www.tickertape.in/stocks/chalet-hotels-CHAL,CHAL,chalet hotels,True
+922,IRCON International,31 Mar 2018,2018-03-31,irconinternational,https://www.tickertape.in/stocks/ircon-international-IRCN,IRCN,ircon international,True
+925,Aavas Financiers,31 Mar 2018,2018-03-31,aavasfinanciers,https://www.tickertape.in/stocks/aavas-financiers-AVAS,AVAS,aavas financiers,True
+969,MSTC,31 Mar 2018,2018-03-31,mstc,https://www.tickertape.in/stocks/mstc-MSTC,MSTC,mstc,True
+978,Metropolis Healthcare,31 Mar 2018,2018-03-31,metropolishealthcare,https://www.tickertape.in/stocks/metropolis-healthcare-METP,METP,metropolis healthcare,True
+979,Polycab India,31 Mar 2018,2018-03-31,polycab,https://www.tickertape.in/stocks/polycab-india-POLC,POLC,polycab india,True
+980,Rail Vikas Nigam,31 Mar 2018,2018-03-31,railvikasnigam,https://www.tickertape.in/stocks/rail-vikas-nigam-RAIV,RAIV,rail vikas nigam,True
+984,Neogen Chemicals,31 Mar 2018,2018-03-31,neogenchemicals,https://www.tickertape.in/stocks/neogen-chemicals-NEOE,NEOE,neogen chemicals,True
+998,IndiaMART InterMESH,31 Mar 2019,2019-03-31,indiamartintermesh,https://www.tickertape.in/stocks/indiamart-intermesh-INMR,INMR,indiamart intermesh,True
+1005,Affle (India),31 Mar 2019,2019-03-31,affle,https://www.tickertape.in/stocks/affle-india-AFFL,AFFL,affle india,True
+1006,Spandana Sphoorty Financial,31 Mar 2019,2019-03-31,spandanasphoortyfinancial,https://www.tickertape.in/stocks/spandana-sphoorty-financial-SPAD,SPAD,spandana sphoorty financial,True
+1016,Vishwaraj Sugar Industries,31 Mar 2019,2019-03-31,vishwarajsugarindustries,https://www.tickertape.in/stocks/vishwaraj-sugar-industries-VNSS,VNSS,vishwaraj sugar industries,True
+1021,CSB Bank,31 Mar 2019,2019-03-31,csbbank,https://www.tickertape.in/stocks/csb-bank-CSBB,CSBB,csb bank,True
+1023,Ujjivan Small Finance Bank,31 Mar 2019,2019-03-31,ujjivansmallfinancebank,https://www.tickertape.in/stocks/ujjivan-small-finance-bank-UJJI,UJJI,ujjivan small finance bank,True
+1033,Antony Waste Handling Cell,31 Mar 2019,2019-03-31,antonywastehandlingcell,https://www.tickertape.in/stocks/antony-waste-handling-cell-AWH,AWH,antony waste handling cell,True
+1040,Equitas Small Finance Bank,31 Mar 2020,2020-03-31,equitassmallfinancebank,https://www.tickertape.in/stocks/equitas-small-finance-bank-EQU,EQU,equitas small finance bank,True
+1049,Rossari Biotech,31 Mar 2020,2020-03-31,rossaribiotech,https://www.tickertape.in/stocks/rossari-biotech-ROSB,ROSB,rossari biotech,True
+1052,UTI Asset Management Co.,31 Mar 2020,2020-03-31,utiassetmanagement,https://www.tickertape.in/stocks/uti-asset-management-company-UTI,UTI,uti asset management company,True
+1055,Computer Age Management Services,31 Mar 2020,2020-03-31,computeragemanagementservices,https://www.tickertape.in/stocks/computer-age-management-services-CAMC,CAMC,computer age management services,True
+1056,Happiest Minds Technologies,31 Mar 2020,2020-03-31,happiestmindstechnologies,https://www.tickertape.in/stocks/happiest-minds-technologies-HAPP,HAPP,happiest minds technologies,True
+1058,Route Mobile,31 Mar 2020,2020-03-31,routemobile,https://www.tickertape.in/stocks/route-mobile-ROUT,ROUT,route mobile,True
+1060,Chemcon Speciality Chemicals,31 Mar 2020,2020-03-31,chemconspecialitychemicals,https://www.tickertape.in/stocks/chemcon-speciality-chemicals-CHEMC,CHEMC,chemcon speciality chemicals,True
+1062,Likhitha Infrastructure,31 Mar 2020,2020-03-31,likhithainfrastructure,https://www.tickertape.in/stocks/likhitha-infrastructure-LIKH,LIKH,likhitha infrastructure,True
+1064,Mazagon Dock Shipbuilders,31 Mar 2020,2020-03-31,mazagondockshipbuilders,https://www.tickertape.in/stocks/mazagon-dock-shipbuilders-MAZ,MAZ,mazagon dock shipbuilders,True
+1072,Gland Pharma,31 Mar 2020,2020-03-31,glandpharma,https://www.tickertape.in/stocks/gland-pharma-GLAN,GLAN,gland pharma,True
+1077,Mrs.Bectors Food Specialities,31 Mar 2020,2020-03-31,mrsbectorsfoodspecialities,https://www.tickertape.in/stocks/mrs-bectors-food-specialities-BEC,BEC,mrs bectors food specialities,True
+1078,Antony Waste Handling Cell,31 Mar 2020,2020-03-31,antonywastehandlingcell,https://www.tickertape.in/stocks/antony-waste-handling-cell-AWH,AWH,antony waste handling cell,True
+1079,Indigo Paints,31 Mar 2020,2020-03-31,indigopaints,https://www.tickertape.in/stocks/indigo-paints-INDIG,INDIG,indigo paints,True
+1080,Home First Finance Co.India,31 Mar 2020,2020-03-31,homefirstfinance,https://www.tickertape.in/stocks/home-first-finance-company-india-HOM,HOM,home first finance company india,True
+1081,Stove Kraft,31 Mar 2020,2020-03-31,stovekraft,https://www.tickertape.in/stocks/stove-kraft-STOVE,STOVE,stove kraft,True
+1084,Nureca,31 Mar 2020,2020-03-31,nureca,https://www.tickertape.in/stocks/nureca-NUR,NUR,nureca,True
+1085,Heranba Industries,31 Mar 2020,2020-03-31,heranbaindustries,https://www.tickertape.in/stocks/heranba-industries-HER,HER,heranba industries,True
+1088,MTAR Technologies,31 Mar 2020,2020-03-31,mtartechnologies,https://www.tickertape.in/stocks/mtar-technologies-MTA,MTA,mtar technologies,True
+1089,Easy Trip Planners,31 Mar 2020,2020-03-31,easytripplanners,https://www.tickertape.in/stocks/easy-trip-planners-EASE,EASE,easy trip planners,True
+1092,Nazara Technologies,31 Mar 2020,2020-03-31,nazaratechnologies,https://www.tickertape.in/stocks/nazara-technologies-NAZ,NAZ,nazara technologies,True
+1095,Craftsman Automation,31 Mar 2020,2020-03-31,craftsmanautomation,https://www.tickertape.in/stocks/craftsman-automation-CRAF,CRAF,craftsman automation,True
+1096,Laxmi Organic Industries,31 Mar 2020,2020-03-31,laxmiorganicindustries,https://www.tickertape.in/stocks/laxmi-organic-industries-LXC,LXC,laxmi organic industries,True
+1097,Anupam Rasayan India,31 Mar 2020,2020-03-31,anupamrasayan,https://www.tickertape.in/stocks/anupam-rasayan-india-ANUR,ANUR,anupam rasayan india,True
+1098,Kalyan Jewellers India,31 Mar 2020,2020-03-31,kalyanjewellers,https://www.tickertape.in/stocks/kalyan-jewellers-india-KALYA,KALYA,kalyan jewellers india,True
+1099,Suryoday Small Finance Bank,31 Mar 2020,2020-03-31,suryodaysmallfinancebank,https://www.tickertape.in/stocks/suryoday-small-finance-bank-SURYO,SURYO,suryoday small finance bank,True
+1102,Barbeque-Nation Hospitality,31 Mar 2020,2020-03-31,barbequenationhospitality,https://www.tickertape.in/stocks/barbeque-nation-hospitality-BARBE,BARBE,barbeque nation hospitality,True
+1107,Macrotech Developers,31 Mar 2020,2020-03-31,macrotechdevelopers,https://www.tickertape.in/stocks/macrotech-developers-LOD,LOD,macrotech developers,True
+1112,Sona BLW Precision Forgings,31 Mar 2021,2021-03-31,sonablwprecisionforgings,https://www.tickertape.in/stocks/sona-blw-precision-forgings-SONAC,SONAC,sona blw precision forgings,True
+1114,Dodla Dairy,31 Mar 2020,2020-03-31,dodladairy,https://www.tickertape.in/stocks/dodla-dairy-DOD,DOD,dodla dairy,True
+1115,Krishna Institute of Medical Sciences,31 Mar 2021,2021-03-31,krishnainstituteofmedicalsciences,https://www.tickertape.in/stocks/krishna-institute-of-medical-sciences-KIMS,KIMS,krishna institute of medical sciences,True
+1119,India Pesticides,31 Mar 2021,2021-03-31,pesticides,https://www.tickertape.in/stocks/india-pesticides-IPL,IPL,india pesticides,True
+1122,G R Infraprojects,31 Mar 2021,2021-03-31,grinfraprojects,https://www.tickertape.in/stocks/g-r-infraprojects-GRI,GRI,g r infraprojects,True
+1127,Tatva Chintan Pharma Chem,31 Mar 2021,2021-03-31,tatvachintanpharmachem,https://www.tickertape.in/stocks/tatva-chintan-pharma-chem-TATV,TATV,tatva chintan pharma chem,True
+1128,One 97 Communications,31 Mar 2021,2021-03-31,one97communications,https://www.tickertape.in/stocks/one-97-communications-PAY,PAY,one 97 communications,True
+1129,Rolex Rings,31 Mar 2021,2021-03-31,rolexrings,https://www.tickertape.in/stocks/rolex-rings-ROLE,ROLE,rolex rings,True
+1134,Exxaro Tiles,31 Mar 2021,2021-03-31,exxarotiles,https://www.tickertape.in/stocks/exxaro-tiles-EXX,EXX,exxaro tiles,True
+1135,Windlas Biotech,31 Mar 2021,2021-03-31,windlasbiotech,https://www.tickertape.in/stocks/windlas-biotech-WINDL,WINDL,windlas biotech,True
+1136,Devyani International,31 Mar 2021,2021-03-31,devyaniinternational,https://www.tickertape.in/stocks/devyani-international-DEVY,DEVY,devyani international,True
+1137,CarTrade Tech,31 Mar 2021,2021-03-31,cartradetech,https://www.tickertape.in/stocks/cartrade-tech-CART,CART,cartrade tech,True
+1138,Krsnaa Diagnostics,31 Mar 2021,2021-03-31,krsnaadiagnostics,https://www.tickertape.in/stocks/krsnaa-diagnostics-KRS,KRS,krsnaa diagnostics,True
+1140,Aptus Value Housing Finance India,31 Mar 2021,2021-03-31,aptusvaluehousingfinance,https://www.tickertape.in/stocks/aptus-value-housing-finance-india-APTU,APTU,aptus value housing finance india,True
+1141,Chemplast Sanmar,31 Mar 2021,2021-03-31,chemplastsanmar,https://www.tickertape.in/stocks/chemplast-sanmar-CHEMP,CHEMP,chemplast sanmar,True
+1145,Vijaya Diagnostic Centre,31 Mar 2021,2021-03-31,vijayadiagnosticcentre,https://www.tickertape.in/stocks/vijaya-diagnostic-centre-VIJAY,VIJAY,vijaya diagnostic centre,True
+1149,Sansera Engineering,31 Mar 2021,2021-03-31,sanseraengineering,https://www.tickertape.in/stocks/sansera-engineering-SANS,SANS,sansera engineering,True
+1151,Aditya Birla Sun Life AMC,31 Mar 2021,2021-03-31,adityabirlasunlifeamc,https://www.tickertape.in/stocks/aditya-birla-sun-life-amc-ABS,ABS,aditya birla sun life amc,True
+1166,Fino Payments Bank,31 Mar 2021,2021-03-31,finopaymentsbank,https://www.tickertape.in/stocks/fino-payments-bank-FINOP,FINOP,fino payments bank,True
+1168,S.J.S.Enterprises,31 Mar 2021,2021-03-31,sjsenterprises,https://www.tickertape.in/stocks/s-j-s-enterprises-SJS,SJS,s j s enterprises,True
+1170,FSN E-Commerce Ventures,31 Mar 2021,2021-03-31,fsnecommerceventures,https://www.tickertape.in/stocks/fsn-e-commerce-ventures-NYK,NYK,fsn e commerce ventures,True
+1172,PB Fintech,31 Mar 2021,2021-03-31,pbfintech,https://www.tickertape.in/stocks/pb-fintech-POLI,POLI,pb fintech,True
+1175,Sigachi Industries,31 Mar 2021,2021-03-31,sigachiindustries,https://www.tickertape.in/stocks/sigachi-industries-SIGA,SIGA,sigachi industries,True
+1177,Sapphire Foods India,31 Mar 2021,2021-03-31,sapphirefoods,https://www.tickertape.in/stocks/sapphire-foods-india-SAPPH,SAPPH,sapphire foods india,True
+1178,Latent View Analytics,31 Mar 2021,2021-03-31,latentviewanalytics,https://www.tickertape.in/stocks/latent-view-analytics-LATE,LATE,latent view analytics,True
+1179,Tarsons Products,31 Mar 2021,2021-03-31,tarsonsproducts,https://www.tickertape.in/stocks/tarsons-products-TARS,TARS,tarsons products,True
+1181,Go Fashion (India),31 Mar 2021,2021-03-31,gofashion,https://www.tickertape.in/stocks/go-fashion-india-GOC,GOC,go fashion india,True
+1185,Tega Industries,31 Mar 2021,2021-03-31,tegaindustries,https://www.tickertape.in/stocks/tega-industries-TEG,TEG,tega industries,True
+1186,Anand Rathi Wealth,31 Mar 2021,2021-03-31,anandrathiwealth,https://www.tickertape.in/stocks/anand-rathi-wealth-ANAND,ANAND,anand rathi wealth,True
+1187,C.E.Info systems,31 Mar 2021,2021-03-31,ceinfosystems,https://www.tickertape.in/stocks/ce-info-systems-MAPM,MAPM,ce info systems,True
+1189,Rategain Travel Technologies,31 Mar 2021,2021-03-31,rategaintraveltechnologies,https://www.tickertape.in/stocks/rategain-travel-technologies-RATE,RATE,rategain travel technologies,True
+1190,Data Patterns (India),31 Mar 2021,2021-03-31,datapatterns,https://www.tickertape.in/stocks/data-patterns-india-DATAP,DATAP,data patterns india,True
+1191,Shriram Properties,31 Mar 2021,2021-03-31,shriramproperties,https://www.tickertape.in/stocks/shriram-properties-SHRIR,SHRIR,shriram properties,True
+1194,HP Adhesives,31 Mar 2021,2021-03-31,hpadhesives,https://www.tickertape.in/stocks/hp-adhesives-HPA,HPA,hp adhesives,True
+1195,Medplus Health Services,31 Mar 2021,2021-03-31,medplushealthservices,https://www.tickertape.in/stocks/medplus-health-services-MEDP,MEDP,medplus health services,True
+1197,Supriya Lifescience,31 Mar 2021,2021-03-31,supriyalifescience,https://www.tickertape.in/stocks/supriya-lifescience-SUPRI,SUPRI,supriya lifescience,True
+1199,Tracxn Technologies,31 Mar 2022,2022-03-31,tracxntechnologies,https://www.tickertape.in/stocks/tracxn-technologies-TRAC,TRAC,tracxn technologies,True
+1203,CMS Info Systems,31 Mar 2021,2021-03-31,cmsinfosystems,https://www.tickertape.in/stocks/cms-info-systems-CMS,CMS,cms info systems,True
+1209,AGS Transact Technologies,31 Mar 2021,2021-03-31,agstransacttechnologies,https://www.tickertape.in/stocks/ags-transact-technologies-AGS,AGS,ags transact technologies,True
+1213,Delhivery,31 Mar 2021,2021-03-31,delhivery,https://www.tickertape.in/stocks/delhivery-DELH,DELH,delhivery,True
+1217,Vedant Fashions,31 Mar 2021,2021-03-31,vedantfashions,https://www.tickertape.in/stocks/vedant-fashions-MANY,MANY,vedant fashions,True
+1235,Uma Exports,31 Mar 2021,2021-03-31,umaexports,https://www.tickertape.in/stocks/uma-exports-UMA,UMA,uma exports,True
+1236,Veranda Learning Solutions,31 Mar 2021,2021-03-31,verandalearningsolutions,https://www.tickertape.in/stocks/veranda-learning-solutions-VERAN,VERAN,veranda learning solutions,True
+1240,Hariom Pipe Industries,31 Mar 2021,2021-03-31,hariompipeindustries,https://www.tickertape.in/stocks/hariom-pipe-industries-HARIO,HARIO,hariom pipe industries,True
+1247,Ethos,31 Mar 2021,2021-03-31,ethos,https://www.tickertape.in/stocks/ethos-ETH,ETH,ethos,True
+1249,Campus Activewear,31 Mar 2021,2021-03-31,campusactivewear,https://www.tickertape.in/stocks/campus-activewear-CAMP,CAMP,campus activewear,True
+1252,Prudent Corporate Advisory Services,31 Mar 2021,2021-03-31,prudentcorporateadvisoryservices,https://www.tickertape.in/stocks/prudent-corporate-advisory-services-PRU,PRU,prudent corporate advisory services,True
+1253,Paradeep Phosphates,31 Mar 2021,2021-03-31,paradeepphosphates,https://www.tickertape.in/stocks/paradeep-phosphates-PARAD,PARAD,paradeep phosphates,True
+1254,eMudhra,31 Mar 2021,2021-03-31,emudhra,https://www.tickertape.in/stocks/emudhra-EMU,EMU,emudhra,True
+1257,Aether Industries,31 Mar 2021,2021-03-31,aetherindustries,https://www.tickertape.in/stocks/aether-industries-AET,AET,aether industries,True
+1281,Dreamfolks Services,31 Mar 2022,2022-03-31,dreamfolksservices,https://www.tickertape.in/stocks/dreamfolks-services-DRE,DRE,dreamfolks services,True
+1316,DCX Systems,31 Mar 2021,2021-03-31,dcxsystems,https://www.tickertape.in/stocks/dcx-systems-DCX,DCX,dcx systems,True
+1318,Electronics Mart India,31 Mar 2022,2022-03-31,electronicsmart,https://www.tickertape.in/stocks/electronics-mart-india-EMI,EMI,electronics mart india,True
+1321,Kaynes Technology India,31 Mar 2022,2022-03-31,kaynestechnology,https://www.tickertape.in/stocks/kaynes-technology-india-KAYN,KAYN,kaynes technology india,True
+1324,Uniparts India,31 Mar 2022,2022-03-31,uniparts,https://www.tickertape.in/stocks/uniparts-india-UNIP,UNIP,uniparts india,True
+1327,Five-Star Business Finance,31 Mar 2022,2022-03-31,fivestarbusinessfinance,https://www.tickertape.in/stocks/five-star-business-finance-FIVES,FIVES,five star business finance,True
+1330,Global Health,31 Mar 2022,2022-03-31,globalhealth,https://www.tickertape.in/stocks/global-health-MEDA,MEDA,global health,True
+1332,Bikaji Foods International,31 Mar 2022,2022-03-31,bikajifoodsinternational,https://www.tickertape.in/stocks/bikaji-foods-international-BIK,BIK,bikaji foods international,True
+1334,Archean Chemical Industries,31 Mar 2022,2022-03-31,archeanchemicalindustries,https://www.tickertape.in/stocks/archean-chemical-industries-ACA,ACA,archean chemical industries,True
+1336,Keystone Realtors,31 Mar 2022,2022-03-31,keystonerealtors,https://www.tickertape.in/stocks/keystone-realtors-RUST,RUST,keystone realtors,True
+1338,Landmark Cars,31 Mar 2022,2022-03-31,landmarkcars,https://www.tickertape.in/stocks/landmark-cars-LANDA,LANDA,landmark cars,True
+1339,Dharmaj Crop Guard,31 Mar 2022,2022-03-31,dharmajcropguard,https://www.tickertape.in/stocks/dharmaj-crop-guard-DHARM,DHARM,dharmaj crop guard,True
+1345,Sula Vineyards,31 Mar 2022,2022-03-31,sulavineyards,https://www.tickertape.in/stocks/sula-vineyards-SULA,SULA,sula vineyards,True
+1346,Elin Electronics,31 Mar 2022,2022-03-31,elinelectronics,https://www.tickertape.in/stocks/elin-electronics-ELIN,ELIN,elin electronics,True
+1347,Sah Polymers,31 Mar 2022,2022-03-31,sahpolymers,https://www.tickertape.in/stocks/sah-polymers-SSH,SSH,sah polymers,True
+1354,KFin Technologies,31 Mar 2022,2022-03-31,kfintechnologies,https://www.tickertape.in/stocks/kfin-technologies-KFI,KFI,kfin technologies,True
+1355,Radiant Cash Management Services,31 Mar 2022,2022-03-31,radiantcashmanagementservices,https://www.tickertape.in/stocks/radiant-cash-management-services-RADIA,RADIA,radiant cash management services,True
+1382,Signatureglobal (India),31 Mar 2023,2023-03-31,signatureglobal,https://www.tickertape.in/stocks/signatureglobal-india-SIGNA,SIGNA,signatureglobal india,True
+1383,Divgi TorqTransfer Systems,31 Mar 2022,2022-03-31,divgitorqtransfersystems,https://www.tickertape.in/stocks/divgi-torqtransfer-systems-DIVG,DIVG,divgi torqtransfer systems,True
+1390,Global Surfaces,31 Mar 2022,2022-03-31,globalsurfaces,https://www.tickertape.in/stocks/global-surfaces-GSLSU,GSLSU,global surfaces,True
+1405,Avalon Technologies,31 Mar 2022,2022-03-31,avalontechnologies,https://www.tickertape.in/stocks/avalon-technologies-AVAL,AVAL,avalon technologies,True
+1412,Mankind Pharma,31 Mar 2022,2022-03-31,mankindpharma,https://www.tickertape.in/stocks/mankind-pharma-MANKI,MANKI,mankind pharma,True
+1418,Tata Technologies,31 Mar 2023,2023-03-31,tatatechnologies,https://www.tickertape.in/stocks/tata-technologies-TATAT,TATAT,tata technologies,True
+1435,HMA Agro Industries,31 Mar 2022,2022-03-31,hmaagroindustries,https://www.tickertape.in/stocks/hma-agro-industries-HMA,HMA,hma agro industries,True
+1446,Cyient DLM,31 Mar 2023,2023-03-31,cyientdlm,https://www.tickertape.in/stocks/cyient-dlm-CYI,CYI,cyient dlm,True
+1452,Senco Gold,31 Mar 2023,2023-03-31,sencogold,https://www.tickertape.in/stocks/senco-gold-SENC,SENC,senco gold,True
+1456,Utkarsh Small Finance Bank,31 Mar 2023,2023-03-31,utkarshsmallfinancebank,https://www.tickertape.in/stocks/utkarsh-small-finance-bank-UTK,UTK,utkarsh small finance bank,True
+1459,Netweb Technologies India,31 Mar 2023,2023-03-31,netwebtechnologies,https://www.tickertape.in/stocks/netweb-technologies-india-NETWE,NETWE,netweb technologies india,True
+1470,SBFC Finance,31 Mar 2023,2023-03-31,sbfcfinance,https://www.tickertape.in/stocks/sbfc-finance-SBFC,SBFC,sbfc finance,True
+1472,Concord Biotech,31 Mar 2023,2023-03-31,concordbiotech,https://www.tickertape.in/stocks/concord-biotech-CONCO,CONCO,concord biotech,True
+1475,TVS Supply Chain Solutions,31 Mar 2023,2023-03-31,tvssupplychainsolutions,https://www.tickertape.in/stocks/tvs-supply-chain-solutions-TVS,TVS,tvs supply chain solutions,True
+1479,Pyramid Technoplast,31 Mar 2023,2023-03-31,pyramidtechnoplast,https://www.tickertape.in/stocks/pyramid-technoplast-PYR,PYR,pyramid technoplast,True
+1482,Aeroflex Industries,31 Mar 2023,2023-03-31,aeroflexindustries,https://www.tickertape.in/stocks/aeroflex-industries-AER,AER,aeroflex industries,True
+1490,Rishabh Instruments,31 Mar 2023,2023-03-31,rishabhinstruments,https://www.tickertape.in/stocks/rishabh-instruments-RISHA,RISHA,rishabh instruments,True
+1496,EMS,31 Mar 2023,2023-03-31,ems,https://www.tickertape.in/stocks/ems-EMS,EMS,ems,True
+1502,SAMHI Hotels,31 Mar 2023,2023-03-31,samhihotels,https://www.tickertape.in/stocks/samhi-hotels-SAMH,SAMH,samhi hotels,True
+1503,R R Kabel,31 Mar 2023,2023-03-31,rrkabel,https://www.tickertape.in/stocks/r-r-kabel-RRK,RRK,r r kabel,True
+1507,Yatra Online,31 Mar 2023,2023-03-31,yatraonline,https://www.tickertape.in/stocks/yatra-online-YATR,YATR,yatra online,True
+1508,Sai Silks (Kalamandir),31 Mar 2023,2023-03-31,saisilks,,,,False
+1512,JSW Infrastructure,31 Mar 2023,2023-03-31,jswinfrastructure,https://www.tickertape.in/stocks/jsw-infrastructure-JSW,JSW,jsw infrastructure,True
+1525,Valiant Laboratories,31 Mar 2023,2023-03-31,valiantlaboratories,https://www.tickertape.in/stocks/valiant-laboratories-VALIN,VALIN,valiant laboratories,True
+1528,Updater Services,31 Mar 2023,2023-03-31,updaterservices,https://www.tickertape.in/stocks/updater-services-UDS,UDS,updater services,True
+1539,Plaza Wires,31 Mar 2023,2023-03-31,plazawires,https://www.tickertape.in/stocks/plaza-wires-PLA,PLA,plaza wires,True
+1542,Saraswati Saree Depot,31 Mar 2024,2024-03-31,saraswatisareedepot,https://www.tickertape.in/stocks/saraswati-saree-depot-SSD,SSD,saraswati saree depot,True
+1543,IRM Energy,31 Mar 2023,2023-03-31,irmenergy,https://www.tickertape.in/stocks/irm-energy-IRM,IRM,irm energy,True
+1545,Protean eGov Technologies,31 Mar 2023,2023-03-31,proteanegovtechnologies,https://www.tickertape.in/stocks/protean-egov-technologies-PROT,PROT,protean egov technologies,True
+1547,Blue Jet Healthcare,31 Mar 2023,2023-03-31,bluejethealthcare,https://www.tickertape.in/stocks/blue-jet-healthcare-BLUEJ,BLUEJ,blue jet healthcare,True
+1551,Honasa Consumer,31 Mar 2023,2023-03-31,honasaconsumer,https://www.tickertape.in/stocks/honasa-consumer-HON,HON,honasa consumer,True
+1552,Cello World,31 Mar 2023,2023-03-31,celloworld,https://www.tickertape.in/stocks/cello-world-CELLO,CELLO,cello world,True
+1553,ESAF Small Finance Bank,31 Mar 2023,2023-03-31,esafsmallfinancebank,https://www.tickertape.in/stocks/esaf-small-finance-bank-ESAF,ESAF,esaf small finance bank,True
+1563,ASK Automotive,31 Mar 2023,2023-03-31,askautomotive,https://www.tickertape.in/stocks/ask-automotive-ASK,ASK,ask automotive,True
+1568,Fedbank Financial Services,31 Mar 2023,2023-03-31,fedbankfinancialservices,https://www.tickertape.in/stocks/fedbank-financial-services-FEDF,FEDF,fedbank financial services,True
+1569,Indian Renewable Energy Development Agency,31 Mar 2023,2023-03-31,indianrenewableenergydevelopmentagency,https://www.tickertape.in/stocks/indian-renewable-energy-development-agency-IRE,IRE,indian renewable energy development agency,True
+1581,DOMS Industries,31 Mar 2023,2023-03-31,domsindustries,https://www.tickertape.in/stocks/doms-industries-DOM,DOM,doms industries,True
+1582,Muthoot Microfin,31 Mar 2023,2023-03-31,muthootmicrofin,https://www.tickertape.in/stocks/muthoot-microfin-MUT,MUT,muthoot microfin,True
+1585,Happy Forgings,31 Mar 2023,2023-03-31,happyforgings,https://www.tickertape.in/stocks/happy-forgings-HAP,HAP,happy forgings,True
+1586,Mukka Proteins,31 Mar 2023,2023-03-31,mukkaproteins,https://www.tickertape.in/stocks/mukka-proteins-MUKK,MUKK,mukka proteins,True
+1587,Motisons Jewellers,31 Mar 2023,2023-03-31,motisonsjewellers,https://www.tickertape.in/stocks/motisons-jewellers-MOT,MOT,motisons jewellers,True
+1588,RBZ Jewellers,31 Mar 2023,2023-03-31,rbzjewellers,https://www.tickertape.in/stocks/rbz-jewellers-RBZ,RBZ,rbz jewellers,True
+1589,Suraj Estate Developers,31 Mar 2023,2023-03-31,surajestatedevelopers,https://www.tickertape.in/stocks/suraj-estate-developers-SURAE,SURAE,suraj estate developers,True
+1593,Inox India,31 Mar 2023,2023-03-31,inox,https://www.tickertape.in/stocks/inox-india-INOXI,INOXI,inox india,True
+1595,Credo Brands Marketing,31 Mar 2023,2023-03-31,credobrandsmarketing,https://www.tickertape.in/stocks/credo-brands-marketing-MUF,MUF,credo brands marketing,True
+1597,Azad Engineering,31 Mar 2023,2023-03-31,azadengineering,https://www.tickertape.in/stocks/azad-engineering-AZA,AZA,azad engineering,True
+1599,Innova Captab,31 Mar 2023,2023-03-31,innovacaptab,https://www.tickertape.in/stocks/innova-captab-INNOP,INNOP,innova captab,True
+1611,Jyoti CNC Automation,31 Mar 2023,2023-03-31,jyoticncautomation,https://www.tickertape.in/stocks/jyoti-cnc-automation-JYOTC,JYOTC,jyoti cnc automation,True
+1612,Medi Assist Healthcare Services,31 Mar 2023,2023-03-31,mediassisthealthcareservices,https://www.tickertape.in/stocks/medi-assist-healthcare-services-MEDIS,MEDIS,medi assist healthcare services,True
+1616,Nova AgriTech,31 Mar 2023,2023-03-31,novaagritech,https://www.tickertape.in/stocks/nova-agritech-NOVAA,NOVAA,nova agritech,True
+1619,EPACK Durable,31 Mar 2023,2023-03-31,epackdurable,https://www.tickertape.in/stocks/epack-durable-EPA,EPA,epack durable,True
+1620,R K SWAMY,31 Mar 2023,2023-03-31,rkswamy,https://www.tickertape.in/stocks/r-k-swamy-RKS,RKS,r k swamy,True
+1632,BLS E-Services,31 Mar 2023,2023-03-31,blseservices,https://www.tickertape.in/stocks/bls-e-services-BLSE,BLSE,bls e services,True
+1634,Rashi Peripherals,31 Mar 2023,2023-03-31,rashiperipherals,https://www.tickertape.in/stocks/rashi-peripherals-RPT,RPT,rashi peripherals,True
+1638,Platinum Industries,31 Mar 2023,2023-03-31,platinumindustries,https://www.tickertape.in/stocks/platinum-industries-PLAT,PLAT,platinum industries,True
+1640,Jana Small Finance Bank,31 Mar 2023,2023-03-31,janasmallfinancebank,https://www.tickertape.in/stocks/jana-small-finance-bank-JSF,JSF,jana small finance bank,True
+1641,Capital Small Finance Bank,31 Mar 2023,2023-03-31,capitalsmallfinancebank,https://www.tickertape.in/stocks/capital-small-finance-bank-CAPI,CAPI,capital small finance bank,True
+1642,Exicom Tele-Systems,31 Mar 2023,2023-03-31,exicomtelesystems,https://www.tickertape.in/stocks/exicom-tele-systems-EXI,EXI,exicom tele systems,True
+1643,Entero Healthcare Solutions,31 Mar 2023,2023-03-31,enterohealthcaresolutions,https://www.tickertape.in/stocks/entero-healthcare-solutions-ENTE,ENTE,entero healthcare solutions,True
+1646,Vibhor Steel Tubes,31 Mar 2023,2023-03-31,vibhorsteeltubes,https://www.tickertape.in/stocks/vibhor-steel-tubes-VSTL,VSTL,vibhor steel tubes,True
+1654,Juniper Hotels,31 Mar 2023,2023-03-31,juniperhotels,https://www.tickertape.in/stocks/juniper-hotels-JUN,JUN,juniper hotels,True
+1655,GPT Healthcare,31 Mar 2023,2023-03-31,gpthealthcare,https://www.tickertape.in/stocks/gpt-healthcare-GPT,GPT,gpt healthcare,True
+1663,J.G.Chemicals,31 Mar 2023,2023-03-31,jgchemicals,https://www.tickertape.in/stocks/jgchemicals-JGC,JGC,jgchemicals,True
+1665,Krystal Integrated Services,31 Mar 2023,2023-03-31,krystalintegratedservices,https://www.tickertape.in/stocks/krystal-integrated-services-KRYS,KRYS,krystal integrated services,True
+1667,Gopal Snacks,31 Mar 2023,2023-03-31,gopalsnacks,https://www.tickertape.in/stocks/gopal-snacks-GOPAL,GOPAL,gopal snacks,True
+1682,SRM Contractors,31 Mar 2023,2023-03-31,srmcontractors,https://www.tickertape.in/stocks/srm-contractors-SRR,SRR,srm contractors,True
+1694,Bharti Hexacom,31 Mar 2023,2023-03-31,bhartihexacom,https://www.tickertape.in/stocks/bharti-hexacom-BHARI,BHARI,bharti hexacom,True
+1749,Stanley Lifestyles,31 Mar 2023,2023-03-31,stanleylifestyles,https://www.tickertape.in/stocks/stanley-lifestyles-STANL,STANL,stanley lifestyles,True
+1765,Ola Electric Mobility,31 Mar 2024,2024-03-31,olaelectricmobility,https://www.tickertape.in/stocks/ola-electric-mobility-OLAE,OLAE,ola electric mobility,True
+1766,Emcure Pharmaceuticals,31 Mar 2024,2024-03-31,emcurepharmaceuticals,https://www.tickertape.in/stocks/emcure-pharmaceuticals-EMC,EMC,emcure pharmaceuticals,True
+1767,Bansal Wire Industries,31 Mar 2024,2024-03-31,bansalwireindustries,https://www.tickertape.in/stocks/bansal-wire-industries-BANSA,BANSA,bansal wire industries,True
+1779,Sanstar,31 Mar 2024,2024-03-31,sanstar,https://www.tickertape.in/stocks/sanstar-SANST,SANST,sanstar,True
+1798,Ceigall India,31 Mar 2024,2024-03-31,ceigall,https://www.tickertape.in/stocks/ceigall-india-CEIG,CEIG,ceigall india,True
+1801,Brainbees Solutions,31 Mar 2024,2024-03-31,brainbeessolutions,https://www.tickertape.in/stocks/brainbees-solutions-FIRS,FIRS,brainbees solutions,True
+1802,Unicommerce eSolutions,31 Mar 2024,2024-03-31,unicommerceesolutions,https://www.tickertape.in/stocks/unicommerce-esolutions-UNIE,UNIE,unicommerce esolutions,True
+1809,Orient Technologies,31 Mar 2024,2024-03-31,orienttechnologies,https://www.tickertape.in/stocks/orient-technologies-ORIE,ORIE,orient technologies,True
+1811,Interarch Building Products,31 Mar 2024,2024-03-31,interarchbuildingproducts,https://www.tickertape.in/stocks/interarch-building-products-INTEI,INTEI,interarch building products,True
+1818,Premier Energies,31 Mar 2023,2023-03-31,premierenergies,https://www.tickertape.in/stocks/premier-energies-PREMI,PREMI,premier energies,True
+1822,Bajaj Housing Finance,31 Mar 2024,2024-03-31,bajajhousingfinance,https://www.tickertape.in/stocks/bajaj-housing-finance-BAJAH,BAJAH,bajaj housing finance,True
+1825,Baazar Style Retail,31 Mar 2024,2024-03-31,baazarstyleretail,https://www.tickertape.in/stocks/baazar-style-retail-STYL,STYL,baazar style retail,True
+1829,Gala Precision Engineering,31 Mar 2024,2024-03-31,galaprecisionengineering,https://www.tickertape.in/stocks/gala-precision-engineering-GALAP,GALAP,gala precision engineering,True
+1835,Shree Tirupati Balajee Agro Trading Co.,31 Mar 2024,2024-03-31,shreetirupatibalajeeagrotrading,https://www.tickertape.in/stocks/shree-tirupati-balajee-agro-trading-co-BALA,BALA,shree tirupati balajee agro trading co,True
+1837,Tolins Tyres,31 Mar 2024,2024-03-31,tolinstyres,https://www.tickertape.in/stocks/tolins-tyres-TOL,TOL,tolins tyres,True
+1839,Kross,31 Mar 2024,2024-03-31,kross,https://www.tickertape.in/stocks/kross-KROS,KROS,kross,True
+1841,P N Gadgil Jewellers,31 Mar 2024,2024-03-31,pngadgiljewellers,https://www.tickertape.in/stocks/p-n-gadgil-jewellers-PNG,PNG,p n gadgil jewellers,True
+1844,Western Carriers (India),31 Mar 2024,2024-03-31,westerncarriers,https://www.tickertape.in/stocks/western-carriers-india-WCI,WCI,western carriers india,True
+1849,Arkade Developers,31 Mar 2024,2024-03-31,arkadedevelopers,https://www.tickertape.in/stocks/arkade-developers-ARK,ARK,arkade developers,True
+1855,Northern Arc Capital,31 Mar 2024,2024-03-31,northernarccapital,https://www.tickertape.in/stocks/northern-arc-capital-NORTH,NORTH,northern arc capital,True
+1866,Manba Finance,31 Mar 2024,2024-03-31,manbafinance,https://www.tickertape.in/stocks/manba-finance-MANBA,MANBA,manba finance,True
+1874,Diffusion Engineers,31 Mar 2024,2024-03-31,diffusionengineers,https://www.tickertape.in/stocks/diffusion-engineers-DIF,DIF,diffusion engineers,True
+1879,Hyundai Motor India,31 Mar 2024,2024-03-31,hyundaimotor,https://www.tickertape.in/stocks/hyundai-motor-india-HYU,HYU,hyundai motor india,True
+1881,Afcons Infrastructure,31 Mar 2024,2024-03-31,afconsinfrastructure,https://www.tickertape.in/stocks/afcons-infrastructure-AFCO,AFCO,afcons infrastructure,True
+1888,Waaree Energies,31 Mar 2024,2024-03-31,waareeenergies,https://www.tickertape.in/stocks/waaree-energies-WAARE,WAARE,waaree energies,True
+1895,Godavari Biorefineries,31 Mar 2024,2024-03-31,godavaribiorefineries,https://www.tickertape.in/stocks/godavari-biorefineries-GODA,GODA,godavari biorefineries,True
+1896,Swiggy,31 Mar 2024,2024-03-31,swiggy,https://www.tickertape.in/stocks/swiggy-SWIG,SWIG,swiggy,True
+1897,ACME Solar Holdings,31 Mar 2024,2024-03-31,acmesolarholdings,https://www.tickertape.in/stocks/acme-solar-holdings-ACMES,ACMES,acme solar holdings,True
+1898,Sagility India,31 Mar 2024,2024-03-31,sagility,https://www.tickertape.in/stocks/sagility-india-SAGI,SAGI,sagility india,True
+1899,Niva Bupa Health Insurance Co.,31 Mar 2024,2024-03-31,nivabupahealthinsurance,https://www.tickertape.in/stocks/niva-bupa-health-insurance-company-NIVA,NIVA,niva bupa health insurance company,True
+1902,NTPC Green Energy,31 Mar 2024,2024-03-31,ntpcgreenenergy,https://www.tickertape.in/stocks/ntpc-green-energy-NTP,NTP,ntpc green energy,True
+1911,Enviro Infra Engineers,31 Mar 2024,2024-03-31,enviroinfraengineers,https://www.tickertape.in/stocks/enviro-infra-engineers-EIE,EIE,enviro infra engineers,True
+1918,Suraksha Diagnostic,31 Mar 2024,2024-03-31,surakshadiagnostic,https://www.tickertape.in/stocks/suraksha-diagnostic-SURAK,SURAK,suraksha diagnostic,True
+1924,Vishal Mega Mart,31 Mar 2024,2024-03-31,vishalmegamart,https://www.tickertape.in/stocks/vishal-mega-mart-VMM,VMM,vishal mega mart,True
+1925,Sai Life Sciences,31 Mar 2024,2024-03-31,sailifesciences,https://www.tickertape.in/stocks/sai-life-sciences-SAILI,SAILI,sai life sciences,True
+1926,Inventurus Knowledge Solutions,31 Mar 2024,2024-03-31,inventurusknowledgesolutions,https://www.tickertape.in/stocks/inventurus-knowledge-solutions-IKS,IKS,inventurus knowledge solutions,True
+1928,One Mobikwik Systems,31 Mar 2024,2024-03-31,onemobikwiksystems,https://www.tickertape.in/stocks/one-mobikwik-systems-MOBI,MOBI,one mobikwik systems,True
+1930,International Gemmological Institute (India),31 Dec 2023,2023-12-31,internationalgemmologicalinstitute,https://www.tickertape.in/stocks/international-gemmological-institute-india-IGI,IGI,international gemmological institute india,True
+1933,Transrail Lighting,31 Mar 2024,2024-03-31,transraillighting,https://www.tickertape.in/stocks/transrail-lighting-TRANI,TRANI,transrail lighting,True
+1934,Indo Farm Equipment,31 Mar 2024,2024-03-31,indofarmequipment,https://www.tickertape.in/stocks/indo-farm-equipment-INDOI,INDOI,indo farm equipment,True
+1936,DAM Capital Advisors,31 Mar 2024,2024-03-31,damcapitaladvisors,https://www.tickertape.in/stocks/dam-capital-advisors-DAM,DAM,dam capital advisors,True
+1937,Mamata Machinery,31 Mar 2024,2024-03-31,mamatamachinery,https://www.tickertape.in/stocks/mamata-machinery-MAMA,MAMA,mamata machinery,True
+1939,Ventive Hospitality,31 Mar 2024,2024-03-31,ventivehospitality,https://www.tickertape.in/stocks/ventive-hospitality-VENTI,VENTI,ventive hospitality,True
+1940,Sanathan Textiles,31 Mar 2024,2024-03-31,sanathantextiles,https://www.tickertape.in/stocks/sanathan-textiles-SANA,SANA,sanathan textiles,True
+1941,Concord Enviro Systems,31 Mar 2024,2024-03-31,concordenvirosystems,https://www.tickertape.in/stocks/concord-enviro-systems-CEW,CEW,concord enviro systems,True
+1943,Senores Pharmaceuticals,31 Mar 2024,2024-03-31,senorespharmaceuticals,https://www.tickertape.in/stocks/senores-pharmaceuticals-SENO,SENO,senores pharmaceuticals,True
+1945,Carraro India,31 Mar 2024,2024-03-31,carraro,https://www.tickertape.in/stocks/carraro-india-CARR,CARR,carraro india,True
+1951,Standard Glass Lining Technology,31 Mar 2024,2024-03-31,standardglassliningtechnology,https://www.tickertape.in/stocks/standard-glass-lining-technology-SGL,SGL,standard glass lining technology,True
+1954,Quadrant Future Tek,31 Mar 2024,2024-03-31,quadrantfuturetek,https://www.tickertape.in/stocks/quadrant-future-tek-QUADF,QUADF,quadrant future tek,True
+1961,Laxmi Dental,31 Mar 2024,2024-03-31,laxmidental,https://www.tickertape.in/stocks/laxmi-dental-LAX,LAX,laxmi dental,True
+1971,Arisinfra Solutions,31 Mar 2024,2024-03-31,arisinfrasolutions,https://www.tickertape.in/stocks/arisinfra-solutions-ARISN,ARISN,arisinfra solutions,True
+1983,Ajax Engineering,31 Mar 2024,2024-03-31,ajaxengineering,https://www.tickertape.in/stocks/ajax-engineering-AJAX,AJAX,ajax engineering,True
+1985,Hexaware Technologies,31 Dec 2023,2023-12-31,hexawaretechnologies,https://www.tickertape.in/stocks/hexaware-technologies-HEXT,HEXT,hexaware technologies,True
+1998,Glottis,31 Mar 2025,2025-03-31,glottis,https://www.tickertape.in/stocks/glottis-GLOT,GLOT,glottis,True
+2001,Amanta Healthcare,31 Mar 2025,2025-03-31,amantahealthcare,https://www.tickertape.in/stocks/amanta-healthcare-AMANT,AMANT,amanta healthcare,True
+2003,Shringar House of Mangalsutra,31 Mar 2025,2025-03-31,shringarhouseofmangalsutra,https://www.tickertape.in/stocks/shringar-house-of-mangalsutra-SHRIM,SHRIM,shringar house of mangalsutra,True
+2005,Vidya Wires,31 Mar 2025,2025-03-31,vidyawires,https://www.tickertape.in/stocks/vidya-wires-VIDY,VIDY,vidya wires,True
+2008,Shanti Gold International,31 Mar 2025,2025-03-31,shantigoldinternational,https://www.tickertape.in/stocks/shanti-gold-international-SHANG,SHANG,shanti gold international,True
+2011,Atlanta Electricals,31 Mar 2025,2025-03-31,atlantaelectricals,https://www.tickertape.in/stocks/atlanta-electricals-ATLAN,ATLAN,atlanta electricals,True
+2014,WeWork India Management,31 Mar 2025,2025-03-31,weworkmanagement,https://www.tickertape.in/stocks/wework-india-management-WEW,WEW,wework india management,True
+2015,Euro Pratik Sales,31 Mar 2025,2025-03-31,europratiksales,https://www.tickertape.in/stocks/euro-pratik-sales-EUROP,EUROP,euro pratik sales,True
+2016,Prostarm Info Systems,31 Mar 2024,2024-03-31,prostarminfosystems,https://www.tickertape.in/stocks/prostarm-info-systems-PROST,PROST,prostarm info systems,True
+2018,Shreeji Shipping Global,31 Mar 2025,2025-03-31,shreejishippingglobal,https://www.tickertape.in/stocks/shreeji-shipping-global-SHREG,SHREG,shreeji shipping global,True
+2023,Epack Prefab Technologies,31 Mar 2025,2025-03-31,epackprefabtechnologies,https://www.tickertape.in/stocks/epack-prefab-technologies-EPAC,EPAC,epack prefab technologies,True
+2025,Fujiyama Power Systems,31 Mar 2025,2025-03-31,fujiyamapowersystems,https://www.tickertape.in/stocks/fujiyama-power-systems-UTLS,UTLS,fujiyama power systems,True
+2026,Aye Finance,31 Mar 2025,2025-03-31,ayefinance,https://www.tickertape.in/stocks/aye-finance-AYE,AYE,aye finance,True
+2029,Anthem Biosciences,31 Mar 2025,2025-03-31,anthembiosciences,https://www.tickertape.in/stocks/anthem-biosciences-ANTH,ANTH,anthem biosciences,True
+2030,Laxmi India Finance,31 Mar 2025,2025-03-31,laxmifinance,https://www.tickertape.in/stocks/laxmi-india-finance-LAXMI,LAXMI,laxmi india finance,True
+2031,GSP Crop Science,31 Mar 2025,2025-03-31,gspcropscience,https://www.tickertape.in/stocks/gsp-crop-science-GSP,GSP,gsp crop science,True
+2032,Gem Aromatics,31 Mar 2025,2025-03-31,gemaromatics,https://www.tickertape.in/stocks/gem-aromatics-GEMA,GEMA,gem aromatics,True
+2035,Regaal Resources,31 Mar 2025,2025-03-31,regaalresources,https://www.tickertape.in/stocks/regaal-resources-REGAA,REGAA,regaal resources,True
+2036,Aditya Infotech,31 Mar 2025,2025-03-31,adityainfotech,https://www.tickertape.in/stocks/aditya-infotech-CPP,CPP,aditya infotech,True
+2038,Indiqube Spaces,31 Mar 2025,2025-03-31,indiqubespaces,https://www.tickertape.in/stocks/indiqube-spaces-INDIQ,INDIQ,indiqube spaces,True
+2039,Innovision,31 Mar 2025,2025-03-31,innovision,https://www.tickertape.in/stocks/innovision-INNOI,INNOI,innovision,True
+2042,GK Energy,31 Mar 2025,2025-03-31,gkenergy,https://www.tickertape.in/stocks/gk-energy-GKE,GKE,gk energy,True
+2045,Ganesh Consumer Products,31 Mar 2025,2025-03-31,ganeshconsumerproducts,https://www.tickertape.in/stocks/ganesh-consumer-products-GANEC,GANEC,ganesh consumer products,True
+2046,GNG Electronics,31 Mar 2025,2025-03-31,gngelectronics,https://www.tickertape.in/stocks/gng-electronics-EBG,EBG,gng electronics,True
+2048,Seshaasai Technologies,31 Mar 2025,2025-03-31,seshaasaitechnologies,https://www.tickertape.in/stocks/seshaasai-technologies-STYS,STYS,seshaasai technologies,True
+2053,Anlon Healthcare,31 Mar 2025,2025-03-31,anlonhealthcare,https://www.tickertape.in/stocks/anlon-healthcare-AHC,AHC,anlon healthcare,True
+2054,Travel Food Services,31 Mar 2025,2025-03-31,travelfoodservices,https://www.tickertape.in/stocks/travel-food-services-TRAVE,TRAVE,travel food services,True
+2064,LG Electronics India,31 Mar 2025,2025-03-31,lgelectronics,https://www.tickertape.in/stocks/lg-electronics-india-LGE,LGE,lg electronics india,True
+2067,Rajputana Stainless,31 Mar 2025,2025-03-31,rajputanastainless,https://www.tickertape.in/stocks/rajputana-stainless-RSL,RSL,rajputana stainless,True
+2069,Mangal Electrical Industries,31 Mar 2025,2025-03-31,mangalelectricalindustries,https://www.tickertape.in/stocks/mangal-electrical-industries-MEI,MEI,mangal electrical industries,True
+2073,Sambhv Steel Tubes,31 Mar 2024,2024-03-31,sambhvsteeltubes,https://www.tickertape.in/stocks/sambhv-steel-tubes-SAMBH,SAMBH,sambhv steel tubes,True
+2074,Indogulf Cropsciences,31 Mar 2024,2024-03-31,indogulfcropsciences,https://www.tickertape.in/stocks/indogulf-cropsciences-IGCL,IGCL,indogulf cropsciences,True
+2080,Aegis Vopak Terminals,31 Mar 2024,2024-03-31,aegisvopakterminals,https://www.tickertape.in/stocks/aegis-vopak-terminals-AEG,AEG,aegis vopak terminals,True
+2082,Saatvik Green Energy,31 Mar 2025,2025-03-31,saatvikgreenenergy,https://www.tickertape.in/stocks/saatvik-green-energy-SAAT,SAAT,saatvik green energy,True
+2083,Belrise Industries,31 Mar 2024,2024-03-31,belriseindustries,https://www.tickertape.in/stocks/belrise-industries-BELR,BELR,belrise industries,True
+2094,Brigade Hotel Ventures,31 Mar 2025,2025-03-31,brigadehotelventures,https://www.tickertape.in/stocks/brigade-hotel-ventures-BRIGO,BRIGO,brigade hotel ventures,True
+2096,Crizac,31 Mar 2025,2025-03-31,crizac,https://www.tickertape.in/stocks/crizac-CRIZ,CRIZ,crizac,True
+2099,Borana Weaves,31 Mar 2024,2024-03-31,boranaweaves,https://www.tickertape.in/stocks/borana-weaves-BORA,BORA,borana weaves,True
+2110,HDB Financial Services,31 Mar 2025,2025-03-31,hdbfinancialservices,https://www.tickertape.in/stocks/hdb-financial-services-HDB,HDB,hdb financial services,True
+2117,Dev Accelerator,31 Mar 2025,2025-03-31,devaccelerator,https://www.tickertape.in/stocks/dev-accelerator-DEVX,DEVX,dev accelerator,True
+2125,All Time Plastics,31 Mar 2025,2025-03-31,alltimeplastics,https://www.tickertape.in/stocks/all-time-plastics-ALLT,ALLT,all time plastics,True
+2126,Vikran Engineering,31 Mar 2025,2025-03-31,vikranengineering,https://www.tickertape.in/stocks/vikran-engineering-VIKRN,VIKRN,vikran engineering,True
+2148,Excelsoft Technologies,31 Mar 2025,2025-03-31,excelsofttechnologies,https://www.tickertape.in/stocks/excelsoft-technologies-EXCES,EXCES,excelsoft technologies,True
+2149,Globe Civil Projects,31 Mar 2024,2024-03-31,globecivilprojects,https://www.tickertape.in/stocks/globe-civil-projects-GLOBC,GLOBC,globe civil projects,True
+2150,Midwest,31 Mar 2025,2025-03-31,midwest,https://www.tickertape.in/stocks/midwest-MIDWE,MIDWE,midwest,True
+2152,Vikram Solar,31 Mar 2025,2025-03-31,vikramsolar,https://www.tickertape.in/stocks/vikram-solar-VIKRM,VIKRM,vikram solar,True
+2161,VMS TMT,31 Mar 2025,2025-03-31,vmstmt,https://www.tickertape.in/stocks/vms-tmt-VMST,VMST,vms tmt,True
+2172,Scoda Tubes,31 Mar 2024,2024-03-31,scodatubes,https://www.tickertape.in/stocks/scoda-tubes-SCOD,SCOD,scoda tubes,True
+2174,Solarworld Energy Solutions,31 Mar 2025,2025-03-31,solarworldenergysolutions,https://www.tickertape.in/stocks/solarworld-energy-solutions-SOLAW,SOLAW,solarworld energy solutions,True
+2180,Highway Infrastructure,31 Mar 2025,2025-03-31,highwayinfrastructure,https://www.tickertape.in/stocks/highway-infrastructure-HILI,HILI,highway infrastructure,True
+2182,Schloss Bangalore,31 Mar 2025,2025-03-31,schlossbangalore,https://www.tickertape.in/stocks/schloss-bangalore-THEL,THEL,schloss bangalore,True
+2189,Ellenbarrie Industrial Gases,31 Mar 2025,2025-03-31,ellenbarrieindustrialgases,https://www.tickertape.in/stocks/ellenbarrie-industrial-gases-ELLE,ELLE,ellenbarrie industrial gases,True
+2202,Oswal Pumps,31 Mar 2024,2024-03-31,oswalpumps,https://www.tickertape.in/stocks/oswal-pumps-OSWAP,OSWAP,oswal pumps,True
+2212,BMW Ventures,31 Mar 2025,2025-03-31,bmwventures,https://www.tickertape.in/stocks/bmw-ventures-BMWV,BMWV,bmw ventures,True
+2227,Ivalue Infosolutions,31 Mar 2025,2025-03-31,ivalueinfosolutions,https://www.tickertape.in/stocks/ivalue-infosolutions-IVA,IVA,ivalue infosolutions,True
+2229,Kalpataru,31 Mar 2024,2024-03-31,kalpataru,https://www.tickertape.in/stocks/kalpataru-KALP,KALP,kalpataru,True
+2230,JSW Cement,31 Mar 2025,2025-03-31,jswcement,https://www.tickertape.in/stocks/jsw-cement-JSWC,JSWC,jsw cement,True
+2231,Trualt Bioenergy,31 Mar 2025,2025-03-31,trualtbioenergy,https://www.tickertape.in/stocks/trualt-bioenergy-TRUA,TRUA,trualt bioenergy,True
+2254,Rubicon Research,31 Mar 2025,2025-03-31,rubiconresearch,https://www.tickertape.in/stocks/rubicon-research-RUBI,RUBI,rubicon research,True
+2259,Studds Accessories,31 Mar 2025,2025-03-31,studdsaccessories,https://www.tickertape.in/stocks/studds-accessories-STUDD,STUDD,studds accessories,True
+2266,PhysicsWallah,31 Mar 2025,2025-03-31,physicswallah,https://www.tickertape.in/stocks/physicswallah-PWL,PWL,physicswallah,True
+2290,Advance Agrolife,31 Mar 2025,2025-03-31,advanceagrolife,https://www.tickertape.in/stocks/advance-agrolife-ADVAN,ADVAN,advance agrolife,True
+2297,Park Medi World,31 Mar 2025,2025-03-31,parkmediworld,https://www.tickertape.in/stocks/park-medi-world-PARKO,PARKO,park medi world,True
+2306,Pace Digitek,31 Mar 2025,2025-03-31,pacedigitek,https://www.tickertape.in/stocks/pace-digitek-PACED,PACED,pace digitek,True
+2317,Tata Capital,31 Mar 2025,2025-03-31,tatacapital,https://www.tickertape.in/stocks/tata-capital-TATAC,TATAC,tata capital,True
+2318,Patel Retail,31 Mar 2025,2025-03-31,patelretail,https://www.tickertape.in/stocks/patel-retail-PATER,PATER,patel retail,True
+2345,Jain Resource Recycling,31 Mar 2025,2025-03-31,jainresourcerecycling,https://www.tickertape.in/stocks/jain-resource-recycling-JAINR,JAINR,jain resource recycling,True
+2357,Ather Energy,31 Mar 2024,2024-03-31,atherenergy,https://www.tickertape.in/stocks/ather-energy-ATHER,ATHER,ather energy,True
+2407,Om Freight Forwarders,31 Mar 2025,2025-03-31,omfreightforwarders,https://www.tickertape.in/stocks/om-freight-forwarders-OMF,OMF,om freight forwarders,True
+2425,Urban Co.,31 Mar 2025,2025-03-31,urban,https://www.tickertape.in/stocks/urban-company-URBA,URBA,urban company,True
+2428,Canara Robeco Asset Management Co.,31 Mar 2025,2025-03-31,canararobecoassetmanagement,https://www.tickertape.in/stocks/canara-robeco-asset-management-company-CRAM,CRAM,canara robeco asset management company,True
+2429,Canara HSBC Life Insurance Co.,31 Mar 2025,2025-03-31,canarahsbclifeinsurance,https://www.tickertape.in/stocks/canara-hsbc-life-insurance-company-CANH,CANH,canara hsbc life insurance company,True
+2432,Jinkushal Industries,31 Mar 2025,2025-03-31,jinkushalindustries,https://www.tickertape.in/stocks/jinkushal-industries-JKI,JKI,jinkushal industries,True
+2433,Corona Remedies,31 Mar 2025,2025-03-31,coronaremedies,https://www.tickertape.in/stocks/corona-remedies-CORON,CORON,corona remedies,True
+2448,National Securities Depository,31 Mar 2025,2025-03-31,nationalsecuritiesdepository,https://www.tickertape.in/stocks/national-securities-depository-NSD,NSD,national securities depository,True
+2453,Billionbrains Garage Ventures,31 Mar 2025,2025-03-31,billionbrainsgarageventures,https://www.tickertape.in/stocks/billionbrains-garage-ventures-GROWO,GROWO,billionbrains garage ventures,True
+2454,KSH International,31 Mar 2025,2025-03-31,kshinternational,https://www.tickertape.in/stocks/ksh-international-KSHI,KSHI,ksh international,True
+2462,Bharat Coking Coal,31 Mar 2025,2025-03-31,bharatcokingcoal,https://www.tickertape.in/stocks/bharat-coking-coal-BHARC,BHARC,bharat coking coal,True
+2465,Aequs,31 Mar 2025,2025-03-31,aequs,https://www.tickertape.in/stocks/aequs-AEQ,AEQ,aequs,True
+2470,Orkla India,31 Mar 2025,2025-03-31,orkla,https://www.tickertape.in/stocks/orkla-india-ORK,ORK,orkla india,True
+2475,PNGS Reva Diamond Jewellery,31 Mar 2025,2025-03-31,pngsrevadiamondjewellery,https://www.tickertape.in/stocks/pngs-reva-diamond-jewellery-PNGS,PNGS,pngs reva diamond jewellery,True
+2476,Capillary Technologies India,31 Mar 2025,2025-03-31,capillarytechnologies,https://www.tickertape.in/stocks/capillary-technologies-india-CAPIL,CAPIL,capillary technologies india,True
+2479,Omnitech Engineering,31 Mar 2025,2025-03-31,omnitechengineering,https://www.tickertape.in/stocks/omnitech-engineering-OMNO,OMNO,omnitech engineering,True
+2484,Sudeep Pharma,31 Mar 2025,2025-03-31,sudeeppharma,https://www.tickertape.in/stocks/sudeep-pharma-SUDE,SUDE,sudeep pharma,True
+2487,Pine Labs,31 Mar 2025,2025-03-31,pinelabs,https://www.tickertape.in/stocks/pine-labs-PINEL,PINEL,pine labs,True
+2488,Wakefit Innovations,31 Mar 2025,2025-03-31,wakefitinnovations,https://www.tickertape.in/stocks/wakefit-innovations-WAK,WAK,wakefit innovations,True
+2501,Amir Chand Jagdish Kumar (Exports),31 Mar 2025,2025-03-31,amirchandjagdishkumar,,,,False
+2502,Shree Ram Twistex,31 Mar 2025,2025-03-31,shreeramtwistex,https://www.tickertape.in/stocks/shree-ram-twistex-SRT,SRT,shree ram twistex,True
+2509,Tenneco Clean Air India,31 Mar 2025,2025-03-31,tennecocleanair,https://www.tickertape.in/stocks/tenneco-clean-air-india-TENN,TENN,tenneco clean air india,True
+2516,Meesho,31 Mar 2025,2025-03-31,meesho,https://www.tickertape.in/stocks/meesho-MEES,MEES,meesho,True
+2518,Emmvee Photovoltaic Power,31 Mar 2025,2025-03-31,emmveephotovoltaicpower,https://www.tickertape.in/stocks/emmvee-photovoltaic-power-EMMV,EMMV,emmvee photovoltaic power,True
+2525,ICICI Prudential Asset Management Co.,31 Mar 2025,2025-03-31,iciciprudentialassetmanagement,https://www.tickertape.in/stocks/icici-prudential-asset-management-co-ICIAI,ICIAI,icici prudential asset management co,True
+2526,Shadowfax Technologies,31 Mar 2025,2025-03-31,shadowfaxtechnologies,https://www.tickertape.in/stocks/shadowfax-technologies-SHADO,SHADO,shadowfax technologies,True
+2548,Nephrocare Health Services,31 Mar 2025,2025-03-31,nephrocarehealthservices,https://www.tickertape.in/stocks/nephrocare-health-services-NEPHR,NEPHR,nephrocare health services,True
+2549,Amagi Media Labs,31 Mar 2025,2025-03-31,amagimedialabs,https://www.tickertape.in/stocks/amagi-media-labs-AMAG,AMAG,amagi media labs,True
+2551,Lenskart Solutions,31 Mar 2025,2025-03-31,lenskartsolutions,https://www.tickertape.in/stocks/lenskart-solutions-LEN,LEN,lenskart solutions,True
+2569,Fractal Analytics,31 Mar 2025,2025-03-31,fractalanalytics,https://www.tickertape.in/stocks/fractal-analytics-FRAC,FRAC,fractal analytics,True
+2570,Powerica,31 Mar 2025,2025-03-31,powerica,https://www.tickertape.in/stocks/powerica-POW,POW,powerica,True
+2573,Clean Max Enviro Energy Solutions,31 Mar 2025,2025-03-31,cleanmaxenviroenergysolutions,https://www.tickertape.in/stocks/clean-max-enviro-energy-solutions-CLEA,CLEA,clean max enviro energy solutions,True
+2576,OnEMI Technology Solutions,31 Mar 2025,2025-03-31,onemitechnologysolutions,https://www.tickertape.in/stocks/onemi-technology-solutions-KISS,KISS,onemi technology solutions,True
+2624,Fabtech Technologies,31 Mar 2025,2025-03-31,fabtechtechnologies,https://www.tickertape.in/stocks/fabtech-technologies-FABT,FABT,fabtech technologies,True
+2676,Om Power Transmission,31 Mar 2025,2025-03-31,ompowertransmission,https://www.tickertape.in/stocks/om-power-transmission-OMP,OMP,om power transmission,True
+2794,SEDEMAC Mechatronics,31 Mar 2025,2025-03-31,sedemacmechatronics,https://www.tickertape.in/stocks/sedemac-mechatronics-SED,SED,sedemac mechatronics,True
+3033,Yes Bank,31 Mar 2005,2005-03-31,yesbank,https://www.tickertape.in/stocks/yes-bank-YESB,YESB,yes bank,True
