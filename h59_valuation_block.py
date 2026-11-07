@@ -144,10 +144,15 @@ def tickertape_for(tt: pd.DataFrame, ipo_id: int, end_date: str) -> dict:
 
 
 def rhp_for(rhp: pd.DataFrame, company: str, fy_year: int | None) -> dict:
-    """The RHP's own values for this company's fiscal year `fy_year`, else {}."""
+    """The RHP's own values for this company's fiscal year `fy_year`, else {}.
+
+    `company` is matched against `_k` (the normalised name) when the caller has added it,
+    and against the raw name otherwise.
+    """
     if not len(rhp) or fy_year is None:
         return {}
-    g = rhp[(rhp["company"] == company) & (rhp["status"] == "ok")]
+    col = "_k" if "_k" in rhp.columns else "company"
+    g = rhp[(rhp[col] == company) & (rhp["status"] == "ok")]
     out = {}
     for r in g.itertuples(index=False):
         if rhp_fiscal_year(r.note) != fy_year:
@@ -258,16 +263,23 @@ def _year(v) -> int | None:
 def build(fy: pd.DataFrame, issue: pd.DataFrame, tt: pd.DataFrame, rhp: pd.DataFrame,
           h45: pd.DataFrame) -> pd.DataFrame:
     """The whole block, long: one row per (ipo_id, variable), every row with a status."""
+    # The three sources spell the same company three ways ("Bansal Wire Industries",
+    # "... Limited", "... Ltd"), so every name join goes through dataio.norm_name: exact
+    # after normalisation, never fuzzy (H28).
+    from dataio import norm_name
     iss = issue.set_index("ipo_id") if "ipo_id" in issue.columns else issue
-    h45i = h45.set_index("company") if "company" in h45.columns else h45
+    rhp = rhp.assign(_k=rhp["company"].map(norm_name)) if len(rhp) else rhp
+    h45i = (h45.assign(_k=h45["company"].map(norm_name)).set_index("_k")
+            if len(h45) else h45)
     rows = []
     for r in fy.itertuples(index=False):
         ipo_id, company = int(r.ipo_id), r.company
         fy_year = fy_label_year(getattr(r, "fy_period", None))
         second_tt = tickertape_for(tt, ipo_id, getattr(r, "fy_period_parsed", None))
-        second_rhp = rhp_for(rhp, company, fy_year)
+        key = norm_name(company)
+        second_rhp = rhp_for(rhp, key, fy_year)
         i = iss.loc[ipo_id] if ipo_id in iss.index else {}
-        h = h45i.loc[company] if (len(h45i) and company in h45i.index) else {}
+        h = h45i.loc[key] if (len(h45i) and key in h45i.index) else {}
         if isinstance(h, pd.DataFrame):
             h = h.iloc[0]
         base = {"ipo_id": ipo_id, "company": company,
@@ -368,6 +380,28 @@ def coverage(b: pd.DataFrame) -> pd.DataFrame:
             "coverage_2019_plus_pct": (round(100.0 * gr["value"].notna().sum() / len(gr), 1)
                                        if len(gr) else 0.0)})
     return pd.DataFrame(out)
+
+BLOCK = ROOT / "data" / "h59_valuation_block.csv"
+COVERAGE = ROOT / "data" / "h59_valuation_coverage.csv"
+
+
+def run() -> tuple[pd.DataFrame, pd.DataFrame]:
+    fy = pd.read_csv(ROOT / "data" / "chittorgarh_mainboard_fy.csv")
+    cg = pd.read_csv(ROOT / "data" / "chittorgarh_backfill.csv")
+    cg = cg[cg["ipo_id"].notna()].copy()
+    cg["ipo_id"] = cg["ipo_id"].astype(int)
+    keep = ["ipo_id", "issue_size_cr", "market_cap_at_offer_cr", "pe_pre", "pe_post",
+            "ronw_pct", "roe_pct", "roce_pct", "debt_equity", "listed_on"]
+    issue = cg[[c for c in keep if c in cg.columns]].drop_duplicates("ipo_id")
+    tt = pd.read_csv(ROOT / "data" / "tickertape_annuals.csv")
+    rhp = pd.read_csv(ROOT / "data" / "rhp_valuation_values.csv")
+    rhp = rhp[rhp["variable"].isin(list(RHP_AMOUNT) + list(RHP_AS_STATED))]
+    h45 = pd.read_csv(ROOT / "data" / "valuation_ratios_h45.csv")
+    b = build(fy, issue, tt, rhp, h45)
+    b.to_csv(BLOCK, index=False, encoding="utf-8")
+    cov = coverage(b)
+    cov.to_csv(COVERAGE, index=False, encoding="utf-8")
+    return b, cov
 
 
 def self_test() -> int:
@@ -565,7 +599,12 @@ def self_test() -> int:
                          "note": "fiscal 2024"}])
     h45 = pd.DataFrame([{"company": "Bansal Wire Industries", "ipo_pe": 41.0,
                          "ipo_pb_pre_issue": 7.4, "ipo_pb": None}])
-    b = build(fy, issue, tt, rhp, h45)
+    # The aggregator writes "Bansal Wire Industries"; the RHP set and the H54 outputs
+    # write "Bansal Wire Industries Limited". Joining on the raw string missed every row,
+    # so both sides go through dataio.norm_name - exact after normalisation, never fuzzy.
+    rhp_suffixed = rhp.assign(company="Bansal Wire Industries Limited")
+    h45_suffixed = h45.assign(company="Bansal Wire Industries Ltd")
+    b = build(fy, issue, tt, rhp_suffixed, h45_suffixed)
     g = b.set_index("variable")
     chk("every row carries a status", b["status"].notna().all())
     chk("an agreeing aggregate is reconciled on Tickertape",
@@ -620,4 +659,11 @@ def self_test() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(self_test())
+    if "--self-test" in sys.argv:
+        raise SystemExit(self_test())
+    b, cov = run()
+    print(f"rows {len(b)} | ipos {b['ipo_id'].nunique()} | variables "
+          f"{b['variable'].nunique()}")
+    print(b["status"].value_counts(dropna=False).to_string())
+    print()
+    print(cov.to_string(index=False))
