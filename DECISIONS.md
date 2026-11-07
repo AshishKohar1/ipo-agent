@@ -2798,3 +2798,44 @@ a full year only when the page shows at least two of it twelve months apart AND 
 31 March column — selects **exactly these three** across all 482 ids and nothing else.
 That is a rule change, so nothing was changed. See
 `reports/H59_FULL_YEAR_HARVEST.md`.
+
+#### H59 amendment (2026-11-06, the user's decision) — a non-March year end, on the page's own proof
+
+The open choice recorded above is settled as **option 2**. A month-end other than 31 March
+counts as `FULL_FY` **only when the page shows at least two of it exactly twelve months
+apart AND shows no 31 March column at all.** Nothing is annualised; this decides a label.
+
+Implemented in `fiscal_year_end()`, which is a property of the **page**, not of one column.
+Every row records `fy_end_basis`, so the basis travels with the value.
+
+**A defect the first implementation had, and the test that now forbids it.** Hexaware's page
+carries `30 Sep 2024, 31 Dec 2023, 30 Sep 2023, 31 Dec 2022, 31 Dec 2021`. Both `09-30` and
+`12-31` repeat twelve months apart, and iterating a set picked **`09-30`** — a stub quarter —
+as the year end. The rule is now: **the longest consecutive annual run wins**, ties go to the
+later month-end, and the iteration is sorted so the answer cannot depend on set order. Three
+tests cover it, including the same page in a different column order.
+
+| company | id | year end found | basis |
+|---|---|---|---|
+| Varun Beverages | 598 | **31 Dec** | `page_shows_repeated_12_31_and_no_31_march` |
+| International Gemmological Institute (India) | 1930 | **31 Dec** | same |
+| Hexaware Technologies | 1985 | **31 Dec** | same (over the competing `09-30` run) |
+
+Exactly these three across all 482 mainboard ids; the twelve ids with a merely repeated
+quarter-end are untouched, because each also carries 31 March columns.
+
+**Result: `usable_for_h59` is now 482 of 482.** The whole mainboard carries a full financial
+year. `revenue_cr` stays 0% because the label does not exist on the source; `total_income_cr`
+is 99.6%. The re-parse used the cached HTML — **zero further requests**.
+
+#### H58 amendment (2026-11-06, the user's decision) — the paid financial MCPs are not used
+
+FactSet, LSEG, S&P Global, Moody's, Morningstar, PitchBook, Daloopa, Aiera and Chronograph
+are **not to be authorised and not to be used.** The audit's finding stands — any one of them
+would settle rule 2 properly — but the decision is taken: the project does not use them. The
+ceiling H58 describes is therefore accepted, not a problem to be solved later.
+
+**Tickertape is ratified as the one permitted second source**, on exactly the conditions the
+audit set: personal, non-commercial reading only; **≥3 s** between requests; **no S&P-derived
+field** (ratings, S&P scores); robots.txt **re-read at the start of every run**; stop on any
+error rather than retry. Screener.in and Trendlyne remain forbidden by their own terms.

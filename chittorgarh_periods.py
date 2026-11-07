@@ -66,6 +66,34 @@ def period_kind(label) -> str:
     return "FULL_FY" if (d.month == 3 and d.day == 31) else "STUB"
 
 
+def fiscal_year_end(dates) -> tuple[int, int] | None:
+    """The company's own year end, when the PAGE proves it is not 31 March. Else None.
+
+    H59 as amended on 6 November 2026. A month-end other than 31 March counts as a full
+    financial year only when the page shows at least two of it exactly twelve months apart
+    AND shows no 31 March column at all. Measured across all 482 mainboard ids, that test
+    selects exactly three companies - Varun Beverages, International Gemmological Institute
+    and Hexaware Technologies, all of which close their books on 31 December - and leaves
+    the twelve ids with a merely repeated quarter-end untouched, because each of those also
+    carries 31 March columns.
+
+    The proof comes from the page. Nothing is annualised either way: this decides a LABEL.
+    """
+    ds = [d for d in dates if d is not None]
+    if any(d.month == 3 and d.day == 31 for d in ds):
+        return None
+    best, best_run = None, 1
+    for md in sorted({(d.month, d.day) for d in ds}, reverse=True):
+        years = sorted(set(d.year for d in ds if (d.month, d.day) == md))
+        run = longest = 1
+        for a, b in zip(years, years[1:]):
+            run = run + 1 if b - a == 1 else 1
+            longest = max(longest, run)
+        if longest >= 2 and longest > best_run:
+            best, best_run = md, longest
+    return best
+
+
 def parse_periods(html: str, ipo_id: int) -> list[dict]:
     """One row per period column of the page's 'Period Ended' table, in page order.
 
@@ -93,14 +121,22 @@ def parse_periods(html: str, ipo_id: int) -> list[dict]:
 
     labels = {re.sub(r"\s+", " ", str(a)).strip().lower(): i
               for i, a in enumerate(fin.iloc[:, 0])}
+    # The year end is a property of the PAGE, not of one column (H59, 6 Nov amendment).
+    dates = [period_date(fin.columns[ci]) for ci in range(1, fin.shape[1])]
+    fye = fiscal_year_end([d.date() for d in dates if d is not None])
+    basis = "31_march" if fye is None else \
+        f"page_shows_repeated_{fye[0]:02d}_{fye[1]:02d}_and_no_31_march"
     rows: list[dict] = []
     for ci in range(1, fin.shape[1]):
         col = fin.columns[ci]
         d = period_date(col)
         if d is None:
             continue
+        kind = ("FULL_FY" if (fye is not None and (d.month, d.day) == fye)
+                else period_kind(col))
         r = {"ipo_id": ipo_id, "company": company, "fin_period": str(col).strip(),
-             "fin_period_parsed": d.date(), "period_kind": period_kind(col),
+             "fin_period_parsed": d.date(), "period_kind": kind,
+             "fy_end_basis": basis,
              "col_index": ci, "unit": UNIT, "url": BASE.format(id=ipo_id)}
         for key, name in FIELDS:
             i = next((i for lab, i in labels.items() if lab.startswith(key)), None)
@@ -124,7 +160,7 @@ MIN_GAP_S = 3.2                                # B2
 COMMIT_EVERY = 10                              # H9
 MAX_CONSECUTIVE_ERRORS = 5
 OUT_COLS = ["ipo_id", "company", "fin_period", "fin_period_parsed", "period_kind",
-            "col_index", "unit", "assets_cr", "total_income_cr", "pat_cr", "net_worth_cr",
+            "fy_end_basis", "col_index", "unit", "assets_cr", "total_income_cr", "pat_cr", "net_worth_cr",
             "reserves_cr", "borrowings_cr", "revenue_cr", "ebitda_cr", "url", "fetched_at"]
 
 
@@ -404,9 +440,12 @@ def self_test() -> int:
     print("[4] latest_full_fy picks the newest 31 March row, or None")
     chk("stub page -> 31 Mar 2024", latest_full_fy(s)["fin_period"] == "31 Mar 2024")
     chk("three FY page -> the newest", latest_full_fy(rows)["fin_period"] == "31 Mar 2024")
+    # Stub columns that do NOT repeat a month-end twelve months apart: no year end is
+    # proved, so no full year exists on the page. (Were they 30 Sep 2023 AND 30 Sep 2022,
+    # the 6 November amendment would make them a full year - tested in [9].)
     chk("no FY column -> None", latest_full_fy(
         parse_periods(STUB_THEN_FY.replace("31 Mar 2024", "30 Sep 2023")
-                      .replace("31 Mar 2023", "30 Sep 2022"), 3)) is None)
+                      .replace("31 Mar 2023", "30 Jun 2022"), 3)) is None)
 
     print("[5] a malformed page costs that page, not the run")
     chk("no table -> no rows", parse_periods("<html>no tables here</html>", 4) == [])
@@ -496,6 +535,66 @@ def self_test() -> int:
         t.loc[11, "fy_prev_period"] == "31 Mar 2023"
         and t.loc[11, "fy_prev_net_worth_cr"] == 1900.56
         and pd.isna(t.loc[22, "fy_prev_period"]), str(dict(t.loc[11])))
+
+
+    print("[9] H59 amendment (6 Nov): a non-March year end, only on the page's own proof")
+    import datetime as _dt
+    D = lambda y, m, d: _dt.date(y, m, d)
+    chk("31 March always wins, whatever else is on the page",
+        fiscal_year_end([D(2024, 6, 30), D(2024, 3, 31), D(2023, 3, 31)]) is None)
+    chk("three consecutive 31 Dec and no March -> (12, 31)",
+        fiscal_year_end([D(2016, 6, 30), D(2015, 12, 31), D(2014, 12, 31),
+                         D(2013, 12, 31)]) == (12, 31))
+    chk("two 31 Dec twelve months apart is enough",
+        fiscal_year_end([D(2024, 9, 30), D(2023, 12, 31), D(2022, 12, 31)]) == (12, 31))
+    chk("ONE 31 Dec is not proof", fiscal_year_end([D(2024, 9, 30), D(2023, 12, 31)]) is None)
+    chk("two of a month-end NOT twelve months apart is not proof",
+        fiscal_year_end([D(2024, 9, 30), D(2024, 6, 30), D(2023, 6, 30),
+                         D(2023, 3, 31)]) is None)
+    chk("24 months apart is not twelve months apart",
+        fiscal_year_end([D(2024, 12, 31), D(2022, 12, 31)]) is None)
+    # Hexaware's real page: 30 Sep 2024, 31 Dec 2023, 30 Sep 2023, 31 Dec 2022,
+    # 31 Dec 2021. BOTH 09-30 and 12-31 repeat twelve months apart, and iterating a set
+    # picked 09-30 - the stub quarter - on the first run. The longest consecutive annual
+    # run decides, because that is what a year end looks like; a repeated stub quarter is
+    # shorter. Ties go to the later month-end, and the choice is deterministic.
+    chk("the LONGEST consecutive annual run wins, not whichever came out of the set",
+        fiscal_year_end([D(2024, 9, 30), D(2023, 12, 31), D(2023, 9, 30),
+                         D(2022, 12, 31), D(2021, 12, 31)]) == (12, 31))
+    chk("the same page in any column order gives the same answer",
+        fiscal_year_end([D(2021, 12, 31), D(2023, 9, 30), D(2022, 12, 31),
+                         D(2024, 9, 30), D(2023, 12, 31)]) == (12, 31))
+    chk("equal runs -> the later month-end, deterministically",
+        fiscal_year_end([D(2024, 12, 31), D(2023, 12, 31), D(2024, 6, 30),
+                         D(2023, 6, 30)]) == (12, 31))
+    chk("a 31 March column anywhere disqualifies the test",
+        fiscal_year_end([D(2023, 12, 31), D(2022, 12, 31), D(2021, 3, 31)]) is None)
+
+    DEC = """<html><h1>Varun Beverages IPO Details</h1>
+    <table><tr><th>Period Ended</th><th>30 Jun 2016</th><th>31 Dec 2015</th>
+      <th>31 Dec 2014</th><th>31 Dec 2013</th></tr>
+    <tr><td>Total Income</td><td>2,124.41</td><td>2,907.41</td><td>2,061.10</td>
+      <td>1,777.13</td></tr>
+    <tr><td>Profit After Tax</td><td>227.64</td><td>147.53</td><td>35.40</td>
+      <td>-16.50</td></tr>
+    </table></html>"""
+    v = parse_periods(DEC, 598)
+    chk("the 31 Dec columns are FULL_FY",
+        [r["period_kind"] for r in v] == ["STUB", "FULL_FY", "FULL_FY", "FULL_FY"],
+        str([r["period_kind"] for r in v]))
+    chk("the 30 Jun column is still a STUB", v[0]["period_kind"] == "STUB")
+    chk("the basis is recorded on the row, not assumed",
+        v[1]["fy_end_basis"] == "page_shows_repeated_12_31_and_no_31_march"
+        and v[0]["fy_end_basis"] == "page_shows_repeated_12_31_and_no_31_march",
+        str(v[1].get("fy_end_basis")))
+    chk("a March page records the March basis",
+        parse_periods(THREE, 1)[0]["fy_end_basis"] == "31_march",
+        str(parse_periods(THREE, 1)[0].get("fy_end_basis")))
+    chk("the amended page yields a usable full year",
+        latest_full_fy(v)["fin_period"] == "31 Dec 2015"
+        and latest_full_fy(v)["pat_cr"] == 147.53, str(latest_full_fy(v)))
+    chk("STILL nothing annualised: the stub's own numbers are untouched",
+        v[0]["pat_cr"] == 227.64 and v[0]["total_income_cr"] == 2124.41, str(v[0]))
 
 
     print(f"\n{ok} passed, {fail} failed")
