@@ -33,6 +33,18 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 - **A market-heat line IS now displayed**, as context only: "IPO market heat (trailing 12m):
   HOT (score +0.51 on 40 listings to 2026-05-08) - context only, not a hold signal; H35
   failed its pre-set test." It touches no threshold and no bid logic.
+- **Task 5 (2026-11-09): the first reader has PASSED the H55 gate.**
+  `shares_outstanding_pre_issue` scores **100% on 12 correct** check-set values. The other
+  four are no longer precision-bound but **recall**-bound, withholding on 9-13 of 15-17
+  documents; 29 of 39 withholdings share one reason, that no profit-and-loss column
+  reproduces a stated EPS on the pre-issue share count. The 13 untouched check-set RHPs are
+  transcribed (check set now **281 rows, 20 companies**), `data/rhp_page_index.csv` holds
+  6,166 located pages over 445 documents, and the master pass wrote 2,225 rows - values for
+  the gated reader only (387 share counts), everything else NULL with
+  `status = reader_not_gated`. **A widening of the net-worth route was implemented, measured
+  at precision 66.7% -> 42.9%, and reverted.** And 5 of the 387 share counts fail the
+  project's own plausibility guard, one of which is the guard being wrong, not the reader -
+  so the PASS is not a guarantee over the corpus. See `reports/TASK5_RHP_PIPELINE.md`.
 - **H57 follow-up: the corpus is clean.** 445 documents — **428 RHP, 17 final PROSPECTUS,
   0 DRHP, 0 UNCLEAR**. SEBI's own RHP slot returns the DRAFT for the two 2017 filings
   (byte-identical SHAs), so the pipeline was fetching what it asked for; both resolve under
