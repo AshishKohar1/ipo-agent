@@ -244,10 +244,26 @@ def _irls(X: np.ndarray, y: np.ndarray, iters: int = 60, ridge: float = 1e-4):
     return b
 
 
-def walk_forward(d: pd.DataFrame | None = None, verbose: bool = True) -> dict:
-    """Expanding window by calendar year. Bins, WoE and coefficients all per fold."""
+def walk_forward(d: pd.DataFrame | None = None, verbose: bool = True,
+                 variables: list[str] | None = None) -> dict:
+    """Expanding window by calendar year. Bins, WoE and coefficients all per fold.
+
+    `variables` takes a PRE-REGISTERED list and bypasses `select()` entirely (H60). The
+    list's order is the priority order: when a fold has too few outcomes to fit all of
+    them, the cap takes a prefix of the list and never a reshuffle, so which variables a
+    fold fits is decided before the fit and not by the fold.
+    """
     d = load() if d is None else d
-    kept, drops = select(d, iv_table(d))
+    if variables is None:
+        kept, drops = select(d, iv_table(d))
+    else:
+        missing = [v for v in variables if v not in d.columns]
+        if missing:
+            raise KeyError(f"pre-registered variables absent from the frame: {missing}")
+        kept = list(variables)
+        drops = pd.DataFrame([{"variable": "(selection)", "why":
+                               "bypassed: the variable list was pre-registered (H60), so "
+                               "no IV selection or collinearity pruning ran here"}])
     years = sorted(int(y) for y in d["year"].unique())
     per_year, oof = [], []
     for Y in years:
@@ -259,8 +275,13 @@ def walk_forward(d: pd.DataFrame | None = None, verbose: bool = True) -> dict:
             per_year.append({"year": Y, "n_test": len(te), "n_train": len(tr),
                              "note": "too little history to train"})
             continue
+        # H30: one variable per MIN_OUTCOMES_PER_VAR beat-Nifty outcomes in the TRAINING
+        # fold. With a pre-registered list this is what limits an early fold.
+        n_out = int(tr["y"].sum())
+        cap = max(1, n_out // MIN_OUTCOMES_PER_VAR)
+        fold_vars = kept[:cap] if variables is not None else kept
         cols, Xtr, Xte = [], [], []
-        for v in kept:
+        for v in fold_vars:
             if v == "demand_profile":
                 btr, bte = tr[v].astype(str), te[v].astype(str)
             else:
@@ -285,6 +306,8 @@ def walk_forward(d: pd.DataFrame | None = None, verbose: bool = True) -> dict:
         idx = np.argsort(-p)[:k]
         hits = int(yte[idx].sum())
         per_year.append({"year": Y, "n_train": len(tr), "n_test": len(te),
+                         "n_train_outcomes": n_out, "n_vars_fitted": len(cols),
+                         "vars_fitted": list(cols),
                          "auc": None if auc is None else round(auc, 4),
                          "band_picks": k, "band_hits": hits,
                          "band_hit_rate": round(hits / k, 4) if k else None,
@@ -314,6 +337,7 @@ def walk_forward(d: pd.DataFrame | None = None, verbose: bool = True) -> dict:
         pooled["H29"] = ("PASS" if (pooled["h29_picks_ok"] and pooled["h29_rate_ok"]
                                     and pooled["h29_wilson_ok"]) else "FAIL")
     return {"variables_kept": kept, "dropped": drops.to_dict("records"),
+            "selection_bypassed": variables is not None,
             "per_year": per_year, "pooled": pooled, "oof": o}
 
 
@@ -326,6 +350,15 @@ def _auc(y: np.ndarray, p: np.ndarray) -> float | None:
     r = pd.Series(np.concatenate([pos, neg])).rank().to_numpy()
     return float((r[:pos.size].sum() - pos.size * (pos.size + 1) / 2)
                  / (pos.size * neg.size))
+
+
+def _refused(d, variables) -> bool:
+    """True when walk_forward REFUSES a variable name that is not a column."""
+    try:
+        walk_forward(d, verbose=False, variables=variables)
+    except (KeyError, ValueError):
+        return True
+    return False
 
 
 def self_test() -> int:
@@ -382,6 +415,47 @@ def self_test() -> int:
         2023 > 2024 - 2)
 
     print("\n[5] H29 is applied as three conditions, not a judgement")
+
+    print("[H60] an explicitly pre-registered variable list bypasses selection")
+    import numpy as _np
+    rng = _np.random.default_rng(60)
+    n = 400
+    syn = pd.DataFrame({
+        "symbol": [f"S{i}" for i in range(n)],
+        "year": rng.integers(2012, 2026, n),
+        "a": rng.normal(size=n), "b": rng.normal(size=n), "c": rng.normal(size=n),
+        "junk": rng.normal(size=n)})
+    syn["y"] = (syn["a"] > 0).astype(int)
+    r = walk_forward(syn, verbose=False, variables=["a", "b", "c"])
+    chk("the kept list is EXACTLY the one passed, in that order",
+        r["variables_kept"] == ["a", "b", "c"], str(r["variables_kept"]))
+    chk("a variable not on the list never enters",
+        "junk" not in r["variables_kept"], str(r["variables_kept"]))
+    chk("selection is recorded as bypassed, not silently skipped",
+        any("pre-registered" in str(x.get("why", "")) for x in r["dropped"]),
+        str(r["dropped"])[:200])
+    chk("the H29 verdict is still computed on all three conditions",
+        set(["h29_picks_ok", "h29_rate_ok", "h29_wilson_ok", "H29"])
+        <= set(r["pooled"]), str(sorted(r["pooled"])))
+    chk("a signal the fit can see produces a band above the base rate",
+        r["pooled"]["hit_rate"] > r["pooled"]["base_rate"], str(r["pooled"]))
+    chk("a name that is not a column is refused, not ignored",
+        _refused(syn, ["a", "nope"]), "no error raised for a missing column")
+
+    print("[H60] one variable per 10 training outcomes still binds, per fold")
+    small = syn[syn["year"] <= 2014].copy()
+    r2 = walk_forward(syn, verbose=False, variables=["a", "b", "c"])
+    caps = [x.get("n_vars_fitted") for x in r2["per_year"] if x.get("n_vars_fitted")]
+    chk("every fold records how many variables it actually fitted", len(caps) > 0, str(caps))
+    chk("no fold fits more variables than one per 10 training outcomes",
+        all(x["n_vars_fitted"] <= max(1, int(x["n_train_outcomes"]) // MIN_OUTCOMES_PER_VAR)
+            for x in r2["per_year"] if x.get("n_vars_fitted")),
+        str([(x.get("n_train_outcomes"), x.get("n_vars_fitted")) for x in r2["per_year"]]))
+    chk("the cap takes the list's own order, never a reshuffle",
+        all(x.get("vars_fitted", []) == ["a", "b", "c"][:len(x.get("vars_fitted", []))]
+            for x in r2["per_year"] if x.get("vars_fitted")),
+        str([x.get("vars_fitted") for x in r2["per_year"]]))
+
     chk("the band is fixed at 20% before anything runs", BAND == 0.20)
     chk("the floor is 50 picks", MIN_PICKS == 50)
     chk("the hit rate is 54%", abs(MIN_HIT - 0.54) < 1e-12)

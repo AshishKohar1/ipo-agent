@@ -2872,3 +2872,43 @@ a bar fixed beforehand. What would not be legitimate is adjusting the bar afterw
 H60 result.
 
 **Status: AWAITING THE USER'S APPROVAL. The fit has not been run.**
+
+#### H60 result (2026-11-09) — the combined fit FAILED. Model H is closed as display-only.
+
+Approved by the user on 2026-11-09 and run exactly as pre-registered. Thirteen variables,
+H30's method, H29's bar; nothing changed after the number was seen.
+
+| criterion (H29, unchanged) | required | achieved | verdict |
+|---|---|---|---|
+| picks in the top-20% band | >= 50 | **87** | PASS |
+| hit rate vs Nifty 50 TRI, first year | >= 54% | **44.83%** | **FAIL** |
+| Wilson 95% lower bound above the base rate | > 42.76% | **34.82%** | **FAIL** |
+
+Pooled out-of-sample AUC **0.5239** on 435 scored IPOs; 39 of 87 band picks beat the index.
+The band came in **below** the base rate, and its Wilson lower bound sits 8 points below it.
+
+**Under decision 4 of the 6 November brief, Model H is now CLOSED as display-only.** All
+three claims ever made for it have been measured against bars set in advance and all three
+failed: H29 per-IPO (AUC 0.5338), H35 cohort (sign held in 3 of 9 test years against 75%),
+H60 combined (above). The combined fit was the best remaining case - the widest variable
+set the stability analysis admitted, the longest window, and the first time the aggregator
+was reconciled against a second source. It scored 0.5239.
+
+**No further Model H fit is authorised.** No threshold, email or decision path changes as a
+result. Model L is untouched: different signal, and the correlation between listing gain
+and long-run CAGR is 0.218.
+
+One structural note, recorded as context and not as an argument against the verdict: 8 of
+the 14 measurable test years had a band hit rate ABOVE their own base rate, yet the pooled
+band fails. The probabilities are not comparable across years with different base rates, so
+the pooled top 20% is not one pick per year - 2021, 2022 and 2025 supply 63 of the 87 picks,
+2025 alone 26 at a 34.6% hit rate. The model scores hot vintages high and hot vintages beat
+the index least, which is H35's finding reappearing inside the per-IPO fit. Consistent with
+four of the seven firm variables on the pre-registered list being market-heat variables - a
+point the pre-registration recorded in advance. H29 is the pooled bar, fixed beforehand, and
+it is the bar that was applied.
+
+I also record a correction to my own first reading of the per-year table: I wrote that eight
+years came in below their base rate when the true count is five, and eight are above. The
+verdict is unaffected - it rests on the pooled bar - but the misreading is corrected in
+`reports/H60_RESULT.md` rather than quietly fixed.
