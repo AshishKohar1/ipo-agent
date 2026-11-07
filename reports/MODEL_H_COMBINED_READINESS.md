@@ -1,3 +1,16 @@
+# Model H — combined-fit readiness: CLOSED (2026-11-09)
+
+**Model H is closed as display-only.** The combined fit was pre-registered as H60, approved,
+run once, and it FAILED H29: 87 picks (PASS), hit rate 44.83% against a required 54% (FAIL),
+Wilson 95% lower bound 34.82% against a 42.76% base rate (FAIL). Pooled out-of-sample AUC
+0.5239 on 435 scored IPOs. See `reports/H60_RESULT.md` and DECISIONS.md H60.
+
+All three claims ever made for Model H were measured against bars set in advance and all
+three failed — H29 per-IPO, H35 cohort, H60 combined. No further fit is authorised. Nothing
+below is a plan any more; it is kept as the record of what was assessed and why.
+
+---
+
 # Model H — combined-fit readiness (Task 7, 2026-11-02)
 
 **No fit was run.** This is the variable list H30's criteria would admit, with coverage

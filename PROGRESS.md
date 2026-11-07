@@ -17,9 +17,22 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
   every criterion, so H56's choice did not decide it. `reports/H35_RESULT.md`.
 - **H56** recorded the two choices (option B binding, A diagnostic only; tercile cuts from
   the training fold) **before** `run_h35.py` existed.
-- **Both Model H claims are now measured and both failed:** H29 per-IPO (AUC 0.5338, short
-  by under 1pp on two of three) and H35 cohort. Model H stays display-only, and there is no
-  market-heat statement to display either.
+- **MODEL H IS CLOSED (2026-11-09, H60 result).** All three claims ever made for it were
+  measured against bars set in advance and all three failed: **H29** per-IPO (AUC 0.5338;
+  83 picks, 53.01%, Wilson 42.38% vs base 43.13%), **H35** cohort (sign held in 3 of 9
+  measurable test years against a required 75%) and **H60** the combined firm + valuation
+  fit (87 picks PASS, hit rate **44.83%** against 54% FAIL, Wilson **34.82%** against a
+  42.76% base rate FAIL; pooled AUC **0.5239** on 435 scored IPOs). H60 was pre-registered
+  at `b4eb78e` before `run_h60.py` existed, approved, and run once. **No further Model H
+  fit is authorised**; it is display-only permanently. Model L is untouched.
+- **H59 is done: the valuation block exists.** 482 mainboard IPOs x 21 variables, 10,122
+  rows, every row with a status - 1,372 reconciled against a genuine second source, 1,977
+  `single_source_unverified`, 693 NULLed over rule 2's 5% with both values logged, 354 held
+  from a second source only (cash, which no aggregator page publishes). Tickertape is the
+  one permitted second source (H58); 455 of 482 companies resolved.
+- **A market-heat line IS now displayed**, as context only: "IPO market heat (trailing 12m):
+  HOT (score +0.51 on 40 listings to 2026-05-08) - context only, not a hold signal; H35
+  failed its pre-set test." It touches no threshold and no bid logic.
 - **H57 follow-up: the corpus is clean.** 445 documents — **428 RHP, 17 final PROSPECTUS,
   0 DRHP, 0 UNCLEAR**. SEBI's own RHP slot returns the DRAFT for the two 2017 filings
   (byte-identical SHAs), so the pipeline was fetching what it asked for; both resolve under
