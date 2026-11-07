@@ -2839,3 +2839,36 @@ ceiling H58 describes is therefore accepted, not a problem to be solved later.
 audit set: personal, non-commercial reading only; **≥3 s** between requests; **no S&P-derived
 field** (ratings, S&P scores); robots.txt **re-read at the start of every run**; stop on any
 error rather than retry. Screener.in and Trendlyne remain forbidden by their own terms.
+
+### H60 — the combined Model H fit, PRE-REGISTERED (2026-11-08). Not yet run.
+
+Task 3 of the 6 November brief, and the one combined fit decision 4 of that brief allows.
+Written and committed **before** any fit. Full text in `reports/H60_PREREGISTRATION.md`.
+
+**The bar is H29, unchanged:** the top-20% band of the fitted score must hold >= 50 picks,
+a hit rate >= 54% against the Nifty 50 TRI over the first year, and a Wilson 95% lower
+bound strictly above the base rate on the same scored population. All three, or it fails.
+
+**Method is H30, unchanged:** WoE bins fitted in the training fold only, IV selection,
+numpy logistic regression (no scikit-learn, rule 10), scheme C expanding walk-forward with
+the Y-2 embargo, a missing value as its own WoE bin and never imputed, one variable per ten
+beat-Nifty outcomes.
+
+**Variables: firm + valuation STABLE only, at most 13.** Eligibility is STABLE under
+scheme C with the Y-2 embargo - the same scheme the fit uses - which gives 16 firm and 12
+valuation variables. The pre-registered cut to 13: drop exact transform duplicates (keeping
+the logged form, as Model L's frozen Set A does), then rank by median in-fold IV and take
+the top 13, with at least 4 valuation variables. That yields **7 firm and 6 valuation**,
+listed in the report.
+
+**Stated before the fit:** the median out-of-sample AUC of every variable on the list lies
+between 0.4863 and 0.5824, eight of the thirteen within 0.03 of 0.50; four of the seven
+firm variables are market-heat variables, which is the signal H35 failed on; and both
+narrower claims on this target (H29 per-IPO, H35 cohort) already failed bars set in
+advance. The honest prior is that this fit fails. It is still worth running once, against
+a bar fixed beforehand. What would not be legitimate is adjusting the bar afterwards.
+
+**On a fail, Model H is closed as display-only** under decision 4, and that closure is the
+H60 result.
+
+**Status: AWAITING THE USER'S APPROVAL. The fit has not been run.**
