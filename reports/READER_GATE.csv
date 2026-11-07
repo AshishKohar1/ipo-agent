@@ -13,10 +13,62 @@ Computer Age Management Services Ltd,shares_outstanding_pre_issue,48786800.0,[48
 Likhitha Infrastructure Ltd,net_worth,6995.58,"[3242.94, 5031.23, 6995.58]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
 Likhitha Infrastructure Ltd,finance_costs,136.4,"[84.62, 136.4, 168.49]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
 Likhitha Infrastructure Ltd,shares_outstanding_pre_issue,14625000.0,[14625000.0],,,False,False,True,"no ISSUED, SUBSCRIBED ... BEFORE THE OFFER line with an Equity Shares count",None
+Route Mobile Ltd,net_worth,2703.65,"[1608.52, 2117.84, 2703.65]",2681.94,INR million,False,False,False,ok,"Total equity 2,946.92 2,681.94 2,099.01 1,601.93"
+Route Mobile Ltd,tax_expense,150.18,"[98.17, 104.71, 150.18]",150.18,INR million,True,True,False,ok (derived),Profit before tax 322.86 841.20 650.03 564.94  ||  Profit for the period/ year 269.34 691.02 545.32 466.77
+Route Mobile Ltd,finance_costs,48.69,"[48.69, 78.03, 130.89]",48.69,INR million,True,True,False,ok,Finance costs 9.89 48.69 130.89 78.03
+Route Mobile Ltd,depreciation_amortisation,226.78,"[158.38, 218.71, 226.78]",226.78,INR million,True,True,False,ok,Depreciation and amortisation expense 60.24 226.78 218.71 158.38
+Antony Waste Handling Cell Ltd,tax_expense,198.8,"[89.03, 129.98, 198.8]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Antony Waste Handling Cell Ltd,finance_costs,302.44,"[228.93, 249.94, 302.44]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Antony Waste Handling Cell Ltd,shares_outstanding_pre_issue,25588758.0,[25588758.0],25588758.0,,True,True,False,ok,"25,588,758 Equity Shares"
+CarTrade Tech Limited,net_worth,16417.77,"[11965.42, 12273.31, 16417.77]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+CarTrade Tech Limited,tax_expense,-540.98,"[-540.98, 76.21, 95.14]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+CarTrade Tech Limited,finance_costs,42.98,"[23.81, 34.89, 42.98]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+CarTrade Tech Limited,depreciation_amortisation,199.27,"[152.18, 173.82, 199.27]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
 Craftsman Automation Limited,finance_costs,1484.0,"[1124.83, 1405.49, 1484.0]",1484.0,INR million,True,True,False,ok,"Finance costs 772.40 7.50 1,484.00 9.89 1,405.49 7.67 1,124.83 7.39"
 Craftsman Automation Limited,depreciation_amortisation,1949.88,"[1491.53, 1761.48, 1949.88]",,,False,False,True,row not present on the page,None
 Craftsman Automation Limited,shares_outstanding_pre_issue,20121600.0,[20121600.0],20121600.0,,True,True,False,ok,"20,121,600 Equity Shares"
+AGS Transact Technologies Limited,net_worth,5586.62,"[4249.34, 4989.55, 5586.62]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
+AGS Transact Technologies Limited,tax_expense,276.35,"[126.95, 276.35, 365.1]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
+AGS Transact Technologies Limited,finance_costs,1330.62,"[1304.01, 1330.62, 1366.61]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
+AGS Transact Technologies Limited,depreciation_amortisation,2596.48,"[2273.25, 2446.65, 2596.48]",,,False,False,True,"no pre-issue share count, so neither the EPS nor the NAV anchor can be applied",None
+Delhivery Limited,net_worth,28013.98,"[28013.98, 31312.34, 33491.11]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Delhivery Limited,shares_outstanding_pre_issue,642365827.0,[642365827.0],642365827.0,,True,True,False,ok,"642,365,827 Equity Shares"
 Global Health Limited,net_worth,16160.11,"[13495.37, 13823.42, 16160.11]",,,False,False,True,no dated row survives as a full fiscal year,None
 Global Health Limited,finance_costs,794.85,"[515.47, 671.74, 794.85]",,,False,False,True,no dated row survives as a full fiscal year,None
 Global Health Limited,depreciation_amortisation,1297.11,"[1150.4, 1232.14, 1297.11]",,,False,False,True,no dated row survives as a full fiscal year,None
 Global Health Limited,shares_outstanding_pre_issue,253303930.0,[253303930.0],253303930.0,,True,True,False,ok,"253,303,930 Equity Shares"
+Cello World Limited,net_worth,3364.5,"[-1067.52, 876.46, 3364.5]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Cello World Limited,tax_expense,1001.3,"[701.45, 795.77, 1001.3]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Cello World Limited,finance_costs,17.56,"[17.56, 22.76, 28.5]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Cello World Limited,depreciation_amortisation,503.26,"[475.54, 489.01, 503.26]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+IRM Energy Limited,net_worth,3464.23,"[1176.04, 2437.2, 3464.23]",3464.23,INR million,True,True,False,ok,"Total equity attributable to equity holders of the company 3,733.26 2,642.65 3,464.23 2,437.20 1,176.04"
+IRM Energy Limited,tax_expense,179.57,"[109.61, 179.57, 388.04]",179.57,INR million,True,True,False,ok,Tax Expense 179.57 388.04 109.61
+IRM Energy Limited,finance_costs,229.03,"[158.55, 220.75, 229.03]",229.03,INR million,True,True,False,ok,Finance Costs 229.03 220.75 158.55
+IRM Energy Limited,depreciation_amortisation,208.98,"[120.0, 150.41, 208.98]",,,False,False,True,row not present on the page,None
+IRM Energy Limited,shares_outstanding_pre_issue,30259677.0,[30259677.0],30259677.0,,True,True,False,ok,"30,259,677 Equity Shares"
+Signature Global India Limited,net_worth,475.39,"[-3522.17, -2068.67, 475.39]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Signature Global India Limited,tax_expense,69.65,"[-209.17, -111.83, 69.65]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Signature Global India Limited,finance_costs,729.24,"[691.25, 708.82, 729.24]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Signature Global India Limited,depreciation_amortisation,221.84,"[118.09, 207.26, 221.84]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+ACME Solar Holdings Limited,net_worth,19408.69,"[12505.63, 12587.63, 19408.69]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+ACME Solar Holdings Limited,finance_costs,7672.93,"[7672.93, 8090.97, 9960.08]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+ACME Solar Holdings Limited,depreciation_amortisation,3081.38,"[3081.38, 4848.02, 5462.75]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Bansal Wire Industries Limited,net_worth,4223.7,"[2230.12, 2825.14, 4223.7]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Bansal Wire Industries Limited,tax_expense,314.14,"[208.45, 216.2, 314.14]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Bansal Wire Industries Limited,finance_costs,288.07,"[240.41, 265.77, 288.07]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Bansal Wire Industries Limited,depreciation_amortisation,134.52,"[84.37, 91.14, 134.52]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Bansal Wire Industries Limited,shares_outstanding_pre_issue,127454390.0,[127454390.0],127454390.0,,True,True,False,ok,"127,454,390 Equity Shares"
+Godavari Biorefineries Limited,net_worth,5006.8,"[4730.04, 4894.48, 5006.8]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Godavari Biorefineries Limited,finance_costs,755.63,"[604.4, 727.9, 755.63]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Godavari Biorefineries Limited,depreciation_amortisation,599.25,"[480.25, 500.76, 599.25]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+Godavari Biorefineries Limited,shares_outstanding_pre_issue,41943023.0,[41943023.0],41943023.0,,True,True,False,ok,"41,943,023 Equity Shares"
+Borana Weaves Limited,net_worth,4769.66,"[180.86, 2411.02, 4769.66]",,,False,False,True,"no dated Basis row for EPS or NAV, so the latest fiscal year cannot be named",None
+Borana Weaves Limited,tax_expense,480.58,"[39.28, 359.68, 480.58]",,,False,False,True,"no dated Basis row for EPS or NAV, so the latest fiscal year cannot be named",None
+Borana Weaves Limited,finance_costs,417.8,"[139.5, 221.04, 417.8]",,,False,False,True,"no dated Basis row for EPS or NAV, so the latest fiscal year cannot be named",None
+Borana Weaves Limited,depreciation_amortisation,915.23,"[161.52, 408.54, 915.23]",,,False,False,True,"no dated Basis row for EPS or NAV, so the latest fiscal year cannot be named",None
+Borana Weaves Limited,shares_outstanding_pre_issue,19937295.0,[19937295.0],19937295.0,,True,True,False,ok,"1,99,37,295 Equity Shares"
+GNG Electronics Limited,net_worth,2264.55,"[1115.95, 1631.41, 2264.55]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+GNG Electronics Limited,tax_expense,93.1,"[29.91, 50.18, 93.1]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+GNG Electronics Limited,finance_costs,383.5,"[118.41, 239.27, 383.5]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+GNG Electronics Limited,depreciation_amortisation,94.51,"[27.8, 36.54, 94.51]",,,False,False,True,"no profit-and-loss column reproduces a stated EPS within 3.0% on the pre-issue share count, so the period cannot be identified and nothing i",None
+GNG Electronics Limited,shares_outstanding_pre_issue,97133880.0,[97133880.0],97133880.0,,True,True,False,ok,"97,133,880 Equity Shares"

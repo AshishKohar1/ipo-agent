@@ -1171,6 +1171,40 @@ def self_test() -> int:
         pin_balance_sheet([cf], 20_121_600, [383.47])["column"] == 0,
         pin_balance_sheet([cf], 20_121_600, [383.47]))
 
+
+    print("[NAV-only] the net-worth-without-a-P&L-column route is REFUSED, and why")
+    # Measured on 2026-11-09, not assumed. read_document() returns early for all four
+    # money fields when no stated EPS can pin the profit-and-loss column, which also
+    # withholds NET WORTH - a field that needs only the balance sheet and the anchor
+    # `net worth / shares = the stated NAV`. Letting the net-worth block run anyway was
+    # implemented and scored against the 20-document check set:
+    #
+    #     produced 3 -> 7, correct 2 -> 3, PRECISION 66.7% -> 42.9%
+    #
+    # Right: Bansal Wire 4,223.70 and IRM Energy 3,464.23. Wrong: Delhivery 59,798.47,
+    # ACME Solar 25,912.98, Godavari 2,602.45, Route Mobile 2,681.94. The cause is not a
+    # tolerance: every one of those six states exactly ONE NAV for the target period and
+    # every gap is under 0.11%. It is definitional - a great many RHPs strike their NAV on
+    # the LATEST BALANCE SHEET, which is the stub period, not on the fiscal year. The
+    # anchor then matches the stub column correctly and returns a number that is not the
+    # quantity the gate asks for. `target_period`'s own `how` does not separate the two
+    # cases either: Bansal (right) and ACME (wrong) both report "dated NAV rows whose
+    # month is the modal fiscal-year end (March)".
+    #
+    # So the route is left REFUSED. A withheld value costs recall; a confidently wrong
+    # net worth corrupts every ratio derived from it and is not found by inspection.
+    import gzip as _gz, json as _js
+    _c = Path(__file__).resolve().parent / "data" / "rhp_text_cache" / \
+        "Delhivery_Limited.json.gz"
+    if _c.exists():
+        _o = read_document(_js.load(_gz.open(_c, "rt", encoding="utf-8"))["pages"])
+        chk("net worth is withheld when the P&L column cannot be pinned",
+            _o["fields"]["net_worth"]["value"] is None,
+            str(_o["fields"]["net_worth"].get("value")))
+        chk("and the refusal names the anchor that failed",
+            "EPS" in str(_o["fields"]["net_worth"]["reason"]),
+            str(_o["fields"]["net_worth"]["reason"])[:120])
+
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
 
