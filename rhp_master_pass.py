@@ -28,7 +28,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-GATE_CSV = ROOT / "reports" / "READER_GATE.csv"
+GATE_CSV = ROOT / "reports" / "READER_GATE_SUMMARY.csv"
 OUT = ROOT / "data" / "rhp_master_values.csv"
 FIELDS = ("pre_issue_shares", "net_worth", "tax_expense", "finance_costs",
           "depreciation_amortisation")
@@ -41,8 +41,13 @@ OUT_COLS = ["sha256", "company", "doc_type", "field", "value", "unit", "value_in
 
 
 def gated_fields(gate: pd.DataFrame) -> set[str]:
-    """The reader field names whose gate verdict is PASS. Nothing else may write a value."""
-    if not len(gate):
+    """The reader field names whose gate verdict is PASS. Nothing else may write a value.
+
+    A frame without a `verdict` column is not a gate - the per-document scoring file has
+    no verdicts in it, and reading that one by mistake raised KeyError mid-sweep. Treated
+    as "nothing is gated", which is the safe direction.
+    """
+    if not len(gate) or "verdict" not in gate.columns or "field" not in gate.columns:
         return set()
     passed = set(gate.loc[gate["verdict"].astype(str) == "PASS", "field"].astype(str))
     return {rd for rd, cs in GATE_NAME.items() if cs in passed}
@@ -73,6 +78,44 @@ def rows_for(doc: dict, sha, company, doc_type, allowed: set[str]) -> list[dict]
     return out
 
 
+def flag_plausibility(d: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFrame:
+    """Flag pre-issue share counts that fail the project's OWN two-sided guard.
+
+    The gate measured `shares_outstanding_pre_issue` at 100% precision on 12 check-set
+    values, and the sweep then produced 387. Those are not the same claim: three of the
+    387 are plainly wrong - Apollo Micro 20,000 and JSW Infrastructure 24,750 (a historical
+    allotment row read as the pre-issue total) and IRFC 11,880,460,000, which is the
+    aggregate RUPEE capital read as a share count, exactly the family `derive_pb`'s
+    docstring describes.
+
+    `share_count_plausible` is REUSED rather than reinvented, so the rule here is the rule
+    the rest of the project already applies. This FLAGS; it does not withhold, because the
+    check set cannot measure the flag and a silent change of 387 values is not something
+    a measurement supports.
+    """
+    from derive_pb import share_count_plausible
+    from dataio import norm_name
+    px = prices.copy()
+    px["_k"] = px["company"].map(norm_name)
+    px = px.drop_duplicates("_k").set_index("_k")
+    out = []
+    for r in d.to_dict("records"):
+        if r.get("field") != "pre_issue_shares" or r.get("status") != "ok":
+            out.append({**r, "plausible": None, "plausibility_note": None})
+            continue
+        k = norm_name(r.get("company"))
+        row = px.loc[k] if k in px.index else None
+        price = None if row is None else row.get("offer_price")
+        size = None if row is None else row.get("issue_size_cr")
+        if price is None or size is None or pd.isna(price) or pd.isna(size):
+            out.append({**r, "plausible": None,
+                        "plausibility_note": "no offer price or issue size to test against"})
+            continue
+        ok_, why, _ = share_count_plausible(r.get("value"), float(price), float(size))
+        out.append({**r, "plausible": bool(ok_), "plausibility_note": str(why)[:160]})
+    return pd.DataFrame(out)
+
+
 def self_test() -> int:
     ok = fail = 0
 
@@ -94,6 +137,9 @@ def self_test() -> int:
     chk("INSUFFICIENT is not a pass", "net_worth" not in gated_fields(g))
     chk("FAIL is not a pass", "tax_expense" not in gated_fields(g))
     chk("an empty gate allows nothing", gated_fields(pd.DataFrame()) == set())
+    chk("the per-document scoring file is NOT a gate, and allows nothing",
+        gated_fields(pd.DataFrame([{"company": "A", "field": "net_worth", "got": 1.0}]))
+        == set())
     body = Path(__file__).read_text(encoding="utf-8").split("def self_test")[0]
     chk("no verdict is written into this module",
         '"PASS"' not in body.split("GATE_NAME")[0] or "READER_GATE" in body)
@@ -122,6 +168,32 @@ def self_test() -> int:
     chk("every field gets a row, always", len(rows_for(doc, "s", "A", "RHP", set())) == 5)
     chk("the reason says why an ungated field is empty",
         "has not passed the H55 gate" in r["net_worth"]["reason"])
+
+
+    print("[3] the project's own two-sided share-count guard is reused as a FLAG")
+    px = pd.DataFrame([{"company": "A Ltd", "offer_price": 100.0, "issue_size_cr": 500.0}])
+    base = [{"company": "A Ltd", "field": "pre_issue_shares", "status": "ok",
+             "value": 50_000_000.0},
+            {"company": "A Ltd", "field": "pre_issue_shares", "status": "ok",
+             "value": 20_000.0},
+            {"company": "A Ltd", "field": "net_worth", "status": "reader_not_gated",
+             "value": None}]
+    f = flag_plausibility(pd.DataFrame(base), px).set_index(
+        pd.Index(["big", "tiny", "other"]))
+    chk("a sane count is flagged plausible", f.loc["big", "plausible"] is True
+        or f.loc["big", "plausible"] == True, str(f.loc["big", "plausible"]))       # noqa: E712
+    chk("a count far too small for the issue is flagged implausible",
+        f.loc["tiny", "plausible"] == False, str(f.loc["tiny", "plausible"]))       # noqa: E712
+    chk("the note says why", bool(str(f.loc["tiny", "plausibility_note"]).strip()),
+        str(f.loc["tiny", "plausibility_note"]))
+    chk("a field that is not the share count is not flagged",
+        f.loc["other", "plausible"] is None or pd.isna(f.loc["other", "plausible"]))
+    chk("the flag NEVER changes a value",
+        list(f["value"])[:2] == [50_000_000.0, 20_000.0], str(list(f["value"])[:2]))
+    chk("no offer price -> no opinion, not a failure",
+        flag_plausibility(pd.DataFrame(base), pd.DataFrame(
+            [{"company": "Z", "offer_price": 1.0, "issue_size_cr": 1.0}])
+        ).iloc[0]["plausible"] is None)
 
     print(f"\n{ok} passed, {fail} failed")
     return 1 if fail else 0

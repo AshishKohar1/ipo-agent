@@ -33,6 +33,10 @@ TRUTH = ROOT / "reports" / "rhp_check_set.csv"
 DOCS = ROOT / "reports" / "rhp_check_set_docs.csv"
 OUT_CSV = ROOT / "reports" / "READER_GATE.csv"
 OUT_MD = ROOT / "reports" / "READER_GATE.md"
+# The verdicts were only ever printed and embedded in the markdown. Any consumer - the
+# master pass, for one - then had to parse prose or hardcode them, which is how an
+# ungated reader's output gets recorded as data. They are written as a table too.
+OUT_SUMMARY = ROOT / "reports" / "READER_GATE_SUMMARY.csv"
 GATE = 95.0
 # H55 (2026-11-02): precision alone is not a gate when it rests on one value. Three of
 # the five readers "passed" at 100% on 1, 1 and 5 correct values - 100% of one is a coin
@@ -317,9 +321,10 @@ if __name__ == "__main__":
     s = summarise(d)
     OUT_CSV.parent.mkdir(exist_ok=True)
     d.to_csv(OUT_CSV, index=False, encoding="utf-8")
+    s.to_csv(OUT_SUMMARY, index=False, encoding="utf-8")
     OUT_MD.write_text(md(d, s), encoding="utf-8")
     print(s.to_string(index=False))
-    print(f"\n{OUT_CSV}\n{OUT_MD}")
+    print(f"\n{OUT_CSV}\n{OUT_MD}\n{OUT_SUMMARY}")
     # Exit 0 only when every reader PASSES. INSUFFICIENT is not a pass: a reader that
     # has not been measured must not be run on 442 documents.
     raise SystemExit(0 if (s["verdict"] == "PASS").all() else 1)
