@@ -58,6 +58,7 @@ import chittorgarh_live as CL      # noqa: E402
 import ipo_calendar as CAL        # noqa: E402  - Task 1.2: NSE-primary IPO list
 import score_l as SL               # noqa: E402  — portable JSON, no joblib (Priority 1b)
 import predictions_log as PL       # noqa: E402
+import h35_context as H35C          # noqa: E402  - Task 4: display-only cohort context
 import live_markers as LM          # noqa: E402
 import market_context as MC        # noqa: E402
 import nse_holidays as HOL        # noqa: E402  - NSE's own trading calendar
@@ -401,6 +402,15 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
 
     # Priority 6: display-only market context. Never a model input (H2).
     L += ["", MC.email_footer(), ""]
+
+    # Task 4 (6 Nov): the cohort context line. H35 FAILED its pre-registered test, so this
+    # is information only - it touches no threshold and no bid logic, and a failure to
+    # compute it must never affect the report.
+    try:
+        L += [H35C.current(today)[0], ""]
+    except Exception as e:                                   # noqa: BLE001
+        L += [f"IPO market heat (trailing 12m): UNAVAILABLE ({type(e).__name__}) - "
+              f"{H35C.DISCLAIMER}.", ""]
 
     if mv.get("diagnostics"):
         L += ["Diagnostics:"] + [f"  - {d}" for d in mv["diagnostics"]]
