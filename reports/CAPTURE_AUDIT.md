@@ -1,6 +1,6 @@
 # Capture audit
 
-Window: the last 4 days, NSE trading days only (weekends and NSE holidays both excluded; calendar in data/nse_trading_holidays.csv). Generated 2026-11-10 19:31 IST.
+Window: the last 4 days, NSE trading days only (weekends and NSE holidays both excluded; calendar in data/nse_trading_holidays.csv). Generated 2026-11-11 02:12 IST.
 
 **Every trading day in the window produced a capture.**
 
