@@ -821,3 +821,6 @@ fetched_at_ist,url,http_status,bytes,note
 2026-11-11 15:06:09.134477,https://www.chittorgarh.com/robots.txt,200,0,permitted; User-agent:* disallows ['/ipo/ipo_discussions.asp']
 2026-11-11 15:06:09.830191,https://www.chittorgarh.com/ipo/,200,128559,
 2026-11-11 15:06:12.422582,https://www.chittorgarh.com/ipo/ipo_dashboard.asp?a=sme,200,155342,
+2026-11-11 15:16:09.340886,https://www.chittorgarh.com/robots.txt,200,0,permitted; User-agent:* disallows ['/ipo/ipo_discussions.asp']
+2026-11-11 15:16:09.949208,https://www.chittorgarh.com/ipo/,200,128559,
+2026-11-11 15:16:12.583614,https://www.chittorgarh.com/ipo/ipo_dashboard.asp?a=sme,200,155342,
