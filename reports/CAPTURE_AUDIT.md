@@ -1,8 +1,8 @@
 # Capture audit
 
-Window: the last 4 days, NSE trading days only (weekends and NSE holidays both excluded; calendar in data/nse_trading_holidays.csv). Generated 2026-11-13 19:32 IST.
+Window: the last 4 days, NSE trading days only (weekends and NSE holidays both excluded; calendar in data/nse_trading_holidays.csv). Generated 2026-11-14 02:15 IST.
 
-**0 missed 15:00 leg(s), 1 missed day-end leg(s).**
+**Every trading day in the window produced a capture.**
 
 A gap means the job left *no attempt at all* — an infrastructure failure. A job that ran and captured nothing is a quiet market, not a gap, and is not counted here. An NSE holiday is not a working day and never appears below.
 
@@ -10,15 +10,10 @@ A gap means the job left *no attempt at all* — an infrastructure failure. A jo
 |---|---|---|
 | 2026-11-11 | 9 | 1 |
 | 2026-11-12 | 9 | 1 |
-| 2026-11-13 | 5 | **0 — MISSED** |
 
 ## What catch-up recovered
 
-### 2026-11-13
-
-* listing prices — no live prediction is awaiting an outcome
-* index closes — 15 closes, 0 NULL with a reason
-
+Nothing to recover.
 
 ## Bhavcopy plausibility
 
