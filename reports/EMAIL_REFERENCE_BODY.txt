@@ -1,0 +1,29 @@
+IPO MARKET — Saturday 14 November
+
+===== CLOSING TODAY — bid by 4:00 PM =====
+
+  Nothing closes today.
+
+===== OPEN, NOT CLOSING TODAY =====
+
+  Nothing else is open.
+
+===== UPCOMING =====
+  Nothing scheduled to open.
+
+
+Decision rule (H17): L1 bids at Total >= 28.39x, L2 at >= 54.02x.
+  Each level is where that share of IPOs the model had NOT seen met the target (walk-forward).
+
+-----
+Caveats: 3pm figures understate final demand; a near-threshold NO is uncertain.
+         Subscription from a single source — verify on your broker app before bidding.
+         Category figures are shown for your judgement only; the model uses total subscription.
+
+Market context: Nifty 50 25,144.30 on 2026-11-13, +11.1% over 30 days (vs 2026-10-14). [NOT a model input — display only. Model L uses total subscription alone (H2).]
+
+
+Model model_l_v1.1 / L_final_3pm. The verdict IS the subscription level met (H17); no probability is involved in the decision.
+IPO list source: fixture.
+Subscription figure source: none (single-origin, single_source_unverified - H14/H22).
+Every request logged with its timestamp and exact URL in data/live_fetch_log.csv.

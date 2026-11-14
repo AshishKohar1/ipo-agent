@@ -58,7 +58,6 @@ import chittorgarh_live as CL      # noqa: E402
 import ipo_calendar as CAL        # noqa: E402  - Task 1.2: NSE-primary IPO list
 import score_l as SL               # noqa: E402  — portable JSON, no joblib (Priority 1b)
 import predictions_log as PL       # noqa: E402
-import h35_context as H35C          # noqa: E402  - Task 4: display-only cohort context
 import live_markers as LM          # noqa: E402
 import market_context as MC        # noqa: E402
 import nse_holidays as HOL        # noqa: E402  - NSE's own trading calendar
@@ -403,14 +402,10 @@ def compose(mv: dict, scored: dict, today: pd.Timestamp | None = None) -> tuple[
     # Priority 6: display-only market context. Never a model input (H2).
     L += ["", MC.email_footer(), ""]
 
-    # Task 4 (6 Nov): the cohort context line. H35 FAILED its pre-registered test, so this
-    # is information only - it touches no threshold and no bid logic, and a failure to
-    # compute it must never affect the report.
-    try:
-        L += [H35C.current(today)[0], ""]
-    except Exception as e:                                   # noqa: BLE001
-        L += [f"IPO market heat (trailing 12m): UNAVAILABLE ({type(e).__name__}) - "
-              f"{H35C.DISCLAIMER}.", ""]
+    # The Model H cohort-context line was REMOVED on 2026-11-14 (H63): Model H is scrapped,
+    # so the report carries no statement derived from it. Everything else in this email is
+    # byte-identical to the version that carried the line - `self_test` proves it against a
+    # stored reference body.
 
     if mv.get("diagnostics"):
         L += ["Diagnostics:"] + [f"  - {d}" for d in mv["diagnostics"]]
@@ -1474,6 +1469,42 @@ def self_test() -> int:
                              _m.index('"exchange_holiday"') + 300])
     chk("a year with no calendar does NOT stand the run down",
         HOL.is_trading_day("2015-06-10") is None)
+
+
+    print("[H63] the email is byte-identical apart from the removed Model H text")
+    # reports/EMAIL_REFERENCE_BODY.txt was captured from compose() on the SAME fixture
+    # immediately after the Model H cohort-context line was removed on 2026-11-14. The
+    # removal took exactly two lines out of a 31-line body - the heat line and the blank
+    # that followed it - and added none. This test fails if anything else in the report
+    # ever moves.
+    #
+    # One line is excluded from the comparison and named here rather than quietly
+    # skipped: market_context's footer, which is live display data by design and changes
+    # when the market does. Everything else is compared character for character.
+    _ref_p = Path(__file__).resolve().parent / "reports" / "EMAIL_REFERENCE_BODY.txt"
+    if _ref_p.exists():
+        _mv = {"closing_today": [], "open_not_closing": [], "upcoming": [],
+               "list_source": "fixture", "diagnostics": []}
+        _, _body = compose(_mv, {}, pd.Timestamp("2026-11-14"))
+        _mcl = MC.email_footer()
+        _strip = lambda t: [l for l in t.splitlines() if l != _mcl]
+        _got, _want = _strip(_body), _strip(_ref_p.read_text(encoding="utf-8"))
+        chk("the composed body matches the stored reference exactly",
+            _got == _want,
+            "first difference: " + str(next((f"line {i}: {g!r} != {w!r}"
+                for i, (g, w) in enumerate(zip(_got, _want)) if g != w),
+                f"lengths {len(_got)} vs {len(_want)}")))
+        chk("no Model H text survives anywhere in the email",
+            not any(x in _body for x in ("market heat", "H35", "Model H", "cohort")),
+            str([x for x in ("market heat", "H35", "Model H", "cohort") if x in _body]))
+        chk("the reference itself carries no Model H text",
+            not any(x in _ref_p.read_text(encoding="utf-8")
+                    for x in ("market heat", "H35", "Model H")))
+        chk("this module no longer imports anything from Model H",
+            "h35_context" not in Path(__file__).read_text(encoding="utf-8")
+            .split("def self_test")[0])
+    else:
+        chk("the email reference body is on disk", False, str(_ref_p))
 
     print(f"\n{ok} passed, {fail} failed")
     return 0 if fail == 0 else 1
