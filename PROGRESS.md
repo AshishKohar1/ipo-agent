@@ -33,6 +33,17 @@ Stage numbering follows `PLAN.md` as amended by `PLAN_AMENDMENT_01.md` (2026-09-
 - **A market-heat line IS now displayed**, as context only: "IPO market heat (trailing 12m):
   HOT (score +0.51 on 40 listings to 2026-05-08) - context only, not a hold signal; H35
   failed its pre-set test." It touches no threshold and no bid logic.
+- **FINAL STATE (2026-11-14, H63). Model H is scrapped and removed.** 10 modules, 1 data
+  file and 12 reports deleted, all recoverable at tag **`model-h-final`**, pushed before
+  anything was touched. Four `model_h*`-named modules are KEPT because kept code or kept
+  data depends on them: `model_h_targets` (builds `holding_target*.csv`, now classed as
+  data), `model_h_turnover` (a bhavcopy fetcher), `model_h_sources` (`remap_sectors`) and
+  `model_h_handoff` (used by `recover_symbols`). The live import closure is **30 modules
+  with no Model H in it**; the only edge was the cohort-context email line, now removed,
+  and the email is proved byte-identical otherwise against
+  `reports/EMAIL_REFERENCE_BODY.txt`. **Read `HANDOVER.md` first** - it is the
+  start-from-cold document, including the challenges log and what was never overcome.
+  Model L is untouched and live.
 - **Task 5 (2026-11-09): the first reader has PASSED the H55 gate.**
   `shares_outstanding_pre_issue` scores **100% on 12 correct** check-set values. The other
   four are no longer precision-bound but **recall**-bound, withholding on 9-13 of 15-17
