@@ -2912,3 +2912,35 @@ I also record a correction to my own first reading of the per-year table: I wrot
 years came in below their base rate when the true count is five, and eight are above. The
 verdict is unaffected - it rests on the pooled bar - but the misreading is corrected in
 `reports/H60_RESULT.md` rather than quietly fixed.
+
+### H63 — Model H is scrapped (2026-11-14, the user's decision)
+
+**Model H scrapped by the user (14 Nov 2026) after H29, H35 and H60 all failed their
+pre-registered bars. H62 prospective logging cancelled. RHP-derived data, other reusable
+data and multi-source fetching code are kept for portfolio-agent.**
+
+| claim | bar, set in advance | result |
+|---|---|---|
+| **H29** per-IPO scorecard | top 20%, >= 50 picks, >= 54% hit, Wilson 95% lo > base | **FAIL** — AUC 0.5338; 83 picks, 53.01%, Wilson 42.38% vs base 43.13% |
+| **H35** cohort / market heat | gap >= 10pp, sign in >= 75% of test years, p < 0.05 | **FAIL** — 14.47pp PASS, sign 33% FAIL, p = 0.00883 PASS |
+| **H60** combined firm + valuation | H29, unchanged | **FAIL** — 87 picks PASS, 44.83% FAIL, Wilson 34.82% vs base 42.76% FAIL; pooled AUC 0.5239 |
+
+The last commit at which every Model H script, report and output exists is tagged
+**`model-h-final`**, pushed before anything was removed, so the work is recoverable in
+full from git without keeping it in the working tree.
+
+**What is kept, and why.** Everything that is data or that fetches data: all RHP-derived
+data, caches and manifests; the Chittorgarh harvest and FY tables; NIFTY50 TRI, index, P/E
+and VIX history; the sector map; corporate actions; NSE symbol and name changes; the equity
+list; holidays; listing prices; day-1 turnover; the master; and `holding_target*.csv`,
+which is relabelled as **data** - adjusted IPO returns against the Nifty 50 TRI - rather
+than as a Model H artefact. Also every fetcher, the failover, `reconcile`, `dataio`, the
+text and table cache builders, the readers, the page index and
+`derive_ratios` / `derive_pb` / `derive_post_issue`, plus `SOURCE_MAP.md`.
+
+**What is deleted:** `model_h*`, `run_h35` / `run_h60`, the scorecard, stability, readiness
+and inventory scripts, their reports and outputs, and the Model H lines in the report and
+the email.
+
+**Model L is untouched.** It is a different signal - the correlation between listing gain
+and long-run CAGR is 0.218 - and it stays live on `model_l_v1.1` under H17.
