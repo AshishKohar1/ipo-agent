@@ -1486,8 +1486,22 @@ def self_test() -> int:
         _mv = {"closing_today": [], "open_not_closing": [], "upcoming": [],
                "list_source": "fixture", "diagnostics": []}
         _, _body = compose(_mv, {}, pd.Timestamp("2026-11-14"))
-        _mcl = MC.email_footer()
-        _strip = lambda t: [l for l in t.splitlines() if l != _mcl]
+
+        # The market-context line is normalised by its PREFIX on BOTH sides, not matched
+        # against today's value.
+        #
+        # The first version of this test computed MC.email_footer() fresh and dropped
+        # lines equal to it. That removed the line from the composed body and left the
+        # 14 November footer in the stored reference, so the two differed by one line as
+        # soon as the market moved - and this self-test gates the live workflow's verify
+        # step, which took the pipeline down for eight trading days from 17 November.
+        # A test that passes only on the day it was written is worse than no test.
+        def _strip(t):
+            out = []
+            for l in t.splitlines():
+                out.append("<MARKET CONTEXT LINE>"
+                           if l.startswith("Market context:") else l)
+            return out
         _got, _want = _strip(_body), _strip(_ref_p.read_text(encoding="utf-8"))
         chk("the composed body matches the stored reference exactly",
             _got == _want,

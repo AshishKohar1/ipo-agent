@@ -20,7 +20,7 @@ Caveats: 3pm figures understate final demand; a near-threshold NO is uncertain.
          Subscription from a single source — verify on your broker app before bidding.
          Category figures are shown for your judgement only; the model uses total subscription.
 
-Market context: Nifty 50 25,144.30 on 2026-11-13, +11.1% over 30 days (vs 2026-10-14). [NOT a model input — display only. Model L uses total subscription alone (H2).]
+<MARKET CONTEXT LINE>
 
 
 Model model_l_v1.1 / L_final_3pm. The verdict IS the subscription level met (H17); no probability is involved in the decision.
